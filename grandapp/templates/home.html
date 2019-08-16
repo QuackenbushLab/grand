@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <title>Bootstrap</title>
+</head>
+<body>
+
+<!-- Header -->
+<nav class="navbar bg-dark navbar-dark navbar-expand-sm">
+  <div class="container">
+      <a class="navbar-brand m-0" href="/">
+          <img src="{% static 'images/logo.svg' %}" style="width: 400px;">
+      </a>
+      <div class="navbar-nav">
+          <a class="nav-item nav-link active" href="/">Home</a>
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Networks</a>
+          <div class="dropdown-menu">
+            <a href="drugs.html" class="dropdown-item">Small molecules</a>
+            <a href="cell.html" class="dropdown-item">Cell lines</a>
+            <a href="tissues.html" class="dropdown-item">Tissues</a>
+          </div>
+        </li>
+          <a class="nav-item nav-link" href="#">Analysis</a>
+          <a class="nav-item nav-link" href="#">Funding</a>
+          <a class="nav-item nav-link" href="about">About</a>
+          <a class="nav-item nav-link" href="https://github.com/QuackenbushLab/grand"><i class="fab fa-github fa-lg"></i></a>
+      </div>
+  </div>
+</nav>
+
+<!-- Footer -->
+<nav class="navbar navbar-dark navbar-expand-sm fixed-bottom bg-dark">
+  <div class="container">
+      <a class="navbar-brand m-0" href="https://www.hsph.harvard.edu/biostatistics/">
+          <img src="{% static 'images/footer-01.svg' %}" style="width: 400px;">
+      </a>
+      <div class="navbar-nav navbar-expand-sm">
+          <a class="nav-item nav-link" href="https://twitter.com/intent/tweet?text=http://hsph.harvard.edu"><i class="fab fa-twitter-square fa-2x"></i></a>
+          <a class="nav-item nav-link" href="http://www.facebook.com/sharer/sharer.php?u=http://hsph.harvard.edu"><i class="fab fa-facebook-square fa-2x"></i></a>
+          <a class="nav-item nav-link" href="https://www.linkedin.com/sharing/share-offsite/?url=http://hsph.harvard.edu"><i class="fab fa-linkedin fa-2x"></i></a>
+          <a class="nav-item nav-link" href="mailto:aa@aa.com"><i class="fas fa-envelope-square fa-2x"></i></a>
+          <a class="nav-item nav-link" href="https://creativecommons.org/licenses/by-sa/4.0/"><i class="fab fa-creative-commons fa-2x"></i></a>
+      </div>
+  </div>
+</nav>
+
+<header class="jumbotron jumbotron-fluid">
+  <div class="container">
+      <div class="display-2 mb-4"></div>
+      <p class="lead">GRAND is a collection of gene regulatory networks of human tissues, cell lines, and small molecule regulatory effects. The networks are represented in bipartite graphs linking Transcription Factors (TFs) to their target genes. The networks can be downloaded as weighted adjacency matrices.</p>
+    </div>
+</header>
+
+<div class="container">
+
+      <div class="card-group">
+      <!-- Drugs --> 
+      <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="#" alt="Drugs">
+        <a href="drugs.html" class="btn btn-secondary">Small molecules</a>
+        <div class="card-body">
+          <p class="card-text">Drug and small molecule-induced gene regulatory networks computed from the connectivity map gene expression.</p>
+        </div>
+      </div>
+
+      <!-- Cell lines -->
+      <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="#" alt="Cell lines">
+        <a href="cell.html" class="btn btn-secondary">Cell lines</a>
+        <div class="card-body">
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+      </div>
+
+      <!-- Tissues -->
+      <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="#" alt="Tissues">
+        <a href="#" class="btn btn-secondary">Tissues</a>
+        <div class="card-body">
+          <p class="card-text">Human tissue specific gene regulation using GTEX gene expression collection.</p>
+        </div>
+      </div>
+      </div>
+
+
+</div><!-- content container -->
+
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src="{% static 'js/jquery.slim.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>
+
