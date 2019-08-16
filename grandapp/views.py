@@ -2,11 +2,11 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import Http404
 
-from .models import Pet
+from .models import Cell
 
 def home(request):
-    pets = Pet.objects.all()
-    return render(request, 'home.html', {'pets': pets})
+    cells = Cell.objects.all()
+    return render(request, 'home.html', {'cells': cells})
 
 def pet_detail(request, id):
     try:
@@ -16,5 +16,4 @@ def pet_detail(request, id):
     return render(request, 'pet_detail.html', {'pet': pet})
 
 def about(request):
-    pets = Pet.objects.all()
-    return render(request, 'about.html', {'pets': pets})
+    return render(request, 'about.html')

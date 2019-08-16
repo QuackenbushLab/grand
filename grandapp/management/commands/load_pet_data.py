@@ -3,7 +3,7 @@ from datetime import datetime
 
 from django.core.management import BaseCommand
 
-from grandapp.models import Pet, Vaccine
+from grandapp.models import Cell
 from pytz import UTC
 
 
@@ -39,24 +39,20 @@ class Command(BaseCommand):
         for vaccine_name in VACCINES_NAMES:
             vac = Vaccine(name=vaccine_name)
             vac.save()
-        print("Loading pet data for pets available for adoption")
-        for row in DictReader(open('./pet_data.csv')):
-            pet = Pet()
-            pet.name = row['Pet']
-            pet.submitter = row['Submitter']
-            pet.species = row['Species']
-            pet.breed = row['Breed']
-            pet.description = row['Pet Description']
-            pet.sex = row['Sex']
-            pet.age = row['Age']
-            raw_submission_date = row['submission date']
-            submission_date = UTC.localize(
-                datetime.strptime(raw_submission_date, DATETIME_FORMAT))
-            pet.submission_date = submission_date
-            pet.save()
-            raw_vaccination_names = row['vaccinations']
-            vaccination_names = [name for name in raw_vaccination_names.split('| ') if name]
-            for vac_name in vaccination_names:
-                vac = Vaccine.objects.get(name=vac_name)
-                pet.vaccinations.add(vac)
-            pet.save()
+        print("Loading cell data!")
+        for row in DictReader(open('./cells.csv')):
+            cell = Cell()
+            cell.cellLine     = row['cellLine']
+            cell.cellLink     = row['cellLink']
+	    cell.tool         = row['tool']
+            cell.netzoo       = row['netzoo']
+            cell.network      = row['network']
+            cell.ppi          = row['ppi']
+            cell.ppiLink      = row['ppiLink']
+            cell.motif        = row['motif']
+            cell.expression   = row['expression']
+            cell.expLink      = row['expLink']
+            cell.tfs          = row['tfs']
+            cell.genes        = row['genes']
+            cell.refs         = row['refs']
+            cell.save()
