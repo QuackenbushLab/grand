@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}>
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <title>Bootstrap</title>
 </head>
 <body>
@@ -15,12 +15,12 @@
 <nav class="navbar bg-dark navbar-dark navbar-expand-sm">
     <div class="container">
         <a class="navbar-brand m-0" href="/">
-            <img src="images/logo.svg" style="width: 400px;">
+            <img src="{% static 'images/logo.svg' %}" style="width: 400px;">
         </a>
         <div class="navbar-nav">
             <a class="nav-item nav-link active" href="/">Home</a>
             <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="index.html">Networks</a>
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Networks</a>
             <div class="dropdown-menu">
               <a href="drugs.html" class="dropdown-item">Small molecules</a>
               <a href="cell.html" class="dropdown-item">Cell lines</a>

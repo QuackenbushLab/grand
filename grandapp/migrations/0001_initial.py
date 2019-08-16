@@ -37,6 +37,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='pet',
             name='vaccinations',
-            field=models.ManyToManyField(blank=True, to='adoptions.Vaccine'),
+            field=models.ManyToManyField(blank=True, to='grandapp.Vaccine'),
         ),
     ]

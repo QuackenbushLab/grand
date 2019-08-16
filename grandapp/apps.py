@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class AdoptionsConfig(AppConfig):
+class GrandConfig(AppConfig):
     name = 'grandapp'
