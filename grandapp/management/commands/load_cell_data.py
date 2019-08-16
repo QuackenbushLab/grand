@@ -31,21 +31,15 @@ class Command(BaseCommand):
     help = "Loads data from pet_data.csv into our Pet model"
 
     def handle(self, *args, **options):
-        if Vaccine.objects.exists() or Pet.objects.exists():
-            print('Pet data already loaded...exiting.')
-            print(ALREADY_LOADED_ERROR_MESSAGE)
-            return
-        print("Creating vaccine data")
-        for vaccine_name in VACCINES_NAMES:
-            vac = Vaccine(name=vaccine_name)
-            vac.save()
         print("Loading cell data!")
         for row in DictReader(open('./cells.csv')):
             cell = Cell()
             cell.cellLine     = row['cellLine']
             cell.cellLink     = row['cellLink']
-	    cell.tool         = row['tool']
+            cell.tool         = row['tool']
             cell.netzoo       = row['netzoo']
+            cell.netzooLink   = row['netzooLink']
+            cell.netzooRel    = row['netzooRel']
             cell.network      = row['network']
             cell.ppi          = row['ppi']
             cell.ppiLink      = row['ppiLink']
