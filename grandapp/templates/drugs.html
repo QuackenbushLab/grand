@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,40 +6,40 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <title>Bootstrap</title>
 </head>
 <body>
 
 <!-- Header -->
 <nav class="navbar bg-dark navbar-dark navbar-expand-sm">
-    <div class="container">
-        <a class="navbar-brand m-0" href="index.html">
-            <img src="images/logo.svg" style="width: 400px;">
-        </a>
-        <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="index.html">Home</a>
-            <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="index.html">Networks</a>
-            <div class="dropdown-menu">
-              <a href="drugs.html" class="dropdown-item">Small molecules</a>
-              <a href="cell.html" class="dropdown-item">Cell lines</a>
-              <a href="tissues.html" class="dropdown-item">Tissues</a>
-            </div>
-          </li>
-            <a class="nav-item nav-link" href="#">Analysis</a>
-            <a class="nav-item nav-link" href="#">Funding</a>
-            <a class="nav-item nav-link" href="about.html">About</a>
-            <a class="nav-item nav-link" href="https://github.com/QuackenbushLab/grand"><i class="fab fa-github fa-lg"></i></a>
-        </div>
-    </div>
-  </nav>
+  <div class="container">
+      <a class="navbar-brand m-0" href="/">
+          <img src="{% static 'images/logo.svg' %}" style="width: 400px;">
+      </a>
+      <div class="navbar-nav">
+          <a class="nav-item nav-link active" href="/">Home</a>
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="index.html">Networks</a>
+          <div class="dropdown-menu">
+            <a href="drugs.html" class="dropdown-item">Small molecules</a>
+            <a href="/cell" class="dropdown-item">Cell lines</a>
+            <a href="tissues.html" class="dropdown-item">Tissues</a>
+          </div>
+        </li>
+          <a class="nav-item nav-link" href="#">Analysis</a>
+          <a class="nav-item nav-link" href="#">Funding</a>
+          <a class="nav-item nav-link" href="/about">About</a>
+          <a class="nav-item nav-link" href="https://github.com/QuackenbushLab/grand"><i class="fab fa-github fa-lg"></i></a>
+      </div>
+  </div>
+</nav>
 
 <!-- Footer -->
 <nav class="navbar navbar-dark navbar-expand-sm fixed-bottom bg-dark">
   <div class="container">
       <a class="navbar-brand m-0" href="https://www.hsph.harvard.edu/biostatistics/">
-          <img src="images/footer-01.svg" style="width: 400px;">
+          <img src="{% static 'images/footer-01.svg' %}" style="width: 400px;">
       </a>
       <div class="navbar-nav navbar-expand-sm">
           <a class="nav-item nav-link" href="https://twitter.com/intent/tweet?text=http://hsph.harvard.edu"><i class="fab fa-twitter-square fa-2x"></i></a>
@@ -50,14 +51,12 @@
   </div>
 </nav>
 
-
-
-<div class="container">
-        <table class="table table-hover mt-5">
+    <div class="container col-9">
+        <table id="cellstable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Small molecule</th>
+                    <th scope="col">Drug</th>
                     <th scope="col">Tool</th>
                     <th scope="col">netZoo release</th>
                     <th scope="col">Network</th>
@@ -76,48 +75,53 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td><a href="https://www.dsmz.de/collection/catalogue/details/culture/ACC-764">drug1</a></td>
-                    <td>PANDA</td>
-                    <td>netZooM <a href="https://github.com/netZoo/netZooM/releases">0.1</a></td>
-                    <td><a href="https://granddb.s3.amazonaws.com/cells/LCL.pairs" download><i class="fas fa-download"></i></a></td>
-                    <td><i class="fas fa-download"></i> <a href="http://string90.embl.de/"><i class="fas fa-link"></i></a></td>
-                    <td>Thornton</td>
-                    <td>Thornton</td>
-                    <td>x</td>
-                    <td>y</td>
-                    <td><a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-017-4111-x"><i class="fas fa-book"></i></a></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>drug2</td>
-                    <td>PANDA</td>
-                    <td>netZooM <a href="https://github.com/netZoo/netZooM/releases">0.1</a></td>
-                    <td><a href="https://granddb.s3.amazonaws.com/cells/Fibroblast.pairs" download><i class="fas fa-download"></i></a></td>
-                    <td><i class="fas fa-download"></i> <a href="http://string90.embl.de/"><i class="fas fa-link"></i></a></td>
-                    <td>Thornton</td>
-                    <td>Thornton</td>
-                    <td>x</td>
-                    <td>y</td>
-                    <td><a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-017-4111-x"><i class="fas fa-book"></i></a></td>
-                  </tr>
+		 {% for drug in drugs %}
+		    <tr>
+		    <th scope="row">{{ forloop.counter }}</th>
+		    <td><a href="{{ drug.drugLink }}">{{ drug.drug }}</a></td>
+		    <td>{{ drug.tool }}</td>
+		    <td>{{ drug.netzoo }} <a href="{{ drug.netzooLink }}">{{ drug.netzooRel }}</a></td>
+		    <td><a href="{{ drug.network }}" download><i class="fas fa-download"></i></a></td>
+	            <td><a href="{{ drug.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ drug.ppiLink }}"><i class="fas fa-link"></i></a></td>
+                    <td><a href="{{ drug.motif }}"><i class="fas fa-download"></i></a></td>
+                    <td><a href="{{ drug.expression }}"><i class="fas fa-download"></i></a> <a href="{{ cell.expLink }}"><i class="fas fa-link"></i></a></td>
+                    <td>{{ drug.tfs }}</td>
+                    <td>{{ drug.genes }}</td>
+                    <td><a href="{{ drug.refs }}"><i class="fas fa-book"></i></a></td>
+                    </tr>
+		 {% endfor %}
+
                 </tbody>
               </table>
-</div><!-- content container -->
+</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.0.2/papaparse.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css"></script>
+<script src="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-<script src="js/jquery.slim.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
 
 <script>
 $(function () {
   $('[data-toggle="popover"]').popover();
 })
 
+// Basic example
+$(document).ready(function() {
+    $('#cellstable').DataTable({
+      "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+    });
+} );
 </script>
+
+
 
 </body>
 </html>
+
+

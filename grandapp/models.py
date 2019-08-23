@@ -26,5 +26,23 @@ class Cell(models.Model):
     #age = models.IntegerField(null=True)
     #vaccinations = models.ManyToManyField('Vaccine', blank=True)
 
+class Drug(models.Model):
+    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    drug      = models.CharField(max_length=200)
+    drugLink  = models.URLField(default='#')
+    tool      = models.CharField(max_length=200)
+    netzoo    = models.CharField(max_length=200)
+    netzooLink= models.URLField(max_length=200)
+    netzooRel = models.FloatField()
+    network   = models.URLField()
+    ppi       = models.URLField()
+    ppiLink   = models.URLField()
+    motif     = models.URLField()
+    expression= models.URLField()
+    expLink   = models.URLField()
+    tfs       = models.IntegerField()
+    genes     = models.IntegerField()
+    refs      = models.URLField()
+
     def __str__(self):
-        return self.name
+       return self.name
