@@ -22,9 +22,9 @@
           <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="index.html">Networks</a>
           <div class="dropdown-menu">
-            <a href="drugs.html" class="dropdown-item">Small molecules</a>
+            <a href="/drugs" class="dropdown-item">Small molecules</a>
             <a href="/cell" class="dropdown-item">Cell lines</a>
-            <a href="tissues.html" class="dropdown-item">Tissues</a>
+            <a href="/tissues" class="dropdown-item">Tissues</a>
           </div>
         </li>
           <a class="nav-item nav-link" href="#">Analysis</a>
@@ -51,8 +51,8 @@
   </div>
 </nav>
 
-    <div class="container col-9">
-        <table id="cellstable" class="table table-hover" style="width: 100%">
+    <div class="container col-9 pb-5 mb-5">
+        <table id="drugstable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -111,7 +111,12 @@ $(function () {
 
 // Basic example
 $(document).ready(function() {
-    $('#cellstable').DataTable({
+    //datatables
+    $('#drugstable').DataTable({
+      "serverSide": true,
+      "paging": true,
+      "deferRender": true,
+      "processing": true,
       "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
              "<'row'<'col-sm-12'tr>>" +
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",

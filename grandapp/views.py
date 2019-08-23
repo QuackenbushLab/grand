@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import Http404
-
+from django.core import serializers
 from  .models import Cell
 from  .models import Drug 
 
@@ -18,3 +18,5 @@ def about(request):
 def drug(request):
     drugs = Drug.objects.all()
     return render(request, 'drugs.html', {'drugs': drugs})
+    #json  = serializers.serialize('json', drugs)
+    #return HttpResponse(json, content_type = 'application/json')
