@@ -58,11 +58,9 @@
             <section class="col-9 mt-5 ml-3">
     <p> Please report any bug to the <a href="https://github.com/QuackenbushLab/grand/issues">issues</a> tab of the website github repo.</p>
     <p> For any suggestion/comment, use the following form:</p>
-    
-
-
-        <form role="form">
-
+    <div class="form-area"> 
+        <form action="{% url 'about' %}" role="form" method="post">
+	 	    {% csrf_token %}
                     <div class="form-group">
                         <input type="text" class="form-control" id="name" name="name" placeholder="Name" maxlength="70" required>
                     </div>
@@ -74,10 +72,10 @@
                         <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject" maxlength="70" required>
                     </div>
                     <div class="form-group">
-                    <textarea class="form-control" type="textarea" id="message" placeholder="Message" maxlength="300" rows="7"></textarea>                
+                    <textarea class="form-control" type="textarea" id="message" placeholder="Message" maxlength="300" rows="7" required></textarea>                
                     </div>
 
-        <button type="button" id="submit" name="submit" class="btn btn-m btn-secondary">Send</button>
+        <button type="submit"  name="submit" class="btn btn-m btn-secondary">Submit</button>
         </form>
 	</section>
     </div>
