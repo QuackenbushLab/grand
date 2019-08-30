@@ -1,60 +1,78 @@
-import subprocess
-import pandas as pd
-import numpy as np
+library('stringr')
+setwd('/Users/mab8354/granddb/src')
+load('GTEx_PANDA_tissues.RData')
 
 # Initialize dataframe
-df = pd.DataFrame(columns=['drug','drugLink','tool','netzoo','netzooLink','netzooRel','network','ppi','ppiLink','motif','expression','expLink','tfs','genes','refs'])
+nTissues = dim(net)[2]
+tissues  = colnames(net)
+# Convert tissue name to capital letter for compatibility with gtex
+nTFs = dim(net)[1]/dim(genes)[1]
+k=0
+for(tissue in tissues){
+    k=k+1
+    pos=gregexpr('_', tissue)
+    for(i in 1:length(pos[[1]])){
+        posi=pos[[1]][i]
+        if(posi != -1){
+            substr(tissue, posi+1, posi+1) <- toupper(substr(tissue, posi+1, posi+1)) 
+            tissues[k] = tissue
+        }
+    }
+}
+cols = c('tissue','tissueLink','tool','netzoo','netzooLink','netzooRel','network','ppi','ppiLink','motif','expression','expLink','tfs','genes','refs')
+df <- data.frame(matrix(ncol = length(cols), nrow = nTissues))
+colnames(df) = cols
 
-# Read from bucket
-batcmd="aws s3 ls s3://cmapreg/data/drugNetworks/"
-res = subprocess.check_output(batcmd, shell=True)
-
-# Loop through files
-nDrugs = 0
-drugList = []
-genesVec = []
-tfsVec   = []
-expressionVec = []
-networkVec    = []
-for line in res.splitlines():
-    print(line)
-    nDrugs = nDrugs + 1
-    drug   = str(line.split()[-1]).split('.')[0][2:]
-    drugList.append(drug)
-    networkVec.append('https://granddb.s3.amazonaws.com/drugs/drugNetworks/' + drug + '.txt.mat')
-    expressionVec.append('https://granddb.s3.amazonaws.com/drugs/drugExpression/' + drug + '.txt')
-    tfsVec.append(nDrugs)
-    genesVec.append(nDrugs)
+# resave networks
+setwd('/Users/mab8354/granddb/networks')
+for(i in 1:nTissues){
+    d = net[,i]
+    d <- matrix(d, nrow = nTFs, byrow = TRUE)
+    rownames(d) = edges$TF[1:nTFs]
+    colnames(d) = unique(edges$Gene)
+    write.csv(d,paste0(tissues[i],".csv"))
+}
 
 # build vectors
-drugVec       = drugList
-drugLinkVec   = np.repeat('#',nDrugs)
-toolVec       = np.repeat('PANDA',nDrugs)
-netzooVec     = np.repeat('netZooM',nDrugs)
-netzooLinkVec = np.repeat('https://github.com/netZoo/netZooM/releases',nDrugs)
-netzooRelVec  = np.repeat('0.1',nDrugs)
-ppiVec        = np.repeat('https://granddb.s3.amazonaws.com/drugs/drugs_ppi.txt',nDrugs)
-ppiLinkVec    = np.repeat('http://string90.embl.de/', nDrugs)
-motifVec  = np.repeat('https://granddb.s3.amazonaws.com/drugs/drugs_motif.txt', nDrugs)
-expLinkVec    = np.repeat('#', nDrugs)
-refsVec       = np.repeat('#', nDrugs)
+expLinkVec = vector()
+networkVec = vector()
+for(i in 1:nTissues){
+    expLinkVec = c(expLinkVec, paste0("https://gtexportal.org/home/eqtls/tissue?tissueName=", tissues[i]))
+    networkVec = c(networkVec, paste0("https://granddb.s3.amazonaws.com/tissues/networks/",tissues[i], '.csv'))
+}
+tissueVec     = colnames(net)
+tissueLinkVec = expLinkVec 
+toolVec       = rep("PANDA", nTissues)
+netzooVec     = rep("netZooM", nTissues)
+netzooLinkVec = rep("https://github.com/netZoo/netZooM/releases", nTissues)
+netzooRelVec  = rep("0.1", nTissues)
+#networkVec    = rep("https://granddb.s3.amazonaws.com/tissues/networks/GTEx_PANDA_tissues.RData", nTissues)
+ppiVec        = rep("https://granddb.s3.amazonaws.com/tissues/networks/GTEx_PANDA_tissues.RData", nTissues)
+ppiLinkVec    = rep("http://string90.embl.de/", nTissues)
+motifVec      = rep("https://granddb.s3.amazonaws.com/tissues/networks/GTEx_PANDA_tissues.RData", nTissues)
+expressionVec = rep("https://granddb.s3.amazonaws.com/tissues/networks/GTEx_PANDA_tissues.RData", nTissues)
+#expLinkVec    = 
+tfsVec        = rep(nTFs, nTissues)
+genesVec      = rep(dim(genes)[1], nTissues)
+refsVec       = rep("https://www.cell.com/cell-reports/fulltext/S2211-1247(17)31418-3?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124717314183%3Fshowall%3Dtrue", nTissues)
 
 # Populate df
-df['drug']      = drugVec
-df['drugLink']  = drugLinkVec
-df['tool']      = toolVec
-df['netzooLink']= netzooLinkVec
-df['netzooRel'] = netzooRelVec
-df['network']   = networkVec
-df['ppi']       = ppiVec
-df['ppiLink']   = ppiLinkVec
-df['motif']     = motifVec
-df['expression']= expressionVec
-df['expLink']   = expLinkVec
-df['tfs']       = tfsVec
-df['genes']     = genesVec
-df['refs']      = refsVec
+df['tissue']     = tissueVec
+df['tissueLink'] = tissueLinkVec
+df['tool']       = toolVec
+df['netzoo']     = netzooVec
+df['netzooLink'] = netzooLinkVec
+df['netzooRel']  = netzooRelVec
+df['network']    = networkVec
+df['ppi']        = ppiVec
+df['ppiLink']    = ppiLinkVec
+df['motif']      = motifVec
+df['expression'] = expressionVec
+df['expLink']    = tissueLinkVec
+df['tfs']        = tfsVec
+df['genes']      = genesVec
+df['refs']       = refsVec
 
-# save dataframe
-os.chdir('/Users/mab8354/granddb')
-df.to_csv('drugs.csv',index=False)
+# Save to csv
+setwd('/Users/mab8354/granddb/')
+write.csv(df,"tissues.csv",row.names = FALSE)

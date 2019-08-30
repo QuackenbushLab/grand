@@ -44,5 +44,26 @@ class Drug(models.Model):
     genes     = models.IntegerField()
     refs      = models.URLField()
 
+class Tissue(models.Model):
+    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    tissue    = models.CharField(max_length=200)
+    tissueLink= models.URLField(default='#')
+    tool      = models.CharField(max_length=200)
+    netzoo    = models.CharField(max_length=200)
+    netzooLink= models.URLField(max_length=200)
+    netzooRel = models.FloatField()
+    network   = models.URLField()
+    ppi       = models.URLField()
+    ppiLink   = models.URLField()
+    motif     = models.URLField()
+    expression= models.URLField()
+    expLink   = models.URLField()
+    tfs       = models.IntegerField()
+    genes     = models.IntegerField()
+    refs      = models.URLField()
+
     def __str__(self):
        return self.name
+
+    def natural_key(self):
+       return self.my_natural_key
