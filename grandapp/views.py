@@ -17,8 +17,9 @@ def cell(request):
     cells = Cell.objects.all()
     return render(request, 'cell.html', {'cells': cells})
 
-#def about(request):
-#    return render(request, 'about.html')
+def about(request):
+    form = ContactForm()
+    return render(request, 'about.html', {'contactform':form})
 
 def drug(request):
     drugs = Drug.objects.all()
@@ -29,22 +30,3 @@ def drug(request):
 def tissue(request):
     tissues = Tissue.objects.all()
     return render(request, 'tissues.html', {'tissues': tissues})
-
-def about(request):
-    #check for POST requests on load.
-    form = ContactForm()
-    request.method == 'POST'
-    subject = request.POST.get('subject')
-    message = request.POST.get('message')
-    email   = request.POST.get('email')
-
-    if subject and message and email:
-        try:
-            send_mail(subject, message, email, ['benguebila@hsph.harvard.edu'])
-        except BadHeaderError:
-            return HttpResponse('Invalid header found.') 
-        return HttpResponse('Thank your for your email !')
-
-    else:
-        #loading contacts.html if no requests
-        return render(request, 'about.html')
