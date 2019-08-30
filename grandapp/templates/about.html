@@ -11,6 +11,8 @@
 </head>
 <body>
 
+{% load widget_tweaks %}
+
 <!-- Header -->
 <nav class="navbar bg-dark navbar-dark navbar-expand-sm">
     <div class="container">
@@ -61,19 +63,23 @@
     <div class="form-area"> 
         <form action="{% url 'about' %}" role="form" method="post">
 	 	    {% csrf_token %}
-		    Name:
-		    <div class="container mt-2">
-                    {{ contactform.contact_name }}
+                    <div class="form-group">
+                        {% render_field contactform.contact_name class="form-control" placeholder="Name" %}
                     </div>
-		    Email:
-		    <div class="container mt-2">
-                    {{ contactform.contact_email }}
+                    <div class="form-group">
+                        {% render_field contactform.contact_email class="form-control" placeholder="Email" %}
                     </div>
-		    Message:
-                    <div class="container mt-2">
-                    {{ contactform.content }}
+
+                    <div class="form-group">
+                        {% render_field contactform.contact_subject class="form-control" placeholder="Subject" %}
                     </div>
+                    <div class="form-group">
+                        {% render_field contactform.content class="form-control" placeholder="Message" %}                
+                    </div>
+
+        <div class="form-actions">
         <button type="submit"  name="submit" class="btn btn-m btn-secondary">Submit</button>
+        </div>
         </form>
 	</section>
     </div>
