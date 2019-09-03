@@ -46,8 +46,43 @@ def about(request):
                 return HttpResponse('Invalid header found.')
             return redirect('thanks')
         else:
-            return HttpResponse('Error')
+            return redirect('erroremail')
     return render(request, "about.html", {'contactform': form})
 
 def thanks(request):
-    return HttpResponse('Thank you for your message.')
+    if request.method == 'GET':
+        form = ContactForm()
+    else:
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            contact_name    = request.POST['contact_name']
+            contact_email   = request.POST['contact_email']
+            contact_subject = request.POST['contact_subject']
+            content         = request.POST['content']
+            try:
+                send_mail(subject=contact_subject, message=content, from_email=settings.EMAIL_HOST_USER, recipient_list=['marouen.b.guebila@gmail.com',], fail_silently=False)
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            return redirect('thanks')
+        else:
+            return HttpResponse('Error')
+    return render(request, "thankyou.html", {'contactform': form})
+
+def erroremail(request):
+    if request.method == 'GET':
+        form = ContactForm()
+    else:
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            contact_name    = request.POST['contact_name']
+            contact_email   = request.POST['contact_email']
+            contact_subject = request.POST['contact_subject']
+            content         = request.POST['content']
+            try:
+                send_mail(subject=contact_subject, message=content, from_email=settings.EMAIL_HOST_USER, recipient_list=['marouen.b.guebila@gmail.com',], fail_silently=False)
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            return redirect('thanks')
+        else:
+            return redirect('erroremail')
+    return render(request, "erroremail.html", {'contactform': form})

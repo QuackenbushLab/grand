@@ -3,3 +3,4 @@
 *.csv
 *.sqlite3
 /granddb/local_settings.py
+*.pyc
