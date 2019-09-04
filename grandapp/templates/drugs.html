@@ -74,24 +74,6 @@
                     <th scope="col">Reference</th>
                   </tr>
                 </thead>
-                <tbody>
-		 {% for drug in drugs %}
-		    <tr>
-		    <th scope="row">{{ forloop.counter }}</th>
-		    <td><a href="{{ drug.drugLink }}">{{ drug.drug }}</a></td>
-		    <td>{{ drug.tool }}</td>
-		    <td>{{ drug.netzoo }} <a href="{{ drug.netzooLink }}">{{ drug.netzooRel }}</a></td>
-		    <td><a href="{{ drug.network }}" download><i class="fas fa-download"></i></a></td>
-	            <td><a href="{{ drug.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ drug.ppiLink }}"><i class="fas fa-link"></i></a></td>
-                    <td><a href="{{ drug.motif }}"><i class="fas fa-download"></i></a></td>
-                    <td><a href="{{ drug.expression }}"><i class="fas fa-download"></i></a> <a href="{{ cell.expLink }}"><i class="fas fa-link"></i></a></td>
-                    <td>{{ drug.tfs }}</td>
-                    <td>{{ drug.genes }}</td>
-                    <td><a href="{{ drug.refs }}"><i class="fas fa-book"></i></a></td>
-                    </tr>
-		 {% endfor %}
-
-                </tbody>
               </table>
 </div>
 
@@ -113,6 +95,25 @@ $(function () {
 $(document).ready(function() {
     //datatables
     $('#drugstable').DataTable({
+      "ajax": "http://localhost:8000/api/v1/drugs/?format=datatables",
+
+     "serverSide": true,
+     "processing": true,
+
+      "columns": [
+          {"data": "number"},
+          {"data": "drug"},
+          {"data": "tool"},
+          {"data": "netzoo"},
+          {"data": "network"},
+          {"data": "ppi"},
+          {"data": "motif"},
+          {"data": "expression"},
+          {"data": "tfs"},
+          {"data": "genes"},
+          {"data": "refs"},
+      ],
+
       "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
              "<'row'<'col-sm-12'tr>>" +
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",

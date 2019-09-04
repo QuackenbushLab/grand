@@ -1,9 +1,10 @@
 import subprocess
 import pandas as pd
 import numpy as np
+import os
 
 # Initialize dataframe
-df = pd.DataFrame(columns=['drug','drugLink','tool','netzoo','netzooLink','netzooRel','network','ppi','ppiLink','motif','expression','expLink','tfs','genes','refs'])
+df = pd.DataFrame(columns=['number','drug','tool','netzoo','network','ppi','motif','expression','tfs','genes','refs'])
 
 # Read from bucket
 batcmd="aws s3 ls s3://cmapreg/data/drugNetworks/"
@@ -16,45 +17,44 @@ genesVec = []
 tfsVec   = []
 expressionVec = []
 networkVec    = []
+numbersVec    = []
+drugVec       = []
+ppiVec        = []
+refsVec       = []
 for line in res.splitlines():
     print(line)
     nDrugs = nDrugs + 1
     drug   = str(line.split()[-1]).split('.')[0][2:]
     drugList.append(drug)
-    networkVec.append('https://granddb.s3.amazonaws.com/drugs/drugNetworks/' + drug + '.txt.mat')
-    expressionVec.append('https://granddb.s3.amazonaws.com/drugs/drugExpression/' + drug + '.txt')
+    networkVec.append('<a href="' + 'https://granddb.s3.amazonaws.com/drugs/drugNetworks/' + drug + '.txt.mat' + '" download><i class="fas fa-download"></i></a>')
+    expressionVec.append('<a href="' + 'https://granddb.s3.amazonaws.com/drugs/drugExpression/' + drug + '.txt' + '"><i class="fas fa-download"></i></a> <a href="#"><i class="fas fa-link"></i></a>')
     tfsVec.append(nDrugs)
     genesVec.append(nDrugs)
+    numbersVec.append(nDrugs)
+    drugVec.append('<a href = "' + '#' + '" >' + drug + '</a>')
+    refsVec.append('<a href="#"><i class="fas fa-book"></i></a>')
 
 # build vectors
-drugVec       = drugList
-drugLinkVec   = np.repeat('#',nDrugs)
-toolVec       = np.repeat('PANDA',nDrugs)
-netzooVec     = np.repeat('netZooM',nDrugs)
-netzooLinkVec = np.repeat('https://github.com/netZoo/netZooM/releases',nDrugs)
-netzooRelVec  = np.repeat('0.1',nDrugs)
-ppiVec        = np.repeat('https://granddb.s3.amazonaws.com/drugs/drugs_ppi.txt',nDrugs)
-ppiLinkVec    = np.repeat('http://string90.embl.de/', nDrugs)
-motifVec  = np.repeat('https://granddb.s3.amazonaws.com/drugs/drugs_motif.txt', nDrugs)
+toolVec       = np.repeat('PANDA', nDrugs)
+netzooVec     = np.repeat('netZooM', nDrugs)
+netzooLinkVec = np.repeat('netZooM <a href="https://github.com/netZoo/netZooM/releases">0.1</a>', nDrugs)
+ppiVec        = np.repeat('<a href="https://granddb.s3.amazonaws.com/drugs/drugs_ppi.txt"><i class="fas fa-download"></i></a> <a href="http://string90.embl.de/"><i class="fas fa-link"></i></a>', nDrugs)
+motifVec      = np.repeat('<a href="https://granddb.s3.amazonaws.com/drugs/drugs_motif.txt"><i class="fas fa-download"></i></a>', nDrugs)
 expLinkVec    = np.repeat('#', nDrugs)
-refsVec       = np.repeat('#', nDrugs)
 
 # Populate df
+df['number']    = numbersVec
 df['drug']      = drugVec
-df['drugLink']  = drugLinkVec
 df['tool']      = toolVec
-df['netzooLink']= netzooLinkVec
-df['netzooRel'] = netzooRelVec
+df['netzoo']    = netzooLinkVec
 df['network']   = networkVec
 df['ppi']       = ppiVec
-df['ppiLink']   = ppiLinkVec
 df['motif']     = motifVec
 df['expression']= expressionVec
-df['expLink']   = expLinkVec
 df['tfs']       = tfsVec
 df['genes']     = genesVec
 df['refs']      = refsVec
 
 # save dataframe
 os.chdir('/Users/mab8354/granddb')
-df.to_csv('drugs.csv',index=False)
+df.to_csv('drugs.csv', index=False)

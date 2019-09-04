@@ -34,18 +34,14 @@ class Command(BaseCommand):
         print("Loading drug data!")
         for row in DictReader(open('./drugs.csv')):
             drug = Drug()
+            drug.number       = row['number']
             drug.drug         = row['drug']
-            drug.drugLink     = row['drugLink']
             drug.tool         = row['tool']
             drug.netzoo       = row['netzoo']
-            drug.netzooLink   = row['netzooLink']
-            drug.netzooRel    = row['netzooRel']
             drug.network      = row['network']
             drug.ppi          = row['ppi']
-            drug.ppiLink      = row['ppiLink']
             drug.motif        = row['motif']
             drug.expression   = row['expression']
-            drug.expLink      = row['expLink']
             drug.tfs          = row['tfs']
             drug.genes        = row['genes']
             drug.refs         = row['refs']
