@@ -1,5 +1,6 @@
 % Drug list
 %Read aws ls
+setenv('LD_LIBRARY_PATH','');
 [status,res]=system('aws s3 ls s3://granddb/drugs/drugNetworks/');
 
 %save output to file
@@ -17,7 +18,7 @@ drugs=[outputNet.Var4(:)]';
 %%
 tfs  = zeros(1,length(drugs));
 genes= zeros(1,length(drugs));
-parpool(4)
+parpool(16)
 parfor i=1:length(drugs)
     i
     fds      = fileDatastore(['s3://granddb/drugs/drugNetworks/' drugs{i}], "ReadFcn", @load);
