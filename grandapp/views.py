@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.http import Http404
 from django.core import serializers
 from .models import Cell
-from .models import Drug, DrugResult 
+from .models import Drug, DrugResultUp, DrugResultDown
 from .models import Tissue
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
 from .forms import ContactForm, GeneForm

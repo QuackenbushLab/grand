@@ -16,8 +16,10 @@ urlpatterns = [
     url(r'^thanks/', views.thanks, name='thanks'),
     url(r'^erroremail/', views.erroremail, name='erroremail'),
     url('api/v1/drugs/', api_views.DrugList.as_view()),
-    path('api/v1/drugresult/', api_views.DrugResultList.as_view()),
+    path('api/v1/drugresultup/', api_views.DrugResultListUp.as_view()),
+    path('api/v1/drugresultdown/', api_views.DrugResultListDown.as_view()),
     url(r'^analysis/', view=views.analysis, name='analysis'),
     path('drugresult/', view=views.drugresult, name='drugresult'),
-    path('api/v1/drugresult/<int:id>/',  api_views.DrugRetrieveUpdateDestroy.as_view())
+    path('api/v1/drugresultup/<int:id>/',  api_views.DrugRetrieveUpdateDestroyUp.as_view()),
+    path('api/v1/drugresultdown/<int:id>/',  api_views.DrugRetrieveUpdateDestroyDown.as_view())
 ]

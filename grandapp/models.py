@@ -39,13 +39,19 @@ class Drug(models.Model):
     genes     = models.IntegerField()
     refs      = models.URLField()
 
-class DrugResult(models.Model):
+class DrugResultUp(models.Model):
     id        = models.AutoField(primary_key=True)
     drug      = models.CharField(max_length=400)
     overlap   = models.FloatField()
     cosine    = models.FloatField()
-    def __repr__(self):
-        return '<DrugResult object ({}) "{}">'.format(self.id, self.drug)
+    #def __repr__(self):
+    #    return '<DrugResult object ({}) "{}">'.format(self.id, self.drug)
+
+class DrugResultDown(models.Model):
+    id        = models.AutoField(primary_key=True)
+    drug      = models.CharField(max_length=400)
+    overlap   = models.FloatField()
+    cosine    = models.FloatField()
 
 class Tissue(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]

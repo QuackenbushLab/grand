@@ -51,17 +51,61 @@
   </div>
 </nav>
 
-    <div class="container col-9 pb-5 mb-5">
-        <table id="drugstbl" class="table table-hover" style="width: 100%">
+<div class="container col-9 pb-5 mb-5">
+        &nbsp; <div class="row lm-6">
+             <div class="col-xs-6">
+             &nbsp; &nbsp;
+             </div>
+            <div class="col-xs-6">
+            <h3><span class="badge badge-danger">Aggravate</span></h3>
+            </div>
+         <div class="col-xs-6">
+         &nbsp; <i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Top 100 compounds that have a similar profile with the query set.">
+                    </i>
+            </div>
+         </div>
+
+        <table id="drugstbl1" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
-                    <th scope="col">ID</th>
                     <th scope="col">Drug</th>
                     <th scope="col">Overlap</th>
                     <th scope="col">Cosine</th>
                   </tr>
                 </thead>
-              </table>
+         </table>
+</div>
+
+<div class="container col-9 pb-5 mb-5">
+                &nbsp; <div class="row lm-6">
+             <div class="col-xs-6">
+             &nbsp; &nbsp;
+             </div>
+            <div class="col-xs-6">
+            <h3><span class="badge badge-primary">Reverse</span></h3>
+            </div>
+         <div class="col-xs-6">
+         &nbsp; <i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Top 100 compounds that have a reverse profile with the query set.">
+                    </i>
+            </div>
+         </div>
+        <table id="drugstbl2" class="table table-hover" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th scope="col">Drug</th>
+                    <th scope="col">Overlap</th>
+                    <th scope="col">Cosine</th>
+                  </tr>
+                </thead>
+         </table>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css"></script>
@@ -81,13 +125,28 @@ $(function () {
 // Basic example
 $(document).ready(function() {
     //datatables
-    $('#drugstbl').DataTable({
-      "ajax": "http://localhost:8000/api/v1/drugresult/?format=datatables",
+    $('#drugstbl1').DataTable({
+      "ajax": "http://localhost:8000/api/v1/drugresultup/?format=datatables",
       "serverSide": true,
       "processing": true,
 
       "columns": [
-          {"data": "id"},
+          {"data": "drug"},
+          {"data": "overlap"},
+          {"data": "cosine"},
+      ],
+
+      "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+    });
+
+    $('#drugstbl2').DataTable({
+      "ajax": "http://localhost:8000/api/v1/drugresultdown/?format=datatables",
+      "serverSide": true,
+      "processing": true,
+
+      "columns": [
           {"data": "drug"},
           {"data": "overlap"},
           {"data": "cosine"},

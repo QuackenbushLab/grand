@@ -63,7 +63,13 @@ res.index = drugNames.iloc[list(reversed(indSort))]
 #print('Results written to results.csv')
 
 # post to API
-for i in range(len(indSort)):
-	payload = {'drug':drugNames.iloc[indSort[i]],'cosine':cosDist[indSort[i]],'overlap':overlap[indSort[i]]}
-	r = requests.put('http://localhost:8000/api/v1/drugresult/' + str(indSort[i]) + '/', data=payload)
+max_display = 100
+for i in range(max_display):
+	payload = {'drug':drugNames.iloc[indSort[i]],'cosine':round(cosDist[indSort[i]],4),'overlap':overlap[indSort[i]]}
+	r = requests.put('http://localhost:8000/api/v1/drugresultup/' + str(i+1) + '/', data=payload)
 	#print(r.status_code)
+
+for i in range(max_display):
+        payload = {'drug':drugNames.iloc[indSort[-1-i]],'cosine':round(cosDist[indSort[-1-i]],4),'overlap':overlap[indSort[-1-i]]}
+        r = requests.put('http://localhost:8000/api/v1/drugresultdown/' + str(i+1) + '/', data=payload)
+        #print(r.status_code)

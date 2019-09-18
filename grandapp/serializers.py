@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Drug, DrugResult
+from .models import Drug, DrugResultUp, DrugResultDown
 
 class DrugSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -13,11 +13,20 @@ class DrugSerializer(serializers.ModelSerializer):
 		#data['current_price'] = instance.current_price()
 		return data
 
-class DrugResultSerializer(serializers.ModelSerializer):
+class DrugResultSerializerUp(serializers.ModelSerializer):
 	class Meta:
-		model = DrugResult
+		model = DrugResultUp
 		fields = ('id','drug','overlap','cosine')
 	
 	def to_representation(self, instance):
 		data = super().to_representation(instance)
 		return data
+
+class DrugResultSerializerDown(serializers.ModelSerializer):
+        class Meta:
+                model = DrugResultDown
+                fields = ('id','drug','overlap','cosine')
+
+        def to_representation(self, instance):
+                data = super().to_representation(instance)
+                return data
