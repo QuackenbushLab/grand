@@ -29,3 +29,8 @@
     float: right;
     text-align: right;
  }
+
+.button-box {
+   text-align:center;
+   margin-top:20px;
+}

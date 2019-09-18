@@ -1,0 +1,30 @@
+from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
+from  .serializers import DrugSerializer, DrugResultSerializer
+from .models import Drug, DrugResult
+from django_filters.rest_framework import DjangoFilterBackend
+
+class DrugList(ListAPIView):
+	queryset = Drug.objects.all()
+	serializer_class = DrugSerializer
+
+class DrugResultList(ListAPIView):
+	queryset = DrugResult.objects.all()
+	serializer_class = DrugResultSerializer
+	filter_backends = (DjangoFilterBackend,)
+	filter_fields = ('idd',)
+
+class DrugRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
+	queryset = DrugResult.objects.all()
+	lookup_field = 'idd'
+	serializer_class = DrugResultSerializer
+
+	def update(self, request, *args, **kwargs):
+		response = super().update(request, *args, **kwargs)
+		if response.status_code == 200:
+			from django.core.cache import cache
+			drugResult = reponse.data
+			cache.set('drugResult_data_{}'.format(drugResult['idd']), {
+				'overlap': drugResult['overlap'],
+				'cosine': drugResult['cosine'],
+			})
+		return reponse

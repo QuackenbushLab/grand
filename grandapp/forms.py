@@ -9,3 +9,15 @@ class ContactForm(forms.Form):
         widget=forms.Textarea,
         label="Message"
     )
+
+class GeneForm(forms.Form):
+    contentup = forms.CharField(
+        required=True,
+        widget=forms.Textarea,
+        label="up"
+    )
+    contentdown = forms.CharField(
+        required=True,
+        widget=forms.Textarea,
+        label="down"
+    )

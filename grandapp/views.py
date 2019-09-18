@@ -3,11 +3,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.http import Http404
 from django.core import serializers
 from .models import Cell
-from .models import Drug 
+from .models import Drug, DrugResult 
 from .models import Tissue
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
-from .forms import ContactForm
+from .forms import ContactForm, GeneForm
 from django.conf import settings
+import os
 
 def home(request):
     return render(request, 'home.html')
@@ -29,6 +30,31 @@ def drug(request):
 def tissue(request):
     tissues = Tissue.objects.all()
     return render(request, 'tissues.html', {'tissues': tissues})
+
+def analysis(request):
+    if request.method == 'GET':
+         form = GeneForm()
+    else:
+         form = GeneForm(request.POST)
+         if form.is_valid():
+             contentup   = request.POST['contentup']
+             contentdown = request.POST['contentdown']
+             try:
+                 u = open('src/cluereg/data/sampleUp.csv','w')
+                 u.write(contentup)
+                 u.close()
+                 d = open('src/cluereg/data/sampleDown.csv','w')
+                 d.write(contentdown)
+                 d.close()
+                 status = os.system('python3 src/cluereg/lib/enrichCmapReg.py src/cluereg/data/sparse_cmapreg.npz src/cluereg/data/geneNames.csv src/cluereg/data/drugNames.csv src/cluereg/data/sampleUp.csv src/cluereg/data/sampleDown.csv')
+                 print(status)
+             except BadHeaderError: #find a better exception
+                 return HttpResponse('Invalid header found.')
+             return redirect('drugresult')
+    return render(request, 'analysis.html', {'geneform':form})
+
+def drugresult(request):
+    return render(request, 'drugresult.html')
 
 def about(request):
     if request.method == 'GET':
