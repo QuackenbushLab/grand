@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-   <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
   <title>Bootstrap</title>
 </head>
 <body>
@@ -66,24 +66,19 @@
                         {% render_field geneform.contentdown class="form-control" placeholder="Genes Down" %}
                     </div>
                     </div>
-                    <div class="button-box">
-                    &nbsp; &nbsp; <button id="a" class="btn btn-primary" type="submit" name="submit">
-  			Submit
-		     </button>
+                    <div class="form-actions button-box">
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<button type="submit"  name="submit" class="btn btn-primary" id="btnFetch">Submit</button>
                     </div>
                </form>
            
 	</section>
-
-    <div style="margin:3em;">
-  <form class="form-inline" id="topicForm" action="" method="POST">
-    <input type="text" id="inputTopic" name="topic" class="form-control mb-2 mr-sm-2" placeholder="Topic of interest" required autofocus/>
-    <button type="button" id="btnFetch" class="btn btn-primary mb-2">Submit</button>
-  </form>
-</div>
     </div>
 </div>
 
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 <script>
 $(document).ready(function() {
     $("#btnFetch").click(function() {
@@ -96,10 +91,6 @@ $(document).ready(function() {
     });
 });
 </script>
-<script src="https://kit.fontawesome.com/a076d05399.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 </body>
 </html>
 
