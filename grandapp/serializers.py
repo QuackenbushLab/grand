@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Drug, DrugResultUp, DrugResultDown
+from .models import Drug, DrugResultUp, DrugResultDown, Params
 
 class DrugSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -26,6 +26,15 @@ class DrugResultSerializerDown(serializers.ModelSerializer):
         class Meta:
                 model = DrugResultDown
                 fields = ('id','drug','overlap','cosine')
+
+        def to_representation(self, instance):
+                data = super().to_representation(instance)
+                return data
+
+class ParamsSerializer(serializers.ModelSerializer):
+        class Meta:
+                model = Params
+                fields = ('id','genesupin','genesdownin','genesup','genesdown')
 
         def to_representation(self, instance):
                 data = super().to_representation(instance)

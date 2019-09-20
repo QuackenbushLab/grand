@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-  <title>Bootstrap</title>
+  <title>Results</title>
 </head>
 <body>
 
@@ -28,8 +28,8 @@
           </div>
         </li>
           <a class="nav-item nav-link" href="#">Analysis</a>
-          <a class="nav-item nav-link" href="#">Funding</a>
-          <a class="nav-item nav-link" href="/about">About</a>
+          <a class="nav-item nav-link" href="#">Help</a>
+          <a class="nav-item nav-link" href="/about">Contact</a>
           <a class="nav-item nav-link" href="https://github.com/QuackenbushLab/grand"><i class="fab fa-github fa-lg"></i></a>
       </div>
   </div>
@@ -51,15 +51,26 @@
   </div>
 </nav>
 
+<div class="container alert alert-info alert-dismissible fade show col-9">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+
+<h4 class="alert-heading">Submission stats</h4>
+<p class="mb-1"> {% for param in params %}
+        {{ param.genesup }}/{{ param.genesupin }} entries are valid gene IDs in the up set.
+        {{ param.genesdown }}/{{ param.genesdownin }} entries are valid gene IDs in the down set.
+        {% endfor %}</p>
+</div>
 <div class="container col-9 pb-5 mb-5">
-        &nbsp; <div class="row lm-6">
+             &nbsp; <div class="row lm-6">
              <div class="col-xs-6">
              &nbsp; &nbsp;
              </div>
             <div class="col-xs-6">
             <h3><span class="badge badge-danger">Aggravate</span></h3>
             </div>
-         <div class="col-xs-6">
+           <div class="col-xs-6">
          &nbsp; <i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
@@ -73,15 +84,26 @@
                 <thead>
                   <tr>
                     <th scope="col">Drug</th>
-                    <th scope="col">Overlap</th>
-                    <th scope="col">Cosine</th>
+                    <th scope="col">Overlap <i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="The overlap score was computed as in Zhong et al., JASN, 2013.">
+                    </i></th>
+                    <th scope="col">Cosine <i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Cosine similarity between the input vector and top 100 compounds. A cosine of 1 indicates a perfect alignment in the direction of the vectors and -1 means an opposite direction of 
+                      the vectors in the n-dimensional gene space. See also Duan et al., NPJ Sys Biol Appl, 2016.">
+                    </i></th>
                   </tr>
                 </thead>
          </table>
 </div>
 
 <div class="container col-9 pb-5 mb-5">
-                &nbsp; <div class="row lm-6">
+             &nbsp; <div class="row lm-6">
              <div class="col-xs-6">
              &nbsp; &nbsp;
              </div>
@@ -101,8 +123,19 @@
                 <thead>
                   <tr>
                     <th scope="col">Drug</th>
-                    <th scope="col">Overlap</th>
-                    <th scope="col">Cosine</th>
+                    <th scope="col">Overlap <i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="The overlap score was computed as in Zhong et al., JASN, 2013.">
+                    </i></th>
+                    <th scope="col">Cosine <i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Cosine similarity between the input vector and top 100 compounds. A cosine of 1 indicates a perfect alignment in the direction of the vectors and -1 means an opposite direction of
+                      the vectors in the n-dimensional gene space. See also Duan et al., NPJ Sys Biol Appl, 2016.">
+                    </i></th>
                   </tr>
                 </thead>
          </table>
@@ -116,7 +149,13 @@
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 <script src="{% static 'js/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
-
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
 <script>
 $(function () {
   $('[data-toggle="popover"]').popover();
@@ -136,9 +175,13 @@ $(document).ready(function() {
           {"data": "cosine"},
       ],
 
-      "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+     buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+
+      "dom": "B" + "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
              "<'row'<'col-sm-12'tr>>" +
-             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-4'p>>",
     });
 
     $('#drugstbl2').DataTable({
@@ -151,10 +194,14 @@ $(document).ready(function() {
           {"data": "overlap"},
           {"data": "cosine"},
       ],
+      
+      buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
 
-      "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+      "dom": "B" + "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
              "<'row'<'col-sm-12'tr>>" +
-             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-4'p>>",
     });
 } );
 </script>

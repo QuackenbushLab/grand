@@ -53,6 +53,13 @@ class DrugResultDown(models.Model):
     overlap   = models.FloatField()
     cosine    = models.FloatField()
 
+class Params(models.Model):
+    id         = models.AutoField(primary_key=True)
+    genesupin  = models.IntegerField()
+    genesdownin= models.IntegerField(default=0)
+    genesup    = models.IntegerField()
+    genesdown  = models.IntegerField()
+
 class Tissue(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
     tissue    = models.CharField(max_length=200)

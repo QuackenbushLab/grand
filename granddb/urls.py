@@ -19,7 +19,9 @@ urlpatterns = [
     path('api/v1/drugresultup/', api_views.DrugResultListUp.as_view()),
     path('api/v1/drugresultdown/', api_views.DrugResultListDown.as_view()),
     url(r'^analysis/', view=views.analysis, name='analysis'),
+    url(r'^analysisexample/', view=views.analysisexample, name='analysisexample'),
     path('drugresult/', view=views.drugresult, name='drugresult'),
     path('api/v1/drugresultup/<int:id>/',  api_views.DrugRetrieveUpdateDestroyUp.as_view()),
-    path('api/v1/drugresultdown/<int:id>/',  api_views.DrugRetrieveUpdateDestroyDown.as_view())
+    path('api/v1/drugresultdown/<int:id>/',  api_views.DrugRetrieveUpdateDestroyDown.as_view()),
+    path('api/v1/params/<int:id>/',  api_views.ParamRetrieveUpdateDestroy.as_view()),
 ]

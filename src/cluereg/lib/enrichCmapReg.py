@@ -73,3 +73,7 @@ for i in range(max_display):
         payload = {'drug':drugNames.iloc[indSort[-1-i]],'cosine':round(cosDist[indSort[-1-i]],4),'overlap':overlap[indSort[-1-i]]}
         r = requests.put('http://localhost:8000/api/v1/drugresultdown/' + str(i+1) + '/', data=payload)
         #print(r.status_code)
+
+# stats about query
+payload = {'genesupin': len(sampleGenesUp),'genesdownin':len(sampleGenesDown),'genesup':np.count_nonzero(intersectUp),'genesdown':np.count_nonzero(intersectDown)}
+r = requests.put('http://localhost:8000/api/v1/params/0/', data=payload)

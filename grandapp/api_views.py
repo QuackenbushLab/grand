@@ -1,6 +1,6 @@
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
-from .serializers import DrugSerializer, DrugResultSerializerUp, DrugResultSerializerDown
-from .models import Drug, DrugResultUp, DrugResultDown
+from .serializers import DrugSerializer, DrugResultSerializerUp, DrugResultSerializerDown, ParamsSerializer
+from .models import Drug, DrugResultUp, DrugResultDown, Params
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
 
@@ -73,5 +73,23 @@ class DrugRetrieveUpdateDestroyDown(RetrieveUpdateDestroyAPIView):
                                 'drug': drugResult['drug'],
                                 'overlap': drugResult['overlap'],
                                 'cosine': drugResult['cosine'],
+                        })
+                return response
+
+class ParamRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
+        queryset = Params.objects.all()
+        lookup_field = 'id'
+        serializer_class = ParamsSerializer
+
+        def update(self, request, *args, **kwargs):
+                response = super().update(request, *args, **kwargs)
+                if response.status_code == 200:
+                        from django.core.cache import cache
+                        param = response.data
+                        cache.set('param_data_{}'.format(param['id']), {
+                                'genesupin': param['genesupin'],
+                                'genesdownin': param['genesdownin'],
+                                'genesup': param['genesup'],
+                                'genesdown': param['genesdown'],
                         })
                 return response
