@@ -60,6 +60,22 @@ class Params(models.Model):
     genesup    = models.IntegerField()
     genesdown  = models.IntegerField()
 
+class Disease(models.Model):
+    id           = models.AutoField(primary_key=True)
+    disease      = models.CharField(max_length=600)
+    count        = models.IntegerField()
+    intersect    = models.IntegerField()
+    pval         = models.FloatField()
+    qval         = models.FloatField()
+
+class Gwas(models.Model):
+    id           = models.AutoField(primary_key=True)
+    disease      = models.CharField(max_length=600)
+    count        = models.IntegerField()
+    intersect    = models.IntegerField()
+    pval         = models.FloatField()
+    qval         = models.FloatField()
+
 class Tissue(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
     tissue    = models.CharField(max_length=200)

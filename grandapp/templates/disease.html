@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  <title>Bootstrap</title>
+</head>
+<body>
+
+{% load widget_tweaks %}
+
+<!-- Header -->
+<nav class="navbar bg-dark navbar-dark navbar-expand-sm">
+    <div class="container">
+        <a class="navbar-brand m-0" href="/">
+            <img src="{% static 'images/logo.svg' %}" style="width: 400px;">
+        </a>
+        <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="/">Home</a>
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Networks</a>
+            <div class="dropdown-menu">
+              <a href="/drugs" class="dropdown-item">Small molecules</a>
+              <a href="/cell" class="dropdown-item">Cell lines</a>
+              <a href="/tissues" class="dropdown-item">Tissues</a>
+            </div>
+          </li>
+             <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Analysis</a>
+          <div class="dropdown-menu">
+            <a href="/analysis" class="dropdown-item">Small molecules</a>
+            <a href="/disease" class="dropdown-item">Disease</a>
+          </div>
+        </li>
+            <a class="nav-item nav-link" href="#">Help</a>
+            <a class="nav-item nav-link" href="/about">Contact</a>
+            <a class="nav-item nav-link" href="https://github.com/QuackenbushLab/grand"><i class="fab fa-github fa-lg"></i></a>
+        </div>
+    </div>
+</nav>
+
+<!-- Footer -->
+<nav class="navbar navbar-dark navbar-expand-sm fixed-bottom bg-dark">
+  <div class="container">
+      <a class="navbar-brand m-0" href="https://www.hsph.harvard.edu/biostatistics/">
+          <img src="{% static 'images/footer-01.svg' %}" style="width: 400px;">
+      </a>
+      <div class="navbar-nav navbar-expand-sm">
+          <a class="nav-item nav-link" href="https://twitter.com/intent/tweet?text=http://hsph.harvard.edu"><i class="fab fa-twitter-square fa-2x"></i></a>
+          <a class="nav-item nav-link" href="http://www.facebook.com/sharer/sharer.php?u=http://hsph.harvard.edu"><i class="fab fa-facebook-square fa-2x"></i></a>
+          <a class="nav-item nav-link" href="https://www.linkedin.com/sharing/share-offsite/?url=http://hsph.harvard.edu"><i class="fab fa-linkedin fa-2x"></i></a>
+          <a class="nav-item nav-link" href="/about"><i class="fas fa-envelope-square fa-2x"></i></a>
+          <a class="nav-item nav-link" href="https://creativecommons.org/licenses/by-sa/4.0/"><i class="fab fa-creative-commons fa-2x"></i></a>
+      </div>
+  </div>
+</nav>
+
+<div class="container mt-5">
+<div class="row">
+        <div class="offset-md-2 col-md-4 form-area"> 
+               <form action="{% url 'disease' %}" role="form" method="post">
+	 	    {% csrf_token %}
+                    <div class="form-group">
+                        {% render_field diseaseform.content class="form-control" placeholder="TF list" %}                
+                    </div>
+                    <div class="form-actions button-box">
+                   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="/diseaseexample" class="btn btn-info" role="button">Example</a>
+                   <button type="submit"  name="submit" class="btn btn-primary" id="btnFetch">
+                   <span id="mySpinner" class="d-none">
+                   <span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
+                   </span>
+                    Submit</button>
+                    </div>
+               </form>
+        </div>
+
+        <div class="col-md-4"> 
+        <p align="justify"></p>
+        <p align="justify"></p>
+        <p align="justify"></p>
+        </div>
+</div>
+</div>
+
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+<script>
+$(document).ready(function() {
+    $("#btnFetch").click(function() {
+        $("#mySpinner").removeClass("d-none")
+    })
+});
+</script>
+</body>
+</html>
+

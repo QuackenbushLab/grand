@@ -1,6 +1,6 @@
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
-from .serializers import DrugSerializer, DrugResultSerializerUp, DrugResultSerializerDown, ParamsSerializer
-from .models import Drug, DrugResultUp, DrugResultDown, Params
+from .serializers import DrugSerializer, DrugResultSerializerUp, DrugResultSerializerDown, ParamsSerializer, DiseaseSerializer, GwasSerializer
+from .models import Drug, DrugResultUp, DrugResultDown, Params, Disease, Gwas
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
 
@@ -23,6 +23,18 @@ class DrugResultListUp(ListAPIView):
 class DrugResultListDown(ListAPIView):
         queryset = DrugResultDown.objects.all().order_by('-overlap')
         serializer_class = DrugResultSerializerDown
+        filter_backends = (DjangoFilterBackend,)
+        filter_fields = ('id',)
+
+class DiseaseList(ListAPIView):
+        queryset = Disease.objects.all().order_by('pval')
+        serializer_class = DiseaseSerializer
+        filter_backends = (DjangoFilterBackend,)
+        filter_fields = ('id',)
+
+class GwasList(ListAPIView):
+        queryset = Gwas.objects.all().order_by('pval')
+        serializer_class = GwasSerializer
         filter_backends = (DjangoFilterBackend,)
         filter_fields = ('id',)
 
@@ -91,5 +103,43 @@ class ParamRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
                                 'genesdownin': param['genesdownin'],
                                 'genesup': param['genesup'],
                                 'genesdown': param['genesdown'],
+                        })
+                return response
+
+class DiseaseRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
+        queryset = Disease.objects.all()
+        lookup_field = 'id'
+        serializer_class = DiseaseSerializer
+
+        def update(self, request, *args, **kwargs):
+                response = super().update(request, *args, **kwargs)
+                if response.status_code == 200:
+                        from django.core.cache import cache
+                        disease = response.data
+                        cache.set('disease_data_{}'.format(disease['id']), {
+                                'disease': disease['disease'],
+                                'count': disease['count'],
+                                'intersect': disease['intersect'],
+                                'pval': disease['pval'],
+                                'qval': disease['qval'],
+                        })
+                return response
+
+class GwasRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
+        queryset = Gwas.objects.all()
+        lookup_field = 'id'
+        serializer_class = GwasSerializer
+
+        def update(self, request, *args, **kwargs):
+                response = super().update(request, *args, **kwargs)
+                if response.status_code == 200:
+                        from django.core.cache import cache
+                        gwas = response.data
+                        cache.set('disease_data_{}'.format(gwas['id']), {
+                                'disease': gwas['disease'],
+                                'count': gwas['count'],
+                                'intersect': gwas['intersect'],
+                                'pval': gwas['pval'],
+                                'qval': gwas['qval'],
                         })
                 return response

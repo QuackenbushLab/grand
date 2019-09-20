@@ -21,3 +21,10 @@ class GeneForm(forms.Form):
         widget=forms.Textarea,
         label="down"
     )
+
+class DiseaseForm(forms.Form):
+    content = forms.CharField(
+        required=True,
+        widget=forms.Textarea(attrs={'rows':20, 'cols':20}),
+        label="disease"
+    )

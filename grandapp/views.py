@@ -6,7 +6,7 @@ from .models import Cell
 from .models import Drug, DrugResultUp, DrugResultDown, Params
 from .models import Tissue
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
-from .forms import ContactForm, GeneForm
+from .forms import ContactForm, GeneForm, DiseaseForm
 from django.conf import settings
 import os
 
@@ -26,6 +26,42 @@ def drug(request):
     return render(request, 'drugs.html', {'drugs': drugs})
     #json  = serializers.serialize('json', drugs)
     #return HttpResponse(json, content_type = 'application/json')
+
+def disease(request):
+    if request.method == 'GET':
+         form = DiseaseForm()
+    else:
+         form = DiseaseForm(request.POST)
+         if form.is_valid():
+             content   = request.POST['content']
+             try:
+                 u = open('src/diseaseEnr/sampleTFGWAS.csv','w')
+                 u.write(content)
+                 u.close()
+                 status  = os.system('python3 src/diseaseEnr/enrichDisease.py src/diseaseEnr/sampleTFGWAS.csv')
+                 print(status)
+             except BadHeaderError: #find a better exception
+                 return HttpResponse('Invalid header found.')
+             return redirect('diseaseresult')
+    return render(request, 'disease.html', {'diseaseform':form})
+
+def diseaseexample(request):
+    if request.method == 'GET':
+         form = DiseaseForm({'content':'BHLHE23\nMAX\nMYOD1\nARNTL\nBHLHE40\nMYCN\nCLOCK\nHEY2\nASCL1\nTCF12\nHES6\nFERD3L\nMSGN1\nUSF1\nNEUROD1\nHAND2\nHEY1\nMESP1\nPTF1A\nNPAS2\nNEUROD2\nNHLH1\nATOH1\nARNT2\nOLIG3\nNHLH2\nNEUROG2\nMSC\nHES7\nFOXL1\nTCF3\nVAX1\nBATF\nMAF\nMYC\nDLX2\nIRF4\nIRF8\nKLF4\nCEBPE\n'})
+    else:
+         form = DiseaseForm(request.POST)
+         if form.is_valid():
+             content   = request.POST['content']
+             try:
+                 u = open('src/diseaseEnr/sampleTFGWAS.csv','w')
+                 u.write(content)
+                 u.close()
+                 status  = os.system('python3 src/diseaseEnr/enrichDisease.py src/diseaseEnr/sampleTFGWAS.csv')
+                 print(status)
+             except BadHeaderError: #find a better exception
+                 return HttpResponse('Invalid header found.')
+             return redirect('diseaseresult')
+    return render(request, 'disease.html', {'diseaseform':form})
 
 def tissue(request):
     tissues = Tissue.objects.all()
@@ -78,6 +114,10 @@ def analysisexample(request):
 def drugresult(request):
     params = Params.objects.all()
     return render(request, 'drugresult.html', {'params':params})
+
+def diseaseresult(request):
+    params = Params.objects.all()
+    return render(request, 'diseaseresult.html', {'params':params})
 
 def about(request):
     if request.method == 'GET':

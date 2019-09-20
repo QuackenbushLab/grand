@@ -27,7 +27,13 @@
             <a href="/tissues" class="dropdown-item">Tissues</a>
           </div>
         </li>
-          <a class="nav-item nav-link" href="#">Analysis</a>
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Analysis</a>
+          <div class="dropdown-menu">
+            <a href="/analysis" class="dropdown-item">Small molecules</a>
+            <a href="/disease" class="dropdown-item">Disease</a>
+          </div>
+        </li>
           <a class="nav-item nav-link" href="#">Help</a>
           <a class="nav-item nav-link" href="/about">Contact</a>
           <a class="nav-item nav-link" href="https://github.com/QuackenbushLab/grand"><i class="fab fa-github fa-lg"></i></a>
@@ -57,10 +63,10 @@
   </button>
 
 <h4 class="alert-heading">Submission stats</h4>
-<p class="mb-1"> {% for param in params %}
-        {{ param.genesup }}/{{ param.genesupin }} entries are valid gene IDs in the up set.
-        {{ param.genesdown }}/{{ param.genesdownin }} entries are valid gene IDs in the down set.
-        {% endfor %}</p>
+<p class="mb-1">
+        {{ params.0.genesup }}/{{ params.0.genesupin }} entries are valid gene IDs in the up set.
+        {{ params.0.genesdown }}/{{ params.0.genesdownin }} entries are valid gene IDs in the down set.
+        </p>
 </div>
 <div class="container col-9 pb-5 mb-5">
              &nbsp; <div class="row lm-6">
