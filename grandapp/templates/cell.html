@@ -65,7 +65,13 @@
                     <th scope="col">Cell line</th>
                     <th scope="col">Tool</th>
                     <th scope="col">netZoo release</th>
-                    <th scope="col">Network</th>
+                    <th scope="col">Network <i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      title="Network format"
+                      data-content="Please refer to the Help page Network section for the network download formats.">
+                    </i></th>
                     <th scope="col">PPI <i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
@@ -87,7 +93,7 @@
 		    <td><a href="{{ cell.cellLink }}">{{ cell.cellLine }}</a></td>
 		    <td>{{ cell.tool }}</td>
 		    <td>{{ cell.netzoo }} <a href="{{ cell.netzooLink }}">{{ cell.netzooRel }}</a></td>
-		    <td><a href="{{ cell.network }}" download><i class="fas fa-download"></i></a></td>
+                    <td><a href="{{ cell.network }}" class="btn btn-outline-primary" role="button">po</a></td>
 	            <td><a href="{{ cell.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ cell.ppiLink }}"><i class="fas fa-link"></i></a></td>
                     <td><a href="{{ cell.motif }}"><i class="fas fa-download"></i></a></td>
                     <td><a href="{{ cell.expression }}"><i class="fas fa-download"></i></a> <a href="{{ cell.expLink }}"><i class="fas fa-link"></i></a></td>

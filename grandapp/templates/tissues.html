@@ -34,8 +34,8 @@
             <a href="/disease" class="dropdown-item">Disease</a>
           </div>
         </li>
-          <a class="nav-item nav-link" href="#">Contact</a>
-          <a class="nav-item nav-link" href="/about">Help</a>
+          <a class="nav-item nav-link" href="/help">Help</a>
+          <a class="nav-item nav-link" href="/about">Contact</a>
           <a class="nav-item nav-link" href="https://github.com/QuackenbushLab/grand"><i class="fab fa-github fa-lg"></i></a>
       </div>
   </div>
@@ -65,7 +65,13 @@
                     <th scope="col">Tissue</th>
                     <th scope="col">Tool</th>
                     <th scope="col">netZoo release</th>
-                    <th scope="col">Network</th>
+                    <th scope="col">Network <i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      title="Network format"
+                      data-content="Please refer to the Help page Network section for the network download formats.">
+                    </i></th>
                     <th scope="col">PPI <i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
@@ -87,7 +93,7 @@
 		    <td><a href="{{ tissue.tissueLink }}">{{ tissue.tissue }}</a></td>
 		    <td>{{ tissue.tool }}</td>
 		    <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}">{{ tissue.netzooRel }}</a></td>
-		    <td><a href="{{ tissue.network }}" download><i class="fas fa-download"></i></a></td>
+                    <td><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a></td>
 	            <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}"><i class="fas fa-link"></i></a></td>
                     <td><a href="{{ tissue.motif }}"><i class="fas fa-download"></i></a></td>
                     <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}"><i class="fas fa-link"></i></a></td>

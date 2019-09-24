@@ -22,6 +22,7 @@ urlpatterns = [
     path('api/v1/gwas/', api_views.GwasList.as_view()),
     url(r'^analysis/', view=views.analysis, name='analysis'),
     path('disease/',view=views.disease, name='disease'),
+    path('help/',view=views.help, name='help'),
     url(r'^analysisexample/', view=views.analysisexample, name='analysisexample'),
     url(r'^diseaseexample/', view=views.diseaseexample, name='diseaseexample'),
     path('drugresult/', view=views.drugresult, name='drugresult'),

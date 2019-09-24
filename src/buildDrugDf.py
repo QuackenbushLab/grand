@@ -28,24 +28,29 @@ refsVec       = []
 missing=0
 for line in res.splitlines():
     print(line)
-    nDrugs = nDrugs + 1
     drug   = str(line.split()[-1]).split('.')[0][2:]
-    drugList.append(drug)
-    networkVec.append('<a href="' + 'https://granddb.s3.amazonaws.com/drugs/drugNetworks/' + drug + '.txt.mat' + '" download><i class="fas fa-download"></i></a>')
-    expressionVec.append('<a href="' + 'https://granddb.s3.amazonaws.com/drugs/drugExpression/' + drug + '.txt' + '"><i class="fas fa-download"></i></a> <a href="#"><i class="fas fa-link"></i></a>')
-    numbersVec.append(nDrugs)
-    drugVec.append('<a href = "' + '#' + '" >' + drug + '</a>')
-    refsVec.append('<a href="#"><i class="fas fa-book"></i></a>')
     matching = [s for s in range(len(dimNet.iloc[:,0])) if drug+'.txt.mat' == dimNet.iloc[s,0]]
     if matching != []:
+        nDrugs = nDrugs + 1
+        drugList.append(drug)
+        networkVec.append(
+            '<a href="' + 'https://granddb.s3.amazonaws.com/drugs/drugNetworks/' + drug + '.txt.mat' + '" class="btn btn-outline-primary" role="button">mo</a>')
+        # networkVec.append('<a href="' + 'https://granddb.s3.amazonaws.com/drugs/drugNetworks/' + drug + '.txt.mat' + '" download><i class="fas fa-download"></i></a>')
+        expressionVec.append(
+            '<a href="' + 'https://granddb.s3.amazonaws.com/drugs/drugExpression/' + drug + '.txt' + '"><i class="fas fa-download"></i></a> <a href="#"><i class="fas fa-link"></i></a>')
+        numbersVec.append(nDrugs)
+        drugVec.append('<a href = "' + '#' + '" >' + drug + '</a>')
+        refsVec.append('<a href="#"><i class="fas fa-book"></i></a>')
         tfsVec.append(dimNet.iloc[matching,1].values[0])
         genesVec.append(dimNet.iloc[matching,2].values[0])
     else:
+        continue
         tfsVec.append(0)
         genesVec.append(0)
         missing=missing+1 # 3 are missing
 
-
+#<button type="button" class="btn btn-outline-primary">po</button>
+#<a href="#" class="btn btn-outline-primary" role="button">po</a>
 
 # build vectors
 toolVec       = np.repeat('PANDA', nDrugs)
