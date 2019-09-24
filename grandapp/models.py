@@ -44,6 +44,8 @@ class DrugResultUp(models.Model):
     drug      = models.CharField(max_length=400)
     overlap   = models.FloatField()
     cosine    = models.FloatField()
+    #class Meta:
+    #    ordering = ['overlap']
     #def __repr__(self):
     #    return '<DrugResult object ({}) "{}">'.format(self.id, self.drug)
 

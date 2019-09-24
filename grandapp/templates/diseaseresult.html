@@ -176,7 +176,7 @@ $(document).ready(function() {
       "ajax": "http://localhost:8000/api/v1/gwas/?format=datatables",
       "serverSide": true,
       "processing": true,
-
+      "order": [[ 3, "asc" ]],
        "columns": [
           {"data": "disease"},
           {"data": "count"},
@@ -198,7 +198,7 @@ $(document).ready(function() {
       "ajax": "http://localhost:8000/api/v1/disease/?format=datatables",
       "serverSide": true,
       "processing": true,
-
+      "order": [[ 3, "asc" ]],
       "columns": [
           {"data": "disease"},
           {"data": "count"},

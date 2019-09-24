@@ -34,7 +34,7 @@
             <a href="/disease" class="dropdown-item">Disease</a>
           </div>
         </li>
-          <a class="nav-item nav-link" href="#">Help</a>
+          <a class="nav-item nav-link" href="/help">Help</a>
           <a class="nav-item nav-link" href="/about">Contact</a>
           <a class="nav-item nav-link" href="https://github.com/QuackenbushLab/grand"><i class="fab fa-github fa-lg"></i></a>
       </div>
@@ -172,9 +172,9 @@ $(document).ready(function() {
     //datatables
     $('#drugstbl1').DataTable({
       "ajax": "http://localhost:8000/api/v1/drugresultup/?format=datatables",
-      "serverSide": true,
       "processing": true,
-
+      "serverSide": true,
+      "order": [[ 1, "asc" ]],
       "columns": [
           {"data": "drug"},
           {"data": "overlap"},
@@ -182,7 +182,7 @@ $(document).ready(function() {
       ],
 
      buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
+            'copy', 'csv', 'pdf', 'print'
         ],
 
       "dom": "B" + "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
@@ -192,9 +192,9 @@ $(document).ready(function() {
 
     $('#drugstbl2').DataTable({
       "ajax": "http://localhost:8000/api/v1/drugresultdown/?format=datatables",
-      "serverSide": true,
       "processing": true,
-
+      "serverSide": true,
+      "order": [[ 1, "desc" ]],
       "columns": [
           {"data": "drug"},
           {"data": "overlap"},
@@ -202,7 +202,7 @@ $(document).ready(function() {
       ],
       
       buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
+            'copy', 'csv', 'pdf', 'print'
         ],
 
       "dom": "B" + "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
