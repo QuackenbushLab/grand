@@ -2,13 +2,28 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import Http404
 from django.core import serializers
-from .models import Cell
+from .models import Cell, Disease
 from .models import Drug, DrugResultUp, DrugResultDown, Params
-from .models import Tissue
+from .models import Tissue, Gwas
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
 from .forms import ContactForm, GeneForm, DiseaseForm
 from django.conf import settings
 import os
+import random
+
+# for enrich disease
+import pandas as pd
+import scipy.stats as stats
+import numpy as  np
+import requests
+from statsmodels.stats import multitest # for fdr correction
+
+# for enrich drug
+import scipy as sp # for sparse matrices
+import scipy.sparse
+import sys # for arguments
+from sklearn.metrics.pairwise import cosine_similarity
+from scipy.sparse.linalg import inv
 
 def home(request):
     return render(request, 'home.html')
@@ -41,8 +56,27 @@ def disease(request):
                  u = open('src/diseaseEnr/sampleTFGWAS.csv','w')
                  u.write(content)
                  u.close()
-                 status  = os.system('python3 src/diseaseEnr/enrichDisease.py src/diseaseEnr/sampleTFGWAS.csv')
-                 print(status)
+                 qval, pvalVec, tfdb, nCondVec, qval1, pvalVec1, tfdb1, nCondVec1,stat1,stat2=enrichDisease()
+                 for i in range(len(qval)):
+                     disease = Disease.objects.get(id=i+1)
+                     disease.disease  =tfdb.iloc[i,0]
+                     disease.count    =tfdb.iloc[i,3]
+                     disease.intersect=nCondVec[i]
+                     disease.pval     =round(pvalVec[i],5)
+                     disease.qval     =round(qval[i],5)
+                     disease.save()
+                 for i in range(len(qval1)):
+                     gwas   = Gwas.objects.get(id=i+1)
+                     gwas.disease     =tfdb1.iloc[i,0]
+                     gwas.count       =tfdb1.iloc[i,3]
+                     gwas.intersect   =nCondVec1[i]
+                     gwas.pval        =round(pvalVec1[i],5)
+                     gwas.qval        =round(qval1[i],5)
+                     gwas.save()
+                 param=Params.objects.get(id=2)
+                 param.genesdownin   =stat1
+                 param.genesupin     =stat2
+                 param.save()  
              except BadHeaderError: #find a better exception
                  return HttpResponse('Invalid header found.')
              return redirect('diseaseresult')
@@ -59,8 +93,27 @@ def diseaseexample(request):
                  u = open('src/diseaseEnr/sampleTFGWAS.csv','w')
                  u.write(content)
                  u.close()
-                 status  = os.system('python3 src/diseaseEnr/enrichDisease.py src/diseaseEnr/sampleTFGWAS.csv')
-                 print(status)
+                 qval, pvalVec, tfdb, nCondVec, qval1, pvalVec1, tfdb1, nCondVec1,stat1,stat2=enrichDisease()
+                 for i in range(len(qval)):
+                     disease = Disease.objects.get(id=i+1)
+                     disease.disease  =tfdb.iloc[i,0]
+                     disease.count    =tfdb.iloc[i,3]
+                     disease.intersect=nCondVec[i]
+                     disease.pval     =round(pvalVec[i],5)
+                     disease.qval     =round(qval[i],5)
+                     disease.save()
+                 for i in range(len(qval1)):
+                     gwas   = Gwas.objects.get(id=i+1)
+                     gwas.disease     =tfdb1.iloc[i,0]
+                     gwas.count       =tfdb1.iloc[i,3]
+                     gwas.intersect   =nCondVec1[i]
+                     gwas.pval        =round(pvalVec1[i],5)
+                     gwas.qval        =round(qval1[i],5)
+                     gwas.save()
+                 param=Params.objects.get(id=2)
+                 param.genesdownin   =stat1
+                 param.genesupin     =stat2
+                 param.save()
              except BadHeaderError: #find a better exception
                  return HttpResponse('Invalid header found.')
              return redirect('diseaseresult')
@@ -84,9 +137,29 @@ def analysis(request):
                  u.close()
                  d = open('src/cluereg/data/sampleDown.csv','w')
                  d.write(contentdown)
-                 d.close()
-                 status = os.system('python3 src/cluereg/lib/enrichCmapReg.py src/cluereg/data/sparse_cmapreg.npz src/cluereg/data/geneNames.csv src/cluereg/data/drugNames.csv src/cluereg/data/sampleUp.csv src/cluereg/data/sampleDown.csv')
-                 print(status)
+                 d.close() 
+                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4 = enrichCmapReg()
+                 max_display=100
+                 for i in range(max_display):
+                     drug=DrugResultUp.objects.get(id=i+1)
+                     drug.drug   =drugNames.iloc[indSort[i]].values[0]
+                     drug.cosine =round(cosDist[indSort[i]],4)
+                     drug.overlap=overlap[indSort[i]]
+                     drug.query  =drug.query+1
+                     drug.save()
+                     drug=DrugResultDown.objects.get(id=i+1)
+                     drug.drug   =drugNames.iloc[indSort[-1-i]].values[0]
+                     drug.cosine =round(cosDist[indSort[-1-i]],4)
+                     drug.overlap=overlap[indSort[-1-i]]
+                     drug.query  =drug.query+1
+                     drug.save()
+                     #payload = {'drug':drugNames.iloc[indSort[-1-i]],'cosine':round(cosDist[indSort[-1-i]],4),'overlap':overlap[indSort[-1-i]]}
+                 param  = Params.objects.get(id=1)
+                 param.genesupin   = stat1
+                 param.genesdownin = stat2
+                 param.genesup     = stat3
+                 param.genesdown   = stat4
+                 param.save()
              except BadHeaderError: #find a better exception
                  return HttpResponse('Invalid header found.')
              return redirect('drugresult')
@@ -107,14 +180,32 @@ def analysisexample(request):
                  d = open('src/cluereg/data/sampleDown.csv','w')
                  d.write(contentdown)
                  d.close()
-                 status = os.system('python3 src/cluereg/lib/enrichCmapReg.py src/cluereg/data/sparse_cmapreg.npz src/cluereg/data/geneNames.csv src/cluereg/data/drugNames.csv src/cluereg/data/sampleUp.csv src/cluereg/data/sampleDown.csv')
-                 print(status)
+                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4 = enrichCmapReg()
+                 max_display=100
+                 for i in range(max_display):
+                     drug=DrugResultUp.objects.get(id=i+1)
+                     drug.drug   =drugNames.iloc[indSort[i]].values[0]
+                     drug.cosine =round(cosDist[indSort[i]],4)
+                     drug.overlap=overlap[indSort[i]]
+                     drug.save()
+                     drug=DrugResultDown.objects.get(id=i+1).values[0]
+                     drug.drug   =drugNames.iloc[indSort[-1-i]]
+                     drug.cosine =round(cosDist[indSort[-1-i]],4)
+                     drug.overlap=overlap[indSort[-1-i]]
+                     drug.save()
+                 param  = Params.objects.get(id=1)
+                 param.genesupin   = stat1
+                 param.genesdownin = stat2
+                 param.genesup     = stat3
+                 param.genesdown   = stat4
+                 param.save()
+                 #payload = {'drug':drugNames.iloc[indSort[-1-i]],'cosine':round(cosDist[indSort[-1-i]],4),'overlap':overlap[indSort[-1-i]]}
              except BadHeaderError: #find a better exception
                  return HttpResponse('Invalid header found.')
              return redirect('drugresult')
     return render(request, 'analysis.html', {'geneform':form})
 
-def drugresult(request):
+def drugresult(request, id):
     params = Params.objects.all()
     return render(request, 'drugresult.html', {'params':params})
 
@@ -178,3 +269,134 @@ def erroremail(request):
         else:
             return redirect('erroremail')
     return render(request, "erroremail.html", {'contactform': form})
+
+def enrichDisease():
+    #Read query
+    tflist = pd.read_csv('src/diseaseEnr/sampleTFGWAS.csv',header=None)
+
+    #Read all TF names
+    alltfs = pd.read_csv('src/diseaseEnr/TF_names_v_1.01.csv', header=None)
+
+    # 1. GWAS
+    #Read TF db
+    tfdbgwas = pd.read_csv('src/diseaseEnr/TF-disease-data_Fig4_GWAS.csv')
+    tfdbgwas = tfdbgwas.iloc[:170,:]
+
+    #Compute p-values
+    pvalVec = np.zeros(len(tfdbgwas))
+    nCondVec= np.zeros(len(tfdbgwas))
+    totPop  = 1639 #total number in population according to Lambert et al, Cell, 2018.
+    #totCond = np.zeros()#total number with condition in population
+    nSubset = len(tflist)#size of subset
+    #nCond   = #n condition in subset
+    for i in range(len(tfdbgwas)):
+        totCond       = tfdbgwas.iloc[i,3]
+        gt            = tfdbgwas.iloc[i, 4].split(',')[:-2]
+        nCond         = len(set(gt).intersection(set(tflist.iloc[:, 0])))
+        nCondVec[i]   = nCond
+        pvalVec[i]    = stats.hypergeom.sf(nCond - 1,totPop,totCond,nSubset)
+
+    qval = multitest.fdrcorrection(pvalVec)
+    qval = qval[1]
+    # for i in range(len(tfdbgwas)):
+    #     payload = {'disease':tfdbgwas.iloc[i,0] ,'count':tfdbgwas.iloc[i,3],'intersect':nCondVec[i],'pval':round(pvalVec[i],5),'qval':round(qval[i],5)}
+    #     r = requests.put('http://localhost:8000/api/v1/gwas/' + str(i+1) + '/', data=payload)
+    qval1    = qval
+    nCondVec1= nCondVec
+    pvalVec1 = pvalVec
+
+    #2. Disease
+    tfdbdisease = pd.read_csv('src/diseaseEnr/TF-disease-data_Fig4_Disease.csv')
+
+    #Compute p-values
+    pvalVec = np.zeros(len(tfdbdisease))
+    nCondVec= np.zeros(len(tfdbdisease))
+    totPop  = 1639 #total number in population according to Lambert et al, Cell, 2018.
+    #totCond = np.zeros()#total number with condition in population
+    nSubset = len(tflist)#size of subset
+    #nCond   = #n condition in subset
+    for i in range(len(tfdbdisease)):
+        totCond       = tfdbdisease.iloc[i,3]
+        gt            = tfdbdisease.iloc[i, 4].split(',')[:-2]
+        nCond         = len(set(gt).intersection(set(tflist.iloc[:, 0])))
+        nCondVec[i]   = nCond
+        pvalVec[i]    = stats.hypergeom.sf(nCond - 1,totPop,totCond,nSubset)
+
+    qval = multitest.fdrcorrection(pvalVec)
+    qval = qval[1]
+    stat1=len(set(alltfs.iloc[:,0]).intersection(set(tflist.iloc[:,0])))
+    stat2=len(tflist)
+    return qval, pvalVec, tfdbdisease, nCondVec, qval1, pvalVec1, tfdbgwas, nCondVec1, stat1, stat2
+
+def enrichCmapReg():
+	print('Reading drug database')
+	#db         = pd.read_csv('cmapreg.csv', header=None,dtype=np.float64)
+	sparse_matrix = scipy.sparse.load_npz('src/cluereg/data/sparse_cmapreg.npz')
+	#sparse_matrix = scipy.sparse.load_npz(sys.argv[1]) #('sparse_cmapreg.npz')
+	# None of python's sparse libraries allow storing colnames and rownames so they have to be maintained separetaly
+	geneNames  = pd.read_csv('src/cluereg/data/geneNames.csv',header=None) #'geneNames.csv'
+	drugNames  = pd.read_csv('src/cluereg/data/drugNames.csv',header=None) #'drugNames.csv'
+	#geneNames  = pd.read_csv(sys.argv[2],header=None) #'geneNames.csv'
+	#drugNames  = pd.read_csv(sys.argv[3],header=None) #'drugNames.csv'
+	#db.columns = drugNames
+	#geneNames  = geneNames.append(geneNames)
+
+	# Save to sparse
+	#sparse_matrix = sp.sparse.csc_matrix(db)
+	#sp.sparse.save_npz('sparse_cmapreg.npz', sparse_matrix)
+
+	# Read genes
+	print('Reading input gene list ') #df = pd.DataFrame(data
+	sampleGenesUp  = pd.read_csv('src/cluereg/data/sampleUp.csv',header=None,dtype=str) #'sampleUp.csv'
+	sampleGenesDown= pd.read_csv('src/cluereg/data/sampleDown.csv',header=None,dtype=str) #'sampleDown.csv'
+	#sampleGenesUp  = pd.read_csv(sys.argv[4],header=None,dtype=str) #'sampleUp.csv'
+	#sampleGenesDown= pd.read_csv(sys.argv[5],header=None,dtype=str) #'sampleDown.csv'
+	print(str(len(sampleGenesUp)) + ' Genes are Up')
+	print(str(len(sampleGenesDown)) + ' Genes are Down')
+
+	# Construct input vector
+	print('Computing enrichment score to ' + str(len(drugNames)) + ' drugs')
+	intersectUp     = np.array(np.in1d(geneNames,sampleGenesUp) ,dtype=int)
+	intersectDown   = np.array(np.in1d(geneNames,sampleGenesDown),dtype=int)
+	intersectUpOv   = np.concatenate([intersectUp, intersectUp])
+	intersectDownOv = np.concatenate([intersectDown, intersectDown])
+
+	# Compute overlap
+	overlap         = intersectDownOv * sparse_matrix -intersectUpOv * sparse_matrix
+
+	# Compute cosine similarity
+	inputSig = intersectUp-intersectDown
+	sparse_matrix_combined = sparse_matrix[:12282,:] + sparse_matrix[12282:,:]
+	cosDist  = cosine_similarity(inputSig.reshape(1,-1), sparse_matrix_combined.transpose())
+	cosDist  = cosDist.transpose()
+	cosDist  = np.concatenate( cosDist, axis=0 )
+
+	# print results
+	indSort  = np.argsort(overlap)
+	d = {'overlapScore': overlap[list(reversed(indSort))], 'cosine similarity': cosDist[list(reversed(indSort))] }
+	res = pd.DataFrame(data=d)
+	res.index = drugNames.iloc[list(reversed(indSort))]
+	#res.to_csv('results.csv')
+
+	#print('Results written to results.csv')
+
+	# post to API
+	#max_display = 100
+	#for i in range(max_display):
+		#payload = {'drug':drugNames.iloc[indSort[i]],'cosine':round(cosDist[indSort[i]],4),'overlap':overlap[indSort[i]]}
+		#r = requests.put('http://localhost:8000/api/v1/drugresultup/' + str(i+1) + '/', data=payload)
+		#print(r.status_code)
+
+	#for i in range(max_display):
+	        #payload = {'drug':drugNames.iloc[indSort[-1-i]],'cosine':round(cosDist[indSort[-1-i]],4),'overlap':overlap[indSort[-1-i]]}
+	        #r = requests.put('http://localhost:8000/api/v1/drugresultdown/' + str(i+1) + '/', data=payload)
+	        #print(r.status_code)
+
+	# stats about query
+	stat1=len(sampleGenesUp)
+	stat2=len(sampleGenesDown)
+	stat3=np.count_nonzero(intersectUp)
+	stat4=np.count_nonzero(intersectDown)
+	#payload = {'genesupin': len(sampleGenesUp),'genesdownin':len(sampleGenesDown),'genesup':np.count_nonzero(intersectUp),'genesdown':np.count_nonzero(intersectDown)}
+	#r = requests.put('http://localhost:8000/api/v1/params/0/', data=payload)
+	return drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4
