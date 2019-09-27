@@ -25,7 +25,7 @@ class DrugResultSerializerUp(serializers.ModelSerializer):
 class DrugResultSerializerDown(serializers.ModelSerializer):
         class Meta:
                 model = DrugResultDown
-                fields = ('id','drug','overlap','cosine')
+                fields = ('id','drug','overlap','cosine','query')
 
         def to_representation(self, instance):
                 data = super().to_representation(instance)

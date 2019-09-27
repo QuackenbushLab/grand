@@ -18,32 +18,32 @@ class DrugList(ListAPIView):
 class DrugResultListUp(ListAPIView):
 	queryset = DrugResultUp.objects.all()
 	serializer_class = DrugResultSerializerUp
-	#filter_backends = (DjangoFilterBackend,)
-	filter_fields = ('id',)
+	filter_backends = (DatatablesFilterBackend,DjangoFilterBackend,)
+	filter_fields = ('query',)
 	#search_fields = ('drug',)
 	#pagination_class = DrugResultPagination
 
 class DrugResultListDown(ListAPIView):
         queryset = DrugResultDown.objects.all()
         serializer_class = DrugResultSerializerDown
-        #filter_backends = (DjangoFilterBackend,)
-        filter_fields = ('id',)
+        filter_backends = (DatatablesFilterBackend,DjangoFilterBackend,)
+        filter_fields = ('query',)
 
 class DiseaseList(ListAPIView):
         queryset = Disease.objects.all()
         serializer_class = DiseaseSerializer
-        #filter_backends = (DjangoFilterBackend,)
-        filter_fields = ('id',)
+        filter_backends = (DjangoFilterBackend,DatatablesFilterBackend,)
+        filter_fields = ('query',)
 
 class GwasList(ListAPIView):
         queryset = Gwas.objects.all()
         serializer_class = GwasSerializer
-        #filter_backends = (DjangoFilterBackend,)
-        filter_fields = ('id',)
+        filter_backends = (DjangoFilterBackend,DatatablesFilterBackend,)
+        filter_fields = ('query',)
 
 class DrugRetrieveUpdateDestroyUp(RetrieveUpdateDestroyAPIView):
 	queryset = DrugResultUp.objects.all()
-	lookup_field = 'query'
+	lookup_field = 'id'
 	serializer_class = DrugResultSerializerUp
 
 class DrugRetrieveUpdateDestroyDown(RetrieveUpdateDestroyAPIView):

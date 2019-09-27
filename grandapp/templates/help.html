@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <title>GRAND</title>
 </head>
@@ -65,6 +66,7 @@
     <li class="breadcrumb-item"><a href="#analysis">Analysis</a></li>
     <li class="breadcrumb-item"><a href="#faq">FAQ</a></li>
     <li class="breadcrumb-item"><a href="#tuto">API tutorial</a></li>
+    <li class="breadcrumb-item"><a href="#credit">Image credit</a></li>
     </ol>
     <p><h3 id="networks" class="text-primary">Networks</h3>
     <div class="ml-3">The networks can be downloaded with two different properties.
@@ -91,12 +93,21 @@
     <div class="ml-3"><p align="justify"> The analysis section allows to analyse a set of TFs or genes in disease or small molecule category. It exploits the duality between TFs and genes
     in bipartite gene regulatory networks.</p>
     <p align="justify">The small molecule analysis section allows to find compounds that optimally reverse the gene targeting or the transcription factor activity patterns in the query set.</p>
-    <p align="justify">Gene targeting refers the to the weighted in-degree of a given gene. Since PANDA is usually validated against Chip-Seq data, targeting can be interpreted as the binding profile of TFs for a given gene in a particular experimenet. Transcription targeting activity refers to the weighted out-degree of a given transcription factor. This tool serves for hypothesis generation wheras compounds that reverse/aggravate the gene/TF targeting patterns of a given experiment are hypothetical candidates for experimental validation. </p>
+    <p align="justify">Gene targeting refers the to the weighted in-degree of a given gene. Since PANDA is usually validated against Chip-Seq data, targeting can be interpreted as the binding profile of TFs for a given gene in a particular experiment. Transcription targeting activity refers to the weighted out-degree of a given transcription factor. This tool serves for hypothesis generation wheras compounds that reverse/aggravate the gene/TF targeting patterns of a given experiment are hypothetical candidates for experimental validation. </p>
+    <p align="justify">The overlap score is equal to intersect(Input_Genes_Up,Drug_Genes_down) + intersect(Input_Genes_Down,Drug_Genes_Up) - intersect(Input_Genes_Up,Drugs_Genes_Up) - intersect(Input_Genes_Down,Drugs_Genes_Down). The cosine similarity compares the input vector to all the drugs. It is a signed measure that computes the direction of the vectors rather than their amplitude. In our case, we are interested in measuring the vectors of opposite directions, thus having negative cosine similarity.</p>
     </div>
     </p>
     <p><h3 id="faq" class="text-primary">FAQ</h3>
     </p>
     <p><h3 id="tuto" class="text-primary">API tutorial</h3>
+    </p>
+    <p><h3 id="credit" class="text-primary">Image credit</h3>
+    <div class="ml-3">Small molecule infographic: <a href="https://www.freepik.com/free-photos-vectors/background">Background vector created by freepik - www.freepik.com</a>
+    <br>Tissues infographic: <a href="https://www.freepik.com/free-photos-vectors/heart">Heart vector created by freepik - www.freepik.com</a>
+    <br>Cell lines infographic: <a href="https://www.freepik.com/free-photos-vectors/background">Background vector created by brgfx - www.freepik.com</a>
+    <br>
+    <br>
+    <br></div>
     </p>
 </div>
 

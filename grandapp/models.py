@@ -51,6 +51,7 @@ class DrugResultDown(models.Model):
     drug      = models.CharField(max_length=400)
     overlap   = models.FloatField()
     cosine    = models.FloatField()
+    query     = models.IntegerField(default=0)
 
 class Params(models.Model):
     id         = models.AutoField(primary_key=True)
@@ -66,6 +67,7 @@ class Disease(models.Model):
     intersect    = models.IntegerField()
     pval         = models.FloatField()
     qval         = models.FloatField()
+    query        = models.IntegerField(default=0)
 
 class Gwas(models.Model):
     id           = models.AutoField(primary_key=True)
@@ -74,6 +76,7 @@ class Gwas(models.Model):
     intersect    = models.IntegerField()
     pval         = models.FloatField()
     qval         = models.FloatField()
+    query        = models.IntegerField(default=0)
 
 class Tissue(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]

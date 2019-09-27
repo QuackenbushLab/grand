@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta http-equiv="x-ua-compatible" content="ie=edge"> 
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <title>GRAND</title>
 </head>
@@ -173,7 +174,7 @@ $(function () {
 $(document).ready(function() {
     //datatables
     $('#drugstbla').DataTable({
-      "ajax": "http://localhost:8000/api/v1/gwas/?format=datatables",
+      "ajax": "http://localhost:8000/api/v1/gwas/?query={{ apiid }}&format=datatables",
       "serverSide": true,
       "processing": true,
       "order": [[ 3, "asc" ]],
@@ -195,7 +196,7 @@ $(document).ready(function() {
     });
 
     $('#drugstblb').DataTable({
-      "ajax": "http://localhost:8000/api/v1/disease/?format=datatables",
+      "ajax": "http://localhost:8000/api/v1/disease/?query={{ apiid }}&format=datatables",
       "serverSide": true,
       "processing": true,
       "order": [[ 3, "asc" ]],

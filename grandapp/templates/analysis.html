@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
   <title>GRAND</title>
@@ -61,7 +62,8 @@
 
 <div class="container mt-5">
 <div class="row">
-        <div class="offset-md-1 col-md-4 form-area"> 
+        <div class="offset-md-1 col-md-4> 
+               <div class="form-area"> 
                <form action="{% url 'analysis' %}" role="form" method="post">
 	 	    {% csrf_token %}
                     <div class="form-group">
@@ -83,18 +85,15 @@
         <div class="col-md-2">
         <div class="col">
         <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
-        <div class="form-check">
-	  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-	  <label class="form-check-label" for="exampleRadios2">
-	    Gene targeting
-	  </label>
-	</div>
-	<div class="form-check disabled">
-	  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" disabled>
-	  <label class="form-check-label" for="exampleRadios3">
-	    TF targeting
-	  </label>
-	</div>
+        <form action="{% url 'analysis' %}" role="form" method="post">
+        <div class="form-group">
+            {% for radio in geneform.tfgene %}
+		<div class="myradio">
+    		{{ radio }}
+		</div>
+		{% endfor %}
+        </div>
+        </form>
         </div>
         </div>
         <div class="col-md-4"> 
