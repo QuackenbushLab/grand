@@ -146,10 +146,10 @@ def analysis(request):
                  d = open('src/cluereg/data/sampleDown.csv','w')
                  d.write(contentdown)
                  d.close() 
-                 if tfgene=='TF targeting': 
-                     gene = 0
-                 elif tfgene=='Gene targeting':
-                     gene = 1
+                 if tfgene=='Gene targeting':
+                     gene=1
+                 elif tfgene=='TF targeting':
+                     gene=0
                  drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4 = enrichCmapReg(gene)
                  max_display=100
                  randid      =random.randint(1,1000000)
@@ -195,10 +195,55 @@ def analysisexample(request):
                  d = open('src/cluereg/data/sampleDown.csv','w')
                  d.write(contentdown)
                  d.close()
-                 if tfgene=='TF targeting':
-                     gene = 0
-                 elif tfgene=='Gene targeting':
+                 if tfgene=='Gene targeting':
+                     gene = 1 
+                 elif tfgene=='TF targeting':
+                     gene=0
+                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4 = enrichCmapReg(gene)
+                 max_display=100
+                 for i in range(max_display):
+                     drug=DrugResultUp.objects.get(id=i+1)
+                     drug.drug   =drugNames.iloc[indSort[i]].values[0]
+                     drug.cosine =round(cosDist[indSort[i]],4)
+                     drug.overlap=overlap[indSort[i]]
+                     drug.save()
+                     drug=DrugResultDown.objects.get(id=i+1).values[0]
+                     drug.drug   =drugNames.iloc[indSort[-1-i]]
+                     drug.cosine =round(cosDist[indSort[-1-i]],4)
+                     drug.overlap=overlap[indSort[-1-i]]
+                     drug.save()
+                 param  = Params.objects.get(id=1)
+                 param.genesupin   = stat1
+                 param.genesdownin = stat2
+                 param.genesup     = stat3
+                 param.genesdown   = stat4
+                 param.save()
+                 #payload = {'drug':drugNames.iloc[indSort[-1-i]],'cosine':round(cosDist[indSort[-1-i]],4),'overlap':overlap[indSort[-1-i]]}
+             except BadHeaderError: #find a better exception
+                 return HttpResponse('Invalid header found.')
+             return redirect('/drugresult/' + str(accessKey) + '/')
+    return render(request, 'analysis.html', {'geneform':form})
+
+def analysisexampletfs(request):
+    if request.method == 'GET':
+        form = GeneForm({'tfgene':'TF targeting','contentup':'AHR\nAIRE\nALX1\nALX4\nAR\nARID2\nARID3A\nARID5B\nARNT\nCREM\nCTCF\nCUX1\nDBP\nDBX2\nDDIT3\nDLX1\nDLX3\nFOXF2\nFOXH1\nNEUROD2\nNR2F1\nNR2F2\nNR2F6\nNR3C1\nNR4A3\nNR5A1\nNR5A2\nFOXI1\nFOXJ3\nFOXK1\nHOXC6\nHOXD10\nPOU5F1B\nPOU6F1\nPURA\nRARA\nRARB\nRARG\nRAX\nRAX2\nRBPJ\nREL\nRORC\nRREB1\nRUNX1\nRUNX2\nRXRA\nRXRB\nSMAD5\nSMARCC1','contentdown':'MEIS2\nMEOX1\nMESP1\nMGA\nMITF\nMIXL1\nMLX\nMLXIPL\nMNT\nMYC\nMYF5\nMYF6\nMYOD1\nMYOG\nMYPOP\nMZF1\nNAIF1\nNANOG\nNEUROD1\nFOXL1\nFOXO1\nHOXB6\nHOXC10\nNR6A1\nPBX3\nPDX1\nPGR\nPHOX2A\nPITX2\nPKNOX1\nPLAG1\nPOU6F2\nPPARA\nPPARG\nPRDM1\nPRDM4\nPRKRIR\nPROP1\nPROX1\nPTF1A\nRXRG\nSCRT1\nSCRT2\nSHOX\nSHOX2\nSIX3\nSMAD1\nSMAD2\nSMAD3\nAHR\n'})
+    else:
+         form = GeneForm(request.POST)
+         if form.is_valid():
+             contentup   = request.POST['contentup']
+             contentdown = request.POST['contentdown']
+             tfgene      = request.POST['tfgene']
+             try:
+                 u = open('src/cluereg/data/sampleUp.csv','w')
+                 u.write(contentup)
+                 u.close()
+                 d = open('src/cluereg/data/sampleDown.csv','w')
+                 d.write(contentdown)
+                 d.close()
+                 if tfgene=='Gene targeting':
                      gene = 1
+                 elif tfgene=='TF targeting':
+                     gene=0
                  drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4 = enrichCmapReg(gene)
                  max_display=100
                  for i in range(max_display):
@@ -347,7 +392,7 @@ def enrichDisease():
     stat2=len(tflist)
     return qval, pvalVec, tfdbdisease, nCondVec, qval1, pvalVec1, tfdbgwas, nCondVec1, stat1, stat2
 
-def enrichCmapReg(gene=0):
+def enrichCmapReg(gene):
     print('Reading drug database')
     #db         = pd.read_csv('cmapreg.csv', header=None,dtype=np.float64)
     if gene==1:

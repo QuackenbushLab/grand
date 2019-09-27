@@ -24,6 +24,7 @@ urlpatterns = [
     path('disease/',view=views.disease, name='disease'),
     path('help/',view=views.help, name='help'),
     path('analysisexample/', view=views.analysisexample, name='analysisexample'),
+    path('analysisexampletfs/', view=views.analysisexampletfs, name='analysisexampletfs'),
     url(r'^diseaseexample/', view=views.diseaseexample, name='diseaseexample'),
     url(r'^drugresult/(\d+)/', view=views.drugresult, name='drugresult'),
     url(r'^diseaseresult/(\d+)', view=views.diseaseresult, name='diseaseresult'),
