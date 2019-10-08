@@ -52,11 +52,15 @@ def disease(request):
          form = DiseaseForm(request.POST)
          if form.is_valid():
              content   = request.POST['content']
+             data=content.split('\r\n')
+             print(data)
+             data = list(filter(None, data))
+             contentdf = pd.DataFrame(data, columns = ['Gene'])
              try:
-                 u = open('src/diseaseEnr/sampleTFGWAS.csv','w')
-                 u.write(content)
-                 u.close()
-                 qval, pvalVec, tfdb, nCondVec, qval1, pvalVec1, tfdb1, nCondVec1,stat1,stat2=enrichDisease()
+                 #u = open('src/diseaseEnr/sampleTFGWAS.csv','w')
+                 #u.write(content)
+                 #u.close()
+                 qval, pvalVec, tfdb, nCondVec, qval1, pvalVec1, tfdb1, nCondVec1,stat1,stat2=enrichDisease(contentdf)
                  randid = random.randint(1,1000000)
                  for i in range(len(qval)):
                      disease = Disease.objects.get(id=i+1)
@@ -93,11 +97,14 @@ def diseaseexample(request):
          form = DiseaseForm(request.POST)
          if form.is_valid():
              content   = request.POST['content']
+             data=content.split('\r\n')
+             data = list(filter(None, data))
+             contentdf = pd.DataFrame(data, columns = ['Gene'])
              try:
-                 u = open('src/diseaseEnr/sampleTFGWAS.csv','w')
-                 u.write(content)
-                 u.close()
-                 qval, pvalVec, tfdb, nCondVec, qval1, pvalVec1, tfdb1, nCondVec1,stat1,stat2=enrichDisease()
+                 #u = open('src/diseaseEnr/sampleTFGWAS.csv','w')
+                 #u.write(content)
+                 #u.close()
+                 qval, pvalVec, tfdb, nCondVec, qval1, pvalVec1, tfdb1, nCondVec1,stat1,stat2=enrichDisease(contentdf)
                  for i in range(len(qval)):
                      disease = Disease.objects.get(id=i+1)
                      disease.disease  =tfdb.iloc[i,0]
@@ -139,18 +146,26 @@ def analysis(request):
              contentup   = request.POST['contentup']
              contentdown = request.POST['contentdown']
              tfgene      = request.POST['tfgene']
+             data=contentup.split('\r\n')
+             print(data)
+             data = list(filter(None, data))
+             sampleUp = pd.DataFrame(data, columns = ['Gene'])
+             data=contentdown.split('\r\n')
+             print(data)
+             data = list(filter(None, data))
+             sampleDown = pd.DataFrame(data, columns = ['Gene'])
              try:
-                 u = open('src/cluereg/data/sampleUp.csv','w')
-                 u.write(contentup)
-                 u.close()
-                 d = open('src/cluereg/data/sampleDown.csv','w')
-                 d.write(contentdown)
-                 d.close() 
+                 #u = open('src/cluereg/data/sampleUp.csv','w')
+                 #u.write(contentup)
+                 #u.close()
+                 #d = open('src/cluereg/data/sampleDown.csv','w')
+                 #d.write(contentdown)
+                 #d.close() 
                  if tfgene=='Gene targeting':
                      gene=1
                  elif tfgene=='TF targeting':
                      gene=0
-                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4 = enrichCmapReg(gene)
+                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4 = enrichCmapReg(gene,sampleUp,sampleDown)
                  max_display=100
                  randid      =random.randint(1,1000000)
                  for i in range(max_display):
@@ -188,18 +203,26 @@ def analysisexample(request):
              contentup   = request.POST['contentup']
              contentdown = request.POST['contentdown']
              tfgene      = request.POST['tfgene']
+             data=contentup.split('\r\n')
+             print(data)
+             data = list(filter(None, data))
+             sampleUp = pd.DataFrame(data, columns = ['Gene'])
+             data=contentdown.split('\r\n')
+             print(data)
+             data = list(filter(None, data))
+             sampleDown = pd.DataFrame(data, columns = ['Gene'])
              try:
-                 u = open('src/cluereg/data/sampleUp.csv','w')
-                 u.write(contentup)
-                 u.close()
-                 d = open('src/cluereg/data/sampleDown.csv','w')
-                 d.write(contentdown)
-                 d.close()
+                 #u = open('src/cluereg/data/sampleUp.csv','w')
+                 #u.write(contentup)
+                 #u.close()
+                 #d = open('src/cluereg/data/sampleDown.csv','w')
+                 #d.write(contentdown)
+                 #d.close()
                  if tfgene=='Gene targeting':
                      gene = 1 
                  elif tfgene=='TF targeting':
                      gene=0
-                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4 = enrichCmapReg(gene)
+                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4 = enrichCmapReg(gene,sampleUp,sampleDown)
                  max_display=100
                  for i in range(max_display):
                      drug=DrugResultUp.objects.get(id=i+1)
@@ -334,9 +357,9 @@ def erroremail(request):
             return redirect('erroremail')
     return render(request, "erroremail.html", {'contactform': form})
 
-def enrichDisease():
+def enrichDisease(tflist):
     #Read query
-    tflist = pd.read_csv('src/diseaseEnr/sampleTFGWAS.csv',header=None)
+    #tflist = pd.read_csv('src/diseaseEnr/sampleTFGWAS.csv',header=None)
 
     #Read all TF names
     alltfs = pd.read_csv('src/diseaseEnr/TF_names_v_1.01.csv', header=None)
@@ -392,7 +415,7 @@ def enrichDisease():
     stat2=len(tflist)
     return qval, pvalVec, tfdbdisease, nCondVec, qval1, pvalVec1, tfdbgwas, nCondVec1, stat1, stat2
 
-def enrichCmapReg(gene):
+def enrichCmapReg(gene,sampleGenesUp,sampleGenesDown):
     print('Reading drug database')
     #db         = pd.read_csv('cmapreg.csv', header=None,dtype=np.float64)
     if gene==1:
@@ -418,8 +441,8 @@ def enrichCmapReg(gene):
 
     # Read genes
     print('Reading input gene list ') #df = pd.DataFrame(data
-    sampleGenesUp  = pd.read_csv('src/cluereg/data/sampleUp.csv',header=None,dtype=str) #'sampleUp.csv'
-    sampleGenesDown= pd.read_csv('src/cluereg/data/sampleDown.csv',header=None,dtype=str) #'sampleDown.csv'
+    #sampleGenesUp  = pd.read_csv('src/cluereg/data/sampleUp.csv',header=None,dtype=str) #'sampleUp.csv'
+    #sampleGenesDown= pd.read_csv('src/cluereg/data/sampleDown.csv',header=None,dtype=str) #'sampleDown.csv'
     #sampleGenesUp  = pd.read_csv(sys.argv[4],header=None,dtype=str) #'sampleUp.csv'
 	#sampleGenesDown= pd.read_csv(sys.argv[5],header=None,dtype=str) #'sampleDown.csv'
     print(str(len(sampleGenesUp)) + ' Genes are Up')
