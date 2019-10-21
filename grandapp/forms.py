@@ -11,7 +11,7 @@ class ContactForm(forms.Form):
     )
 
 class GeneForm(forms.Form):
-    CHOICES = [('Gene targeting','Gene targeting'),('TF targeting','TF targeting')]
+    CHOICES = [('Targeted genes','Targeted genes'),('TF targeting','TF targeting')]
     contentup = forms.CharField(
         required=True,
         widget=forms.Textarea,

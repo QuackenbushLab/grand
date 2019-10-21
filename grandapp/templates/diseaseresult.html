@@ -150,6 +150,86 @@
          </table>
 </div>
 
+<div class="container col-9 pb-5 mb-5">
+             &nbsp; <div class="row lm-6">
+             <div class="col-xs-6">
+             &nbsp; &nbsp;
+             </div>
+            <div class="col-xs-6">
+            <h3><span class="badge badge-success">Tissue Expression</span></h3>
+            </div>
+         <div class="col-xs-6">
+         &nbsp; <i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="TF expression associated with human tissues as determined in Sonawane et al, 2017.">
+                    </i>
+            </div>
+         </div>
+        <table id="drugstblc" class="table table-hover" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th scope="col">Tissue</th>
+                    <th scope="col">Count <i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Number of TF genes associated to the tissue.">
+                    </i></th>
+                    <th scope="col">Intersect <i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Number of TF genes in the query set that are associated to the tissue.">
+                    </i></th>
+                    <th>P-value</th>
+                   <th>Q-value</th>
+                  </tr>
+                </thead>
+         </table>
+</div>
+
+<div class="container col-9 pb-5 mb-5">
+             &nbsp; <div class="row lm-6">
+             <div class="col-xs-6">
+             &nbsp; &nbsp;
+             </div>
+            <div class="col-xs-6">
+            <h3><span class="badge badge-warning">Tissue Targeting</span></h3>
+            </div>
+         <div class="col-xs-6">
+         &nbsp; <i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="TF targeting associated with human tissues as determined in Sonawane et al, 2017.">
+                    </i>
+            </div>
+         </div>
+        <table id="drugstbld" class="table table-hover" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th scope="col">Tissue</th>
+                    <th scope="col">Count <i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Number of TF genes associated to the tissue.">
+                    </i></th>
+                    <th scope="col">Intersect <i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Number of TF genes in the query set that are associated to the tissue.">
+                    </i></th>
+                    <th>P-value</th>
+                   <th>Q-value</th>
+                  </tr>
+                </thead>
+         </table>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css"></script>
 <script src="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
@@ -216,6 +296,51 @@ $(document).ready(function() {
              "<'row'<'col-sm-12'tr>>" +
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-4'p>>",
     });
+
+        $('#drugstblc').DataTable({
+      "ajax": "http://localhost:8000/api/v1/tissueex/?query={{ apiid }}&format=datatables",
+      "serverSide": true,
+      "processing": true,
+      "order": [[ 3, "asc" ]],
+      "columns": [
+          {"data": "tissue"},
+          {"data": "count"},
+          {"data": "intersect"},
+          {"data": "pval"},
+          {"data": "qval"},
+      ],
+
+      buttons: [
+            'copy', 'csv', 'pdf', 'print'
+        ],
+
+      "dom": "B" + "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-4'p>>",
+    });
+
+       $('#drugstbld').DataTable({
+      "ajax": "http://localhost:8000/api/v1/tissuetar/?query={{ apiid }}&format=datatables",
+      "serverSide": true,
+      "processing": true,
+      "order": [[ 3, "asc" ]],
+      "columns": [
+          {"data": "tissue"},
+          {"data": "count"},
+          {"data": "intersect"},
+          {"data": "pval"},
+          {"data": "qval"},
+      ],
+
+      buttons: [
+            'copy', 'csv', 'pdf', 'print'
+        ],
+
+      "dom": "B" + "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-4'p>>",
+    });
+
 } );
 </script>
 

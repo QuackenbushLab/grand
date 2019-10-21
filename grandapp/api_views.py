@@ -1,6 +1,6 @@
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
-from .serializers import DrugSerializer, DrugResultSerializerUp, DrugResultSerializerDown, ParamsSerializer, DiseaseSerializer, GwasSerializer
-from .models import Drug, DrugResultUp, DrugResultDown, Params, Disease, Gwas
+from .serializers import DrugSerializer, DrugResultSerializerUp, DrugResultSerializerDown, ParamsSerializer, DiseaseSerializer, GwasSerializer, TissueTarSerializer, TissueExSerializer
+from .models import Drug, DrugResultUp, DrugResultDown, Params, Disease, Gwas, TissueTar, TissueEx
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.filters import SearchFilter
@@ -38,6 +38,18 @@ class DiseaseList(ListAPIView):
 class GwasList(ListAPIView):
         queryset = Gwas.objects.all()
         serializer_class = GwasSerializer
+        filter_backends = (DjangoFilterBackend,DatatablesFilterBackend,)
+        filter_fields = ('query',)
+
+class TissueTarList(ListAPIView):
+        queryset = TissueTar.objects.all()
+        serializer_class = TissueTarSerializer
+        filter_backends = (DjangoFilterBackend,DatatablesFilterBackend,)
+        filter_fields = ('query',)
+
+class TissueExList(ListAPIView):
+        queryset = TissueEx.objects.all()
+        serializer_class = TissueExSerializer
         filter_backends = (DjangoFilterBackend,DatatablesFilterBackend,)
         filter_fields = ('query',)
 

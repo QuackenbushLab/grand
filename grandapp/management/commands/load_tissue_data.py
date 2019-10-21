@@ -49,4 +49,5 @@ class Command(BaseCommand):
             tissue.tfs          = row['tfs']
             tissue.genes        = row['genes']
             tissue.refs         = row['refs']
+            tissue.refs2        = row['refs2']
             tissue.save()

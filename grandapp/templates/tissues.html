@@ -32,7 +32,7 @@
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Analysis</a>
           <div class="dropdown-menu">
             <a href="/analysis" class="dropdown-item">Small molecules</a>
-            <a href="/disease" class="dropdown-item">Disease</a>
+            <a href="/disease" class="dropdown-item">Disease/Tissues</a>
           </div>
         </li>
           <a class="nav-item nav-link" href="/help">Help</a>
@@ -100,7 +100,7 @@
                     <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}"><i class="fas fa-link"></i></a></td>
                     <td>{{ tissue.tfs }}</td>
                     <td>{{ tissue.genes }}</td>
-                    <td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a></td>
+                    <td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a> <a href="{{ tissue.refs2 }}"><i class="fas fa-book"></i></a></td>
                     </tr>
 		 {% endfor %}
 

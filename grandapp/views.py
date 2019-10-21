@@ -4,7 +4,7 @@ from django.http import Http404
 from django.core import serializers
 from .models import Cell, Disease
 from .models import Drug, DrugResultUp, DrugResultDown, Params
-from .models import Tissue, Gwas
+from .models import Tissue, Gwas, TissueEx, TissueTar
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
 from .forms import ContactForm, GeneForm, DiseaseForm
 from django.conf import settings
@@ -60,7 +60,7 @@ def disease(request):
                  #u = open('src/diseaseEnr/sampleTFGWAS.csv','w')
                  #u.write(content)
                  #u.close()
-                 qval, pvalVec, tfdb, nCondVec, qval1, pvalVec1, tfdb1, nCondVec1,stat1,stat2=enrichDisease(contentdf)
+                 qval, pvalVec, tfdb, nCondVec, qval1, pvalVec1, tfdb1, nCondVec1,stat1,stat2,qvalTE,pvalVecTE,nCondVecTE,qvalTT,pvalVecTT,nCondVecTT,tfdbTE,tfdbTT=enrichDisease(contentdf)
                  randid = random.randint(1,1000000)
                  for i in range(len(qval)):
                      disease = Disease.objects.get(id=i+1)
@@ -80,6 +80,24 @@ def disease(request):
                      gwas.qval        =round(qval1[i],5)
                      gwas.query       =randid
                      gwas.save()
+                 for i in range(len(qvalTE)):
+                     tissueex   = TissueEx.objects.get(id=i+1)
+                     tissueex.tissue      =tfdbTE['Tissues'].iloc[i]
+                     tissueex.count       =tfdbTE['Cond'].iloc[i]
+                     tissueex.intersect   =nCondVecTE[i]
+                     tissueex.pval        =round(pvalVecTE[i],5)
+                     tissueex.qval        =round(qvalTE[i],5)
+                     tissueex.query       =randid
+                     tissueex.save()
+                 for i in range(len(qvalTT)):
+                     tissuett   = TissueTar.objects.get(id=i+1)
+                     tissuett.tissue      =tfdbTT['Tissue'].iloc[i]
+                     tissuett.count       =tfdbTT['#TFsDifferentiallyTargetingSelectedCategories'].iloc[i]
+                     tissuett.intersect   =nCondVecTT[i]
+                     tissuett.pval        =round(pvalVecTT[i],5)
+                     tissuett.qval        =round(qvalTT[i],5)
+                     tissuett.query       =randid
+                     tissuett.save()
                  accessKey = disease.query
                  param=Params.objects.get(id=2)
                  param.genesdownin   =stat1
@@ -400,7 +418,7 @@ def enrichDisease(tflist):
     nCondVec= np.zeros(len(tfdbdisease))
     totPop  = 1639 #total number in population according to Lambert et al, Cell, 2018.
     #totCond = np.zeros()#total number with condition in population
-    nSubset = len(tflist)#size of subset
+    nSubset = len(tflist) #size of subset
     #nCond   = #n condition in subset
     for i in range(len(tfdbdisease)):
         totCond       = tfdbdisease.iloc[i,3]
@@ -411,9 +429,48 @@ def enrichDisease(tflist):
 
     qval = multitest.fdrcorrection(pvalVec)
     qval = qval[1]
+
+    #3. Tissue Expression
+    tftissueex = pd.read_csv('src/diseaseEnr/TF-tissue-expression.csv')
+
+    #Compute p-values
+    pvalVecTE = np.zeros(len(tftissueex))
+    nCondVecTE= np.zeros(len(tftissueex))
+    totPop  = 1639
+    nSubset = len(tflist) #size of subset
+    #nCond   = #n condition in subset
+    for i in range(len(tftissueex)):
+        totCond       = tftissueex['Cond'].iloc[i]
+        gt            = tftissueex['TFs'].iloc[i].split(',')[:-2]
+        nCond         = len(set(gt).intersection(set(tflist.iloc[:, 0])))
+        nCondVecTE[i]   = nCond
+        pvalVecTE[i]    = stats.hypergeom.sf(nCond - 1,totPop,totCond,nSubset)
+
+    qvalTE = multitest.fdrcorrection(pvalVecTE)
+    qvalTE = qvalTE[1]
+
+    #4. Tissue Expression
+    tftissuetar = pd.read_csv('src/diseaseEnr/TF-tissue-target.csv')
+
+    #Compute p-values
+    pvalVecTT = np.zeros(len(tftissuetar))
+    nCondVecTT= np.zeros(len(tftissuetar))
+    totPop  = 1639
+    nSubset = len(tflist) #size of subset
+    #nCond   = #n condition in subset
+    for i in range(len(tftissuetar)):
+        totCond       = tftissuetar['#TFsDifferentiallyTargetingSelectedCategories'].iloc[i]
+        gt            = tftissuetar['DifferentiallyTargetingTFs'].iloc[i].split(',')
+        nCond         = len(set(gt).intersection(set(tflist.iloc[:, 0])))
+        nCondVecTT[i]   = nCond
+        pvalVecTT[i]    = stats.hypergeom.sf(nCond - 1,totPop,totCond,nSubset)
+
+    qvalTT = multitest.fdrcorrection(pvalVecTT)
+    qvalTT = qvalTT[1]
+
     stat1=len(set(alltfs.iloc[:,0]).intersection(set(tflist.iloc[:,0])))
     stat2=len(tflist)
-    return qval, pvalVec, tfdbdisease, nCondVec, qval1, pvalVec1, tfdbgwas, nCondVec1, stat1, stat2
+    return qval, pvalVec, tfdbdisease, nCondVec, qval1, pvalVec1, tfdbgwas, nCondVec1, stat1, stat2, qvalTE, pvalVecTE, nCondVecTE, qvalTT, pvalVecTT, nCondVecTT, tftissueex, tftissuetar
 
 def enrichCmapReg(gene,sampleGenesUp,sampleGenesDown):
     print('Reading drug database')

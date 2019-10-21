@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Drug, DrugResultUp, DrugResultDown, Params, Disease, Gwas
+from .models import Drug, DrugResultUp, DrugResultDown, Params, Disease, Gwas, TissueTar, TissueEx
 
 class DrugSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -53,6 +53,24 @@ class GwasSerializer(serializers.ModelSerializer):
         class Meta:
                 model = Gwas
                 fields = ('id','disease','count','intersect','pval','qval')
+
+        def to_representation(self, instance):
+                data = super().to_representation(instance)
+                return data
+
+class TissueTarSerializer(serializers.ModelSerializer):
+        class Meta:
+                model = TissueTar
+                fields = ('id','tissue','count','intersect','pval','qval')
+
+        def to_representation(self, instance):
+                data = super().to_representation(instance)
+                return data
+
+class TissueExSerializer(serializers.ModelSerializer):
+        class Meta:
+                model = TissueEx
+                fields = ('id','tissue','count','intersect','pval','qval')
 
         def to_representation(self, instance):
                 data = super().to_representation(instance)

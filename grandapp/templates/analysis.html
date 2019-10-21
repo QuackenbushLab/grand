@@ -34,7 +34,7 @@
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Analysis</a>
           <div class="dropdown-menu">
             <a href="/analysis" class="dropdown-item">Small molecules</a>
-            <a href="/disease" class="dropdown-item">Disease</a>
+            <a href="/disease" class="dropdown-item">Disease/Tissues</a>
           </div>
         </li>
             <a class="nav-item nav-link" href="/help">Help</a>
@@ -68,10 +68,10 @@
 
                    <div class="col-md-5"> 
                    <div class="form-group">
-                        {% render_field geneform.contentup class="form-control" placeholder="Genes Up" %}                
+                        {% render_field geneform.contentup class="form-control" placeholder="Highly targeted genes/TFs" %}                
                    </div>
                    <div class="form-group">
-                        {% render_field geneform.contentdown class="form-control" placeholder="Genes Down" %}
+                        {% render_field geneform.contentdown class="form-control" placeholder="Lowly targeted genes/TFs" %}
                    </div>
                    <div class="form-actions button-box">
                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="/analysisexampletfs" class="btn btn-info" role="button">Example TFs</a>&nbsp;<a href="/analysisexample" class="btn btn-info" role="button">Example genes</a>

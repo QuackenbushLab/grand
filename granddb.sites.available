@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name 34.207.196.182;
+    server_name 34.207.196.182 grand.tm4.org www.grand.tm4.org;
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /static/ {

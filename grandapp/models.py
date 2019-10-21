@@ -95,6 +95,25 @@ class Tissue(models.Model):
     tfs       = models.IntegerField()
     genes     = models.IntegerField()
     refs      = models.URLField()
+    refs2     = models.URLField(default='#')
+
+class TissueTar(models.Model):
+    id           = models.AutoField(primary_key=True)
+    tissue       = models.CharField(max_length=600)
+    count        = models.IntegerField()
+    intersect    = models.IntegerField()
+    pval         = models.FloatField()
+    qval         = models.FloatField()
+    query        = models.IntegerField(default=0)
+
+class TissueEx(models.Model):
+    id           = models.AutoField(primary_key=True)
+    tissue       = models.CharField(max_length=600)
+    count        = models.IntegerField()
+    intersect    = models.IntegerField()
+    pval         = models.FloatField()
+    qval         = models.FloatField()
+    query        = models.IntegerField(default=0)
 
     def __str__(self):
        return self.name

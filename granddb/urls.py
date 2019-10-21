@@ -20,6 +20,8 @@ urlpatterns = [
     path('api/v1/drugresultdown/', api_views.DrugResultListDown.as_view()),
     path('api/v1/disease/', api_views.DiseaseList.as_view()),
     path('api/v1/gwas/', api_views.GwasList.as_view()),
+    path('api/v1/tissueex/', api_views.TissueExList.as_view()),
+    path('api/v1/tissuetar/', api_views.TissueTarList.as_view()),
     path('analysis/', view=views.analysis, name='analysis'),
     path('disease/',view=views.disease, name='disease'),
     path('help/',view=views.help, name='help'),

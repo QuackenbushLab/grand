@@ -55,6 +55,7 @@ expressionVec = rep("https://granddb.s3.amazonaws.com/tissues/expression/tissues
 tfsVec        = rep(nTFs, nTissues)
 genesVec      = rep(dim(genes)[1], nTissues)
 refsVec       = rep("https://www.cell.com/cell-reports/fulltext/S2211-1247(17)31418-3?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124717314183%3Fshowall%3Dtrue", nTissues)
+refsVec2      = rep("https://zenodo.org/record/838734", nTissues)
 
 # Populate df
 df['tissue']     = tissueVec
@@ -72,6 +73,7 @@ df['expLink']    = tissueLinkVec
 df['tfs']        = tfsVec
 df['genes']      = genesVec
 df['refs']       = refsVec
+df['refs2']      = refsVec2
 
 # Save to csv
 setwd('/Users/mab8354/granddb/')
