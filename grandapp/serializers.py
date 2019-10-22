@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Drug, DrugResultUp, DrugResultDown, Params, Disease, Gwas, TissueTar, TissueEx
+from .models import Drug, DrugResultUp, DrugResultDown, Params, Disease, Gwas, TissueTar, TissueEx, Cell, Tissue, DrugApi
 
 class DrugSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -74,4 +74,33 @@ class TissueExSerializer(serializers.ModelSerializer):
 
         def to_representation(self, instance):
                 data = super().to_representation(instance)
+                return data
+
+class TissueSerializer(serializers.ModelSerializer):
+        class Meta:
+                model = Tissue
+                fields = ('tissue','tissueLink','tool','netzoo','netzooLink','netzooRel','network','ppi','ppiLink','motif','expression','expLink','tfs','genes','refs','refs2')
+
+        def to_representation(self, instance):
+                data = super().to_representation(instance)
+                return data
+
+class CellSerializer(serializers.ModelSerializer):
+        class Meta:
+                model = Cell
+                fields = ('cellLine','cellLink','tool','netzoo','netzooLink','network','ppi','ppiLink','motif','expression','expLink','tfs','genes','refs')
+
+        def to_representation(self, instance):
+                data = super().to_representation(instance)
+                return data
+
+class DrugApiSerializer(serializers.ModelSerializer):
+        class Meta:
+                model  = Drug
+                fields = ('number','drug','tool','netzoo','network','ppi','motif','expression','tfs','genes','refs')
+
+        def to_representation(self, instance):
+                data = super().to_representation(instance)
+                #data['is_on_sale'] = instance.is_on_sale()
+                #data['current_price'] = instance.current_price()
                 return data

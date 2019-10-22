@@ -1,9 +1,8 @@
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
 from .serializers import DrugSerializer, DrugResultSerializerUp, DrugResultSerializerDown, ParamsSerializer, DiseaseSerializer, GwasSerializer, TissueTarSerializer, TissueExSerializer
-from .models import Drug, DrugResultUp, DrugResultDown, Params, Disease, Gwas, TissueTar, TissueEx
-from django_filters.rest_framework import DjangoFilterBackend
+from .serializers import CellSerializer, TissueSerializer, DrugApiSerializer
+from .models import Drug, DrugResultUp, DrugResultDown, Params, Disease, Gwas, TissueTar, TissueEx, Tissue, Cell, DrugApi
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.filters import SearchFilter
 from rest_framework_datatables.filters import DatatablesFilterBackend
 
 class DrugResultPagination(LimitOffsetPagination):
@@ -15,10 +14,28 @@ class DrugList(ListAPIView):
 	serializer_class = DrugSerializer
 	#pagination_class = DrugResultPagination
 
+class DrugApiList(ListAPIView):
+        queryset         = DrugApi.objects.all()
+        serializer_class = DrugApiSerializer
+        #filter_backends  = (DatatablesFilterBackend,DjangoFilterBackend,)
+        #filter_fields    = ('query',)
+
+class CellList(ListAPIView):
+        queryset         = Cell.objects.all()
+        serializer_class = CellSerializer
+        #filter_backends  = (DatatablesFilterBackend,DjangoFilterBackend,)
+        #filter_fields    = ('query',)
+
+class TissueList(ListAPIView):
+        queryset         = Tissue.objects.all()
+        serializer_class = TissueSerializer
+        #filter_backends  = (DatatablesFilterBackend,DjangoFilterBackend,)
+        #filter_fields    = ('query',)
+
 class DrugResultListUp(ListAPIView):
 	queryset = DrugResultUp.objects.all()
 	serializer_class = DrugResultSerializerUp
-	filter_backends = (DatatablesFilterBackend,DjangoFilterBackend,)
+	filter_backends = (DatatablesFilterBackend,)
 	filter_fields = ('query',)
 	#search_fields = ('drug',)
 	#pagination_class = DrugResultPagination
@@ -26,31 +43,31 @@ class DrugResultListUp(ListAPIView):
 class DrugResultListDown(ListAPIView):
         queryset = DrugResultDown.objects.all()
         serializer_class = DrugResultSerializerDown
-        filter_backends = (DatatablesFilterBackend,DjangoFilterBackend,)
+        filter_backends = (DatatablesFilterBackend,)
         filter_fields = ('query',)
 
 class DiseaseList(ListAPIView):
         queryset = Disease.objects.all()
         serializer_class = DiseaseSerializer
-        filter_backends = (DjangoFilterBackend,DatatablesFilterBackend,)
+        filter_backends = (DatatablesFilterBackend,)
         filter_fields = ('query',)
 
 class GwasList(ListAPIView):
         queryset = Gwas.objects.all()
         serializer_class = GwasSerializer
-        filter_backends = (DjangoFilterBackend,DatatablesFilterBackend,)
+        filter_backends = (DatatablesFilterBackend,)
         filter_fields = ('query',)
 
 class TissueTarList(ListAPIView):
         queryset = TissueTar.objects.all()
         serializer_class = TissueTarSerializer
-        filter_backends = (DjangoFilterBackend,DatatablesFilterBackend,)
+        filter_backends = (DatatablesFilterBackend,)
         filter_fields = ('query',)
 
 class TissueExList(ListAPIView):
         queryset = TissueEx.objects.all()
         serializer_class = TissueExSerializer
-        filter_backends = (DjangoFilterBackend,DatatablesFilterBackend,)
+        filter_backends = (DatatablesFilterBackend,)
         filter_fields = ('query',)
 
 class DrugRetrieveUpdateDestroyUp(RetrieveUpdateDestroyAPIView):

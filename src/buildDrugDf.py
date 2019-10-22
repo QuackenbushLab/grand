@@ -8,7 +8,7 @@ os.chdir('/Users/mab8354/granddb/src')
 dimNet = pd.read_csv('dimNet.csv')
 
 # Initialize dataframe
-df = pd.DataFrame(columns=['number','drug','tool','netzoo','network','ppi','motif','expression','tfs','genes','refs'])
+df    = pd.DataFrame(columns=['number','drug','tool','netzoo','network','ppi','motif','expression','tfs','genes','refs'])
 
 # Read from bucket
 batcmd="aws s3 ls s3://cmapreg/data/drugNetworks/"
@@ -25,6 +25,10 @@ numbersVec    = []
 drugVec       = []
 ppiVec        = []
 refsVec       = []
+drugVecApi    = []
+networkVecApi = []
+expressionVecApi=[]
+refsVecApi    = []
 missing=0
 for line in res.splitlines():
     print(line)
@@ -43,6 +47,9 @@ for line in res.splitlines():
         refsVec.append('<a href="#"><i class="fas fa-book"></i></a>')
         tfsVec.append(dimNet.iloc[matching,1].values[0])
         genesVec.append(dimNet.iloc[matching,2].values[0])
+        drugVecApi.append(drug)
+        networkVecApi.append('https://granddb.s3.amazonaws.com/drugs/drugNetworks/' + drug + '.txt.mat')
+        expressionVecApi.append('https://granddb.s3.amazonaws.com/drugs/drugExpression/' + drug + '.txt')
     else:
         continue
         tfsVec.append(0)
@@ -54,11 +61,10 @@ for line in res.splitlines():
 
 # build vectors
 toolVec       = np.repeat('PANDA', nDrugs)
-netzooVec     = np.repeat('netZooM', nDrugs)
 netzooLinkVec = np.repeat('netZooM <a href="https://github.com/netZoo/netZooM/releases">0.1</a>', nDrugs)
 ppiVec        = np.repeat('<a href="https://granddb.s3.amazonaws.com/drugs/drugs_ppi.txt"><i class="fas fa-download"></i></a> <a href="http://string90.embl.de/"><i class="fas fa-link"></i></a>', nDrugs)
 motifVec      = np.repeat('<a href="https://granddb.s3.amazonaws.com/drugs/drugs_motif.txt"><i class="fas fa-download"></i></a>', nDrugs)
-expLinkVec    = np.repeat('#', nDrugs)
+refsVecApi    = np.repeat('#', nDrugs)
 
 # Populate df
 df['number']    = numbersVec
@@ -76,3 +82,16 @@ df['refs']      = refsVec
 # save dataframe
 os.chdir('/Users/mab8354/granddb')
 df.to_csv('drugs.csv', index=False)
+
+# save APi dataframe
+dfApi = df
+dfApi['tool']          = np.repeat('PANDA', nDrugs)
+dfApi['netzoo']        = np.repeat('netZooM 0.1', nDrugs)
+dfApi['ppi']           = np.repeat('https://granddb.s3.amazonaws.com/drugs/drugs_ppi.txt', nDrugs)
+dfApi['motif']         = np.repeat('https://granddb.s3.amazonaws.com/drugs/drugs_motif.txt', nDrugs)
+dfApi['drug']          = drugVecApi
+dfApi['network']       = networkVecApi
+dfApi['expression']    = expressionVecApi
+dfApi['refs']          = refsVecApi
+
+dfApi.to_csv('drugsApi.csv', index=False)

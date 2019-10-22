@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from django.conf import settings
+from django.conf.urls import include
 
 from grandapp import views,api_views
 
@@ -16,17 +17,20 @@ urlpatterns = [
     url(r'^thanks/', views.thanks, name='thanks'),
     url(r'^erroremail/', views.erroremail, name='erroremail'),
     url('api/v1/drugs/', api_views.DrugList.as_view()),
-    path('api/v1/drugresultup/', api_views.DrugResultListUp.as_view()),
-    path('api/v1/drugresultdown/', api_views.DrugResultListDown.as_view()),
-    path('api/v1/disease/', api_views.DiseaseList.as_view()),
-    path('api/v1/gwas/', api_views.GwasList.as_view()),
-    path('api/v1/tissueex/', api_views.TissueExList.as_view()),
-    path('api/v1/tissuetar/', api_views.TissueTarList.as_view()),
-    path('analysis/', view=views.analysis, name='analysis'),
-    path('disease/',view=views.disease, name='disease'),
-    path('help/',view=views.help, name='help'),
-    path('analysisexample/', view=views.analysisexample, name='analysisexample'),
-    path('analysisexampletfs/', view=views.analysisexampletfs, name='analysisexampletfs'),
+    url('api/v1/drugresultup/', api_views.DrugResultListUp.as_view()),
+    url('api/v1/drugresultdown/', api_views.DrugResultListDown.as_view()),
+    url('api/v1/disease/', api_views.DiseaseList.as_view()),
+    url('api/v1/gwas/', api_views.GwasList.as_view()),
+    url('api/v1/drugapi/', api_views.DrugApiList.as_view()),
+    url('api/v1/tissueapi/', api_views.TissueList.as_view()),
+    url('api/v1/cellapi/', api_views.CellList.as_view()),
+    url('api/v1/tissueex/', api_views.TissueExList.as_view()),
+    url('api/v1/tissuetar/', api_views.TissueTarList.as_view()),
+    url('analysis/', view=views.analysis, name='analysis'),
+    url('disease/',view=views.disease, name='disease'),
+    url('help/',view=views.help, name='help'),
+    url('analysisexample/', view=views.analysisexample, name='analysisexample'),
+    url('analysisexampletfs/', view=views.analysisexampletfs, name='analysisexampletfs'),
     url(r'^diseaseexample/', view=views.diseaseexample, name='diseaseexample'),
     url(r'^drugresult/(\d+)/', view=views.drugresult, name='drugresult'),
     url(r'^diseaseresult/(\d+)', view=views.diseaseresult, name='diseaseresult'),

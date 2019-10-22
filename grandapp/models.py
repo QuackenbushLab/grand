@@ -115,6 +115,19 @@ class TissueEx(models.Model):
     qval         = models.FloatField()
     query        = models.IntegerField(default=0)
 
+class DrugApi(models.Model):
+    number    = models.IntegerField(default='0')
+    drug      = models.CharField(max_length=400)
+    tool      = models.CharField(max_length=400)
+    netzoo    = models.CharField(max_length=400)
+    network   = models.CharField(max_length=400)
+    ppi       = models.CharField(max_length=400)
+    motif     = models.CharField(max_length=400)
+    expression= models.CharField(max_length=400)
+    tfs       = models.IntegerField()
+    genes     = models.IntegerField()
+    refs      = models.CharField(max_length=400)
+
     def __str__(self):
        return self.name
 
