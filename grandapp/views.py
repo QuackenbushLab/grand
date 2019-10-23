@@ -53,7 +53,6 @@ def disease(request):
          if form.is_valid():
              content   = request.POST['content']
              data=content.split('\r\n')
-             print(data)
              data = list(filter(None, data))
              contentdf = pd.DataFrame(data, columns = ['Gene'])
              try:
@@ -177,7 +176,6 @@ def analysis(request):
              contentdown = request.POST['contentdown']
              tfgene      = request.POST['tfgene']
              data=contentup.split('\r\n')
-             print(data)
              data = list(filter(None, data))
              sampleUp = pd.DataFrame(data, columns = ['Gene'])
              data=contentdown.split('\r\n')
@@ -234,7 +232,6 @@ def analysisexample(request):
              contentdown = request.POST['contentdown']
              tfgene      = request.POST['tfgene']
              data=contentup.split('\r\n')
-             print(data)
              data = list(filter(None, data))
              sampleUp = pd.DataFrame(data, columns = ['Gene'])
              data=contentdown.split('\r\n')
