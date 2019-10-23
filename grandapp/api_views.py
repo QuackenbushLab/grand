@@ -6,8 +6,8 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework_datatables.filters import DatatablesFilterBackend
 
 class DrugResultPagination(LimitOffsetPagination):
-	default_limit = 100
-	max_limit = 100
+	default_limit = 20000
+	max_limit = 20000
 
 class DrugList(ListAPIView):
 	queryset = Drug.objects.all()
@@ -17,6 +17,7 @@ class DrugList(ListAPIView):
 class DrugApiList(ListAPIView):
         queryset         = DrugApi.objects.all()
         serializer_class = DrugApiSerializer
+        #pagination_class = DrugResultPagination
         #filter_backends  = (DatatablesFilterBackend,DjangoFilterBackend,)
         #filter_fields    = ('query',)
 

@@ -48,8 +48,8 @@ for line in res.splitlines():
         tfsVec.append(dimNet.iloc[matching,1].values[0])
         genesVec.append(dimNet.iloc[matching,2].values[0])
         drugVecApi.append(drug)
-        networkVecApi.append('https://granddb.s3.amazonaws.com/drugs/drugNetworks/' + drug + '.txt.mat')
-        expressionVecApi.append('https://granddb.s3.amazonaws.com/drugs/drugExpression/' + drug + '.txt')
+        networkVecApi.append('s3://granddb/drugs/drugNetworks/' + drug + '.txt.mat')
+        expressionVecApi.append('s3://granddb/drugs/drugExpression/' + drug + '.txt')
     else:
         continue
         tfsVec.append(0)
@@ -87,8 +87,8 @@ df.to_csv('drugs.csv', index=False)
 dfApi = df
 dfApi['tool']          = np.repeat('PANDA', nDrugs)
 dfApi['netzoo']        = np.repeat('netZooM 0.1', nDrugs)
-dfApi['ppi']           = np.repeat('https://granddb.s3.amazonaws.com/drugs/drugs_ppi.txt', nDrugs)
-dfApi['motif']         = np.repeat('https://granddb.s3.amazonaws.com/drugs/drugs_motif.txt', nDrugs)
+dfApi['ppi']           = np.repeat('s3://granddb/drugs//drugs_ppi.txt', nDrugs)
+dfApi['motif']         = np.repeat('s3://granddb/drugs/drugs_motif.txt', nDrugs)
 dfApi['drug']          = drugVecApi
 dfApi['network']       = networkVecApi
 dfApi['expression']    = expressionVecApi

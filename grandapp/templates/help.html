@@ -65,7 +65,7 @@
     <li class="breadcrumb-item"><a href="#networks">Networks</a></li>
     <li class="breadcrumb-item"><a href="#analysis">Analysis</a></li>
     <li class="breadcrumb-item"><a href="#faq">FAQ</a></li>
-    <li class="breadcrumb-item"><a href="#tuto">API tutorial</a></li>
+    <li class="breadcrumb-item"><a href="#tuto">API</a></li>
     <li class="breadcrumb-item"><a href="#credit">Image credit</a></li>
     </ol>
     <p><h3 id="networks" class="text-primary">Networks</h3>
@@ -103,10 +103,46 @@
     <p align="justify">The overlap score is equal to intersect(Input_Genes_Up,Drug_Genes_down) + intersect(Input_Genes_Down,Drug_Genes_Up) - intersect(Input_Genes_Up,Drugs_Genes_Up) - intersect(Input_Genes_Down,Drugs_Genes_Down). The cosine similarity compares the input vector to all the drugs. It is a signed measure that computes the direction of the vectors rather than their amplitude. In our case, we are interested in measuring the vectors of opposite directions, thus having negative cosine similarity.</p>
     </div>
     </p>
-    <p><h3 id="tuto" class="text-primary">API tutorial</h3>
-    GRAND has an API that allows accessing the data programatically to perform large-scale downloads. 
-   
+    <p><h3 id="tuto" class="text-primary">API</h3>
+    <h4>Documentation</h4>
+    <div class="ml-3">GRAND has an API that allows accessing the data programmatically to perform large-scale downloads. The full API documentation is available at <a href="http://localhost:8000/redoc/">http://localhost:8000/redoc/</a>.
+    A web view of the API is also available for <a href="http://localhost:8000/api/v1/cellapi/">cells</a>, <a href="http://localhost:8000/api/v1/tissueapi/">tissues</a>, and <a href="http://localhost:8000/api/v1/drugapi/">drug networks</a>.
+    </div>
+    <h4>Tutorial</h4>
+    <div class="ml-3">You can access the database programmatically through the API, here we provide an example using the <a href="https://requests.kennethreitz.org/en/master/">requests</a> library of Python3. Additionally, you need to install the library <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html">awscli</a> to download networks through the command line.
+    <pre><code>
+    import requests
+    import os      
+    </code></pre>
+    We perform a GET operation to the drugs database but we can also query cells and tissues. We need to make sure the returned status code is 200.
+    <pre><code>
+    response=requests.get('http://localhost:8000/api/v1/drugapi/')
+    
+    if response.status_code == 200:
+    	print('Success!')
+    elif response.status_code == 404:
+    	print('Not Found.')
+    </code></pre>
+    Since the API results are paginated for faster access, the previous command returns the first page with the first 50 drugs. To get the address of the next page, please use the following command:
+    <pre><code>
+    data['next']
+    </code></pre>
+    Then, we transform the result data into JSON strings for easier parsing.
+    <pre><code>
+    data=response.json()
+    drugs=data['results']
+    </code></pre>
+    We can print the name of the first 50 drugs in the database among other attributes.
+    <pre><code>
+    for drug in drugs:
+    	print(drug['drug'])
+    </code></pre>
+    We can also serially download the drug-induced gene regulatory network through awscli library. You can wrap this command into a for loop:
+    <pre><code>
+    os.system('aws s3 cp ' + drug['network'] + ' .')
+    </code></pre>
     </p>
+    </div>
     <p><h3 id="credit" class="text-primary">Image credit</h3>
     <div class="ml-3">Small molecule infographic: <a href="https://www.freepik.com/free-photos-vectors/background">Background vector created by freepik - www.freepik.com</a>
     <br>Tissues infographic: <a href="https://www.freepik.com/free-photos-vectors/heart">Heart vector created by freepik - www.freepik.com</a>
