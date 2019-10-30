@@ -26,7 +26,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from scipy.sparse.linalg import inv
 
 def home(request):
-    return render(request, 'home.html')
+    params = Params.objects.all()
+    return render(request, 'home.html', {'params':params})
 
 def help(request):
     return render(request, 'help.html')
@@ -108,6 +109,9 @@ def disease(request):
                  param.genesdownin   =stat1
                  param.genesupin     =stat2
                  param.save()  
+                 counter=Params.objects.get(id=3)
+                 counter.genesupin+=1
+                 counter.save()
              except BadHeaderError: #find a better exception
                  return HttpResponse('Invalid header found.')
              return redirect('/diseaseresult/'+str(accessKey)+'/')
@@ -217,6 +221,9 @@ def analysis(request):
                  param.genesup     = stat3
                  param.genesdown   = stat4
                  param.save()
+                 counter=Params.objects.get(id=3)
+                 counter.genesupin+=1
+                 counter.save()
              except BadHeaderError: #find a better exception
                  return HttpResponse('Invalid header found.')
              return redirect('/drugresult/' + str(accessKey) + '/')

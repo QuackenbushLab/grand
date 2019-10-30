@@ -1,6 +1,9 @@
 library('stringr')
-setwd('/Users/mab8354/granddb/src')
+setwd('/Users/mab8354/granddb/src/')
 load('GTEx_PANDA_tissues.RData')
+
+generateExpression=1
+generateNetworks=0
 
 # Initialize dataframe
 nTissues = dim(net)[2]
@@ -23,22 +26,36 @@ cols = c('tissue','tissueLink','tool','netzoo','netzooLink','netzooRel','network
 df <- data.frame(matrix(ncol = length(cols), nrow = nTissues))
 colnames(df) = cols
 
+# Resave tissues expression
+if(generateExpression){
+    setwd('/Users/mab8354/granddb/expression')
+    for(tissue in tissues){
+        indTissue = which(samples[,2] == tissue)
+        matTissue = exp[,indTissue]
+        write.csv(matTissue,paste0(tissue,".csv"))
+    }
+}
+
 # resave networks
-setwd('/Users/mab8354/granddb/networks')
-for(i in 1:nTissues){
-    d = net[,i]
-    d <- matrix(d, nrow = nTFs, byrow = TRUE)
-    rownames(d) = edges$TF[1:nTFs]
-    colnames(d) = unique(edges$Gene)
-    write.csv(d,paste0(tissues[i],".csv"))
+if(generateNetworks){
+    setwd('/Users/mab8354/granddb/networks')
+    for(i in 1:nTissues){
+        d = net[,i]
+        d <- matrix(d, nrow = nTFs, byrow = TRUE)
+        rownames(d) = edges$TF[1:nTFs]
+        colnames(d) = unique(edges$Gene)
+        write.csv(d,paste0(tissues[i],".csv"))
+    }
 }
 
 # build vectors
 expLinkVec = vector()
 networkVec = vector()
+expressionVec = vector()
 for(i in 1:nTissues){
     expLinkVec = c(expLinkVec, paste0("https://gtexportal.org/home/eqtls/tissue?tissueName=", tissues[i]))
     networkVec = c(networkVec, paste0("https://granddb.s3.amazonaws.com/tissues/networks/",tissues[i], '.csv'))
+    expressionVec = c(expressionVec, paste0("https://granddb.s3.amazonaws.com/tissues/expression/",tissues[i], '.csv'))
 }
 tissueVec     = colnames(net)
 tissueLinkVec = expLinkVec 
@@ -50,7 +67,7 @@ netzooRelVec  = rep("0.1", nTissues)
 ppiVec        = rep("https://granddb.s3.amazonaws.com/tissues/ppi/tissues_ppi.txt", nTissues)
 ppiLinkVec    = rep("http://string90.embl.de/", nTissues)
 motifVec      = rep("https://granddb.s3.amazonaws.com/tissues/motif/tissues_motif.txt", nTissues)
-expressionVec = rep("https://granddb.s3.amazonaws.com/tissues/expression/tissues_expression.txt", nTissues)
+#expressionVec = rep("https://granddb.s3.amazonaws.com/tissues/expression/tissues_expression.txt", nTissues)
 #expLinkVec    = 
 tfsVec        = rep(nTFs, nTissues)
 genesVec      = rep(dim(genes)[1], nTissues)

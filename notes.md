@@ -1,3 +1,5 @@
+Creation date of GRAND October 1st 2019 at 8:37:39pm
+
 run the server through
 
 `python3 manage.py runserver`
