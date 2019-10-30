@@ -427,7 +427,7 @@ def enrichDisease(tflist):
     pvalVec1 = pvalVec
 
     #2. Disease
-    tfdbdisease = pd.read_csv('src/diseaseEnr/TF-disease-data_Fig4_Disease.csv')
+    tfdbdisease = pd.read_csv('src/diseaseEnr/TF-disease-data_Fig4_disease.csv')
 
     #Compute p-values
     pvalVec = np.zeros(len(tfdbdisease))

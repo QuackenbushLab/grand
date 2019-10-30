@@ -6,23 +6,15 @@ run the server through
 
 import new db
 
-`python3 manage.py load_cell_data`
-
-`python3 manage.py load_drug_data`
-
-make migration
-
-`python3 manage makemigrations`
-
-run migration
-
-`python3 manage.py migrate`
+`python3 load_data.py`
 
 Requires
 
-`pip: django django-widget-tweaks gunicorn psycopg2-binary djangorestframework-datatables djangorestframework django-filter`
+`pip: django django-widget-tweaks djangorestframework-datatables djangorestframework django-filter`
 
-`pandas sklearn requests statsmodels`
+`pip install -U drf-yasg`
+
+`scipy pandas sklearn requests statsmodels`
 
 `apt: python3-pip python3-dev libpq-dev postgresql-contrib nginx curl`
 
@@ -38,7 +30,7 @@ Deployment:
 
 SCP transfer
 
-`scp -r -i /Volumes/home$/mab8354/Misc/amazonKey/Virginia.pem granddb/ ubuntu@34.207.196.182:`
+`scp -r -i /Volumes/home$/mab8354/Misc/amazonKey/Virginia.pem granddb/ ubuntu@34.229.232.135:`
 
 `chmod -R 755 granddb`
 
@@ -51,6 +43,8 @@ SCP transfer
 /!\ inside venv
 
 `pip3 install django gunicorn psycopg2-binary pillow`
+
+To exit venv `deactivate`
 
 Settings
 
@@ -87,9 +81,9 @@ Nginx
 
 `debug=FALSE` in settings
 
-paste in `nano /etc/nginx/sites-available/granddb`
+paste in `sudo nano /etc/nginx/sites-available/granddb`
 
-`sudo ln -s /etc/nginx/sites-available/portfolio /etc/nginx/sites-enabled`
+`sudo ln -s /etc/nginx/sites-available/granddb /etc/nginx/sites-enabled`
 
 sudo nginx -t
 
