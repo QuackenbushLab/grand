@@ -10,17 +10,23 @@ import new db
 
 Requires
 
-`pip: django django-widget-tweaks djangorestframework-datatables djangorestframework django-filter`
+/!\ inside and outside venv
 
-`pip install -U drf-yasg`
+`pip3 install django django-widget-tweaks djangorestframework-datatables djangorestframework django-filter`
 
-`scipy pandas sklearn requests statsmodels`
+`pip3 install -U drf-yasg`
+
+`pip3 install scipy pandas sklearn requests statsmodels`
 
 `apt: python3-pip python3-dev libpq-dev postgresql-contrib nginx curl`
 
 Firewall
 
 `sudo ufw allow 8000`
+
+to block port
+
+`sudo ufw delete allow 8000`
 
 Launch server
 
@@ -40,7 +46,7 @@ SCP transfer
 
 `source venv/bin/activate`
 
-/!\ inside venv
+/!\ inside venv only
 
 `pip3 install django gunicorn psycopg2-binary pillow`
 
@@ -61,7 +67,6 @@ Django
 `sudo ufw allow 8000`
 
 Gunicorn
-
 
 paste `sudo nano /etc/systemd/system/gunicorn.socket`
 
