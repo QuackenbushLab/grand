@@ -36,7 +36,7 @@ Deployment:
 
 SCP transfer
 
-`scp -r -i /Volumes/home$/mab8354/Misc/amazonKey/Virginia.pem granddb/ ubuntu@34.229.232.135:`
+`scp -r -i /Volumes/home$/mab8354/Misc/amazonKey/Virginia.pem granddb/ ubuntu@54.80.24.97:`
 
 `chmod -R 755 granddb`
 
