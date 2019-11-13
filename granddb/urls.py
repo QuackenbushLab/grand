@@ -17,7 +17,7 @@ schema_view = get_schema_view(
       default_version='v1',
       description="GRAND is a database of gene regulatory networks that integrates tissues, cells, and small molecules. It hosts webserver functionalities to perform cloud analytics on the networks.",
       terms_of_service="https://creativecommons.org/licenses/by-sa/4.0/",
-      contact=openapi.Contact(email="http://localhost:8000/about/"),
+      contact=openapi.Contact(email="http://grand.networkmedicine.org/about/"),
       license=openapi.License(name="GPL License"),
    ),
    public=True,
