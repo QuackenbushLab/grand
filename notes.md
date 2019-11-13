@@ -1,5 +1,11 @@
 Creation date of GRAND October 1st 2019 at 8:37:39pm
 
+Transfer .csv files
+
+` scp -r -i /Volumes/home$/mab8354/Misc/amazonKey/Virginia.pem granddb/*.csv ubuntu@54.80.24.97:~/granddb/`
+
+and create db sqlite3 in the server.
+
 run the server through
 
 `python3 manage.py runserver`
