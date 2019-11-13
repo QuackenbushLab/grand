@@ -26,7 +26,7 @@ SECRET_KEY = 'xigekntf99wnyz5(tuqxo)jm!za=*^6z3^9lwh_%c8ndxa^^-_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['www.grand.networkmedicine.org','grand.networkmedicine.org','54.80.24.97']
 
 
 # Application definition
