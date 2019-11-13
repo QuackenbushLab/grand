@@ -54,8 +54,8 @@ networkVec = vector()
 expressionVec = vector()
 for(i in 1:nTissues){
     expLinkVec = c(expLinkVec, paste0("https://gtexportal.org/home/eqtls/tissue?tissueName=", tissues[i]))
-    networkVec = c(networkVec, paste0("https://granddb.s3.amazonaws.com/tissues/networks/",tissues[i], '.csv'))
-    expressionVec = c(expressionVec, paste0("https://granddb.s3.amazonaws.com/tissues/expression/",tissues[i], '.csv'))
+    networkVec = c(networkVec, paste0("s3://granddb/tissues/networks/",tissues[i], '.csv'))
+    expressionVec = c(expressionVec, paste0("s3://granddb/tissues/expression/",tissues[i], '.csv'))
 }
 tissueVec     = colnames(net)
 tissueLinkVec = expLinkVec 
@@ -64,9 +64,9 @@ netzooVec     = rep("netZooM", nTissues)
 netzooLinkVec = rep("https://github.com/netZoo/netZooM/releases", nTissues)
 netzooRelVec  = rep("0.1", nTissues)
 #networkVec    = rep("https://granddb.s3.amazonaws.com/tissues/networks/GTEx_PANDA_tissues.RData", nTissues)
-ppiVec        = rep("https://granddb.s3.amazonaws.com/tissues/ppi/tissues_ppi.txt", nTissues)
+ppiVec        = rep("s3://granddb/tissues/ppi/tissues_ppi.txt", nTissues)
 ppiLinkVec    = rep("http://string90.embl.de/", nTissues)
-motifVec      = rep("https://granddb.s3.amazonaws.com/tissues/motif/tissues_motif.txt", nTissues)
+motifVec      = rep("s3://granddb/tissues/motif/tissues_motif.txt", nTissues)
 #expressionVec = rep("https://granddb.s3.amazonaws.com/tissues/expression/tissues_expression.txt", nTissues)
 #expLinkVec    = 
 tfsVec        = rep(nTFs, nTissues)
