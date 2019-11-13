@@ -125,7 +125,7 @@
     </code></pre>
     We perform a GET operation to the drugs database but we can also query cells and tissues. We need to make sure the returned status code is 200.
     <pre><code>
-    response=requests.get('http://localhost:8000/api/v1/drugapi/')
+    response=requests.get('https://grand.networkmedicine.org/api/v1/drugapi/')
     
     if response.status_code == 200:
     	print('Success!')
