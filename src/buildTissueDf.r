@@ -8,6 +8,7 @@ generateNetworks=0
 # Initialize dataframe
 nTissues = dim(net)[2]
 tissues  = colnames(net)
+tissues2 = tissues
 # Convert tissue name to capital letter for compatibility with gtex
 nTFs = dim(net)[1]/dim(genes)[1]
 k=0
@@ -27,12 +28,14 @@ df <- data.frame(matrix(ncol = length(cols), nrow = nTissues))
 colnames(df) = cols
 
 # Resave tissues expression
+iterExp=0
 if(generateExpression){
     setwd('/Users/mab8354/granddb/expression')
-    for(tissue in tissues){
+    for(tissue in tissues2){
+        iterExp=iterExp+1
         indTissue = which(samples[,2] == tissue)
         matTissue = exp[,indTissue]
-        write.csv(matTissue,paste0(tissue,".csv"))
+        write.csv(matTissue,paste0(tissues[iterExp],".csv"))
     }
 }
 
