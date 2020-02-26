@@ -35,19 +35,5 @@ class Command(BaseCommand):
         for row in DictReader(open('./tissues.csv')):
             tissue = Tissue()
             tissue.tissue       = row['tissue']
-            tissue.tissueLink   = row['tissueLink']
-            tissue.tool         = row['tool']
-            tissue.netzoo       = row['netzoo']
-            tissue.netzooLink   = row['netzooLink']
-            tissue.netzooRel    = row['netzooRel']
-            tissue.network      = row['network']
-            tissue.ppi          = row['ppi']
-            tissue.ppiLink      = row['ppiLink']
-            tissue.motif        = row['motif']
-            tissue.expression   = row['expression']
-            tissue.expLink      = row['expLink']
-            tissue.tfs          = row['tfs']
-            tissue.genes        = row['genes']
-            tissue.refs         = row['refs']
-            tissue.refs2        = row['refs2']
+            tissue.nnets        = row['nnets']
             tissue.save()

@@ -46,6 +46,7 @@
         </li>
           <a class="nav-item nav-link" href="/help">Help</a>
           <a class="nav-item nav-link" href="/about">Contact</a>
+          <a class="nav-item nav-link" href="download">Download</a>
           <a class="nav-item nav-link" href="https://github.com/QuackenbushLab/grand"><i class="fab fa-github fa-lg"></i></a>
       </div>
   </div>
@@ -73,43 +74,15 @@
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Tissue</th>
-                    <th scope="col">Tool</th>
-                    <th scope="col">netZoo release</th>
-                    <th scope="col">Network <i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      title="Network format"
-                      data-content="Please refer to the Help page Network section for the network download formats.">
-                    </i></th>
-                    <th scope="col">PPI <i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      title="Data sources"
-                      data-content="Directly download the PPI prior used for the generation of the network and check the link to the original PPI database and its version.">
-                    </i></th>
-                    <th scope="col">Motif</th>
-                    <th scope="col">Expression</th>
-                    <th scope="col">TFs</th>
-                    <th scope="col">Genes</th>
-                    <th scope="col">Reference</th>
+                    <th scope="col">Number of networks</th>
                   </tr>
                 </thead>
                 <tbody>
 		 {% for tissue in tissues %}
 		    <tr>
 		    <th scope="row">{{ forloop.counter }}</th>
-		    <td><a href="{{ tissue.tissueLink }}">{{ tissue.tissue }}</a></td>
-		    <td>{{ tissue.tool }}</td>
-		    <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}">{{ tissue.netzooRel }}</a></td>
-                    <td><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a></td>
-	            <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}"><i class="fas fa-link"></i></a></td>
-                    <td><a href="{{ tissue.motif }}"><i class="fas fa-download"></i></a></td>
-                    <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}"><i class="fas fa-link"></i></a></td>
-                    <td>{{ tissue.tfs }}</td>
-                    <td>{{ tissue.genes }}</td>
-                    <td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a> <a href="{{ tissue.refs2 }}"><i class="fas fa-book"></i></a></td>
+		    <td><a href="{{ tissue.tissue}}-tissue">{{ tissue.tissue }}</a></td>
+                    <td>{{ tissue.nnets }}</td>
                     </tr>
 		 {% endfor %}
 

@@ -62,7 +62,8 @@ for(i in 1:nTissues){
 }
 tissueVec     = colnames(net)
 tissueLinkVec = expLinkVec 
-toolVec       = rep("PANDA", nTissues)
+toolVec1       = rep("PANDA", nTissues)
+toolVec2       = rep("LIONESS", nTissues)
 netzooVec     = rep("netZooM", nTissues)
 netzooLinkVec = rep("https://github.com/netZoo/netZooM/releases", nTissues)
 netzooRelVec  = rep("0.1", nTissues)
@@ -70,29 +71,31 @@ netzooRelVec  = rep("0.1", nTissues)
 ppiVec        = rep("https://granddb.s3.amazonaws.com/tissues/ppi/tissues_ppi.txt", nTissues)
 ppiLinkVec    = rep("http://string90.embl.de/", nTissues)
 motifVec      = rep("https://granddb.s3.amazonaws.com/tissues/motif/tissues_motif.txt", nTissues)
+motifVec2      = rep("https://granddb.s3.amazonaws.com/tissues/motif/tissues_lioness_motif.txt", nTissues)
 #expressionVec = rep("https://granddb.s3.amazonaws.com/tissues/expression/tissues_expression.txt", nTissues)
 #expLinkVec    = 
 tfsVec        = rep(nTFs, nTissues)
 genesVec      = rep(dim(genes)[1], nTissues)
-refsVec       = rep("https://www.cell.com/cell-reports/fulltext/S2211-1247(17)31418-3?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124717314183%3Fshowall%3Dtrue", nTissues)
+refsVec1      = rep("https://www.cell.com/cell-reports/fulltext/S2211-1247(17)31418-3?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124717314183%3Fshowall%3Dtrue", nTissues)
+refsVec11     = rep("https://www.biorxiv.org/content/10.1101/082289v1.full", nTissues)
 refsVec2      = rep("https://zenodo.org/record/838734", nTissues)
 
 # Populate df
-df['tissue']     = tissueVec
-df['tissueLink'] = tissueLinkVec
-df['tool']       = toolVec
-df['netzoo']     = netzooVec
-df['netzooLink'] = netzooLinkVec
-df['netzooRel']  = netzooRelVec
+df['tissue']     = c(tissueVec,tissueVec)
+df['tissueLink'] = c(tissueLinkVec,tissueLinkVec)
+df['tool']       = c(toolVec1,toolVec2)
+df['netzoo']     = c(netzooVec,netzooVec)
+df['netzooLink'] = c(netzooLinkVec,netzooLinkVec)
+df['netzooRel']  = c(netzooRelVec,netzooRelVec)
 df['network']    = networkVec
-df['ppi']        = ppiVec
-df['ppiLink']    = ppiLinkVec
-df['motif']      = motifVec
+df['ppi']        = c(ppiVec,ppiVec)
+df['ppiLink']    = c(ppiLinkVec,ppiLinkVec)
+df['motif']      = c(motifVec,motifVec2)
 df['expression'] = expressionVec
-df['expLink']    = tissueLinkVec
+df['expLink']    = c(tissueLinkVec,tissueLinkVec)
 df['tfs']        = tfsVec
 df['genes']      = genesVec
-df['refs']       = refsVec
+df['refs']       = c(refsVec1,refsVec11)
 df['refs2']      = refsVec2
 
 # Save to csv

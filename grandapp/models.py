@@ -81,6 +81,11 @@ class Gwas(models.Model):
 class Tissue(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
     tissue    = models.CharField(max_length=200)
+    nnets     = models.IntegerField(default=0)
+
+class Tissuelanding(models.Model):
+    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    tissue    = models.CharField(max_length=200)
     tissueLink= models.URLField(default='#')
     tool      = models.CharField(max_length=200)
     netzoo    = models.CharField(max_length=200)
@@ -96,6 +101,7 @@ class Tissue(models.Model):
     genes     = models.IntegerField()
     refs      = models.URLField()
     refs2     = models.URLField(default='#')
+    nnets     = models.IntegerField(default=0)
 
 class TissueTar(models.Model):
     id           = models.AutoField(primary_key=True)

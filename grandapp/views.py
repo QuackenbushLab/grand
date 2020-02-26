@@ -4,7 +4,7 @@ from django.http import Http404
 from django.core import serializers
 from .models import Cell, Disease
 from .models import Drug, DrugResultUp, DrugResultDown, Params
-from .models import Tissue, Gwas, TissueEx, TissueTar
+from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
 from .forms import ContactForm, GeneForm, DiseaseForm
 from django.conf import settings
@@ -31,6 +31,9 @@ def home(request):
 
 def help(request):
     return render(request, 'help.html')
+
+def download(request):
+    return render(request, 'download.html')
 
 def cell(request):
     cells = Cell.objects.all()
@@ -169,6 +172,10 @@ def diseaseexample(request):
 def tissue(request):
     tissues = Tissue.objects.all()
     return render(request, 'tissues.html', {'tissues': tissues})
+
+def tissuelanding(request):
+    tissuelanding = Tissuelanding.objects.all()
+    return render(request, 'tissueslanding.html', {'tissuelanding': tissuelanding})
 
 def analysis(request):
     if request.method == 'GET':
