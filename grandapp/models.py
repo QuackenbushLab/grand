@@ -90,7 +90,7 @@ class Tissuelanding(models.Model):
     tool      = models.CharField(max_length=200)
     netzoo    = models.CharField(max_length=200)
     netzooLink= models.URLField(max_length=200)
-    netzooRel = models.FloatField()
+    netzooRel = models.CharField(max_length=200)
     network   = models.URLField()
     ppi       = models.URLField()
     ppiLink   = models.URLField()
@@ -101,7 +101,7 @@ class Tissuelanding(models.Model):
     genes     = models.IntegerField()
     refs      = models.URLField()
     refs2     = models.URLField(default='#')
-    nnets     = models.IntegerField(default=0)
+    samples   = models.IntegerField(default=0)
 
 class TissueTar(models.Model):
     id           = models.AutoField(primary_key=True)

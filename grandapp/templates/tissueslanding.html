@@ -94,6 +94,7 @@
                     <th scope="col">Expression</th>
                     <th scope="col">TFs</th>
                     <th scope="col">Genes</th>
+                    <th scope="col">Samples</th>
                     <th scope="col">Reference</th>
                   </tr>
                 </thead>
@@ -111,7 +112,12 @@
                     <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}"><i class="fas fa-link"></i></a></td>
                     <td>{{ tissue.tfs }}</td>
                     <td>{{ tissue.genes }}</td>
-                    <td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a> <a href="{{ tissue.refs2 }}"><i class="fas fa-book"></i></a></td>
+                    <td>{{ tissue.smaples }}</td>
+		    {% if tissue.tool == 'LIONESS' %}
+		    	<td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a></td>
+		    {% else %}
+                    	<td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a> <a href="{{ tissue.refs2 }}"><i class="fas fa-book"></i></a></td>
+                    {% endif %}
                     </tr>
                     {% endif %}
 		 {% endfor %}

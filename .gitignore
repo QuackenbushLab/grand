@@ -5,3 +5,5 @@
 /granddb/local_settings.py
 *.pyc
 *.Rhistory
+/paper
+*.RDataTmp

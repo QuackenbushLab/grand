@@ -34,6 +34,6 @@ class Command(BaseCommand):
         print("Loading tissue data!")
         for row in DictReader(open('./tissues.csv')):
             tissue = Tissue()
-            tissue.tissue       = row['tissue']
-            tissue.nnets        = row['nnets']
+            tissue.tissue    = row['tissue']
+            tissue.nnets     = row['nnets']
             tissue.save()
