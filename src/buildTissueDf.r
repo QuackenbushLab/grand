@@ -66,7 +66,7 @@ for(i in 1:nTissues){
     networkVec = c(networkVec, paste0("https://granddb.s3.amazonaws.com/tissues/networks/",tissues[i], '.csv'))
     expressionVec = c(expressionVec, paste0("https://granddb.s3.amazonaws.com/tissues/expression/",tissues[i], '.csv'))
     networkVec2 = c(networkVec2, paste0("https://granddb.s3.amazonaws.com/tissues/networks/lioness/",tissues[i],'_AllSamples','.csv'))
-}
+}               
 tissueVec     = colnames(net)
 tissueVec2    = setdiff(tissueVec,notInLionessTissues2)
 tissueLinkVec = expLinkVec 
