@@ -49,4 +49,5 @@ class Command(BaseCommand):
             cell.tfs          = row['tfs']
             cell.genes        = row['genes']
             cell.refs         = row['refs']
+            cell.samples      = row['samples']
             cell.save()

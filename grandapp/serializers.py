@@ -5,7 +5,7 @@ from .models import Drug, DrugResultUp, DrugResultDown, Params, Disease, Gwas, T
 class DrugSerializer(serializers.ModelSerializer):
 	class Meta:
 		model  = Drug
-		fields = ('number','drug','tool','netzoo','network','ppi','motif','expression','tfs','genes','refs')
+		fields = ('number','drug','nnets')
 
 	def to_representation(self, instance):
 		data = super().to_representation(instance)

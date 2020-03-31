@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.http import Http404
 from django.core import serializers
 from .models import Cell, Disease
-from .models import Drug, DrugResultUp, DrugResultDown, Params
+from .models import Drug, Druglanding, DrugResultUp, DrugResultDown, Params
 from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
 from .forms import ContactForm, GeneForm, DiseaseForm
@@ -45,9 +45,14 @@ def cell(request):
 
 def drug(request):
     drugs = Drug.objects.all()
+    #drugs=drugs.filter(drug="<a href = \"#\" >zopiclone</a>")
     return render(request, 'drugs.html', {'drugs': drugs})
-    #json  = serializers.serialize('json', drugs)
-    #return HttpResponse(json, content_type = 'application/json')
+
+def druglanding(request):
+    drugslanding = Druglanding.objects.all()
+    query=request.path_info[7:-6]
+    drugslanding = drugslanding.filter(drug=query)
+    return render(request, 'drugslanding.html', {'drugslanding': drugslanding})
 
 def disease(request):
     if request.method == 'GET':

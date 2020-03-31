@@ -40,7 +40,7 @@
            <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Analysis</a>
           <div class="dropdown-menu">
-            <a href="/analysis" class="dropdown-item">Small molecules</a>
+            <a href="/analysis" class="dropdown-item">CLUEreg</a>
             <a href="/disease" class="dropdown-item">Disease/Tissues</a>
           </div>
         </li>
@@ -68,33 +68,13 @@
   </div>
 </nav>
 
-    <div class="container col-10 pb-5 mb-5">
+    <div class="container col-9 pb-5 mb-5">
         <table id="drugstable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Drug</th>
-                    <th scope="col">Tool</th>
-                    <th scope="col">netZoo release</th>
-                    <th scope="col">Network <i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      title="Network format"
-                      data-content="Please refer to the Help page Network section for the network download formats.">
-                    </i></th>
-                    <th scope="col">PPI <i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      title="Data sources"
-                      data-content="Directly download the PPI prior used for the generation of the network and check the link to the original PPI database and its version.">
-                    </i></th>
-                    <th scope="col">Motif</th>
-                    <th scope="col">Expression</th>
-                    <th scope="col">TFs</th>
-                    <th scope="col">Genes</th>
-                    <th scope="col">Reference</th>
+                    <th scope="col">Number of networks</th>
                   </tr>
                 </thead>
               </table>
@@ -118,7 +98,7 @@ $(function () {
 $(document).ready(function() {
     //datatables
     $('#drugstable').DataTable({
-      "ajax": "https://grand.networkmedicine.org/api/v1/drugs/?format=datatables",
+      "ajax": "http://127.0.0.1:8000/api/v1/drugs/?format=datatables",
 
      "serverSide": true,
      "processing": true,
@@ -126,15 +106,7 @@ $(document).ready(function() {
       "columns": [
           {"data": "number"},
           {"data": "drug"},
-          {"data": "tool"},
-          {"data": "netzoo"},
-          {"data": "network"},
-          {"data": "ppi"},
-          {"data": "motif"},
-          {"data": "expression"},
-          {"data": "tfs"},
-          {"data": "genes"},
-          {"data": "refs"},
+          {"data": "nnets"},
       ],
 
       "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +

@@ -17,6 +17,7 @@ class Cell(models.Model):
     tfs       = models.IntegerField()
     genes     = models.IntegerField()
     refs      = models.URLField()
+    samples   = models.IntegerField(default=0)
     #submitter = models.CharField(max_length=100)
     #species = models.CharField(max_length=30)
     #breed = models.CharField(max_length=30, blank=True)
@@ -29,15 +30,24 @@ class Cell(models.Model):
 class Drug(models.Model):
     number    = models.IntegerField(default='0')
     drug      = models.CharField(max_length=400)
-    tool      = models.CharField(max_length=400)
-    netzoo    = models.CharField(max_length=400)
-    network   = models.CharField(max_length=400)
-    ppi       = models.CharField(max_length=400)
-    motif     = models.CharField(max_length=400)
-    expression= models.CharField(max_length=400)
+    nnets       = models.IntegerField(default='0')
+
+class Druglanding(models.Model):
+    number    = models.IntegerField(default=0)
+    drug      = models.CharField(max_length=200)
+    tool      = models.CharField(max_length=200)
+    netzoo    = models.CharField(max_length=200)
+    netzooRel = models.CharField(max_length=200)
+    network   = models.URLField()
+    ppi       = models.URLField()
+    motif     = models.URLField()
+    expression= models.URLField()
     tfs       = models.IntegerField()
     genes     = models.IntegerField()
+    ppiLink   = models.CharField(max_length=200)
     refs      = models.URLField()
+    samples   = models.IntegerField(default=0)
+    expLink   = models.URLField()
 
 class DrugResultUp(models.Model):
     id        = models.AutoField(primary_key=True)
@@ -139,3 +149,4 @@ class DrugApi(models.Model):
 
     def natural_key(self):
        return self.my_natural_key
+

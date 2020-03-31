@@ -36,13 +36,5 @@ class Command(BaseCommand):
             drug = Drug()
             drug.number       = row['number']
             drug.drug         = row['drug']
-            drug.tool         = row['tool']
-            drug.netzoo       = row['netzoo']
-            drug.network      = row['network']
-            drug.ppi          = row['ppi']
-            drug.motif        = row['motif']
-            drug.expression   = row['expression']
-            drug.tfs          = row['tfs']
-            drug.genes        = row['genes']
-            drug.refs         = row['refs']
+            drug.nnets         = row['nnets']
             drug.save()

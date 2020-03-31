@@ -68,12 +68,12 @@
   </div>
 </nav>
 
-    <div class="container col-9 bm-5 bp-5">
-        <table id="cellstable" class="table table-hover" style="width: 100%">
+    <div class="container col-9 pb-5 mb-5">
+        <table id="drugstable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Cell line</th>
+                    <th scope="col">Drug</th>
                     <th scope="col">Tool</th>
                     <th scope="col">netZoo release</th>
                     <th scope="col">Network <i class="far fa-question-circle"
@@ -99,23 +99,22 @@
                   </tr>
                 </thead>
                 <tbody>
-		 {% for cell in cells %}
+		 {% for drug in drugslanding %}
 		    <tr>
-		    <th scope="row">{{ forloop.counter }}</th>
-		    <td><a href="{{ cell.cellLink }}">{{ cell.cellLine }}</a></td>
-		    <td>{{ cell.tool }}</td>
-		    <td>{{ cell.netzoo }} <a href="{{ cell.netzooLink }}">{{ cell.netzooRel }}</a></td>
-                    <td><a href="{{ cell.network }}" class="btn btn-outline-primary" role="button">po</a></td>
-	            <td><a href="{{ cell.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ cell.ppiLink }}"><i class="fas fa-link"></i></a></td>
-                    <td><a href="{{ cell.motif }}"><i class="fas fa-download"></i></a></td>
-                    <td><a href="{{ cell.expression }}"><i class="fas fa-download"></i></a> <a href="{{ cell.expLink }}"><i class="fas fa-link"></i></a></td>
-                    <td>{{ cell.tfs }}</td>
-                    <td>{{ cell.genes }}</td>
-                    <td>{{ cell.samples }}</td>
-                    <td><a href="{{ cell.refs }}"><i class="fas fa-book"></i></a></td>
+		    <th scope="row">{{ drug.number }}</th>
+		    <td><a href = "{{ drug.refs }}" >{{ drug.drug }}</a></td>
+		    <td>{{ drug.tool }}</td>
+		    <td>{{ drug.netzoo }} <a href="https://github.com/netZoo/netZooM/releases">{{ drug.netzooRel }}</a></td>
+                    <td><a href="{{ drug.network }}" class="btn btn-outline-primary" role="button">co</a></td>
+	            <td><a href="{{ drug.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ drug.ppiLink }}"><i class="fas fa-link"></i></a></td>
+                    <td><a href="{{ drug.motif }}"><i class="fas fa-download"></i></a></td>
+                    <td><a href="{{ drug.expression }}"><i class="fas fa-download"></i></a> <a href="{{ drug.expLink}}"><i class="fas fa-link"></i></a></td>
+                    <td>{{ drug.tfs }}</td>
+                    <td>{{ drug.genes }}</td>
+                    <td>{{ drug.samples }} </td>
+		    <td><a href="{{ drug.refs }}"><i class="fas fa-book"></i></a></td>
                     </tr>
 		 {% endfor %}
-
                 </tbody>
               </table>
 </div>
@@ -136,7 +135,8 @@ $(function () {
 
 // Basic example
 $(document).ready(function() {
-    $('#cellstable').DataTable({
+    //datatables
+    $('#drugstable').DataTable({
       "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
              "<'row'<'col-sm-12'tr>>" +
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
