@@ -6,7 +6,7 @@ from .models import Cell, Disease
 from .models import Drug, Druglanding, DrugResultUp, DrugResultDown, Params
 from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
-from .forms import ContactForm, GeneForm, DiseaseForm
+from .forms import ContactForm, GeneForm, DiseaseForm, DownloadForm
 from django.conf import settings
 import os
 import random
@@ -17,6 +17,11 @@ import scipy.stats as stats
 import numpy as  np
 import requests
 from statsmodels.stats import multitest # for fdr correction
+
+# to fetch single-sample network
+import dask.dataframe as dd
+from io import StringIO # python3; python2: BytesIO 
+import boto3
 
 # for enrich drug
 import scipy as sp # for sparse matrices
@@ -83,7 +88,7 @@ def disease(request):
                      disease.intersect=nCondVec[i]
                      disease.pval     =round(pvalVec[i],5)
                      disease.qval     =round(qval[i],5)
-                     disease.query    =randid
+                     disease.hpoId    ='https://hpo.jax.org/app/browse/term/' + tfdb.iloc[i,5]
                      disease.save()
                  for i in range(len(qval1)):
                      gwas   = Gwas.objects.get(id=i+1)
@@ -101,7 +106,7 @@ def disease(request):
                      tissueex.intersect   =nCondVecTE[i]
                      tissueex.pval        =round(pvalVecTE[i],5)
                      tissueex.qval        =round(qvalTE[i],5)
-                     tissueex.query       =randid
+                     tissueex.tissueLink  ='https://grand.networkmedicine.org/tissues/' + tissueex.tissue + '-tissue/'
                      tissueex.save()
                  for i in range(len(qvalTT)):
                      tissuett   = TissueTar.objects.get(id=i+1)
@@ -110,9 +115,9 @@ def disease(request):
                      tissuett.intersect   =nCondVecTT[i]
                      tissuett.pval        =round(pvalVecTT[i],5)
                      tissuett.qval        =round(qvalTT[i],5)
-                     tissuett.query       =randid
+                     tissuett.tissueLink  ='https://grand.networkmedicine.org/tissues/' + tissuett.tissue + '-tissue/'
                      tissuett.save()
-                 accessKey = disease.query
+                 accessKey = randid
                  param=Params.objects.get(id=2)
                  param.genesdownin   =stat1
                  param.genesupin     =stat2
@@ -162,7 +167,6 @@ def diseaseexample(request):
                      gwas.intersect   =nCondVec1[i]
                      gwas.pval        =round(pvalVec1[i],5)
                      gwas.qval        =round(qval1[i],5)
-                     gwas.query       =gwas.query+1
                      gwas.save()
                  accessKey = disease.query
                  param=Params.objects.get(id=2)
@@ -178,9 +182,78 @@ def tissue(request):
     tissues = Tissue.objects.all()
     return render(request, 'tissues.html', {'tissues': tissues})
 
-def tissuelanding(request):
+def tissuelanding(request,slug):
     tissuelanding = Tissuelanding.objects.all()
-    return render(request, 'tissueslanding.html', {'tissuelanding': tissuelanding})
+    slug2='error'
+    if request.method == 'GET':
+        form = DownloadForm()
+    else:
+        form = DownloadForm(request.POST)
+        if form.is_valid():
+            download_sample    = request.POST['download_sample']
+            try:
+                sampleid=int(download_sample)
+                df_train = dd.read_csv('src/Intestine_Terminal_Ileum_AllSamples.csv', usecols=[sampleid])
+                df_train=df_train.compute()
+                tfs=pd.read_csv('src/tissue_tfs.csv',header=None)
+                genes=pd.read_csv('src/tissue_genes.csv',header=None)
+                tfs.columns = ['','']
+                genes.columns = ['','']
+                sampleNet=pd.DataFrame(index=tfs.iloc[1:,1],columns=genes.iloc[:,1],data=df_train.iloc[:,0].values.reshape((644,30243)))
+                fileName = 'sample' + str(sampleid) + '_' + df_train.columns[0] + '.csv'
+                bucket = 'granddb' # already created on S3
+                csv_buffer = StringIO()
+                sampleNet.to_csv(csv_buffer)
+                s3_resource = boto3.resource('s3')
+                res=s3_resource.Object(bucket, 'tissues/networks/lioness/singleSample/' + fileName).put(Body=csv_buffer.getvalue())
+                if res['ResponseMetadata']['HTTPStatusCode'] == 200:
+                    os.system('aws s3api put-object-acl --bucket granddb --key tissues/networks/lioness/singleSample/' + fileName  + ' --acl public-read')
+                    resURL='https://granddb.s3.amazonaws.com/tissues/networks/lioness/singleSample/' + fileName 
+            except:
+                if download_sample == 'all':
+                    resURL = 'https://granddb.s3.amazonaws.com/tissues/networks/lioness/Adipose_Subcutaneous_AllSamples.csv'
+                else:
+                    return redirect('tissuelandingerror',slug)
+            return redirect(resURL)
+        else:
+            return redirect('tissuelandingerror'.slug)
+    return render(request, "tissueslanding.html", {'tissuelanding': tissuelanding,'downloadform':form, 'slug':slug})
+
+def tissuelandingerror(request,slug):
+    tissuelanding = Tissuelanding.objects.all()
+    if request.method == 'GET':
+        form = DownloadForm()
+    else:
+        form = DownloadForm(request.POST)
+        if form.is_valid():
+            download_sample    = request.POST['download_sample']
+            try:
+                sampleid=int(download_sample)
+                df_train = dd.read_csv('src/Intestine_Terminal_Ileum_AllSamples.csv', usecols=[sampleid])
+                df_train=df_train.compute()
+                tfs=pd.read_csv('src/tissue_tfs.csv',header=None)
+                genes=pd.read_csv('src/tissue_genes.csv',header=None)
+                tfs.columns = ['','']
+                genes.columns = ['','']
+                sampleNet=pd.DataFrame(index=tfs.iloc[1:,1],columns=genes.iloc[:,1],data=df_train.iloc[:,0].values.reshape((644,30243)))
+                fileName = 'sample' + str(sampleid) + '_' + df_train.columns[0] + '.csv'
+                bucket = 'granddb' # already created on S3
+                csv_buffer = StringIO()
+                sampleNet.to_csv(csv_buffer)
+                s3_resource = boto3.resource('s3')
+                res=s3_resource.Object(bucket, 'tissues/networks/lioness/singleSample/' + fileName).put(Body=csv_buffer.getvalue())
+                if res['ResponseMetadata']['HTTPStatusCode'] == 200:
+                    os.system('aws s3api put-object-acl --bucket granddb --key tissues/networks/lioness/singleSample/' + fileName  + ' --acl public-read')
+                    resURL='https://granddb.s3.amazonaws.com/tissues/networks/lioness/singleSample/' + fileName
+            except:
+                if download_sample == 'all':
+                    resURL = 'https://granddb.s3.amazonaws.com/tissues/networks/lioness/Adipose_Subcutaneous_AllSamples.csv'
+                else:
+                    return redirect('tissuelandingerror', slug)
+            return redirect(resURL)
+        else:
+            return redirect('tissuelandingerror', slug)
+    return render(request, "tissueslandingerror.html", {'tissuelanding': tissuelanding,'downloadform':form, 'slug':slug})
 
 def analysis(request):
     if request.method == 'GET':
@@ -214,19 +287,21 @@ def analysis(request):
                  randid      =random.randint(1,1000000)
                  for i in range(max_display):
                      drug=DrugResultUp.objects.get(id=i+1)
-                     drug.drug   =drugNames.iloc[indSort[i]].values[0]
-                     drug.cosine =round(cosDist[indSort[i]],4)
-                     drug.overlap=overlap[indSort[i]]
-                     drug.query  =randid
+                     currDrugName = drugNames.iloc[indSort[i]].values[0]
+                     drug.drug    = currDrugName[0].upper() + currDrugName[1:]
+                     drug.cosine  = round(cosDist[indSort[i]],4)
+                     drug.overlap = overlap[indSort[i]]
+                     drug.druglink= 'https://grand.networkmedicine.org/drugs/' + drug.drug + '-drug/'
                      drug.save()
                      drug=DrugResultDown.objects.get(id=i+1)
-                     drug.drug   =drugNames.iloc[indSort[-1-i]].values[0]
-                     drug.cosine =round(cosDist[indSort[-1-i]],4)
-                     drug.overlap=overlap[indSort[-1-i]]
-                     drug.query  =randid
+                     currDrugName = drugNames.iloc[indSort[-1-i]].values[0]
+                     drug.drug    = currDrugName[0].upper() + currDrugName[1:]
+                     drug.cosine  = round(cosDist[indSort[-1-i]],4)
+                     drug.overlap = overlap[indSort[-1-i]]
+                     drug.druglink= 'https://grand.networkmedicine.org/drugs/' + drug.drug + '-drug/'
                      drug.save()
                      #payload = {'drug':drugNames.iloc[indSort[-1-i]],'cosine':round(cosDist[indSort[-1-i]],4),'overlap':overlap[indSort[-1-i]]}
-                 accessKey = drug.query
+                 accessKey = randid
                  param  = Params.objects.get(id=1)
                  param.genesupin   = stat1
                  param.genesdownin = stat2
@@ -241,7 +316,7 @@ def analysis(request):
              return redirect('/drugresult/' + str(accessKey) + '/')
     return render(request, 'analysis.html', {'geneform':form})
 
-def analysisexample(request):
+def analysisexample(request): #all the else part can be deleted
     if request.method == 'GET':
          form = GeneForm({'tfgene':'Targeted genes','contentup':'ENSG00000137154\nENSG00000160049\nENSG00000281221\nENSG00000137822\nENSG00000113739\nENSG00000139146\nENSG00000099721\nENSG00000147488\nENSG00000116824\nENSG00000013583\nENSG00000105671\nENSG00000012983\nENSG00000013288\nENSG00000102871\nENSG00000226248\nENSG00000102226\nENSG00000136856\nENSG00000108312\nENSG00000132591\nENSG00000175895\nENSG00000198353\nENSG00000130005\nENSG00000177548\nENSG00000110171\nENSG00000026559\nENSG00000170345\nENSG00000173638\nENSG00000125730\nENSG00000198000\nENSG00000125931\nENSG00000176387\nENSG00000232860\nENSG00000229937\nENSG00000197475\nENSG00000135346\nENSG00000213931\nENSG00000030419\nENSG00000156802\nENSG00000146842\nENSG00000196655\nENSG00000110944\nENSG00000228435\nENSG00000156222\nENSG00000146143\nENSG00000177595\nENSG00000019582\nENSG00000160959\nENSG00000185958\nENSG00000256771\nENSG00000139874\nENSG00000116745\nENSG00000140092\nENSG00000120235\nENSG00000128285\nENSG00000156049\nENSG00000157782\nENSG00000168229\nENSG00000111012\nENSG00000170852\nENSG00000147437\nENSG00000088543\nENSG00000108953\nENSG00000125843\nENSG00000170950\nENSG00000148943\nENSG00000124549\nENSG00000196591\nENSG00000169242\nENSG00000175426\nENSG00000105339\nENSG00000163605\nENSG00000132677\nENSG00000134538\nENSG00000158874\nENSG00000085185\nENSG00000135116\nENSG00000168268\nENSG00000102100\nENSG00000172215\nENSG00000165494\nENSG00000198417\nENSG00000102003\nENSG00000169764\nENSG00000057294\nENSG00000167548\nENSG00000183242\nENSG00000116711\nENSG00000100307\nENSG00000103126\nENSG00000137673\nENSG00000116106\nENSG00000111640\nENSG00000174483\nENSG00000073331\nENSG00000110169\nENSG00000250254\nENSG00000163737\nENSG00000204248\nENSG00000198650\nENSG00000125826\n' , 'contentdown':'ENSG00000127528\nENSG00000165487\nENSG00000160181\nENSG00000158815\nENSG00000136932\nENSG00000254997\nENSG00000107104\nENSG00000104881\nENSG00000182326\nENSG00000084093\nENSG00000165792\nENSG00000077498\nENSG00000085788\nENSG00000184302\nENSG00000108861\nENSG00000165280\nENSG00000178445\nENSG00000196372\nENSG00000181143\nENSG00000127125\nENSG00000182446\nENSG00000198056\nENSG00000062485\nENSG00000146276\nENSG00000067064\nENSG00000077380\nENSG00000163946\nENSG00000122299\nENSG00000183549\nENSG00000174483\nENSG00000076382\nENSG00000111716\nENSG00000139718\nENSG00000131747\nENSG00000164035\nENSG00000095319\nENSG00000164081\nENSG00000170075\nENSG00000178053\nENSG00000179477\nENSG00000163624\nENSG00000134243\nENSG00000072682\nENSG00000214022\nENSG00000124783\nENSG00000100941\nENSG00000152402\nENSG00000119655\nENSG00000111450\nENSG00000164128\nENSG00000147804\nENSG00000278548\nENSG00000146834\nENSG00000134684\nENSG00000092345\nENSG00000253293\nENSG00000088726\nENSG00000111328\nENSG00000145244\nENSG00000196646\nENSG00000036549\nENSG00000125726\nENSG00000080709\nENSG00000011295\nENSG00000010256\nENSG00000198815\nENSG00000066044\nENSG00000089154\nENSG00000179455\nENSG00000095752\nENSG00000142657\nENSG00000253729\nENSG00000133740\nENSG00000105229\nENSG00000059145\nENSG00000100342\nENSG00000114742\nENSG00000103187\nENSG00000103174\nENSG00000111145\nENSG00000070366\nENSG00000196954\nENSG00000025156\nENSG00000105997\nENSG00000183648\nENSG00000157150\nENSG00000166167\nENSG00000163754\nENSG00000147457\nENSG00000083896\nENSG00000078142\nENSG00000084112\nENSG00000041357\nENSG00000127948\nENSG00000078403\nENSG00000242372\nENSG00000206073\nENSG00000103994\nENSG00000163739\nENSG00000114867\n' })
     else:
@@ -272,14 +347,18 @@ def analysisexample(request):
                  max_display=100
                  for i in range(max_display):
                      drug=DrugResultUp.objects.get(id=i+1)
-                     drug.drug   =drugNames.iloc[indSort[i]].values[0]
-                     drug.cosine =round(cosDist[indSort[i]],4)
-                     drug.overlap=overlap[indSort[i]]
+                     currDrugName  = drugNames.iloc[indSort[i]].values[0]
+                     drug.drug     = currDrugName.capitalize()
+                     drug.cosine   = round(cosDist[indSort[i]],4)
+                     drug.overlap  = overlap[indSort[i]]
+                     drug.druglink = 'https://grand.networkmedicine.org/drugs/' + drug.drug + '-drug/'
                      drug.save()
                      drug=DrugResultDown.objects.get(id=i+1).values[0]
-                     drug.drug   =drugNames.iloc[indSort[-1-i]]
-                     drug.cosine =round(cosDist[indSort[-1-i]],4)
-                     drug.overlap=overlap[indSort[-1-i]]
+                     currDrugName  = drugNames.iloc[indSort[-1-i]].values[0]
+                     drug.drug     = currDrugName.capitalize()
+                     drug.cosine   = round(cosDist[indSort[-1-i]],4)
+                     drug.overlap  = overlap[indSort[-1-i]]
+                     drug.druglink = 'https://grand.networkmedicine.org/drugs/' + drug.drug + '-drug/'
                      drug.save()
                  param  = Params.objects.get(id=1)
                  param.genesupin   = stat1
@@ -340,11 +419,17 @@ def analysisexampletfs(request):
 
 def drugresult(request, id):
     params = Params.objects.all()
-    return render(request, 'drugresult.html', {'params':params,'apiid':id})
+    drugup = DrugResultUp.objects.all()
+    drugdown = DrugResultDown.objects.all()
+    return render(request, 'drugresult.html', {'params':params,'drugup':drugup,'drugdown':drugdown})
 
 def diseaseresult(request, id):
-    params = Params.objects.all()
-    return render(request, 'diseaseresult.html', {'params':params,'apiid':id})
+    params  = Params.objects.all()
+    disease = Disease.objects.all()
+    gwas    = Gwas.objects.all()
+    tissueex   = TissueEx.objects.all()
+    tissuetar  = TissueTar.objects.all()
+    return render(request, 'diseaseresult.html', {'params':params,'disease':disease, 'gwas':gwas, 'tissueex':tissueex, 'tissuetar':tissuetar})
 
 def about(request):
     if request.method == 'GET':

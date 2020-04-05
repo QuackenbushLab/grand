@@ -21,6 +21,8 @@
 </script>
 <body>
 
+{% load widget_tweaks %}
+
 <!-- Header -->
 <nav class="navbar bg-dark navbar-dark navbar-expand-sm">
   <div class="container">
@@ -99,31 +101,64 @@
                   </tr>
                 </thead>
                 <tbody>
-		 {% for tissue in tissuelanding %}
-                    {% if "/tissues/"|add:tissue.tissue|add:"-tissue/" ==  request.path %}
-		    <tr>
-		    <th scope="row">{{ forloop.counter }}</th>
-		    <td><a href="{{ tissue.tissueLink }}">{{ tissue.tissue }}</a></td>
-		    <td>{{ tissue.tool }}</td>
-		    <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}">{{ tissue.netzooRel }}</a></td>
+                 {% for tissue in tissuelanding %}
+                    {% if "/tissues/"|add:tissue.tissue|add:"_tissue/" ==  request.path %}
+                    <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td><a href="{{ tissue.tissueLink }}">{{ tissue.tissue }}</a></td>
+                    <td>{{ tissue.tool }}</td>
+                    <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}">{{ tissue.netzooRel }}</a></td>
+                    {% if tissue.tool == 'LIONESS' %}
+                    <td><a class="btn btn-outline-primary" role="button"  data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls>co</a></td>
+                    {% else %}
                     <td><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a></td>
-	            <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}"><i class="fas fa-link"></i></a></td>
+                    {% endif %}
+                    <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}"><i class="fas fa-link"></i></a></td>
                     <td><a href="{{ tissue.motif }}"><i class="fas fa-download"></i></a></td>
                     <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}"><i class="fas fa-link"></i></a></td>
                     <td>{{ tissue.tfs }}</td>
                     <td>{{ tissue.genes }}</td>
                     <td>{{ tissue.samples }}</td>
-		    {% if tissue.tool == 'LIONESS' %}
-		    	<td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a></td>
-		    {% else %}
-                    	<td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a> <a href="{{ tissue.refs2 }}"><i class="fas fa-book"></i></a></td>
+                    {% if tissue.tool == 'LIONESS' %}
+                        <td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a></td>
+                    {% else %}
+                        <td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a> <a href="{{ tissue.refs2 }}"><i class="fas fa-book"></i></a></td>
                     {% endif %}
                     </tr>
                     {% endif %}
-		 {% endfor %}
-
+                 {% endfor %}
                 </tbody>
               </table>
+        <div class="collapse" id="collapseExample">
+                  <div class="card border-primary">
+                        <div class="card-header">Download information</div>
+                        <div class="card-body">
+                            <a href="https://pubmed.ncbi.nlm.nih.gov/23741402/">PANDA</a> reconstructs one network using all the expression samples. 
+			    <a href="https://www.sciencedirect.com/science/article/pii/S2589004219300872">LIONESS</a> builds a single-sample network for each sample.
+                            You can either download all the networks by entering 'all'  (~10-50Gb) and you will get a matrix of size the number of samples by the number of edges. The number of edges
+			    is 644 * 30243 (number of TFs * number of genes) (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a TF-by-gene
+            		    matrix named after  the GTEx sample reference. It will take about four minutes to fetch the network.
+                            <form action="{% url 'tissuelanding' slug %}" role="form" method="post">
+                                {% csrf_token %}
+                                <div class="form-row align-items-center">
+                                        <div class="col-sm-4"></div>
+                                        <div class="input-group-prepend mb-3">
+                                                    <div class="input-group-text">Sample number</div>
+                                         </div>
+                                    <div class="form-group ">
+                                                {% render_field downloadform.download_sample class="form-control" placeholder="all or 29" %}
+                                    </div>
+                                    <div class="col-auto"></div>
+                                    <div class="form-actions col-auto">
+                                        <button type="submit"  name="submit" class="btn btn-primary mb-3">Download</button>
+                                    </div>
+                                </div>
+                                </form>
+
+                        </div>
+                   </div>
+        </div>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css"></script>

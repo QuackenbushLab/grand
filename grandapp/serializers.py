@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Drug, DrugResultUp, DrugResultDown, Params, Disease, Gwas, TissueTar, TissueEx, Cell, Tissue, DrugApi
+from .models import Drug, Disease, Cell, Tissue, Tissuelanding, Druglanding
 
 class DrugSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -13,73 +13,10 @@ class DrugSerializer(serializers.ModelSerializer):
 		#data['current_price'] = instance.current_price()
 		return data
 
-class DrugResultSerializerUp(serializers.ModelSerializer):
-	class Meta:
-		model = DrugResultUp
-		fields = ('id','drug','overlap','cosine','query')
-	
-	def to_representation(self, instance):
-		data = super().to_representation(instance)
-		return data
-
-class DrugResultSerializerDown(serializers.ModelSerializer):
+class TissuelandingSerializer(serializers.ModelSerializer):
         class Meta:
-                model = DrugResultDown
-                fields = ('id','drug','overlap','cosine','query')
-
-        def to_representation(self, instance):
-                data = super().to_representation(instance)
-                return data
-
-class ParamsSerializer(serializers.ModelSerializer):
-        class Meta:
-                model = Params
-                fields = ('id','genesupin','genesdownin','genesup','genesdown')
-
-        def to_representation(self, instance):
-                data = super().to_representation(instance)
-                return data
-
-class DiseaseSerializer(serializers.ModelSerializer):
-        class Meta:
-                model = Disease
-                fields = ('id','disease','count','intersect','pval','qval')
-
-        def to_representation(self, instance):
-                data = super().to_representation(instance)
-                return data
-
-class GwasSerializer(serializers.ModelSerializer):
-        class Meta:
-                model = Gwas
-                fields = ('id','disease','count','intersect','pval','qval')
-
-        def to_representation(self, instance):
-                data = super().to_representation(instance)
-                return data
-
-class TissueTarSerializer(serializers.ModelSerializer):
-        class Meta:
-                model = TissueTar
-                fields = ('id','tissue','count','intersect','pval','qval')
-
-        def to_representation(self, instance):
-                data = super().to_representation(instance)
-                return data
-
-class TissueExSerializer(serializers.ModelSerializer):
-        class Meta:
-                model = TissueEx
-                fields = ('id','tissue','count','intersect','pval','qval')
-
-        def to_representation(self, instance):
-                data = super().to_representation(instance)
-                return data
-
-class TissueSerializer(serializers.ModelSerializer):
-        class Meta:
-                model = Tissue
-                fields = ('tissue','tissueLink','tool','netzoo','netzooLink','netzooRel','network','ppi','ppiLink','motif','expression','expLink','tfs','genes','refs','refs2')
+                model = Tissuelanding
+                fields = ('tissue','tissueLink','tool','netzoo','netzooLink','netzooRel','network','ppi','ppiLink','motif','expression','expLink','tfs','genes','refs','refs2','samples')
 
         def to_representation(self, instance):
                 data = super().to_representation(instance)
@@ -94,10 +31,10 @@ class CellSerializer(serializers.ModelSerializer):
                 data = super().to_representation(instance)
                 return data
 
-class DrugApiSerializer(serializers.ModelSerializer):
+class DruglandingSerializer(serializers.ModelSerializer):
         class Meta:
-                model  = Drug
-                fields = ('number','drug','tool','netzoo','network','ppi','motif','expression','tfs','genes','refs')
+                model  = Druglanding
+                fields = ('number','drug','tool','netzoo','netzooRel','network','ppi','motif','expression','tfs','genes','ppiLink','refs','samples','expLink')
 
         def to_representation(self, instance):
                 data = super().to_representation(instance)

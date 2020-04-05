@@ -4,7 +4,7 @@ Update to github is:
 
 1. Transfer .csv files
 
-` scp -r -i /Users/mab8354/Misc/amazonKey/Virginia.pem granddb/*.csv ubuntu@54.80.24.97:~/granddb/`
+` scp -r -i /Users/mab8354/Virginia.pem granddb/*.csv ubuntu@54.80.24.97:~/granddb/`
 
 2. set debug to false
 

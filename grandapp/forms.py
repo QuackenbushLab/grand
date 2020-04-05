@@ -30,3 +30,6 @@ class DiseaseForm(forms.Form):
         widget=forms.Textarea(attrs={'rows':20, 'cols':20}),
         label="disease"
     )
+
+class DownloadForm(forms.Form):
+    download_sample = forms.CharField(required=True, label="sample")

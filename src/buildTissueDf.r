@@ -10,7 +10,7 @@ countSamples=1
 nTissues = dim(net)[2]
 tissues  = colnames(net)
 tissues2 = tissues
-notInLionessTissues2=c('Ovary','Prostate','Testis','Uterus','Vagina','Kidney_cortex','Minor_salivary_gland')
+notInLionessTissues2=c('Lymphoblastoid_cell_line','Fibroblast_cell_line','Ovary','Prostate','Testis','Uterus','Vagina','Kidney_cortex','Minor_salivary_gland')
 indnotInLionessTissues2=which(tissues2 %in% notInLionessTissues2)
 # Convert tissue name to capital letter for compatibility with gtex
 nTFs = dim(net)[1]/dim(genes)[1]

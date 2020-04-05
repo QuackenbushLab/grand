@@ -117,6 +117,17 @@
                    <th>Q-value</th>
                   </tr>
                 </thead>
+                <tbody>
+                 {% for g in gwas %}
+                    <tr>
+                    <td>{{ g.disease }}</a></td>
+                    <td>{{ g.count }}</td>
+                    <td>{{ g.intersect }}</td>
+                    <td>{{ g.pval }}</td>
+                    <td>{{ g.qval }}</td>
+                    </tr>
+                 {% endfor %}
+                </tbody>
          </table>
 </div>
 
@@ -157,6 +168,17 @@
                    <th>Q-value</th>
                   </tr>
                 </thead>
+	        <tbody>
+		 {% for d in disease %}
+		    <tr>
+		    <td><a href={{ d.hpoId }}>{{ d.disease }}</a></td>
+		    <td>{{ d.count }}</td>
+                    <td>{{ d.intersect }}</td>
+                    <td>{{ d.pval }}</td>
+		    <td>{{ d.qval }}</td>
+                    </tr>
+		 {% endfor %}
+                </tbody>
          </table>
 </div>
 
@@ -197,6 +219,17 @@
                    <th>Q-value</th>
                   </tr>
                 </thead>
+          <tbody>
+                 {% for tex in tissueex %}
+                    <tr>
+                    <td><a href=" {{ tex.tissueLink }} ">{{ tex.tissue }}</a></td>
+                    <td>{{ tex.count }}</td>
+                    <td>{{ tex.intersect }}</td>
+                    <td>{{ tex.pval }}</td>
+                    <td>{{ tex.qval }}</td>
+                    </tr>
+                 {% endfor %}
+                </tbody>
          </table>
 </div>
 
@@ -237,6 +270,17 @@
                    <th>Q-value</th>
                   </tr>
                 </thead>
+          <tbody>
+                 {% for ttar in tissuetar %}
+                    <tr>
+                    <td><a href="{{ ttar.tissueLink }}">{{ ttar.tissue }}</a></td>
+                    <td>{{ ttar.count }}</td>
+                    <td>{{ ttar.intersect }}</td>
+                    <td>{{ ttar.pval }}</td>
+                    <td>{{ ttar.qval }}</td>
+                    </tr>
+                 {% endfor %}
+          </tbody>
          </table>
 </div>
 
@@ -264,17 +308,10 @@ $(function () {
 $(document).ready(function() {
     //datatables
     $('#drugstbla').DataTable({
-      "ajax": "http://localhost:8000/api/v1/gwas/?query={{ apiid }}&format=datatables",
-      "serverSide": true,
+
+      "serverSide": false,
       "processing": true,
       "order": [[ 3, "asc" ]],
-       "columns": [
-          {"data": "disease"},
-          {"data": "count"},
-          {"data": "intersect"},
-          {"data": "pval"},
-          {"data": "qval"},
-      ],
 
      buttons: [
             'copy', 'csv', 'pdf', 'print'
@@ -286,17 +323,10 @@ $(document).ready(function() {
     });
 
     $('#drugstblb').DataTable({
-      "ajax": "http://localhost:8000/api/v1/disease/?query={{ apiid }}&format=datatables",
-      "serverSide": true,
+
+      "serverSide": false,
       "processing": true,
       "order": [[ 3, "asc" ]],
-      "columns": [
-          {"data": "disease"},
-          {"data": "count"},
-          {"data": "intersect"},
-          {"data": "pval"},
-          {"data": "qval"},
-      ],
       
       buttons: [
             'copy', 'csv', 'pdf', 'print'
@@ -308,17 +338,11 @@ $(document).ready(function() {
     });
 
         $('#drugstblc').DataTable({
-      "ajax": "http://localhost:8000/api/v1/tissueex/?query={{ apiid }}&format=datatables",
-      "serverSide": true,
+      
+      "serverSide": false,
       "processing": true,
       "order": [[ 3, "asc" ]],
-      "columns": [
-          {"data": "tissue"},
-          {"data": "count"},
-          {"data": "intersect"},
-          {"data": "pval"},
-          {"data": "qval"},
-      ],
+     
 
       buttons: [
             'copy', 'csv', 'pdf', 'print'
@@ -330,17 +354,11 @@ $(document).ready(function() {
     });
 
        $('#drugstbld').DataTable({
-      "ajax": "http://localhost:8000/api/v1/tissuetar/?query={{ apiid }}&format=datatables",
-      "serverSide": true,
+
+      "serverSide": false,
       "processing": true,
       "order": [[ 3, "asc" ]],
-      "columns": [
-          {"data": "tissue"},
-          {"data": "count"},
-          {"data": "intersect"},
-          {"data": "pval"},
-          {"data": "qval"},
-      ],
+      
 
       buttons: [
             'copy', 'csv', 'pdf', 'print'

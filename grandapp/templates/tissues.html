@@ -74,14 +74,14 @@
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Tissue</th>
-                    <th scope="col">Number of networks</th>
+                    <th scope="col">Types of networks</th>
                   </tr>
                 </thead>
                 <tbody>
 		 {% for tissue in tissues %}
 		    <tr>
 		    <th scope="row">{{ forloop.counter }}</th>
-		    <td><a href="{{ tissue.tissue}}-tissue">{{ tissue.tissue }}</a></td>
+		    <td><a href="{{ tissue.tissue}}_tissue">{{ tissue.tissue }}</a></td>
                     <td>{{ tissue.nnets }}</td>
                     </tr>
 		 {% endfor %}

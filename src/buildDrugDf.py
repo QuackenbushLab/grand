@@ -123,16 +123,3 @@ df['expLink']   = ['https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742'
 # save dataframe
 os.chdir('/Users/mab8354/granddb')
 df.to_csv('drugslanding.csv', index=False)
-
-# save APi dataframe
-dfApi = df
-dfApi['tool']          = toolVec
-dfApi['netzoo']        = np.repeat('netZooM 0.4.2', nDrugs*4)
-dfApi['ppi']           = np.repeat('s3://granddb/drugs//drugs_ppi.txt', nDrugs*4)
-dfApi['motif']         = np.repeat('s3://granddb/drugs/drugs_motif.txt', nDrugs*4)
-dfApi['drug']          = drugVecApi*4
-dfApi['network']       = networkVecApi*4
-dfApi['expression']    = expressionVecApi*4
-dfApi['refs']          = refsVecApi
-
-dfApi.to_csv('drugslandingApi.csv', index=False)

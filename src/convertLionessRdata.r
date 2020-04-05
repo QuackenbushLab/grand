@@ -79,7 +79,10 @@ for (file in files){
 #[1] "muscle_skeletal"
 #[1] 19476492      469
 
-#Missing: kidney cortex
+#Missing: 
+#fibroblast
+#lymphoblast
+#kidney cortex
 #minor salivary gland
 #ovary
 #prostate
@@ -101,5 +104,10 @@ for (file in files){
 # "adipose_subcutaneous"     19476492      380
 
 
-totalSamples = 254 + 360 + 217 + 283 + 330 + 176 + 203 + 173 + 217 + 267 + 137 + 360 + 334 + 193 + 124 + 104 + 118
-     + 204 + 355 + 779 + 661 + 444 + 469
+totalSamples = 254 + 360 + 217 + 283 + 330 + 176 + 203 + 173 + 217 + 267 + 137 + 360 + 334 + 193 + 124 + 104 + 118 + 204 + 355 + 779 + 661 + 444 + 469 + 380 +234 +159 +247 +140 +357
+
+
+
+
+
+
