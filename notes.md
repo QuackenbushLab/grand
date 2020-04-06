@@ -41,6 +41,10 @@ Requires
 
 /!\ inside and outside venv
 
+`python -m pip install "dask[complete]" `
+
+`pip install boto3`
+
 `pip3 install django django-widget-tweaks djangorestframework-datatables djangorestframework django-filter`
 
 `pip3 install -U drf-yasg`
@@ -62,6 +66,8 @@ Launch server
 `python3 manage.py runserver 0.0.0.0:8000`
 
 Deployment:
+
+/!\ Important local settings is on disk only, no github
 
 SCP transfer
 
