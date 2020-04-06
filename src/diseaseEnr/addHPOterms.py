@@ -187,3 +187,9 @@ for my_bucket_object in my_bucket.objects.filter(Prefix='tissues/networks/liones
 
 
 #Adipose_subcutaneous_tissue_sample40_GTEX-13QBU-1926-SM-5IJEW.csv
+
+
+for my_bucket_object in my_bucket.objects.filter(Prefix='tissues/networks/lioness/singleSample/'):
+    if my_bucket_object.key[:-29] == 'tissues/networks/lioness/singleSample/' + slug + '_sample' + str(sampleid):
+        resURL = 'https://granddb.s3.amazonaws.com/' + my_bucket_object.key
+        fileexists = 1

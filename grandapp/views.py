@@ -192,6 +192,7 @@ def tissuelanding(request,slug):
             download_sample    = request.POST['download_sample']
             try:
                 sampleid = int(download_sample)
+                fileexists=0
                 # check if file exists
                 s3 = boto3.resource('s3')
                 my_bucket = s3.Bucket('granddb')
@@ -202,13 +203,12 @@ def tissuelanding(request,slug):
                 if fileexists==0:
                     slug3=[t.capitalize() for t in slug.split('_')]
                     slug3='_'.join(slug3)
-                    if slug3 in ['Adipose_subcutaneous_tissue']: #Adipose_Subcutaneous_AllSamples.csv
-                        pathToFile = '/diskb/' + slug3[:-7] + 'AllSamples.csv'
-                        print(pathToFile)
-                    elif slug3 in ['Breast_tissue']:
-                        pathToFile = '/diskc/'
-                    elif slug3 in ['Skeletal_muscle_tissue']:
-                        pathToFile = '/diskd/'
+                    if slug3 in ['Adipose_Subcutaneous_Tissue']: #Adipose_Subcutaneous_AllSamples.csv
+                        pathToFile = '/diskb/' + slug3[:-7] + '_AllSamples.csv'
+                    elif slug3 in ['Breast_Tissue']:
+                        pathToFile = '/diskc/' + slug3[:-7] + '_AllSamples.csv'
+                    elif slug3 in ['Skeletal_Muscle_Tissue']:
+                        pathToFile = '/diskd/' + slug3[:-7] + '_AllSamples.csv'
                     df_train = dd.read_csv(pathToFile, usecols=[sampleid])
                     df_train = df_train.compute()
                     tfs   = pd.read_csv('src/tissue_tfs.csv',header=None)
@@ -245,6 +245,7 @@ def tissuelandingerror(request,slug):
             download_sample    = request.POST['download_sample']
             try:
                 sampleid = int(download_sample)
+                fileexists=0
                 # check if file exists
                 s3 = boto3.resource('s3')
                 my_bucket = s3.Bucket('granddb')
