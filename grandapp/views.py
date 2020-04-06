@@ -239,7 +239,7 @@ def tissuelanding(request,slug):
                 else:
                     return redirect('tissuelandingerror',slug)
             redirect(resURL)
-            return redirect('tissuelandingsuccess')
+            return redirect('tissuelandingsuccess', slug)
         else:
             return redirect('tissuelandingerror'.slug)
     return render(request, "tissueslanding.html", {'tissuelanding': tissuelanding,'downloadform':form, 'slug':slug})
@@ -386,7 +386,7 @@ def tissuelandingsuccess(request,slug):
                 else:
                     return redirect('tissuelandingerror',slug)
                 redirect(resURL)
-                return redirect('tissuelandingsuccess')
+                return redirect('tissuelandingsuccess',slug)
             else:
                 return redirect('tissuelandingerror'.slug)
         return render(request, "tissueslandingsucess.html", {'tissuelanding': tissuelanding,'downloadform':form, 'slug':slug})
