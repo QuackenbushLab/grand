@@ -184,7 +184,6 @@ def tissue(request):
 
 def tissuelanding(request,slug):
     tissuelanding = Tissuelanding.objects.all()
-    slug2='error'
     if request.method == 'GET':
         form = DownloadForm()
     else:
@@ -192,23 +191,31 @@ def tissuelanding(request,slug):
         if form.is_valid():
             download_sample    = request.POST['download_sample']
             try:
-                sampleid=int(download_sample)
-                df_train = dd.read_csv('src/Intestine_Terminal_Ileum_AllSamples.csv', usecols=[sampleid])
-                df_train=df_train.compute()
-                tfs=pd.read_csv('src/tissue_tfs.csv',header=None)
-                genes=pd.read_csv('src/tissue_genes.csv',header=None)
-                tfs.columns = ['','']
-                genes.columns = ['','']
-                sampleNet=pd.DataFrame(index=tfs.iloc[1:,1],columns=genes.iloc[:,1],data=df_train.iloc[:,0].values.reshape((644,30243)))
-                fileName = 'sample' + str(sampleid) + '_' + df_train.columns[0] + '.csv'
-                bucket = 'granddb' # already created on S3
-                csv_buffer = StringIO()
-                sampleNet.to_csv(csv_buffer)
-                s3_resource = boto3.resource('s3')
-                res=s3_resource.Object(bucket, 'tissues/networks/lioness/singleSample/' + fileName).put(Body=csv_buffer.getvalue())
-                if res['ResponseMetadata']['HTTPStatusCode'] == 200:
-                    os.system('aws s3api put-object-acl --bucket granddb --key tissues/networks/lioness/singleSample/' + fileName  + ' --acl public-read')
-                    resURL='https://granddb.s3.amazonaws.com/tissues/networks/lioness/singleSample/' + fileName 
+                sampleid = int(download_sample)
+                # check if file exists
+                s3 = boto3.resource('s3')
+                my_bucket = s3.Bucket('granddb')
+                for my_bucket_object in my_bucket.objects.filter(Prefix='tissues/networks/lioness/singleSample/'):
+                    if my_bucket_object.key[:-29]=='tissues/networks/lioness/singleSample/' + slug + '_sample' + str(sampleid):
+                        resURL='https://granddb.s3.amazonaws.com/' + my_bucket_object.key
+                        fileexists=1
+                if fileexists==0:
+                    df_train = dd.read_csv('src/Intestine_Terminal_Ileum_AllSamples.csv', usecols=[sampleid])
+                    df_train = df_train.compute()
+                    tfs   = pd.read_csv('src/tissue_tfs.csv',header=None)
+                    genes = pd.read_csv('src/tissue_genes.csv',header=None)
+                    tfs.columns   = ['','']
+                    genes.columns = ['','']
+                    sampleNet  = pd.DataFrame(index=tfs.iloc[1:,1],columns=genes.iloc[:,1],data=df_train.iloc[:,0].values.reshape((644,30243)))
+                    fileName   = slug + '_sample' + str(sampleid) + '_' + df_train.columns[0] + '.csv'
+                    bucket     = 'granddb' # already created on S3
+                    csv_buffer = StringIO()
+                    sampleNet.to_csv(csv_buffer)
+                    s3_resource = boto3.resource('s3')
+                    res=s3_resource.Object(bucket, 'tissues/networks/lioness/singleSample/' + fileName).put(Body=csv_buffer.getvalue())
+                    if res['ResponseMetadata']['HTTPStatusCode'] == 200:
+                        os.system('aws s3api put-object-acl --bucket granddb --key tissues/networks/lioness/singleSample/' + fileName  + ' --acl public-read')
+                        resURL='https://granddb.s3.amazonaws.com/tissues/networks/lioness/singleSample/' + fileName 
             except:
                 if download_sample == 'all':
                     resURL = 'https://granddb.s3.amazonaws.com/tissues/networks/lioness/Adipose_Subcutaneous_AllSamples.csv'
@@ -228,23 +235,31 @@ def tissuelandingerror(request,slug):
         if form.is_valid():
             download_sample    = request.POST['download_sample']
             try:
-                sampleid=int(download_sample)
-                df_train = dd.read_csv('src/Intestine_Terminal_Ileum_AllSamples.csv', usecols=[sampleid])
-                df_train=df_train.compute()
-                tfs=pd.read_csv('src/tissue_tfs.csv',header=None)
-                genes=pd.read_csv('src/tissue_genes.csv',header=None)
-                tfs.columns = ['','']
-                genes.columns = ['','']
-                sampleNet=pd.DataFrame(index=tfs.iloc[1:,1],columns=genes.iloc[:,1],data=df_train.iloc[:,0].values.reshape((644,30243)))
-                fileName = 'sample' + str(sampleid) + '_' + df_train.columns[0] + '.csv'
-                bucket = 'granddb' # already created on S3
-                csv_buffer = StringIO()
-                sampleNet.to_csv(csv_buffer)
-                s3_resource = boto3.resource('s3')
-                res=s3_resource.Object(bucket, 'tissues/networks/lioness/singleSample/' + fileName).put(Body=csv_buffer.getvalue())
-                if res['ResponseMetadata']['HTTPStatusCode'] == 200:
-                    os.system('aws s3api put-object-acl --bucket granddb --key tissues/networks/lioness/singleSample/' + fileName  + ' --acl public-read')
-                    resURL='https://granddb.s3.amazonaws.com/tissues/networks/lioness/singleSample/' + fileName
+                sampleid = int(download_sample)
+                # check if file exists
+                s3 = boto3.resource('s3')
+                my_bucket = s3.Bucket('granddb')
+                for my_bucket_object in my_bucket.objects.filter(Prefix='tissues/networks/lioness/singleSample/'):
+                    if my_bucket_object.key[:-29]=='tissues/networks/lioness/singleSample/' + slug + '_sample' + str(sampleid):
+                        resURL='https://granddb.s3.amazonaws.com/' + my_bucket_object.key
+                        fileexists=1
+                if fileexists==0:
+                    df_train = dd.read_csv('src/Intestine_Terminal_Ileum_AllSamples.csv', usecols=[sampleid])
+                    df_train = df_train.compute()
+                    tfs   = pd.read_csv('src/tissue_tfs.csv',header=None)
+                    genes = pd.read_csv('src/tissue_genes.csv',header=None)
+                    tfs.columns   = ['','']
+                    genes.columns = ['','']
+                    sampleNet  = pd.DataFrame(index=tfs.iloc[1:,1],columns=genes.iloc[:,1],data=df_train.iloc[:,0].values.reshape((644,30243)))
+                    fileName   = slug + '_sample' + str(sampleid) + '_' + df_train.columns[0] + '.csv'
+                    bucket     = 'granddb' # already created on S3
+                    csv_buffer = StringIO()
+                    sampleNet.to_csv(csv_buffer)
+                    s3_resource = boto3.resource('s3')
+                    res=s3_resource.Object(bucket, 'tissues/networks/lioness/singleSample/' + fileName).put(Body=csv_buffer.getvalue())
+                    if res['ResponseMetadata']['HTTPStatusCode'] == 200:
+                        os.system('aws s3api put-object-acl --bucket granddb --key tissues/networks/lioness/singleSample/' + fileName  + ' --acl public-read')
+                        resURL='https://granddb.s3.amazonaws.com/tissues/networks/lioness/singleSample/' + fileName
             except:
                 if download_sample == 'all':
                     resURL = 'https://granddb.s3.amazonaws.com/tissues/networks/lioness/Adipose_Subcutaneous_AllSamples.csv'

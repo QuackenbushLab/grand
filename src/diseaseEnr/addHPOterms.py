@@ -176,3 +176,14 @@ xx=pd.DataFrame(index=tfs.iloc[1:,1],columns=genes.iloc[:,1],data=df_train.iloc[
 #file name is sample name
 
 TotalGb=256+219+154+142+126+119+119+118+117+110+110+94+88+84+82+78+72+72+68+67+64+59+58+53+47+45+41+39+34
+
+
+import boto3
+s3 = boto3.resource('s3')
+my_bucket = s3.Bucket('granddb')
+for my_bucket_object in my_bucket.objects.filter(Prefix='tissues/networks/lioness/singleSample/'):
+    if my_bucket_object.key=='tissues/networks/lioness/singleSample/Adipose_subcutaneous_tissue_sample40_GTEX-13QBU-1926-SM-5IJEW.csv':
+        print('file exist')
+
+
+#Adipose_subcutaneous_tissue_sample40_GTEX-13QBU-1926-SM-5IJEW.csv
