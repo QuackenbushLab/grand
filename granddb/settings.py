@@ -27,7 +27,7 @@ SECRET_KEY = 'xigekntf99wnyz5(tuqxo)jm!za=*^6z3^9lwh_%c8ndxa^^-_'
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
-#ALLOWED_HOSTS = ['www.grand.networkmedicine.org','grand.networkmedicine.org','54.80.24.97']
+#ALLOWED_HOSTS = ['www.grand.networkmedicine.org','grand.networkmedicine.org','3.91.1.70']
 
 
 # Application definition
