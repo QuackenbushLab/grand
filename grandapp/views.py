@@ -378,13 +378,13 @@ def tissuelandingsucces(request,slug):
                         if res['ResponseMetadata']['HTTPStatusCode'] == 200:
                             os.system('/usr/local/bin/aws s3api put-object-acl --bucket granddb --key tissues/networks/lioness/singleSample/' + fileName  + ' --acl public-read')
                             resURL='https://granddb.s3.amazonaws.com/tissues/networks/lioness/singleSample/' + fileName
-                except:
-                    if download_sample == 'all':
-                        slug3=[t.capitalize() for t in slug.split('_')]
-                        slug3='_'.join(slug3)
-                        resURL = 'https://granddb.s3.amazonaws.com/tissues/networks/lioness/' + slug3[:-7] + '_AllSamples.csv'
-                    else:
-                        return redirect('tissuelandingerror',slug)
+            except:
+                if download_sample == 'all':
+                    slug3=[t.capitalize() for t in slug.split('_')]
+                    slug3='_'.join(slug3)
+                    resURL = 'https://granddb.s3.amazonaws.com/tissues/networks/lioness/' + slug3[:-7] + '_AllSamples.csv'
+                else:
+                    return redirect('tissuelandingerror',slug)
                 redirect(resURL)
                 return redirect('tissuelandingsuccess')
             else:
