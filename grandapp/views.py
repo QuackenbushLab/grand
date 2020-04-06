@@ -192,6 +192,8 @@ def tissuelanding(request,slug):
             download_sample    = request.POST['download_sample']
             try:
                 sampleid = int(download_sample)
+                if sampleid==0:
+                    raise
                 fileexists=0
                 # check if file exists
                 s3 = boto3.resource('s3')
@@ -209,6 +211,7 @@ def tissuelanding(request,slug):
                         pathToFile = '/diskc/' + slug3[:-7] + '_AllSamples.csv'
                     elif slug3 in ['Skeletal_Muscle_Tissue']:
                         pathToFile = '/diskd/' + slug3[:-7] + '_AllSamples.csv'
+                    print(pathToFile)
                     df_train = dd.read_csv(pathToFile, usecols=[sampleid])
                     df_train = df_train.compute()
                     tfs   = pd.read_csv('src/tissue_tfs.csv',header=None)
@@ -221,9 +224,10 @@ def tissuelanding(request,slug):
                     csv_buffer = StringIO()
                     sampleNet.to_csv(csv_buffer)
                     s3_resource = boto3.resource('s3')
+                    print('hello7')
                     res=s3_resource.Object(bucket, 'tissues/networks/lioness/singleSample/' + fileName).put(Body=csv_buffer.getvalue())
                     if res['ResponseMetadata']['HTTPStatusCode'] == 200:
-                        os.system('aws s3api put-object-acl --bucket granddb --key tissues/networks/lioness/singleSample/' + fileName  + ' --acl public-read')
+                        os.system('/usr/local/bin/aws s3api put-object-acl --bucket granddb --key tissues/networks/lioness/singleSample/' + fileName  + ' --acl public-read')
                         resURL='https://granddb.s3.amazonaws.com/tissues/networks/lioness/singleSample/' + fileName 
             except:
                 if download_sample == 'all':
