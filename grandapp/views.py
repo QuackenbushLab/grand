@@ -292,6 +292,8 @@ def tissuelandingerror(request,slug):
                         resURL='https://granddb.s3.amazonaws.com/tissues/networks/lioness/singleSample/' + fileName
             except:
                 if download_sample == 'all':
+                    slug3=[t.capitalize() for t in slug.split('_')]
+                    slug3='_'.join(slug3)
                     resURL = 'https://granddb.s3.amazonaws.com/tissues/networks/lioness/' + slug3[:-7] + '_AllSamples.csv'
                 else:
                     return redirect('tissuelandingerror',slug)
