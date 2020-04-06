@@ -303,7 +303,7 @@ def tissuelandingerror(request,slug):
             return redirect('tissuelandingerror'.slug)
     return render(request, "tissueslandingerror.html", {'tissuelanding': tissuelanding,'downloadform':form, 'slug':slug})
 
-def tissuelandingsucces(request,slug):
+def tissuelandingsuccess(request,slug):
     tissuelanding = Tissuelanding.objects.all()
     if request.method == 'GET':
         form = DownloadForm()
