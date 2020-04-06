@@ -1,10 +1,25 @@
 Creation date of GRAND October 1st 2019 at 8:37:39pm
 
+Disks:
+Follow this guide for mounting:
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html
+
+Disks specs:
+Disk /dev/xvdd: 1000 GiB
+Adipose_Subcutaneous_AllSamples.csv -> Brain_Other_AllSamples.csv 
+Disk /dev/xvdb: 1000 GiB
+Breast_AllSamples.csv -> Pituitary_AllSamples.csv (923)
+Disk /dev/xvdc: 1000 GiB
+Skeletal_Muscle_AllSamples.csv-> Whole_Blood_AllSample.csv (849)
+
+AWS is :
+/usr/local/bin/aws
+
 Update to github is:
 
 1. Transfer .csv files
 
-` scp -r -i /Users/mab8354/Virginia.pem granddb/*.csv ubuntu@54.80.24.97:~/granddb/`
+` scp -r -i /Users/mab8354/Virginia.pem granddb/*.csv ubuntu@3.91.1.70:~/granddb/`
 
 2. set debug to false
 
@@ -50,7 +65,7 @@ Deployment:
 
 SCP transfer
 
-`scp -r -i /Volumes/home$/mab8354/Misc/amazonKey/Virginia.pem granddb/ ubuntu@54.80.24.97:`
+`scp -r -i /Volumes/home$/mab8354/Misc/amazonKey/Virginia.pem granddb/ ubuntu@3.91.1.70:`
 
 `chmod -R 755 granddb`
 

@@ -200,7 +200,14 @@ def tissuelanding(request,slug):
                         resURL='https://granddb.s3.amazonaws.com/' + my_bucket_object.key
                         fileexists=1
                 if fileexists==0:
-                    df_train = dd.read_csv('src/Intestine_Terminal_Ileum_AllSamples.csv', usecols=[sampleid])
+                    if slug in ['Adipose_subcutaneous_tissue']: #Adipose_Subcutaneous_AllSamples.csv
+                        pathToFile = '/diskb/' + slug[:-7] + 'AllSamples.csv'
+                        print(pathToFile)
+                    elif slug in ['Breast_tissue']:
+                        pathToFile = '/diskc/'
+                    elif slug in ['Skeletal_muscle_tissue']:
+                        pathToFile = '/diskd/'
+                    df_train = dd.read_csv(pathToFile, usecols=[sampleid])
                     df_train = df_train.compute()
                     tfs   = pd.read_csv('src/tissue_tfs.csv',header=None)
                     genes = pd.read_csv('src/tissue_genes.csv',header=None)
