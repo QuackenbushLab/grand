@@ -377,7 +377,7 @@ def tissuelandingsucces(request,slug):
                         res=s3_resource.Object(bucket, 'tissues/networks/lioness/singleSample/' + fileName).put(Body=csv_buffer.getvalue())
                         if res['ResponseMetadata']['HTTPStatusCode'] == 200:
                             os.system('/usr/local/bin/aws s3api put-object-acl --bucket granddb --key tissues/networks/lioness/singleSample/' + fileName  + ' --acl public-read')
-                           resURL='https://granddb.s3.amazonaws.com/tissues/networks/lioness/singleSample/' + fileName
+                            resURL='https://granddb.s3.amazonaws.com/tissues/networks/lioness/singleSample/' + fileName
                 except:
                     if download_sample == 'all':
                         slug3=[t.capitalize() for t in slug.split('_')]
