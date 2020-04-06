@@ -84,6 +84,8 @@ SCP transfer
 /!\ inside venv only
 
 `pip3 install django gunicorn psycopg2-binary pillow`
+`python -m pip install "dask[complete]" `
+`pip install boto3`
 
 To exit venv `deactivate`
 
@@ -135,3 +137,11 @@ sudo ufw allow 'Nginx Full'
 
 
 
+Don't forget 
+`python3 manage.py collectstatic`
+
+- Add static root in `settings.py`
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+Then `python3 manage.py collectstatic`
