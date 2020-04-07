@@ -145,3 +145,12 @@ Don't forget
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 Then `python3 manage.py collectstatic`
+
+
+EMAIL:
+
+- Unlock captcha
+
+- enable less secure apps
+
+https://stackoverflow.com/questions/20337040/getting-error-while-sending-email-through-gmail-smtp-please-log-in-via-your-w

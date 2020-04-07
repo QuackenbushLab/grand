@@ -31,7 +31,6 @@ urlpatterns = [
     url(r'^about/' ,views.about, name='about'),
     url(r'^cell/' ,views.cell, name='cell'),
     url('tissues/$', view=views.tissue, name='tissues'),
-    url(r'^tissues/(\w+)/success', view=views.tissuelandingsuccess, name='tissuelandingsuccess'),
     url(r'^tissues/(\w+)/error', view=views.tissuelandingerror, name='tissuelandingerror'),
     url(r'^tissues/(\w+)/', view=views.tissuelanding, name='tissuelanding'),
     url(r'-drug/$', view=views.druglanding, name='druglanding'),
