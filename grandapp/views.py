@@ -127,7 +127,7 @@ def disease(request):
                  counter.save()
              except BadHeaderError: #find a better exception
                  return HttpResponse('Invalid header found.')
-             return redirect('/diseaseresult/'+str(accessKey)+'/')
+             return redirect('/diseaseresult/'+str(accessKey)+'/gwas')
     return render(request, 'disease.html', {'diseaseform':form})
 
 def diseaseexample(request):
@@ -469,13 +469,25 @@ def drugresult(request, id):
     drugdown = DrugResultDown.objects.all()
     return render(request, 'drugresult.html', {'params':params,'drugup':drugup,'drugdown':drugdown})
 
-def diseaseresult(request, id):
+def diseasegwas(request, id):
+    params  = Params.objects.all()
+    gwas    = Gwas.objects.all()
+    return render(request, 'diseaseresultgwas.html', {'params':params,'gwas':gwas,'id':id})
+
+def diseasehpo(request, id):
     params  = Params.objects.all()
     disease = Disease.objects.all()
-    gwas    = Gwas.objects.all()
+    return render(request, 'diseaseresulthpo.html', {'params':params,'disease':disease,'id':id})
+
+def diseasetissueex(request, id):
+    params  = Params.objects.all()
     tissueex   = TissueEx.objects.all()
+    return render(request, 'diseaseresulttissueex.html', {'params':params,'tissueex':tissueex,'id':id})
+
+def diseasetissuetar(request, id):
+    params  = Params.objects.all()
     tissuetar  = TissueTar.objects.all()
-    return render(request, 'diseaseresult.html', {'params':params,'disease':disease, 'gwas':gwas, 'tissueex':tissueex, 'tissuetar':tissuetar})
+    return render(request, 'diseaseresulttissuetar.html', {'params':params,'tissuetar':tissuetar,'id':id})
 
 def about(request):
     if request.method == 'GET':

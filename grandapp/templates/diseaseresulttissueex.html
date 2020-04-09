@@ -80,110 +80,25 @@
 </div>
 
 <div class="container col-9 pb-5 mb-5">
-             &nbsp; <div class="row lm-6">
-             <div class="col-xs-6">
-             &nbsp; &nbsp;
-             </div>
-            <div class="col-xs-6">
-            <h3><span class="badge badge-danger">GWAS</span></h3>
-            </div>
-           <div class="col-xs-6">
-         &nbsp; <i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Enrichement of the query set in GWAS traits where hits were located near TF coding region as determined in Lambert et al, Cell, 2018.">
-                    </i>
-            </div>
-         </div>
-
-        <table id="drugstbla" class="table table-hover" style="width: 100%">
-                <thead>
-                  <tr>
-                    <th scope="col">Gwas trait</th>
-                    <th scope="col">Count <i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Number of TF genes associated to the trait.">
-                    </i></th>
-                    <th scope="col">Intersect <i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Number of TF genes in the query set that are associated to the trait.">
-                    </i></th>
-                   <th>P-value</th>
-                   <th>Q-value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                 {% for g in gwas %}
-                    <tr>
-                    <td>{{ g.disease }}</a></td>
-                    <td>{{ g.count }}</td>
-                    <td>{{ g.intersect }}</td>
-                    <td>{{ g.pval }}</td>
-                    <td>{{ g.qval }}</td>
-                    </tr>
-                 {% endfor %}
-                </tbody>
-         </table>
-</div>
-
-<div class="container col-9 pb-5 mb-5">
-             &nbsp; <div class="row lm-6">
-             <div class="col-xs-6">
-             &nbsp; &nbsp;
-             </div>
-            <div class="col-xs-6">
-            <h3><span class="badge badge-primary">Disease</span></h3>
-            </div>
-         <div class="col-xs-6">
-         &nbsp; <i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="TFs associated with disease and human phenotype as listed in the Human Phenotype Ontology and processed in Lambert et al, Cell, 2018.">
-                    </i>
-            </div>
-         </div>
-        <table id="drugstblb" class="table table-hover" style="width: 100%">
-                <thead>
-                  <tr>
-                    <th scope="col">Disease</th>
-                    <th scope="col">Count <i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Number of TF genes associated to the phenotype.">
-                    </i></th>
-                    <th scope="col">Intersect <i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Number of TF genes in the query set that are associated to the phenotype.">
-                    </i></th>
-                    <th>P-value</th>
-                   <th>Q-value</th>
-                  </tr>
-                </thead>
-	        <tbody>
-		 {% for d in disease %}
-		    <tr>
-		    <td><a href={{ d.hpoId }}>{{ d.disease }}</a></td>
-		    <td>{{ d.count }}</td>
-                    <td>{{ d.intersect }}</td>
-                    <td>{{ d.pval }}</td>
-		    <td>{{ d.qval }}</td>
-                    </tr>
-		 {% endfor %}
-                </tbody>
-         </table>
-</div>
-
-<div class="container col-9 pb-5 mb-5">
-             &nbsp; <div class="row lm-6">
+<div class="card text-left">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+        <a class="nav-link" href="/diseaseresult/{{ id }}/gwas">GWAS</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/diseaseresult/{{ id }}/hpo">Disease</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="/diseaseresult/{{ id }}/tissueex">Tissue expression</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/diseaseresult/{{ id }}/tissuetar">Tissue targeting</a>
+      </li>
+    </ul>
+  </div>
+  <div class="card-body">
+                    &nbsp; <div class="row lm-6">
              <div class="col-xs-6">
              &nbsp; &nbsp;
              </div>
@@ -231,57 +146,8 @@
                  {% endfor %}
                 </tbody>
          </table>
-</div>
 
-<div class="container col-9 pb-5 mb-5">
-             &nbsp; <div class="row lm-6">
-             <div class="col-xs-6">
-             &nbsp; &nbsp;
-             </div>
-            <div class="col-xs-6">
-            <h3><span class="badge badge-warning">Tissue Targeting</span></h3>
-            </div>
-         <div class="col-xs-6">
-         &nbsp; <i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="TF targeting associated with human tissues as determined in Sonawane et al, 2017.">
-                    </i>
-            </div>
-         </div>
-        <table id="drugstbld" class="table table-hover" style="width: 100%">
-                <thead>
-                  <tr>
-                    <th scope="col">Tissue</th>
-                    <th scope="col">Count <i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Number of TF genes associated to the tissue.">
-                    </i></th>
-                    <th scope="col">Intersect <i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Number of TF genes in the query set that are associated to the tissue.">
-                    </i></th>
-                    <th>P-value</th>
-                   <th>Q-value</th>
-                  </tr>
-                </thead>
-          <tbody>
-                 {% for ttar in tissuetar %}
-                    <tr>
-                    <td><a href="{{ ttar.tissueLink }}">{{ ttar.tissue }}</a></td>
-                    <td>{{ ttar.count }}</td>
-                    <td>{{ ttar.intersect }}</td>
-                    <td>{{ ttar.pval }}</td>
-                    <td>{{ ttar.qval }}</td>
-                    </tr>
-                 {% endfor %}
-          </tbody>
-         </table>
+</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css"></script>
