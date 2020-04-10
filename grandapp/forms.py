@@ -23,6 +23,7 @@ class GeneForm(forms.Form):
         label="down"
     )
     tfgene = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
+    brd    = forms.BooleanField(widget=forms.CheckboxInput, required = False )
 
 class DiseaseForm(forms.Form):
     content = forms.CharField(

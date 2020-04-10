@@ -313,6 +313,7 @@ def analysis(request):
              contentup   = request.POST['contentup']
              contentdown = request.POST['contentdown']
              tfgene      = request.POST['tfgene']
+             brd         = request.POST.get('brd', False)
              data=contentup.split('\r\n')
              data = list(filter(None, data))
              sampleUp = pd.DataFrame(data, columns = ['Gene'])
@@ -321,19 +322,15 @@ def analysis(request):
              data = list(filter(None, data))
              sampleDown = pd.DataFrame(data, columns = ['Gene'])
              try:
-                 #u = open('src/cluereg/data/sampleUp.csv','w')
-                 #u.write(contentup)
-                 #u.close()
-                 #d = open('src/cluereg/data/sampleDown.csv','w')
-                 #d.write(contentdown)
-                 #d.close() 
                  if tfgene=='Targeted genes':
                      gene=1
                  elif tfgene=='TF targeting':
                      gene=0
-                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4 = enrichCmapReg(gene,sampleUp,sampleDown)
+                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4 = enrichCmapReg(gene,sampleUp,sampleDown,brd)
+                 print(len(drugNames))
                  max_display=100
                  randid      =random.randint(1,1000000)
+                 i=0
                  for i in range(max_display):
                      drug=DrugResultUp.objects.get(id=i+1)
                      currDrugName = drugNames.iloc[indSort[i]].values[0]
@@ -351,6 +348,7 @@ def analysis(request):
                      drug.druglink= 'https://grand.networkmedicine.org/drugs/' + drug.drug + '-drug/'
                      drug.query   = randid
                      drug.save()
+                     i+=1
                      #payload = {'drug':drugNames.iloc[indSort[-1-i]],'cosine':round(cosDist[indSort[-1-i]],4),'overlap':overlap[indSort[-1-i]]}
                  accessKey = randid
                  param  = Params.objects.get(id=1)
@@ -649,7 +647,7 @@ def enrichDisease(tflist):
     stat2=len(tflist)
     return qval, pvalVec, tfdbdisease, nCondVec, qval1, pvalVec1, tfdbgwas, nCondVec1, stat1, stat2, qvalTE, pvalVecTE, nCondVecTE, qvalTT, pvalVecTT, nCondVecTT, tftissueex, tftissuetar
 
-def enrichCmapReg(gene,sampleGenesUp,sampleGenesDown):
+def enrichCmapReg(gene,sampleGenesUp,sampleGenesDown,brd):
     print('Reading drug database')
     #db         = pd.read_csv('cmapreg.csv', header=None,dtype=np.float64)
     if gene==1:
@@ -674,7 +672,6 @@ def enrichCmapReg(gene,sampleGenesUp,sampleGenesDown):
 	#sp.sparse.save_npz('sparse_cmapreg.npz', sparse_matrix)
 
     # Read genes
-    print('Reading input gene list ') #df = pd.DataFrame(data
     #sampleGenesUp  = pd.read_csv('src/cluereg/data/sampleUp.csv',header=None,dtype=str) #'sampleUp.csv'
     #sampleGenesDown= pd.read_csv('src/cluereg/data/sampleDown.csv',header=None,dtype=str) #'sampleDown.csv'
     #sampleGenesUp  = pd.read_csv(sys.argv[4],header=None,dtype=str) #'sampleUp.csv'
@@ -728,6 +725,10 @@ def enrichCmapReg(gene,sampleGenesUp,sampleGenesDown):
     stat2=len(sampleGenesDown)
     stat3=np.count_nonzero(intersectUp)
     stat4=np.count_nonzero(intersectDown)
-    #payload = {'genesupin': len(sampleGenesUp),'genesdownin':len(sampleGenesDown),'genesup':np.count_nonzero(intersectUp),'genesdown':np.count_nonzero(intersectDown)}
-	#r = requests.put('http://localhost:8000/api/v1/params/0/', data=payload)
+    if brd=='on':
+        indBrd=[False if d[0:4]=='BRD-' else True for d in drugNames.iloc[:,0]]
+        drugNames= drugNames.iloc[indBrd,]
+        cosDist  = cosDist[indBrd]
+        overlap  = overlap[indBrd]
+        indSort  = np.argsort(overlap)
     return drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4
