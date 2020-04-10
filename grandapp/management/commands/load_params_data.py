@@ -39,4 +39,5 @@ class Command(BaseCommand):
             params.genesdownin       = row['genesdownin']
             params.genesup           = row['genesup']
             params.genesdown         = row['genesdown']
+            params.query             = row['query']
             params.save()

@@ -55,6 +55,7 @@ class DrugResultUp(models.Model):
     overlap   = models.FloatField()
     cosine    = models.FloatField()
     druglink  = models.URLField()
+    query     = models.IntegerField(default=0)
 
 class DrugResultDown(models.Model):
     id        = models.AutoField(primary_key=True)
@@ -62,13 +63,16 @@ class DrugResultDown(models.Model):
     overlap   = models.FloatField()
     cosine    = models.FloatField()
     druglink  = models.URLField()
+    query     = models.IntegerField(default=0)
 
 class Params(models.Model):
     id         = models.AutoField(primary_key=True)
-    genesupin  = models.IntegerField()
+    genesupin  = models.IntegerField(default=0)
     genesdownin= models.IntegerField(default=0)
-    genesup    = models.IntegerField()
-    genesdown  = models.IntegerField()
+    genesup    = models.IntegerField(default=0)
+    genesdown  = models.IntegerField(default=0)
+    query      = models.IntegerField(default=0)
+
 
 class Disease(models.Model):
     id           = models.AutoField(primary_key=True)
@@ -78,6 +82,7 @@ class Disease(models.Model):
     pval         = models.FloatField()
     qval         = models.FloatField()
     hpoId        = models.CharField(max_length=200)
+    query        = models.IntegerField(default=0)
 
 class Gwas(models.Model):
     id           = models.AutoField(primary_key=True)
@@ -86,6 +91,7 @@ class Gwas(models.Model):
     intersect    = models.IntegerField()
     pval         = models.FloatField()
     qval         = models.FloatField()
+    query        = models.IntegerField(default=0)
 
 class Tissue(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
@@ -120,6 +126,7 @@ class TissueTar(models.Model):
     pval         = models.FloatField()
     qval         = models.FloatField()
     tissueLink   = models.URLField('#')
+    query        = models.IntegerField(default=0)
 
 class TissueEx(models.Model):
     id           = models.AutoField(primary_key=True)
@@ -129,6 +136,7 @@ class TissueEx(models.Model):
     pval         = models.FloatField()
     qval         = models.FloatField()
     tissueLink   = models.URLField('#')
+    query        = models.IntegerField(default=0)
 
     def __str__(self):
        return self.name

@@ -89,6 +89,7 @@ def disease(request):
                      disease.pval     =round(pvalVec[i],5)
                      disease.qval     =round(qval[i],5)
                      disease.hpoId    ='https://hpo.jax.org/app/browse/term/' + tfdb.iloc[i,5]
+                     disease.query    =randid
                      disease.save()
                  for i in range(len(qval1)):
                      gwas   = Gwas.objects.get(id=i+1)
@@ -107,6 +108,7 @@ def disease(request):
                      tissueex.pval        =round(pvalVecTE[i],5)
                      tissueex.qval        =round(qvalTE[i],5)
                      tissueex.tissueLink  ='https://grand.networkmedicine.org/tissues/' + tissueex.tissue + '_tissue/'
+                     tissueex.query       =randid
                      tissueex.save()
                  for i in range(len(qvalTT)):
                      tissuett   = TissueTar.objects.get(id=i+1)
@@ -116,18 +118,20 @@ def disease(request):
                      tissuett.pval        =round(pvalVecTT[i],5)
                      tissuett.qval        =round(qvalTT[i],5)
                      tissuett.tissueLink  ='https://grand.networkmedicine.org/tissues/' + tissuett.tissue + '_tissue/'
+                     tissuett.query       =randid
                      tissuett.save()
                  accessKey = randid
                  param=Params.objects.get(id=2)
                  param.genesdownin   =stat1
                  param.genesupin     =stat2
+                 param.query         =randid
                  param.save()  
                  counter=Params.objects.get(id=3)
                  counter.genesupin+=1
                  counter.save()
              except BadHeaderError: #find a better exception
                  return HttpResponse('Invalid header found.')
-             return redirect('/diseaseresult/'+str(accessKey)+'/gwas')
+             return redirect('/diseaseresult/'+str(accessKey)+'/gwas/')
     return render(request, 'disease.html', {'diseaseform':form})
 
 def diseaseexample(request):
@@ -213,7 +217,6 @@ def tissuelanding(request,slug):
                         pathToFile = '/diskc/' + slug3[:-7] + '_AllSamples.csv'
                     elif slug3 in ['Skeletal_Muscle_Tissue','Skin_Tissue','Spleen_Tissue','Stomach_Tissue','Thyroid_Tissue','Tibial_Nerve_Tissue','Whole_Blood_Tissue']:
                         pathToFile = '/diskd/' + slug3[:-7] + '_AllSamples.csv'
-                    print(pathToFile)
                     df_train = dd.read_csv(pathToFile, usecols=[sampleid])
                     df_train = df_train.compute()
                     tfs   = pd.read_csv('src/tissue_tfs.csv',header=None)
@@ -338,6 +341,7 @@ def analysis(request):
                      drug.cosine  = round(cosDist[indSort[i]],4)
                      drug.overlap = overlap[indSort[i]]
                      drug.druglink= 'https://grand.networkmedicine.org/drugs/' + drug.drug + '-drug/'
+                     drug.query   = randid
                      drug.save()
                      drug=DrugResultDown.objects.get(id=i+1)
                      currDrugName = drugNames.iloc[indSort[-1-i]].values[0]
@@ -345,6 +349,7 @@ def analysis(request):
                      drug.cosine  = round(cosDist[indSort[-1-i]],4)
                      drug.overlap = overlap[indSort[-1-i]]
                      drug.druglink= 'https://grand.networkmedicine.org/drugs/' + drug.drug + '-drug/'
+                     drug.query   = randid
                      drug.save()
                      #payload = {'drug':drugNames.iloc[indSort[-1-i]],'cosine':round(cosDist[indSort[-1-i]],4),'overlap':overlap[indSort[-1-i]]}
                  accessKey = randid
@@ -353,6 +358,7 @@ def analysis(request):
                  param.genesdownin = stat2
                  param.genesup     = stat3
                  param.genesdown   = stat4
+                 param.query       = randid
                  param.save()
                  counter=Params.objects.get(id=3)
                  counter.genesupin+=1
@@ -464,29 +470,29 @@ def analysisexampletfs(request):
     return render(request, 'analysis.html', {'geneform':form})
 
 def drugresult(request, id):
-    params = Params.objects.all()
-    drugup = DrugResultUp.objects.all()
-    drugdown = DrugResultDown.objects.all()
+    params = Params.objects.filter(query=id)
+    drugup = DrugResultUp.objects.filter(query=id)
+    drugdown = DrugResultDown.objects.filter(query=id)
     return render(request, 'drugresult.html', {'params':params,'drugup':drugup,'drugdown':drugdown})
 
 def diseasegwas(request, id):
-    params  = Params.objects.all()
-    gwas    = Gwas.objects.all()
+    params  = Params.objects.filter(query=id)
+    gwas    = Gwas.objects.filter(query=id)
     return render(request, 'diseaseresultgwas.html', {'params':params,'gwas':gwas,'id':id})
 
 def diseasehpo(request, id):
-    params  = Params.objects.all()
-    disease = Disease.objects.all()
+    params  = Params.objects.filter(query=id)
+    disease = Disease.objects.filter(query=id)
     return render(request, 'diseaseresulthpo.html', {'params':params,'disease':disease,'id':id})
 
 def diseasetissueex(request, id):
-    params  = Params.objects.all()
-    tissueex   = TissueEx.objects.all()
+    params  = Params.objects.filter(query=id)
+    tissueex   = TissueEx.objects.filter(query=id)
     return render(request, 'diseaseresulttissueex.html', {'params':params,'tissueex':tissueex,'id':id})
 
 def diseasetissuetar(request, id):
-    params  = Params.objects.all()
-    tissuetar  = TissueTar.objects.all()
+    params  = Params.objects.filter(query=id)
+    tissuetar  = TissueTar.objects.filter(query=id)
     return render(request, 'diseaseresulttissuetar.html', {'params':params,'tissuetar':tissuetar,'id':id})
 
 def about(request):
