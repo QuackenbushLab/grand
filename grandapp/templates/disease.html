@@ -8,6 +8,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
   <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
   <title>GRAND</title>
 </head>
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -19,7 +20,8 @@
 
   gtag('config', 'UA-151168345-1');
 </script>
-<body>
+<body class="d-flex flex-column min-vh-100">
+<div class="wrapper flex-grow-1">
 
 {% load widget_tweaks %}
 
@@ -54,23 +56,7 @@
     </div>
 </nav>
 
-<!-- Footer -->
-<nav class="navbar navbar-dark navbar-expand-sm fixed-bottom bg-dark">
-  <div class="container">
-      <a class="navbar-brand m-0" href="https://www.hsph.harvard.edu/biostatistics/">
-          <img src="{% static 'images/footer-01.svg' %}" style="width: 400px;">
-      </a>
-      <div class="navbar-nav navbar-expand-sm">
-          <a class="nav-item nav-link" href="https://twitter.com/intent/tweet?text=GRAND: Integrated gene regulatory network database of cell lines, tissues, and small molecules. http://grand.tm4.org"><i class="fab fa-twitter-square fa-2x"></i></a>
-          <a class="nav-item nav-link" href="http://www.facebook.com/sharer/sharer.php?u=http://hsph.harvard.edu"><i class="fab fa-facebook-square fa-2x"></i></a>
-          <a class="nav-item nav-link" href="https://www.linkedin.com/sharing/share-offsite/?url=http://hsph.harvard.edu"><i class="fab fa-linkedin fa-2x"></i></a>
-          <a class="nav-item nav-link" href="/about"><i class="fas fa-envelope-square fa-2x"></i></a>
-          <a class="nav-item nav-link" href="https://creativecommons.org/licenses/by-sa/4.0/"><i class="fab fa-creative-commons fa-2x"></i></a>
-      </div>
-  </div>
-</nav>
-
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
 <div class="row">
         <div class="offset-md-2 col-md-4 form-area"> 
                <form action="{% url 'disease' %}" role="form" method="post">
@@ -89,7 +75,7 @@
                </form>
         </div>
 
-        <div class="col-md-4"> 
+        <div class="col-md-5"> 
         <p align="justify">TFs regulate the expression of genes. Whereas several tools allow to test the enrichment of a list of genes in disease pathways, this tool allows testing the enrichemnt of a 
         list of disrupted TF activites in two disease libraries, namely, GWAS traits and Human Phenotype ontology disease as described in <a href="https://www.ncbi.nlm.nih.gov/pubmed/29425488">Lambert et al, Cell, 2018</a>.</p>
         <p align="justify">The <a href="http://humantfs.ccbr.utoronto.ca/download.php">GWAS library</a> connects several traits to transcription factors through assigning hits to TFs if they fall near their coding regions. 
@@ -99,6 +85,43 @@
         </div>
 </div>
 </div>
+
+</div>
+<!-- Footer -->
+<footer class="page-footer font-small lighten-3 pt-4">
+  <div class="container text-center text-md-left">
+    <div class="row">
+      <div class="col-md-6 col-lg-6">
+        <h6 class="text-uppercase mb-2">Contact</h6>
+        <p><a href="https://www.hsph.harvard.edu/biostatistics/">Department of Biostatistics</a>
+        <br><a href="https://www.hsph.harvard.edu/">Harvard T.H. Chan School of Public Health</a></p>
+      </div>
+      <div class="col-md-5 col-lg-5">
+        <!-- Social buttons -->
+        <h6 class="text-uppercase mb-2">License</h6>
+        <a class="nav-item nav-link" href="https://creativecommons.org/licenses/by-sa/4.0/"><i class="fab fa-creative-commons fa-2x"></i></a>
+      </div>
+      <div class="col-md-1 col-lg-1">
+        <h6 class="text-uppercase mb-2">Share</h6>
+        <!-- Facebook -->
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://hsph.harvard.edu" type="button" class="btn-floating btn-fb">
+          <i class="fab fa-facebook-square fa-2x"></i>
+        </a>
+        <!-- Twitter -->
+        <a type="button" class="btn-floating btn-fb" href="https://twitter.com/intent/tweet?text=GRAND: Integrated gene regulatory network database of cell lines, tissues, and small molecules. https://grand.networkmedicine.org">
+          <i class="fab fa-twitter-square fa-2x"></i>
+        </a>
+       <!-- Linkedin -->
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://grand.networkmedicine.org" type="button" class="btn-floating btn-fb">
+          <i class="fab fa-linkedin fa-2x"></i>
+        </a>
+        <a href="/about" type="button" class="btn-floating btn-fb">
+          <i class="fas fa-envelope-square fa-2x"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
 
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
