@@ -6,7 +6,7 @@ class ContactForm(forms.Form):
     contact_subject = forms.CharField(required=True, label="Subject")
     content = forms.CharField(
         required=True,
-        widget=forms.Textarea,
+        widget=forms.Textarea(attrs={'rows':7, 'cols':20}),
         label="Message"
     )
 
