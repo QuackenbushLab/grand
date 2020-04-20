@@ -4,9 +4,9 @@ from django.http import Http404
 from django.core import serializers
 from .models import Cell, Disease
 from .models import Drug, Druglanding, DrugResultUp, DrugResultDown, Params
-from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding
+from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding, Tissuesample
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
-from .forms import ContactForm, GeneForm, DiseaseForm, DownloadForm
+from .forms import ContactForm, GeneForm, DiseaseForm
 from django.conf import settings
 import os
 import random
@@ -19,7 +19,6 @@ import requests
 from statsmodels.stats import multitest # for fdr correction
 
 # to fetch single-sample network
-import dask.dataframe as dd
 from io import StringIO # python3; python2: BytesIO 
 import boto3
 
@@ -188,121 +187,12 @@ def tissue(request):
 
 def tissuelanding(request,slug):
     tissuelanding = Tissuelanding.objects.all()
-    if request.method == 'GET':
-        form = DownloadForm()
-    else:
-        form = DownloadForm(request.POST)
-        if form.is_valid():
-            download_sample    = request.POST['download_sample']
-            try:
-                sampleid = int(download_sample)
-                if sampleid==0:
-                    raise
-                fileexists=0
-                # check if file exists
-                s3 = boto3.resource('s3')
-                my_bucket = s3.Bucket('granddb')
-                for my_bucket_object in my_bucket.objects.filter(Prefix='tissues/networks/lioness/singleSample/'):
-                    if my_bucket_object.key[:-29]=='tissues/networks/lioness/singleSample/' + slug + '_sample' + str(sampleid):
-                        resURL='https://granddb.s3.amazonaws.com/' + my_bucket_object.key
-                        fileexists=1
-                if fileexists==0:
-                    slug3=[t.capitalize() for t in slug.split('_')]
-                    slug3='_'.join(slug3)
-                    if slug3 in ['Adipose_Subcutaneous_Tissue','Adipose_Visceral_Tissue','Adrenal_Gland_Tissue','Artery_Aorta_Tissue','Artery_Coronary_Tissue',
-                                 'Artery_Tibial_Tissue','Brain_Basal_Ganglia_Tissue','Brain_Cerebellum_Tissue','Brain_Other_Tissue']: #Adipose_Subcutaneous_AllSamples.csv
-                        pathToFile = '/diskb/' + slug3[:-7] + '_AllSamples.csv'
-                    elif slug3 in ['Breast_Tissue','Colon_Sigmoid_Tissue','Colon_Transverse_Tissue','Esophagus_Mucosa_Tissue','Esophagus_Muscularis_Tissue','Gastroesophageal_Junction_Tissue',
-                                   'Heart_Atrial_Appendage_Tissue','Heart_Left_Ventricule_Tissue','Intestine_Terminal_Ileum_Tissue','Liver_Tissue','Lung_Tissue','Pancrease_Tissue','Pituitary_Tissue']:
-                        pathToFile = '/diskc/' + slug3[:-7] + '_AllSamples.csv'
-                    elif slug3 in ['Skeletal_Muscle_Tissue','Skin_Tissue','Spleen_Tissue','Stomach_Tissue','Thyroid_Tissue','Tibial_Nerve_Tissue','Whole_Blood_Tissue']:
-                        pathToFile = '/diskd/' + slug3[:-7] + '_AllSamples.csv'
-                    df_train = dd.read_csv(pathToFile, usecols=[sampleid])
-                    df_train = df_train.compute()
-                    tfs   = pd.read_csv('src/tissue_tfs.csv',header=None)
-                    genes = pd.read_csv('src/tissue_genes.csv',header=None)
-                    tfs.columns   = ['','']
-                    genes.columns = ['','']
-                    sampleNet  = pd.DataFrame(index=tfs.iloc[1:,1],columns=genes.iloc[:,1],data=df_train.iloc[:,0].values.reshape((644,30243)))
-                    fileName   = slug + '_sample' + str(sampleid) + '_' + df_train.columns[0] + '.csv'
-                    bucket     = 'granddb' # already created on S3
-                    csv_buffer = StringIO()
-                    sampleNet.to_csv(csv_buffer)
-                    s3_resource = boto3.resource('s3')
-                    res=s3_resource.Object(bucket, 'tissues/networks/lioness/singleSample/' + fileName).put(Body=csv_buffer.getvalue())
-                    if res['ResponseMetadata']['HTTPStatusCode'] == 200:
-                        os.system('/usr/local/bin/aws s3api put-object-acl --bucket granddb --key tissues/networks/lioness/singleSample/' + fileName  + ' --acl public-read')
-                        resURL='https://granddb.s3.amazonaws.com/tissues/networks/lioness/singleSample/' + fileName 
-            except:
-                if download_sample == 'all':
-                    slug3=[t.capitalize() for t in slug.split('_')]
-                    slug3='_'.join(slug3)
-                    resURL = 'https://granddb.s3.amazonaws.com/tissues/networks/lioness/' + slug3[:-7] + '_AllSamples.csv'
-                else:
-                    return redirect('tissuelandingerror',slug)
-            return redirect(resURL)
-        else:
-            return redirect('tissuelandingerror',slug)
-    return render(request, "tissueslanding.html", {'tissuelanding': tissuelanding,'downloadform':form, 'slug':slug})
-
-def tissuelandingerror(request,slug):
-    tissuelanding = Tissuelanding.objects.all()
-    if request.method == 'GET':
-        form = DownloadForm()
-    else:
-        form = DownloadForm(request.POST)
-        if form.is_valid():
-            download_sample    = request.POST['download_sample']
-            try:
-                sampleid = int(download_sample)
-                if sampleid==0:
-                    raise
-                fileexists=0
-                # check if file exists
-                s3 = boto3.resource('s3')
-                my_bucket = s3.Bucket('granddb')
-                for my_bucket_object in my_bucket.objects.filter(Prefix='tissues/networks/lioness/singleSample/'):
-                    if my_bucket_object.key[:-29]=='tissues/networks/lioness/singleSample/' + slug + '_sample' + str(sampleid):
-                        resURL='https://granddb.s3.amazonaws.com/' + my_bucket_object.key
-                        fileexists=1
-                if fileexists==0:
-                    slug3=[t.capitalize() for t in slug.split('_')]
-                    slug3='_'.join(slug3)
-                    if slug3 in ['Adipose_Subcutaneous_Tissue','Adipose_Visceral_Tissue','Adrenal_Gland_Tissue','Artery_Aorta_Tissue','Artery_Coronary_Tissue',
-                                 'Artery_Tibial_Tissue','Brain_Basal_Ganglia_Tissue','Brain_Cerebellum_Tissue','Brain_Other_Tissue']: #Adipose_Subcutaneous_AllSamples.csv
-                        pathToFile = '/diskb/' + slug3[:-7] + '_AllSamples.csv'
-                    elif slug3 in ['Breast_Tissue','Colon_Sigmoid_Tissue','Colon_Transverse_Tissue','Esophagus_Mucosa_Tissue','Esophagus_Muscularis_Tissue','Gastroesophageal_Junction_Tissue',
-                                   'Heart_Atrial_Appendage_Tissue','Heart_Left_Ventricule_Tissue','Intestine_Terminal_Ileum_Tissue','Liver_Tissue','Lung_Tissue','Pancrease_Tissue','Pituitary_Tissue']:
-                        pathToFile = '/diskc/' + slug3[:-7] + '_AllSamples.csv'
-                    elif slug3 in ['Skeletal_Muscle_Tissue','Skin_Tissue','Spleen_Tissue','Stomach_Tissue','Thyroid_Tissue','Tibial_Nerve_Tissue','Whole_Blood_Tissue']:
-                        pathToFile = '/diskd/' + slug3[:-7] + '_AllSamples.csv'
-                    df_train = dd.read_csv(pathToFile, usecols=[sampleid])
-                    df_train = df_train.compute()
-                    tfs   = pd.read_csv('src/tissue_tfs.csv',header=None)
-                    genes = pd.read_csv('src/tissue_genes.csv',header=None)
-                    tfs.columns   = ['','']
-                    genes.columns = ['','']
-                    sampleNet  = pd.DataFrame(index=tfs.iloc[1:,1],columns=genes.iloc[:,1],data=df_train.iloc[:,0].values.reshape((644,30243)))
-                    fileName   = slug + '_sample' + str(sampleid) + '_' + df_train.columns[0] + '.csv'
-                    bucket     = 'granddb' # already created on S3
-                    csv_buffer = StringIO()
-                    sampleNet.to_csv(csv_buffer)
-                    s3_resource = boto3.resource('s3')
-                    res=s3_resource.Object(bucket, 'tissues/networks/lioness/singleSample/' + fileName).put(Body=csv_buffer.getvalue())
-                    if res['ResponseMetadata']['HTTPStatusCode'] == 200:
-                        os.system('/usr/local/bin/aws s3api put-object-acl --bucket granddb --key tissues/networks/lioness/singleSample/' + fileName  + ' --acl public-read')
-                        resURL='https://granddb.s3.amazonaws.com/tissues/networks/lioness/singleSample/' + fileName
-            except:
-                if download_sample == 'all':
-                    slug3=[t.capitalize() for t in slug.split('_')]
-                    slug3='_'.join(slug3)
-                    resURL = 'https://granddb.s3.amazonaws.com/tissues/networks/lioness/' + slug3[:-7] + '_AllSamples.csv'
-                else:
-                    return redirect('tissuelandingerror',slug)
-            return redirect(resURL)
-        else:
-            return redirect('tissuelandingerror',slug)
-    return render(request, "tissueslandingerror.html", {'tissuelanding': tissuelanding,'downloadform':form, 'slug':slug})
+    tissuesample = Tissuesample.objects.filter(grdid=slug) 
+    name= 'yes'
+    if slug in ['Lymphoblastoid_cell_line_tissue','Fibroblast_cell_line_tissue','Kidney_cortex_tissue','Minor_salivary_gland_tissue',
+               'Ovary_tissue','Prostate_tissue','Testis_tissue','Uterus_tissue','Vagina_tissue']:
+        name='no'
+    return render(request, "tissueslanding.html", {'tissuelanding': tissuelanding, 'slug':slug,'tissuesample':tissuesample, 'name':name})
 
 def analysis(request):
     if request.method == 'GET':

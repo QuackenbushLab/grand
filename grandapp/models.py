@@ -128,6 +128,23 @@ class TissueTar(models.Model):
     tissueLink   = models.URLField('#')
     query        = models.IntegerField(default=0)
 
+class Tissuesample(models.Model):
+    sampleid    = models.CharField(max_length=600)
+    subjectid   = models.CharField(max_length=600)
+    tissueid    = models.CharField(max_length=600)
+    gender      = models.CharField(max_length=600)
+    age         = models.CharField(max_length=600)
+    dthhrdy     = models.CharField(max_length=600)
+    smatsscr    = models.CharField(max_length=600)
+    smrin       = models.CharField(max_length=600)
+    smts        = models.CharField(max_length=600)
+    smtsd       = models.CharField(max_length=600)
+    smubrid     = models.CharField(max_length=600)
+    smtsisch    = models.CharField(max_length=600)
+    grdid       = models.CharField(max_length=600)
+    size        = models.CharField(max_length=600)
+    link        = models.CharField(max_length=600)
+
 class TissueEx(models.Model):
     id           = models.AutoField(primary_key=True)
     tissue       = models.CharField(max_length=600)

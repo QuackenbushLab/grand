@@ -73,9 +73,12 @@
     <h4>Download</h4>
     <div class="ml-3">The networks can be downloaded with two different properties.
     <h5>Format:</h5>
-    <code>p:</code> stands for <code>.pairs</code> format. The network is written in a text file with the following format:
-    <pre>                node1    node2   edge weight 
-    <br>          e.g.,  A        B       1.0</pre>
+    <code>p:</code> stands for <code>.pairs</code> format. The network is written in a text or csv file with the following format:
+    <pre>                node1    node2    edge_weight 
+    <br>          e.g.,  A        B        1.0</pre>
+    <br> or in the following format for multi-sample files:
+    <pre>                node1:node2    edge_weight_sample_1   edge_weight_sample_n
+    <br>          e.g.,  A:B            1.0                    2.0</pre>
     <br><code>c:</code> stands for <code>.csv</code> format. The bipartite network is saved as the weighted adjacency matrix W(TFs,Genes).
     <br><code>m:</code> stands for <code>.mat</code> format. The bipartite network is saved as the weighted adjacency matrix W(TFs,Genes) in MATLAB format.
     <h5>Edge weights:</h5>

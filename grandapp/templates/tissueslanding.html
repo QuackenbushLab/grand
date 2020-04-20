@@ -8,8 +8,8 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.20/af-2.3.4/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/b-print-1.6.1/cr-1.5.2/fc-3.3.0/fh-3.1.6/kt-2.5.1/r-2.2.3/rg-1.1.1/rr-1.2.6/sc-2.0.1/sp-1.0.1/sl-1.3.1/datatables.min.css"/>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
   <title>GRAND</title>
 </head>
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -57,7 +57,14 @@
   </div>
 </nav>
 
-    <div class="container col-9 pb-5 mb-5 mt-4">
+    <div class="container col-10 pb-2 mt-4">
+        <div class="card">
+  <h5 class="card-header">Networks</h5>
+  <div class="card-body">
+    <h5 class="card-title">Tool description</h5>
+    <p class="card-text"><a href="https://pubmed.ncbi.nlm.nih.gov/23741402/">PANDA</a> reconstructs one network using all the expression samples. 
+			   {% if name == 'yes' %} <a href="https://www.sciencedirect.com/science/article/pii/S2589004219300872">LIONESS</a> builds a single-sample network for each sample. To download sample-specific networks, you can check <a href='#cardtissue'>the phenotypic information</a> to select the networks by
+                            clinical variables or to download all the samples in a single file. {% else %} Check <a href='#cardtissue'>the phenotypic information</a>{% endif %} for the clinical variables of the samples that were used to reconstruct the network.</p>
         <table id="tissuestable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
@@ -65,14 +72,14 @@
                     <th scope="col">Tissue</th>
                     <th scope="col">Tool</th>
                     <th scope="col">netZoo release</th>
-                    <th scope="col">Network <i class="far fa-question-circle"
+                    <th scope="col">Network <br><i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
                       title="Network format"
                       data-content="Please refer to the Help page Network section for the network download formats.">
                     </i></th>
-                    <th scope="col">PPI <i class="far fa-question-circle"
+                    <th scope="col">PPI <br><i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
@@ -96,7 +103,7 @@
                     <td>{{ tissue.tool }}</td>
                     <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}">{{ tissue.netzooRel }}</a></td>
                     {% if tissue.tool == 'LIONESS' %}
-                    <td><a class="btn btn-outline-primary" role="button"  data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls>co</a></td>
+                    <td><a class="btn btn-outline-primary" role="button"  href="#cardtissue" role="button">co</a></td>
                     {% else %}
                     <td><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a></td>
                     {% endif %}
@@ -105,7 +112,7 @@
                     <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}"><i class="fas fa-link"></i></a></td>
                     <td>{{ tissue.tfs }}</td>
                     <td>{{ tissue.genes }}</td>
-                    <td>{{ tissue.samples }}</td>
+                    <td><a href="#cardtissue">{{ tissue.samples }}</a></td>
                     {% if tissue.tool == 'LIONESS' %}
                         <td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a></td>
                     {% else %}
@@ -116,41 +123,110 @@
                  {% endfor %}
                 </tbody>
               </table>
-        <div class="collapse" id="collapseExample">
-                  <div class="card border-primary">
-                        <div class="card-header">Download information</div>
-                        <div class="card-body">
-                            <a href="https://pubmed.ncbi.nlm.nih.gov/23741402/">PANDA</a> reconstructs one network using all the expression samples. 
-			    <a href="https://www.sciencedirect.com/science/article/pii/S2589004219300872">LIONESS</a> builds a single-sample network for each sample.
-                            You can either download all the networks by entering 'all'  (~10-50Gb) and you will get a matrix of size the number of samples by the number of edges. The number of edges
-			    is 644 * 30243 (number of TFs * number of genes) (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a TF-by-gene
-            		    matrix named after  the GTEx sample reference. It will take about four minutes to fetch the network.
-                            <form action="{% url 'tissuelanding' slug %}" role="form" method="post">
-                                {% csrf_token %}
-                                <div class="form-row align-items-center">
-                                        <div class="col-sm-4"></div>
-                                        <div class="input-group-prepend mb-3">
-                                                    <div class="input-group-text">Sample number</div>
-                                         </div>
-                                    <div class="form-group ">
-                                                {% render_field downloadform.download_sample class="form-control" placeholder="all or 29" %}
-                                    </div>
-                                    <div class="col-auto"></div>
-                                    <div class="form-actions col-auto">
-                                        <button type="submit"  name="submit" class="btn btn-primary mb-3">
-                                        <span id="mySpinner" class="d-none">
-                                        <span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
-                                        </span>Download</button>
-                                    </div>
-                                </div>
-                                </form>
-
-                        </div>
-                   </div>
-        </div>
-
+    </div>
+</div>
 </div>
 
+<div class="container col-10 pb-5 mb-5 mt-4">
+        <div class="card" id="cardtissue">
+  <h5 class="card-header">Phenotypic information</h5>
+  <div class="card-body">
+    <h5 class="card-title">Variable description</h5>
+    <p class="card-text">{% if name == 'yes' %}You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges
+			    is 644 * 30243 (number of TFs * number of genes) (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a TF-by-gene
+            		    matrix named after  the GTEx sample reference {% else %} This is a description of the primary clinical variables of the gene expression samples that were used to generate the gene regulatory network. {% endif %}.</p>
+        <table id="tissuestable2" class="table table-hover" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th scope="col">Sample</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Gender <br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="1=Male, 2=Female">
+                    </i></th>
+                    <th scope="col">Age</th>
+                    <th scope="col">DTH-HRDY <br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Hardy scale">
+                    </i></th>
+                    <th scope="col">SMAT-SSCR <br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Autolysis Score">
+                    </i></th>
+                    <th scope="col">SMRIN <br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="RIN Number">
+                    </i></th>
+                    <th scope="col">SMTS <br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Tissue Type, area from which the tissue sample was taken">
+                    </i></th>
+                    <th scope="col">SMTSD <br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Tissue Type, more specific detail of tissue type">
+                    </i></th>
+                    <th scope="col">SMUBRID <br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Uberon ID, anatomical location as described by the Uber Anatomy Ontology (UBERON)">
+                    </i></th>
+                    <th scope="col">SMTSISCH <br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Total Ischemic time for a sample in 4 hour intervals">
+                    </i></th>
+                    {% if name == 'yes' %}
+                    <th scope="col">Network <br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Please refer to the Help page Network section for the network download formats">
+                    </i></th>
+                    <th scope="col">Size</th>
+                    {% endif %}
+                  </tr>
+                </thead>
+                <tbody>
+                 {% for tissue in tissuesample %}
+                    <tr>
+                    <td>{{ tissue.sampleid }}</td>
+                    <td>{{ tissue.subjectid }}</td>
+                    <td>{{ tissue.gender }}</td>
+                    <td>{{ tissue.age }}</td>
+                    <td>{{ tissue.dthhrdy }}</td>
+                    <td>{{ tissue.smatsscr }}</td>
+                    <td>{{ tissue.smrin }}</td>
+                    <td>{{ tissue.smts }}</td>
+                    <td>{{ tissue.smtsd }}</td>
+                    <td>{{ tissue.smubrid }}</td>
+                    <td>{{ tissue.smtsisch }}</td>
+                    {% if name == 'yes' %}
+                    {% if tissue.sampleid == 'All' %}
+                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a></td>
+                    {% else %}
+                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a></td>
+                    {% endif %}
+                    <td>{{ tissue.size }}</td>
+                    {% endif %}
+                 {% endfor %}
+                </tbody>
+              </table>
+</div>
+</div>
 </div>
 <!-- Footer -->
 <footer class="page-footer font-small lighten-3 pt-4">
@@ -213,6 +289,13 @@ $(document).ready(function() {
              "<'row'<'col-sm-12'tr>>" +
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
     });
+
+    $('#tissuestable2').DataTable({
+            "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+    });
+
 } );
 </script>
 </body>
