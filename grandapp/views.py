@@ -253,7 +253,7 @@ def analysis(request):
                  counter.save()
              except BadHeaderError: #find a better exception
                  return HttpResponse('Invalid header found.')
-             return redirect('/drugresult/' + str(accessKey) + '/')
+             return redirect('/drugresult/' + str(accessKey) + '/reverse/')
     return render(request, 'analysis.html', {'geneform':form})
 
 def analysisexample(request): #all the else part can be deleted
@@ -309,7 +309,7 @@ def analysisexample(request): #all the else part can be deleted
                  #payload = {'drug':drugNames.iloc[indSort[-1-i]],'cosine':round(cosDist[indSort[-1-i]],4),'overlap':overlap[indSort[-1-i]]}
              except BadHeaderError: #find a better exception
                  return HttpResponse('Invalid header found.')
-             return redirect('/drugresult/' + str(accessKey) + '/')
+             return redirect('/drugresult/' + str(accessKey) + '/reverse/')
     return render(request, 'analysis.html', {'geneform':form})
 
 def analysisexampletfs(request):
@@ -358,10 +358,14 @@ def analysisexampletfs(request):
     return render(request, 'analysis.html', {'geneform':form})
 
 def drugresult(request, id):
+    params   = Params.objects.filter(query=id)
+    drugdown = DrugResultDown.objects.filter(query=id)
+    return render(request, 'drugresult.html', {'params':params,'drugdown':drugdown,'id':id})
+
+def drugresultsimilar(request, id):
     params = Params.objects.filter(query=id)
     drugup = DrugResultUp.objects.filter(query=id)
-    drugdown = DrugResultDown.objects.filter(query=id)
-    return render(request, 'drugresult.html', {'params':params,'drugup':drugup,'drugdown':drugdown})
+    return render(request, 'drugresultsimilar.html', {'params':params,'drugup':drugup,'id':id})
 
 def diseasegwas(request, id):
     params  = Params.objects.filter(query=id)

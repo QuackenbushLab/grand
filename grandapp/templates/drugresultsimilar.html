@@ -74,10 +74,10 @@
   <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs">
       <li class="nav-item">
-        <a class="nav-link active" href="/drugresult/{{ id }}/reverse">Reverse</a>
+        <a class="nav-link" href="/drugresult/{{ id }}/reverse">Reverse</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/drugresult/{{ id }}/similar">Similar</a>
+        <a class="nav-link active" href="/drugresult/{{ id }}/similar">Similar</a>
       </li>
     </ul>
   </div>
@@ -87,19 +87,19 @@
              &nbsp; &nbsp;
              </div>
             <div class="col-xs-6">
-            <h3><span class="badge badge-primary">Reverse</span></h3>
+            <h3><span class="badge badge-danger">Similar</span></h3>
             </div>
            <div class="col-xs-6">
          &nbsp; <i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
-                      data-content="Top 100 compounds that have a reverse profile with the query set.">
+                      data-content="Top 100 compounds that have a similar profile with the query set.">
                     </i>
             </div>
          </div>
 
-        <table id="drugstbl1" class="table table-hover" style="width: 100%">
+        <table id="drugstbl2" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
                     <th scope="col">Drug</th>
@@ -120,7 +120,7 @@
                 </thead>
 
 		 <tbody>
-		 {% for dd in drugdown %}
+		 {% for dd in drugup %}
 		    <tr>
 		    <td><a href="{{ dd.druglink }}">{{ dd.drug }}</a></td>
 		    <td>{{ dd.overlap }}</td>
@@ -197,11 +197,11 @@ $(function () {
 // Basic example
 $(document).ready(function() {
     //datatables
-    $('#drugstbl1').DataTable({
+    $('#drugstbl2').DataTable({
 
       "serverSide": false,
       "processing": true,
-      "order": [[ 1, "desc" ]],
+      "order": [[ 1, "asc" ]],
 
       buttons: [
             'copy', 'csv', 'pdf', 'print'
