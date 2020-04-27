@@ -34,10 +34,11 @@ class Command(BaseCommand):
         print("Loading disease data!")
         for row in DictReader(open('./disease.csv')):
             disease = Disease()
-            disease.id        = row['id']
+            disease.idd       = row['idd']
             disease.disease   = row['disease']
             disease.count     = row['count']
             disease.intersect = row['intersect']
             disease.pval      = row['pval']
             disease.qval      = row['qval']
+            disease.nuser     = row['nuser']
             disease.save()

@@ -34,10 +34,11 @@ class Command(BaseCommand):
         print("Loading tissue expression data!")
         for row in DictReader(open('./tissue-expression.csv')):
             tissueex = TissueEx()
-            tissueex.id        = row['id']
+            tissueex.idd       = row['idd']
             tissueex.tissue    = row['tissue']
             tissueex.count     = row['count']
             tissueex.intersect = row['intersect']
             tissueex.pval      = row['pval']
             tissueex.qval      = row['qval']
+            tissueex.nuser     = row['nuser']
             tissueex.save()

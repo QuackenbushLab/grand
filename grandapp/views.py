@@ -30,7 +30,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from scipy.sparse.linalg import inv
 
 def home(request):
-    params = Params.objects.all()
+    params  = Params.objects.filter(id=-1)
+    print(params)
     return render(request, 'home.html', {'params':params})
 
 def help(request):
@@ -65,7 +66,7 @@ def disease(request):
          form = DiseaseForm(request.POST)
          if form.is_valid():
              content   = request.POST['content']
-             data=content.split('\r\n')
+             data = content.split('\r\n')
              data = list(filter(None, data))
              contentdf = pd.DataFrame(data, columns = ['Gene'])
              try:
@@ -80,8 +81,10 @@ def disease(request):
                  nCondVec  = nCondVec[indSortP]
                  tfdb      = tfdb.iloc[indSortP]
                  max_display=100
+                 counter = Params.objects.get(id=-1)
+                 newID   = counter.genesupin % 10
                  for i in range(max_display):
-                     disease = Disease.objects.get(id=i+1)
+                     disease = Disease.objects.get(idd=i+1, nuser=newID)
                      disease.disease  =tfdb.iloc[i,0]
                      disease.count    =tfdb.iloc[i,3]
                      disease.intersect=nCondVec[i]
@@ -91,7 +94,7 @@ def disease(request):
                      disease.query    =randid
                      disease.save()
                  for i in range(len(qval1)):
-                     gwas   = Gwas.objects.get(id=i+1)
+                     gwas   = Gwas.objects.get(idd=i+1, nuser=newID)
                      gwas.disease     =tfdb1.iloc[i,0]
                      gwas.count       =tfdb1.iloc[i,3]
                      gwas.intersect   =nCondVec1[i]
@@ -100,7 +103,7 @@ def disease(request):
                      gwas.query       =randid
                      gwas.save()
                  for i in range(len(qvalTE)):
-                     tissueex   = TissueEx.objects.get(id=i+1)
+                     tissueex   = TissueEx.objects.get(idd=i+1, nuser=newID)
                      tissueex.tissue      =tfdbTE['Tissues'].iloc[i]
                      tissueex.count       =tfdbTE['Cond'].iloc[i]
                      tissueex.intersect   =nCondVecTE[i]
@@ -110,7 +113,7 @@ def disease(request):
                      tissueex.query       =randid
                      tissueex.save()
                  for i in range(len(qvalTT)):
-                     tissuett   = TissueTar.objects.get(id=i+1)
+                     tissuett   = TissueTar.objects.get(idd=i+1, nuser=newID)
                      tissuett.tissue      =tfdbTT['Tissue'].iloc[i]
                      tissuett.count       =tfdbTT['#TFsDifferentiallyTargetingSelectedCategories'].iloc[i]
                      tissuett.intersect   =nCondVecTT[i]
@@ -120,12 +123,12 @@ def disease(request):
                      tissuett.query       =randid
                      tissuett.save()
                  accessKey = randid
-                 param=Params.objects.get(id=2)
+                 param=Params.objects.get(id=newID)
                  param.genesdownin   =stat1
                  param.genesupin     =stat2
                  param.query         =randid
                  param.save()  
-                 counter=Params.objects.get(id=3)
+                 counter=Params.objects.get(id=-1)
                  counter.genesupin+=1
                  counter.save()
              except BadHeaderError: #find a better exception
@@ -172,7 +175,9 @@ def diseaseexample(request):
                      gwas.qval        =round(qval1[i],5)
                      gwas.save()
                  accessKey = disease.query
-                 param=Params.objects.get(id=2)
+                 counter= Params.objects.get(id=0)
+                 newID  = counter.genesupin % 10
+                 param=Params.objects.get(id=newID+1)
                  param.genesdownin   =stat1
                  param.genesupin     =stat2
                  param.save()
@@ -220,9 +225,11 @@ def analysis(request):
                  print(len(drugNames))
                  max_display=100
                  randid      =random.randint(1,1000000)
+                 counter= Params.objects.get(id=-1)
+                 newID  = counter.genesupin % 10
                  i=0
                  for i in range(max_display):
-                     drug=DrugResultUp.objects.get(id=i+1)
+                     drug=DrugResultUp.objects.get(idd=i+1, nuser=newID)
                      currDrugName = drugNames.iloc[indSort[i]].values[0]
                      drug.drug    = currDrugName[0].upper() + currDrugName[1:]
                      drug.cosine  = round(cosDist[indSort[i]],4)
@@ -230,7 +237,7 @@ def analysis(request):
                      drug.druglink= 'https://grand.networkmedicine.org/drugs/' + drug.drug + '-drug/'
                      drug.query   = randid
                      drug.save()
-                     drug=DrugResultDown.objects.get(id=i+1)
+                     drug=DrugResultDown.objects.get(idd=i+1, nuser=newID)
                      currDrugName = drugNames.iloc[indSort[-1-i]].values[0]
                      drug.drug    = currDrugName[0].upper() + currDrugName[1:]
                      drug.cosine  = round(cosDist[indSort[-1-i]],4)
@@ -241,14 +248,14 @@ def analysis(request):
                      i+=1
                      #payload = {'drug':drugNames.iloc[indSort[-1-i]],'cosine':round(cosDist[indSort[-1-i]],4),'overlap':overlap[indSort[-1-i]]}
                  accessKey = randid
-                 param  = Params.objects.get(id=1)
+                 param  = Params.objects.get(id=newID)
                  param.genesupin   = stat1
                  param.genesdownin = stat2
                  param.genesup     = stat3
                  param.genesdown   = stat4
                  param.query       = randid
                  param.save()
-                 counter=Params.objects.get(id=3)
+                 counter=Params.objects.get(id=-1)
                  counter.genesupin+=1
                  counter.save()
              except BadHeaderError: #find a better exception

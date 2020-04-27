@@ -34,8 +34,9 @@ class Command(BaseCommand):
         print("Loading drug results template data!")
         for row in DictReader(open('./drugResultsUp.csv')):
             drugResult = DrugResultUp()
-            drugResult.id         = row['id']
+            drugResult.idd        = row['idd']
             drugResult.drug       = row['drug']
             drugResult.overlap    = row['overlap']
             drugResult.cosine     = row['cosine']
+            drugResult.nuser      = row['nuser']
             drugResult.save()

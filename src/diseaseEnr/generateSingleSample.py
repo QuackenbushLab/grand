@@ -59,3 +59,4 @@ for slug3 in tissues:
             print(resURL)
         else:
             print('error')
+    k=k+1

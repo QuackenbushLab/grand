@@ -34,10 +34,11 @@ class Command(BaseCommand):
         print("Loading gwas data!")
         for row in DictReader(open('./gwas.csv')):
             gwas = Gwas()
-            gwas.id        = row['id']
+            gwas.idd       = row['idd']
             gwas.disease   = row['disease']
             gwas.count     = row['count']
             gwas.intersect = row['intersect']
             gwas.pval      = row['pval']
             gwas.qval      = row['qval']
+            gwas.nuser     = row['nuser']
             gwas.save()

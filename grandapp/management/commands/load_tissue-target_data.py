@@ -34,10 +34,11 @@ class Command(BaseCommand):
         print("Loading tissue target data!")
         for row in DictReader(open('./tissue-target.csv')):
             tissuetar = TissueTar()
-            tissuetar.id        = row['id']
+            tissuetar.idd       = row['idd']
             tissuetar.tissue    = row['tissue']
             tissuetar.count     = row['count']
             tissuetar.intersect = row['intersect']
             tissuetar.pval      = row['pval']
             tissuetar.qval      = row['qval']
+            tissuetar.nuser     = row['nuser']
             tissuetar.save()

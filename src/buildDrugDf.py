@@ -86,7 +86,9 @@ for line in res.splitlines():
             tfsVec.append(1603)
             ppilinkVec.append('https://string-db.org/')
             motifVec.append('https://granddb.s3.amazonaws.com/optPANDA/motifs/regMatPval1e3.csv')
-        if netTypes[netl] in ['PANDA','optPANDA (FunBind)']:
+        if netTypes[netl] == 'PANDA':
+            ppiVec.append('https://granddb.s3.amazonaws.com/drugs/drugs_ppi.txt')
+        elif netTypes[netl] == 'optPANDA (FunBind)':
             ppiVec.append('https://granddb.s3.amazonaws.com/optPANDA/ppi/ppi_complete.txt')
         elif netTypes[netl] == 'optPANDA (ChIP-seq)':
             ppiVec.append('https://granddb.s3.amazonaws.com/optPANDA/ppi/ppi_complete_bind.txt')

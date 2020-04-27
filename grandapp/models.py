@@ -7,7 +7,7 @@ class Cell(models.Model):
     tool      = models.CharField(max_length=200)
     netzoo    = models.CharField(max_length=200)
     netzooLink= models.URLField(max_length=200)
-    netzooRel = models.FloatField()
+    netzooRel = models.CharField(max_length=200)
     network   = models.URLField()
     ppi       = models.URLField()
     ppiLink   = models.URLField()
@@ -50,20 +50,22 @@ class Druglanding(models.Model):
     expLink   = models.URLField()
 
 class DrugResultUp(models.Model):
-    id        = models.AutoField(primary_key=True)
+    idd       = models.IntegerField(default=0)
     drug      = models.CharField(max_length=400)
     overlap   = models.FloatField()
     cosine    = models.FloatField()
     druglink  = models.URLField()
     query     = models.IntegerField(default=0)
+    nuser     = models.IntegerField(default=0)
 
 class DrugResultDown(models.Model):
-    id        = models.AutoField(primary_key=True)
+    idd       = models.IntegerField(default=0)
     drug      = models.CharField(max_length=400)
     overlap   = models.FloatField()
     cosine    = models.FloatField()
     druglink  = models.URLField()
     query     = models.IntegerField(default=0)
+    nuser     = models.IntegerField(default=0)
 
 class Params(models.Model):
     id         = models.AutoField(primary_key=True)
@@ -73,9 +75,8 @@ class Params(models.Model):
     genesdown  = models.IntegerField(default=0)
     query      = models.IntegerField(default=0)
 
-
 class Disease(models.Model):
-    id           = models.AutoField(primary_key=True)
+    idd          = models.IntegerField(default=0)
     disease      = models.CharField(max_length=600)
     count        = models.IntegerField()
     intersect    = models.IntegerField()
@@ -83,15 +84,17 @@ class Disease(models.Model):
     qval         = models.FloatField()
     hpoId        = models.CharField(max_length=200)
     query        = models.IntegerField(default=0)
+    nuser        = models.IntegerField(default=0)
 
 class Gwas(models.Model):
-    id           = models.AutoField(primary_key=True)
+    idd          = models.IntegerField(default=0)
     disease      = models.CharField(max_length=600)
     count        = models.IntegerField()
     intersect    = models.IntegerField()
     pval         = models.FloatField()
     qval         = models.FloatField()
     query        = models.IntegerField(default=0)
+    nuser        = models.IntegerField(default=0)
 
 class Tissue(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
@@ -119,7 +122,7 @@ class Tissuelanding(models.Model):
     samples   = models.IntegerField(default=0)
 
 class TissueTar(models.Model):
-    id           = models.AutoField(primary_key=True)
+    idd          = models.IntegerField(default=0)
     tissue       = models.CharField(max_length=600)
     count        = models.IntegerField()
     intersect    = models.IntegerField()
@@ -127,6 +130,7 @@ class TissueTar(models.Model):
     qval         = models.FloatField()
     tissueLink   = models.URLField('#')
     query        = models.IntegerField(default=0)
+    nuser        = models.IntegerField(default=0)
 
 class Tissuesample(models.Model):
     sampleid    = models.CharField(max_length=600)
@@ -146,7 +150,7 @@ class Tissuesample(models.Model):
     link        = models.CharField(max_length=600)
 
 class TissueEx(models.Model):
-    id           = models.AutoField(primary_key=True)
+    idd          = models.IntegerField(default=0)
     tissue       = models.CharField(max_length=600)
     count        = models.IntegerField()
     intersect    = models.IntegerField()
@@ -154,6 +158,7 @@ class TissueEx(models.Model):
     qval         = models.FloatField()
     tissueLink   = models.URLField('#')
     query        = models.IntegerField(default=0)
+    nuser        = models.IntegerField(default=0)
 
     def __str__(self):
        return self.name

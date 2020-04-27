@@ -92,7 +92,11 @@
 		    <td><a href="{{ cell.cellLink }}">{{ cell.cellLine }}</a></td>
 		    <td>{{ cell.tool }}</td>
 		    <td>{{ cell.netzoo }} <a href="{{ cell.netzooLink }}">{{ cell.netzooRel }}</a></td>
+                    {% if cell.cellLine == 'THP-1' %}
+                    <td><a href="{{ cell.network }}" class="btn btn-outline-primary" role="button">co</a></td>
+                    {% else %}
                     <td><a href="{{ cell.network }}" class="btn btn-outline-primary" role="button">po</a></td>
+                    {% endif %}
 	            <td><a href="{{ cell.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ cell.ppiLink }}"><i class="fas fa-link"></i></a></td>
                     <td><a href="{{ cell.motif }}"><i class="fas fa-download"></i></a></td>
                     <td><a href="{{ cell.expression }}"><i class="fas fa-download"></i></a> <a href="{{ cell.expLink }}"><i class="fas fa-link"></i></a></td>
