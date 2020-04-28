@@ -60,9 +60,10 @@
 <div class="container mb-5">
         <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#optPANDA">optPANDA</a></li>
+        <li class="breadcrumb-item"><a href="#gpuPANDA">gpuPANDA</a></li>
         </ol>
 	<p><h4 id="optPANDA" class="text-primary">optPANDA</h4>
-	<p class="small">Below, you will find links to the data priors and the processed ground truths for the benchmarking of optPANDA.</p>
+	<p class="small">Below, you will find links to the data priors and the processed ground truths for the benchmarking of optPANDA (as implemented in <a href="https://github.com/netZoo/netZooM">netZooM</a>).</p>
 	<div class='row'>
         <div class="col-sm">
         <h6>Gene expression </h6>
@@ -141,6 +142,66 @@
         </ul>
         </div>
  	</div>
+        <p><h4 id="gpuPANDA" class="text-primary">gpuPANDA</h4>
+        <p class="small">This is the data used for the benchmark of gpuPANDA (using <a href="https://github.com/netZoo/netZooPy">netZooPy</a> and <a href="https://github.com/netZoo/netZooM">netZooM</a>). To reproduce the benchmarks, check the <a href='https://github.com/QuackenbushLab/gpupanda'>github repository</a>.</p>
+        <style>
+	table {
+	  font-family: arial, sans-serif;
+	  border-collapse: collapse;
+          margin-left:auto;
+          margin-right:auto;
+	}
+
+	td, th {
+	  border: 1px solid #dddddd;
+	  text-align: left;
+	  padding: 8px;
+	}
+
+	tr:nth-child(even) {
+	  background-color: #dddddd;
+	}
+        </style>
+        <font size="2">
+        <table>
+        <tr>
+        <th>Model</th>
+        <th>Motif</th>
+        <th>PPI</th>
+        <th>Expression</th>
+        <th>Mode</th>
+        <th>TFs</th>
+        <th>Genes</th>
+        </tr>
+        <tr>
+        <td>Small</td>
+        <td><a href='https://granddb.s3.amazonaws.com/optPANDA/motifs/Hugo_motifCellLine_reduced.txt'>download</a></td>
+        <td><a href='https://granddb.s3.amazonaws.com/gpuPANDA/ppi2015_freezeCellLine.txt'>download</a></td>
+        <td><a href='https://granddb.s3.amazonaws.com/optPANDA/expression/Hugo_exp1_lcl.txt'>download</a></td>
+        <td>Intersection</td>
+        <td>652</td>
+        <td>1000</td>
+        </tr>
+        <tr>
+        <td>Coding genes</td>
+        <td><a href='https://granddb.s3.amazonaws.com/optPANDA/motifs/Hugo_motifCellLine.txt'>download</a></td>
+        <td><a href='https://granddb.s3.amazonaws.com/gpuPANDA/ppi2015_freezeCellLine.txt'>download</a></td>
+        <td><a href='https://granddb.s3.amazonaws.com/optPANDA/expression/Hugo_exp1_lcl.txt'>download</a></td>
+        <td>Union</td>
+        <td>652</td>
+        <td>27149</td>
+        </tr>
+        <tr>
+        <td>All genes</td>
+        <td><a href='https://granddb.s3.amazonaws.com/gpuPANDA/motif_complete_reduced.txt'>download</a></td>
+        <td><a href='https://granddb.s3.amazonaws.com/optPANDA/ppi/ppi_complete.txt'>download</a></td>
+        <td><a href='https://granddb.s3.amazonaws.com/optPANDA/expression/THP-1.tsv'>download</a></td>
+        <td>Union</td>
+        <td>1603</td>
+        <td>43698</td>
+        </tr>
+        </table> 
+        </font>
 <br>
 <br>
 </div>
