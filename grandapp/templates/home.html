@@ -35,11 +35,12 @@
           <a class="nav-item nav-link active" href="/">Home</a>
           <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Networks</a>
-          <div class="dropdown-menu">
-            <a href="drugs/" class="dropdown-item">Small molecules</a>
-            <a href="cell/" class="dropdown-item">Cell lines</a>
-            <a href="tissues" class="dropdown-item">Tissues</a>
-          </div>
+            <div class="dropdown-menu">
+              <a href="/drugs" class="dropdown-item">Small molecules</a>
+              <a href="/cancerlanding" class="dropdown-item">Cancer</a>
+              <a href="/tissues" class="dropdown-item">Tissues</a>
+              <a href="/cell" class="dropdown-item">Cell lines</a>
+            </div>
         </li>
           <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Analysis</a>
@@ -59,7 +60,7 @@
 <header class="jumbotron jumbotron-fluid">
   <div class="container">
       <div class="display-2 mb-4"></div>
-      <p class="lead">GRAND is a collection of gene regulatory networks of <a href="/tissues">human tissues</a>, <a href="/cell">cell lines</a>, and <a href="/drugs">small molecule</a> regulatory effects. The networks are represented in bipartite graphs linking Transcription Factors (TFs) to their target genes. 
+      <p class="lead">GRAND is a collection of gene regulatory networks of <a href="/tissues">human tissues</a>, <a href="/cancerlanding">cancer</a>, <a href="/cell">cell lines</a>, and <a href="/drugs">small molecule</a> regulatory effects. The networks are bipartite graphs linking Transcription Factors (TFs) to their target genes. 
       Also, you can test the <a href='/disease'>enrichment</a> of a list of TFs in a set of libraries or <a href="/analysis">find compounds</a> that reverse/exacerbate a gene or TF signature. To date, we analyzed {{ params.0.genesupin }} gene sets.</p>
     </div>
 </header>
@@ -68,32 +69,42 @@
 
       <div class="card-group">
       <!-- Drugs --> 
-      <div class="card " style="width: 18rem;">
+      <div class="card " style="width: 13rem;">
         <img class="card-img-top" src="{% static 'images/drugs.svg' %}" alt="Drugs">
         <a href="drugs/" class="btn btn-secondary">Small molecules</a>
         <div class="card-body">
-          <p class="card-text">259 Drug-induced gene regulatory networks across 4 regulation modalities computed from the <a href="https://clue.io">CLUE</a> gene expression collection.</p>
+          <p class="card-text">259 drug-induced gene regulatory networks across 4 regulation modalities computed from the <a href="https://clue.io">CLUE</a> gene expression collection.</p>
         </div>
       </div>
 
-      <!-- Cell lines -->
-      <div class="card " style="width: 18rem;">
-        <img class="card-img-top" src="{% static 'images/cells.svg' %}" alt="Cell lines">
-        <a href="cell/" class="btn btn-secondary">Cell lines</a>
+      <!-- Cancer -->
+      <div class="card " style="width: 13rem;">
+        <img class="card-img-top" src="{% static 'images/cancer.svg' %}" alt="Cancer">
+        <a href="cancerlanding/" class="btn btn-secondary">Cancer</a>
         <div class="card-body">
-          <p class="card-text">6 Cell line gene regulatory networks and many more in development.</p>
+          <p class="card-text">1638 patient-specific colon cancer regulatory networks using expression data from <a href="https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga">TCGA</a> and <a href="https://www.ncbi.nlm.nih.gov/geo/">GEO</a>.</p>
         </div>
       </div>
 
       <!-- Tissues -->
-      <div class="card " style="width: 18rem;">
+      <div class="card " style="width: 13rem;">
         <img class="card-img-top" src="{% static 'images/tissues.svg' %}" alt="Tissues">
         <a href="tissues/" class="btn btn-secondary">Tissues</a>
         <div class="card-body">
-          <p class="card-text">38 Human tissue-specific and 8279 single-sample gene regulatory network using <a href="https://gtexportal.org/">GTEx</a> gene expression collection.</p>
+          <p class="card-text">38 tissue-specific and 8279 single-sample gene regulatory network using <a href="https://gtexportal.org/">GTEx</a> gene expression collection.</p>
         </div>
       </div>
+
+      <!-- Cell lines -->
+      <div class="card " style="width: 13rem;">
+        <img class="card-img-top" src="{% static 'images/cells.svg' %}" alt="Cell lines">
+        <a href="cell/" class="btn btn-secondary">Cell lines</a>
+        <div class="card-body">
+          <p class="card-text">6 cell line gene regulatory networks and many more in development.</p>
+        </div>
       </div>
+
+      </div> <!-- card group-->
 </div><!-- content container -->
 
 

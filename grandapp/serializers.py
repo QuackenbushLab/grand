@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Drug, Disease, Cell, Tissue, Tissuelanding, Druglanding
+from .models import Drug, Disease, Cell, Tissue, Tissuelanding, Druglanding, Cancerlanding
 
 class DrugSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -26,6 +26,15 @@ class CellSerializer(serializers.ModelSerializer):
         class Meta:
                 model = Cell
                 fields = ('cellLine','cellLink','tool','netzoo','netzooLink','network','ppi','ppiLink','motif','expression','expLink','tfs','genes','refs')
+
+        def to_representation(self, instance):
+                data = super().to_representation(instance)
+                return data
+
+class CancerlandingSerializer(serializers.ModelSerializer):
+        class Meta:
+                model = Cancerlanding
+                fields = ('cancer','cancerLink','tool','netzoo','netzooLink','netzooRel','network','ppi','ppiLink','motif','expression','expLink','tfs','genes','refs','refs2','samples')
 
         def to_representation(self, instance):
                 data = super().to_representation(instance)

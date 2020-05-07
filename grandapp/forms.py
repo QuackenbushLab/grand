@@ -11,15 +11,15 @@ class ContactForm(forms.Form):
     )
 
 class GeneForm(forms.Form):
-    CHOICES = [('Targeted genes','Targeted genes'),('TF targeting','TF targeting')]
+    CHOICES = [('Gene targeting','Gene targeting'),('TF targeting','TF targeting')]
     contentup = forms.CharField(
         required=True,
-        widget=forms.Textarea,
+        widget=forms.Textarea(attrs={'rows':7, 'cols':20}),
         label="up"
     )
     contentdown = forms.CharField(
         required=True,
-        widget=forms.Textarea,
+        widget=forms.Textarea(attrs={'rows':7, 'cols':20}),
         label="down"
     )
     tfgene = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
@@ -28,6 +28,6 @@ class GeneForm(forms.Form):
 class DiseaseForm(forms.Form):
     content = forms.CharField(
         required=True,
-        widget=forms.Textarea(attrs={'rows':20, 'cols':20}),
+        widget=forms.Textarea(attrs={'rows':14, 'cols':20}),
         label="disease"
     )

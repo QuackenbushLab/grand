@@ -149,6 +149,57 @@ class Tissuesample(models.Model):
     size        = models.CharField(max_length=600)
     link        = models.CharField(max_length=600)
 
+class Tcgasample(models.Model):
+    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    sample     = models.CharField(max_length=200)
+    platform   = models.CharField(max_length=200)
+    gender     = models.CharField(max_length=200)
+    race       = models.CharField(max_length=200)
+    weight_kg_at_diagnosis  = models.CharField(max_length=200)
+    height_cm_at_diagnosis  = models.CharField(max_length=200)
+    age_at_initial_pathologic_diagnosis	 = models.CharField(max_length=200)
+    anatomic_neoplasm_subdivision	 = models.CharField(max_length=200)
+    uicc_stage	 = models.CharField(max_length=200)
+    time_to_event= models.CharField(max_length=200)
+    vital_status = models.CharField(max_length=200)
+    size = models.CharField(max_length=200)
+    link = models.CharField(max_length=200)
+
+class Geosample(models.Model):
+    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    sample     = models.CharField(max_length=200)
+    gender     = models.CharField(max_length=200)
+    race       = models.CharField(max_length=200)
+    geoid      = models.CharField(max_length=200)
+    age_at_initial_pathologic_diagnosis  = models.CharField(max_length=200)
+    tumor_location = models.CharField(max_length=200)
+    uicc_stage   = models.CharField(max_length=200)
+    time_to_event= models.CharField(max_length=200)
+    vital_status = models.CharField(max_length=200)
+    size = models.CharField(max_length=200)
+    link = models.CharField(max_length=200)
+
+class Cancerlanding(models.Model):
+    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    cancer    = models.CharField(max_length=200)
+    cancerLink= models.URLField(default='#')
+    tool      = models.CharField(max_length=200)
+    netzoo    = models.CharField(max_length=200)
+    netzooLink= models.URLField(max_length=200)
+    netzooRel = models.CharField(max_length=200)
+    network   = models.URLField()
+    ppi       = models.URLField()
+    ppiLink   = models.URLField()
+    motif     = models.URLField()
+    expression= models.URLField()
+    expLink   = models.URLField()
+    tfs       = models.IntegerField()
+    genes     = models.IntegerField()
+    refs      = models.URLField()
+    refs2     = models.URLField(default='#')
+    samples   = models.IntegerField(default=0)
+    cardref   = models.CharField(max_length=200)
+
 class TissueEx(models.Model):
     idd          = models.IntegerField(default=0)
     tissue       = models.CharField(max_length=600)
