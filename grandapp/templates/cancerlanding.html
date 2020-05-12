@@ -96,7 +96,7 @@
                  {% for tissue in cancerlanding %}
                     <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td><a href="{{ tissue.tissueLink }}">{{ tissue.tissue }}</a></td>
+                    <td><a href="{{ tissue.cancerLink }}">{{ tissue.cancer }}</a></td>
                     <td>{{ tissue.tool }}</td>
                     <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}">{{ tissue.netzooRel }}</a></td>
                     {% if tissue.tool == 'LIONESS' %}
