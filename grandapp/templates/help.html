@@ -82,6 +82,8 @@
     <br>          e.g.,  A:B            1.0                    2.0</pre>
     <br><code>c:</code> stands for <code>.csv</code> format. The bipartite network is saved as the weighted adjacency matrix W(TFs,Genes).
     <br><code>m:</code> stands for <code>.mat</code> format. The bipartite network is saved as the weighted adjacency matrix W(TFs,Genes) in MATLAB format.
+    <br><code>g:</code> stands for gene targeting. Gene targeting is the sum of weighted in-degrees in the network.
+    <br><code>tt:</code> stands for TF targeting. TF targeting is the sum of weighted out-degrees in the network.
     <h5>Edge weights:</h5>
     <code>o:</code> stands for original edge weights. These are the original edges weights computed by the <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0064832">PANDA</a> algorithm. They usually vary between -20 and 20.
     A large value means a high likelihood of the existence of an edge between two nodes, a low negative value means a small probability of interaction between two given nodes.

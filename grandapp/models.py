@@ -27,11 +27,6 @@ class Cell(models.Model):
     #age = models.IntegerField(null=True)
     #vaccinations = models.ManyToManyField('Vaccine', blank=True)
 
-class Drug(models.Model):
-    number    = models.IntegerField(default='0')
-    drug      = models.CharField(max_length=400)
-    nnets       = models.IntegerField(default='0')
-
 class Druglanding(models.Model):
     number    = models.IntegerField(default=0)
     drug      = models.CharField(max_length=200)
@@ -48,6 +43,8 @@ class Druglanding(models.Model):
     refs      = models.URLField()
     samples   = models.IntegerField(default=0)
     expLink   = models.URLField()
+    nnets     = models.IntegerField(default=0)
+    druglink  = models.CharField(max_length=200)
 
 class DrugResultUp(models.Model):
     idd       = models.IntegerField(default=0)
@@ -200,6 +197,46 @@ class Cancerlanding(models.Model):
     samples   = models.IntegerField(default=0)
     cardref   = models.CharField(max_length=200)
 
+class Genelanding(models.Model):
+    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    pr_gene_id    = models.CharField(max_length=200)
+    pr_gene_symbol= models.CharField(max_length=200)
+    pr_gene_title = models.CharField(max_length=200)
+    pr_is_lm      = models.CharField(max_length=200)
+    pr_is_bing    = models.CharField(max_length=200)
+
+class Drugsample(models.Model):
+    sig_id      = models.CharField(max_length=200)
+    pert_iname  = models.CharField(max_length=200)
+    cell_id     = models.CharField(max_length=200)
+    pert_idose  = models.CharField(max_length=200)
+    pert_itime  = models.CharField(max_length=200)
+    distil_nsample  = models.CharField(max_length=200)
+    cell_type       = models.CharField(max_length=200)
+    modification    = models.CharField(max_length=200)
+    sample_type     = models.CharField(max_length=200)
+    primary_site    = models.CharField(max_length=200)
+    subtype         = models.CharField(max_length=200)
+    original_growth_pattern     = models.CharField(max_length=200)
+    donor_age       = models.CharField(max_length=200)
+    donor_sex       = models.CharField(max_length=200)
+    donor_ethnicity = models.CharField(max_length=200)
+    network         = models.CharField(max_length=200)
+    size            = models.CharField(max_length=200)
+
+class Drugdesc(models.Model):
+    expected_mass  = models.CharField(max_length=200)
+    smiles         = models.CharField(max_length=200)
+    InChIKey       = models.CharField(max_length=200)
+    pubchem_cid    = models.CharField(max_length=200)
+    pert_iname     = models.CharField(max_length=200)
+    clinical_phase = models.CharField(max_length=200)
+    moa            = models.CharField(max_length=200)
+    target         = models.CharField(max_length=200)
+    disease_area   = models.CharField(max_length=200)
+    indication     = models.CharField(max_length=200)
+    broad_id       = models.CharField(max_length=200)
+ 
 class TissueEx(models.Model):
     idd          = models.IntegerField(default=0)
     tissue       = models.CharField(max_length=600)

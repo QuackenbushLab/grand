@@ -5,38 +5,18 @@ import os
 
 #Read network dimension
 os.chdir('/Users/mab8354/granddb/')
-samplesNet = pd.read_csv('drugSamples.csv')
 
-#1. drugs page
-nDrugs=0
-numbersVec    = []
-drugVec       = []
-df    = pd.DataFrame(columns=['number','drug','nnets'])
-batcmd = "aws s3 ls s3://granddb/drugs/drugNetwork/chipSeq/"
-res = subprocess.check_output(batcmd, shell=True)
-for line in res.splitlines():
-    drug   = str(line.split()[-1]).split('.')[0][2:]
-    if drug=='0\'':
-        print(drug)
-        continue
-    nDrugs = nDrugs + 1
-    numbersVec.append(nDrugs)
-    drugVec.append('<a href = "' + drug + '-drug' + '" >' + drug + '</a>')
+#0. read drug list
+dfd=pd.read_csv('drugs.csv')
+drugs=dfd.drug.values
+cid=dfd.cid.values
+samples=dfd.samples.values
 
-nnetsVec      = [4] * nDrugs
-df['number'] = numbersVec
-df['drug']   = drugVec
-df['nnets']  = nnetsVec
-os.chdir('/Users/mab8354/granddb')
-df.to_csv('drugs.csv', index=False)
-
-#2. landing page
+#1. landing page
 # Initialize dataframe
-df    = pd.DataFrame(columns=['number','drug','tool','netzoo','netzooRel','network','ppi','motif','expression','tfs','genes','refs','ppiLink','samples','expLink'])
+df    = pd.DataFrame(columns=['number','drug','tool','netzoo','netzooRel','network','ppi','motif','expression','tfs','genes','refs',
+                              'ppiLink','samples','expLink','nnets','druglink'])
 # add samples, type of optPANDA netowrk or parameters
-
-# Read from bucket
-res = subprocess.check_output(batcmd, shell=True)
 
 #Initialize variables
 nDrugs = 0
@@ -55,26 +35,24 @@ expressionVecApi = []
 ppilinkVec       = []
 refsVecApi       = []
 toolVec,expLink  = [],[]
-samplesVec       = []
+samplesVec,druglink = [],[]
 missing=0
-netTypes  =['PANDA','optPANDA (ChIP-seq)','optPANDA (TFKD)','optPANDA (FunBind)']
-netFolder =['PANDA','chipSeq','tfKd','funBind']
-funcStr = lambda s: s[:1].lower() + s[1:] if s else ''
-# Loop through files
-for line in res.splitlines():
-    print(line)
-    drug   = str(line.split()[-1]).split('.')[0][2:]
+netTypes  =['PANDA'] #,'optPANDA (ChIP-seq)','optPANDA (TFKD)','optPANDA (FunBind)']
+netFolder =['PANDA'] #,'chipSeq','tfKd','funBind']
+
+# Loop through drugs
+for drug in drugs:
+    print(drug)
     if drug=='0\'':
         print(drug)
         continue
     for netl in range(len(netTypes)):
-        nDrugs = nDrugs + 1
         networkVec.append('https://granddb.s3.amazonaws.com/drugs/drugNetwork/' + netFolder[netl] + '/' + drug + '.csv')
-        expressionVec.append('https://granddb.s3.amazonaws.com/drugs/drugExpression/' + funcStr(drug) + '.txt')
+        expressionVec.append('https://granddb.s3.amazonaws.com/drugs/drugExpression/' + '' + '.txt')
         numbersVec.append(nDrugs)
         drugVec.append(drug)
-        if samplesNet['cid'].loc[samplesNet['Var1']==funcStr(drug)].values[0] not in [0,-666]:
-            ref2add=str(samplesNet['cid'].loc[samplesNet['Var1']==funcStr(drug)].values[0])
+        if cid[nDrugs] not in [0,-666]:
+            ref2add=cid[nDrugs]
         else:
             ref2add = '#'
         refsVec.append('https://pubchem.ncbi.nlm.nih.gov/compound/' + ref2add)
@@ -94,19 +72,21 @@ for line in res.splitlines():
             ppiVec.append('https://granddb.s3.amazonaws.com/optPANDA/ppi/ppi_complete_bind.txt')
         elif netTypes[netl] == 'optPANDA (TFKD)':
             ppiVec.append('https://granddb.s3.amazonaws.com/optPANDA/ppi/2ppi_complete_bind.txt')
-        genesVec.append(12329)
+        genesVec.append(12328)
         toolVec.append(netTypes[netl])
         drugVecApi.append(drug)
-        networkVecApi.append('https: // granddb.s3.amazonaws.com/drugs/drugNetwork/' + netFolder[netl] + '/' + drug + '.csv')
-        samplesVec.append(samplesNet['nSamples'].loc[samplesNet['Var1']==funcStr(drug)].values[0])
+        druglink.append('<a href="http://127.0.0.1:8000/drugs/' + drug +'_drug">'+drug+'</a>')
+        networkVecApi.append('https: /granddb.s3.amazonaws.com/drugs/drugNetwork/' + netFolder[netl] + '/' + drug + '.csv')
+        samplesVec.append(samples[nDrugs])
         expressionVecApi.append('s3://granddb/drugs/drugExpression/' + drug + '.txt')
+        nDrugs = nDrugs + 1
 
 # build vectors
 netzooLinkVec = np.repeat('netZooM', nDrugs)
 refsVecApi    = np.repeat('#', nDrugs)
 
 # Populate df
-df['number']    = numbersVec
+df['number']    = np.array(numbersVec)+1
 df['drug']      = drugVec
 df['tool']      = toolVec
 df['netzoo']    = netzooLinkVec
@@ -119,8 +99,10 @@ df['tfs']       = tfsVec
 df['genes']     = genesVec
 df['refs']      = refsVec
 df['samples']   = samplesVec
-df['netzooRel'] = ['0.4.2']*nDrugs
+df['netzooRel'] = ['0.4.3']*nDrugs
 df['expLink']   = ['https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742']*nDrugs
+df['nnets']     = np.ones((nDrugs), dtype = int)
+df['druglink']  = druglink
 
 # save dataframe
 os.chdir('/Users/mab8354/granddb')

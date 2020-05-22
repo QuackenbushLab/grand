@@ -1,18 +1,9 @@
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
-from .serializers import DrugSerializer
-from .serializers import CellSerializer, TissuelandingSerializer, DruglandingSerializer, CancerlandingSerializer
-from .models import Drug, DrugResultUp, DrugResultDown, Disease, Gwas, TissueTar, TissueEx, Cell, Druglanding, Tissuelanding, Cancerlanding
+from .serializers import CellSerializer, TissuelandingSerializer, DruglandingSerializer, CancerlandingSerializer, GenelandingSerializer
+from .models import DrugResultUp, DrugResultDown, Disease, Gwas, TissueTar, TissueEx, Cell, Druglanding, Tissuelanding, Cancerlanding
+from .models import Genelanding
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework_datatables.filters import DatatablesFilterBackend
-
-class DrugResultPagination(LimitOffsetPagination):
-	default_limit = 20000
-	max_limit = 20000
-
-class DrugList(ListAPIView):
-	queryset = Drug.objects.all()
-	serializer_class = DrugSerializer
-	#pagination_class = DrugResultPagination
 
 class DruglandingList(ListAPIView):
         queryset         = Druglanding.objects.all()
@@ -38,3 +29,7 @@ class CancerlandingList(ListAPIView):
         serializer_class = CancerlandingSerializer
         #filter_backends  = (DatatablesFilterBackend,DjangoFilterBackend,)
         #filter_fields    = ('query',)
+
+class GenelandingList(ListAPIView):
+        queryset         = Genelanding.objects.all()
+        serializer_class = GenelandingSerializer

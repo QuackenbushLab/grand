@@ -56,7 +56,7 @@
   </div>
 </nav>
 
-    <div class="container col-9 bm-5 bp-5 mt-4">
+    <div class="container col-10 bm-4 bp-4 mt-4">
         <table id="cellstable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
@@ -83,6 +83,13 @@
                     <th scope="col">TFs</th>
                     <th scope="col">Genes</th>
                     <th scope="col">Samples</th>
+                    <th scope="col">Precision<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      title="Computation precision"
+                      data-content="S=Single, D=Double">
+                    </i></th>
                     <th scope="col">Reference</th>
                   </tr>
                 </thead>
@@ -104,6 +111,7 @@
                     <td>{{ cell.tfs }}</td>
                     <td>{{ cell.genes }}</td>
                     <td>{{ cell.samples }}</td>
+                    <td><span class="badge badge-pill badge-primary">D</span></td>
                     <td><a href="{{ cell.refs }}"><i class="fas fa-book"></i></a></td>
                     </tr>
 		 {% endfor %}

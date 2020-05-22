@@ -55,14 +55,14 @@
   </div>
 </nav>
 
-    <div class="container col-10 pb-2 mt-4">
-        <div class="card">
+    <div class="container col-10 mt-4">
+        <div class="card ">
   <h5 class="card-header">Networks</h5>
   <div class="card-body">
     <h5 class="card-title">Tool description</h5>
     <p class="card-text"><a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. <a href="https://www.sciencedirect.com/science/article/pii/S2589004219300872">LIONESS</a> reconstructs patient-specific <a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> networks for each gene expression sample. 
-			    To download patient-specific networks, you can check <a href='#cardtissuetcga'>the phenotypic information of the TCGA dataset</a> or <a href='#cardtissuegeo'>the phenotypic information of the GEO dataset</a> to select the networks by
-                            clinical variables or to download all the samples in a single file. 
+			    To download patient-specific networks, you can check <a href='#cardtissuetcga'>the phenotypic information of the TCGA dataset</a> or <a href='#cardtissuegeo'>the phenotypic information of the GEO dataset</a>. You can also select the networks by
+                            clinical variables or download all the samples in a single file.</p>
         <table id="tissuestable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
@@ -89,6 +89,13 @@
                     <th scope="col">TFs</th>
                     <th scope="col">Genes</th>
                     <th scope="col">Samples</th>
+                    <th scope="col">Precision<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      title="Computation precision"
+                      data-content="S=Single, D=Double">
+                    </i></th>
                     <th scope="col">Reference</th>
                   </tr>
                 </thead>
@@ -97,7 +104,11 @@
                     <tr>
                     <th scope="row">{{ forloop.counter }}</th>
                     <td><a href="{{ tissue.cancerLink }}">{{ tissue.cancer }}</a></td>
-                    <td>{{ tissue.tool }}</td>
+                    {% if tissue.tool == 'LIONESS' %}
+                        <td>PANDA-{{ tissue.tool }}</td>
+                    {% else %}
+                        <td>{{ tissue.tool }}</td>
+                    {% endif %}
                     <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}">{{ tissue.netzooRel }}</a></td>
                     {% if tissue.tool == 'LIONESS' %}
                         <td><a class="btn btn-outline-primary" role="button"  href="{{ tissue.cardref }}" role="button">co</a></td>
@@ -114,6 +125,7 @@
                     {% else %}
                          <td>{{ tissue.samples }}</td>
                     {% endif %}
+                    <td><span class="badge badge-pill badge-primary">D</span></td>
                     <td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a></td>
                     </tr>
                  {% endfor %}
@@ -125,7 +137,7 @@
 
 
 <div class="container col-10 mt-4">
-        <div class="card" id="cardtissuetcga">
+        <div class="card " id="cardtissuetcga">
   <h5 class="card-header">Phenotypic information TCGA</h5>
   <div class="card-body">
     <h5 class="card-title">Variable description</h5>
@@ -135,7 +147,12 @@
         <table id="tissuestabletcga" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
-                    <th scope="col">Sample</th>
+                    <th scope="col">Sample<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Sample and platform ID">
+                    </i></th>
                     <th scope="col">Gender</th>
                     <th scope="col">Race</th>
                     <th scope="col">Weight <br><i class="far fa-question-circle"
@@ -187,7 +204,17 @@
                 <tbody>
                  {% for tissue in tcgasample %}
                     <tr>
-                    <td>{{ tissue.sample }}</td>
+                    {% if tissue.sample == 'All' %}
+                        <td>{{ tissue.sample }}</td>
+                    {% else %}
+                        <td>{{ tissue.sample }} <i class="fas fa-info-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      title="Platform ID"
+                      data-content="{{ tissue.platform }}">
+                    </i></td>
+                    {% endif %}
                     <td>{{ tissue.gender }}</td>
                     <td>{{ tissue.race }}</td>
                     <td>{{ tissue.weight_kg_at_diagnosis }}</td>
@@ -211,8 +238,8 @@
 </div>
 
 
-<div class="container col-10 pb-5 mb-5 mt-4">
-        <div class="card" id="cardtissuegeo">
+<div class="container col-10 pb-4 mb-4 mt-4">
+        <div class="card " id="cardtissuegeo">
   <h5 class="card-header">Phenotypic information GEO</h5>
   <div class="card-body">
     <h5 class="card-title">Variable description</h5>

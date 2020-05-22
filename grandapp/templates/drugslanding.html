@@ -57,8 +57,90 @@
   </div>
 </nav>
 
+<div class="container-fluid col-10 mt-4">
+<div class="card-deck">
+<div class="card col-md-3 border-light">
+  <div class="card-header bg-transparent border-light">
+  <h6 style="color:white;">{{ drugdesc.pert_iname }} </h1>
+   </div>
+{% with 'images/'|add:drugdesc.image_name|add:'.svg' as image_static %}
+  <img class=card-img src="{% static image_static %}" >
+{% endwith %}
 
-    <div class="container col-9 pb-5 mb-5 mt-4">
+</div>
+
+<div class="card border-secondary">
+  <div class="card-header">
+  {{ drugdesc.pert_iname }} <i class="fas fa-info-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      title="Reference"
+                      data-content="Drug Repurposing Hub (https://clue.io/repurposing)">
+                    </i>
+  </div>
+
+<ul class="list-group list-group-flush">
+
+<li class="list-group-item">
+<div class="row">
+<div class="col-md-3"><p class="font-weight-bold">Clinical phase</p></div>
+<div class="col-md-3">{{ drugdesc.clinical_phase}}</div>
+<div class="col-md-3"><p class="font-weight-bold">SMILES</p></div>
+<div class="col-md-3"><small>{{ drugdesc.smiles}}</small></div>
+</div>
+</li>
+
+<li class="list-group-item">
+<div class="row">
+<div class="col-md-3"><p class="font-weight-bold">Mechanism of action</p></div>
+<div class="col-md-3">{{ drugdesc.moa }}</div>
+<div class="col-md-3"><p class="font-weight-bold">InChIKey</p></div>
+<div class="col-md-3"><small>{{ drugdesc.InChIKey }}</small></div>
+</div>
+</li>
+
+<li class="list-group-item">
+<div class="row">
+<div class="col-md-3"><p class="font-weight-bold">Target(s)</p></div>
+<div class="col-md-3">{{ drugdesc.target }}</div>
+<div class="col-md-3"><p class="font-weight-bold">Mass</p></div>
+<div class="col-md-3">{{ drugdesc.expected_mass }} g/mol</div>
+</div>
+</li>
+
+<li class="list-group-item">
+<div class="card-group row">
+<div class="col-md-3"><p class="font-weight-bold">Disease area</p></div>
+<div class="col-md-3">{{ drugdesc.disease_area }}</div>
+<div class="col-md-3"><p class="font-weight-bold">Pubchem ID</p></div>
+<div class="col-md-3"><a href="https://pubchem.ncbi.nlm.nih.gov/compound/{{ drugdesc.pubchem_cid }}">{{ drugdesc.pubchem_cid }}</a></div>
+</div>
+</li>
+
+<li class="list-group-item">
+<div class=" row">
+<div class="col-md-3"><p class="font-weight-bold">Indication</p></div>
+<div class="col-md-3">{{ drugdesc.indication }}</div>
+<div class="col-md-3"><p class="font-weight-bold">Broad ID</p></div>
+<div class="col-md-3">{{ drugdesc.broad_id }}</div>
+</div>
+</li>
+
+</ul>
+</div>
+
+</div>
+</div>
+
+<div class="container col-10 mt-4">
+  <div class="card">
+  <h5 class="card-header">Networks</h5>
+  <div class="card-body">
+    <h5 class="card-title">Tool description</h5>
+    <p class="card-text"><a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. <a href="https://www.sciencedirect.com/science/article/pii/S2589004219300872">LIONESS</a> reconstructs patient-specific <a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> networks for each gene expression sample. 
+			    To download sample-specific TF and gene targeting profiles i.e., the TF weighted outdegree and gene weighted indgree in the regulatory network, you can check <a href='#carddrug'>the phenotypic information</a> section. You can also select the networks by
+                            variables such as cell line, drug dose, and sampling time point or download all the samples in a single file.</p>
         <table id="drugstable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
@@ -66,7 +148,7 @@
                     <th scope="col">Drug</th>
                     <th scope="col">Tool</th>
                     <th scope="col">netZoo release</th>
-                    <th scope="col">Network <br><i class="far fa-question-circle"
+                    <th scope="col">Network<br><i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
@@ -85,6 +167,13 @@
                     <th scope="col">TFs</th>
                     <th scope="col">Genes</th>
                     <th scope="col">Samples</th>
+                    <th scope="col">Precision<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      title="Computation precision"
+                      data-content="S=Single, D=Double">
+                    </i></th>
                     <th scope="col">Reference</th>
                   </tr>
                 </thead>
@@ -93,20 +182,148 @@
 		    <tr>
 		    <th scope="row">{{ drug.number }}</th>
 		    <td><a href = "{{ drug.refs }}" >{{ drug.drug }}</a></td>
-		    <td>{{ drug.tool }}</td>
+		    <td>{{ drug.tool }}-LIONESS</td>
 		    <td>{{ drug.netzoo }} <a href="https://github.com/netZoo/netZooM/releases">{{ drug.netzooRel }}</a></td>
-                    <td><a href="{{ drug.network }}" class="btn btn-outline-primary" role="button">co</a></td>
+                    <td><a href="#carddrug" class="btn btn-outline-primary" role="button">go/tto</a></td>
 	            <td><a href="{{ drug.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ drug.ppiLink }}"><i class="fas fa-link"></i></a></td>
                     <td><a href="{{ drug.motif }}"><i class="fas fa-download"></i></a></td>
                     <td><a href="{{ drug.expression }}"><i class="fas fa-download"></i></a> <a href="{{ drug.expLink}}"><i class="fas fa-link"></i></a></td>
                     <td>{{ drug.tfs }}</td>
-                    <td>{{ drug.genes }}</td>
-                    <td>{{ drug.samples }} </td>
+                    <td><a href="/genes">{{ drug.genes }}</a></td>
+                    <td><a href="#carddrug">{{ drug.samples }}</a> </td>
+                    <td><span class="badge badge-pill badge-success">S</span></td>
 		    <td><a href="{{ drug.refs }}"><i class="fas fa-book"></i></a></td>
                     </tr>
 		 {% endfor %}
                 </tbody>
               </table>
+</div>
+</div>
+</div>
+
+
+
+
+<div class="container col-10 pb-4 mb-4 mt-4">
+        <div class="card" id="carddrug">
+  <h5 class="card-header">Phenotypic information</h5>
+  <div class="card-body">
+    <h5 class="card-title">Signature description</h5>
+    <p class="card-text">You can either download the gene targeting (sum of weighted in-degree in the network) or TF targeting (sum of weighted out-degree in the network). You can download the targeting profiles of all the samples to get a matrix of size the number of samples by the number of genes/TFs. Otherwise, you can specify the sample targeting profile to download and you will get a TF/gene vector
+            		    named after the <a href="https://clue.io/">CLUE</a> sample reference.</p>
+        <table id="drugstable2" class="table table-hover" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th scope="col">Cell<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="cell and signature id">
+                    </i></th>
+                    <th scope="col">Dose<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="pert idose">
+                    </i></th>
+                    <th scope="col">Time<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="pert itime">
+                    </i></th>
+                    <th scope="col">Rep.<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="replicates (distil nsample)">
+                    </i></th>
+                    <th scope="col">Cell<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="cell type">
+                    </i></th>
+                    <th scope="col">Mod.<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Modification">
+                    </i></th>
+                    <th scope="col">Type<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="sample type">
+                    </i></th>
+                    <th scope="col">Site<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Primary site">
+                    </i></th>
+                    <th scope="col">Subtype</th>
+                    <th scope="col">Growth<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Original growth pattern">
+                    </i></th>
+                    <th scope="col">Age<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="donor age">
+                    </i></th>
+                    <th scope="col">Sex<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="donor sex">
+                    </i></th>
+                    <th scope="col">Ethnicity<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="donor ethnicity">
+                    </i></th>
+                    <th>Network<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Please refer to the Help page Network section for the network download formats.">
+                    </i></th>
+                    <th>Size</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 {% for drug in drugsample %}
+                    <tr>
+                    <td>{{ drug.cell_id }}<br> <i class="fas fa-info-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      title="Signature ID"
+                      data-content="{{ drug.sig_id }}">
+                    </i></td>
+                    <td>{{ drug.pert_idose }}</td>
+                    <td>{{ drug.pert_itime }}</td>
+                    <td>{{ drug.distil_nsample }}</td>
+                    <td>{{ drug.cell_type }}</td>
+                    <td>{{ drug.modification }}</td>
+                    <td>{{ drug.sample_type }}</td>
+                    <td>{{ drug.primary_site }}</td>
+                    <td>{{ drug.subtype }}</td>
+                    <td>{{ drug.original_growth_pattern }}</td>
+                    <td>{{ drug.donor_age }}</td>
+                    <td>{{ drug.donor_sex }}</td>
+                    <td>{{ drug.donor_ethnicity }}</td>
+                    <td><a href="" class="btn btn-outline-primary" role="button">go</a><br> <a href="" class="btn btn-outline-primary" role="button">tto</a></td>
+                 {% endfor %}
+                </tbody>
+              </table>
+</div>
+</div>
 </div>
 
 
@@ -167,6 +384,13 @@ $(function () {
 $(document).ready(function() {
     //datatables
     $('#drugstable').DataTable({
+   
+      "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+    });
+
+    $('#drugstable2').DataTable({
       "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
              "<'row'<'col-sm-12'tr>>" +
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",

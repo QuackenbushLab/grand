@@ -58,15 +58,15 @@
   </div>
 </nav>
 
-    <div class="container col-10 pb-2 mt-4">
-        <div class="card">
-  <h5 class="card-header">Networks</h5>
-  <div class="card-body">
-    <h5 class="card-title">Tool description</h5>
-    <p class="card-text"><a href="https://pubmed.ncbi.nlm.nih.gov/23741402/">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. 
-			   {% if name == 'yes' %} <a href="https://www.sciencedirect.com/science/article/pii/S2589004219300872">LIONESS</a> reconstructs patient-specific <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3669401/">PANDA</a> networks for each gene expression sample. To download sample-specific networks, you can check <a href='#cardtissue'>the phenotypic information</a> to select the networks by
-                            clinical variables or to download all the samples in a single file. {% else %} Check <a href='#cardtissue'>the phenotypic information</a> for the clinical variables of the samples that were used to reconstruct the network. {% endif %}</p>
-        <table id="tissuestable" class="table table-hover" style="width: 100%">
+<div class="container col-10 mt-4">
+    <div class="card">
+        <h5 class="card-header">Networks</h5>
+            <div class="card-body">
+            <h5 class="card-title">Tool description</h5>
+            <p class="card-text"><a href="https://pubmed.ncbi.nlm.nih.gov/23741402/">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. 
+			   {% if name == 'yes' %} <a href="https://www.sciencedirect.com/science/article/pii/S2589004219300872">LIONESS</a> reconstructs patient-specific <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3669401/">PANDA</a> networks for each gene expression sample. To download sample-specific networks, you can check <a href='#cardtissue'>the phenotypic information</a> and select the networks by
+                            clinical variables or download all the samples in a single file. {% else %} Check <a href='#cardtissue'>the phenotypic information</a> for the clinical variables of the samples that were used to reconstruct the network. {% endif %}</p>
+             <table id="tissuestable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -92,6 +92,13 @@
                     <th scope="col">TFs</th>
                     <th scope="col">Genes</th>
                     <th scope="col">Samples</th>
+                    <th scope="col">Precision<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      title="Computation precision"
+                      data-content="S=Single, D=Double">
+                    </i></th>
                     <th scope="col">Reference</th>
                   </tr>
                 </thead>
@@ -101,7 +108,11 @@
                     <tr>
                     <th scope="row">{{ forloop.counter }}</th>
                     <td><a href="{{ tissue.tissueLink }}">{{ tissue.tissue }}</a></td>
-                    <td>{{ tissue.tool }}</td>
+                    {% if tissue.tool == 'LIONESS' %}
+                        <td>PANDA-{{ tissue.tool }}</td>
+                    {% else %}
+                        <td>{{ tissue.tool }}</td>
+                    {% endif %}
                     <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}">{{ tissue.netzooRel }}</a></td>
                     {% if tissue.tool == 'LIONESS' %}
                     <td><a class="btn btn-outline-primary" role="button"  href="#cardtissue" role="button">co</a></td>
@@ -114,6 +125,7 @@
                     <td>{{ tissue.tfs }}</td>
                     <td>{{ tissue.genes }}</td>
                     <td><a href="#cardtissue">{{ tissue.samples }}</a></td>
+                    <td><span class="badge badge-pill badge-primary">D</span></td>
                     {% if tissue.tool == 'LIONESS' %}
                         <td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a></td>
                     {% else %}
@@ -124,19 +136,19 @@
                  {% endfor %}
                 </tbody>
               </table>
+        </div>
     </div>
 </div>
-</div>
 
-<div class="container col-10 pb-5 mb-5 mt-4">
-        <div class="card" id="cardtissue">
-  <h5 class="card-header">Phenotypic information</h5>
-  <div class="card-body">
-    <h5 class="card-title">Variable description</h5>
-    <p class="card-text">{% if name == 'yes' %}You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges
+<div class="container col-10 pb-4 mt-4">
+    <div class="card" id="cardtissue">
+        <h5 class="card-header">Phenotypic information</h5>
+            <div class="card-body">
+            <h5 class="card-title">Variable description</h5>
+            <p class="card-text">{% if name == 'yes' %}You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges
 			    is 644 * 30243 (number of TFs * number of genes) (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a TF-by-gene
             		    matrix named after  the GTEx sample reference {% else %} This is a description of the primary clinical variables of the gene expression samples that were used to generate the gene regulatory network. {% endif %}.</p>
-        <table id="tissuestable2" class="table table-hover" style="width: 100%">
+            <table id="tissuestable2" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
                     <th scope="col">Sample</th>
@@ -226,9 +238,12 @@
                  {% endfor %}
                 </tbody>
               </table>
+        </div>
+    </div>
 </div>
+
 </div>
-</div>
+
 <!-- Footer -->
 <footer class="page-footer font-small lighten-3 pt-4">
   <div class="container text-center text-md-left">

@@ -49,4 +49,6 @@ class Command(BaseCommand):
             drugslanding.ppiLink      = row['ppiLink']
             drugslanding.samples      = row['samples']
             drugslanding.expLink      = row['expLink']
+            drugslanding.nnets        = row['nnets']
+            drugslanding.druglink     = row['druglink']
             drugslanding.save()

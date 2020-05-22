@@ -3,8 +3,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.http import Http404
 from django.core import serializers
 from .models import Cell, Disease
-from .models import Drug, Druglanding, DrugResultUp, DrugResultDown, Params, Tcgasample, Geosample
-from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding, Tissuesample, Cancerlanding
+from .models import Druglanding, DrugResultUp, DrugResultDown, Params, Tcgasample, Geosample, Genelanding
+from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding, Tissuesample, Cancerlanding, Drugsample
+from .models import Drugdesc
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
 from .forms import ContactForm, GeneForm, DiseaseForm
 from django.conf import settings
@@ -44,20 +45,27 @@ def cell(request):
     cells = Cell.objects.all()
     return render(request, 'cell.html', {'cells': cells})
 
-#def about(request):
-#    form = ContactForm()
-#    return render(request, 'about.html', {'contactform':form})
+def genes(request):
+    geneslanding = Genelanding.objects.all()
+    return render(request, 'genes.html',{'geneslanding':geneslanding})
 
 def drug(request):
-    drugs = Drug.objects.all()
-    #drugs=drugs.filter(drug="<a href = \"#\" >zopiclone</a>")
-    return render(request, 'drugs.html', {'drugs': drugs})
+    return render(request, 'drugs.html')
 
 def druglanding(request):
     drugslanding = Druglanding.objects.all()
+    drugsample   = Drugsample.objects.all()
     query=request.path_info[7:-6]
+    drugdesc     = Drugdesc.objects.get(pert_iname=query)
+    if "/" in query:
+        query2=query.replace("/", "")
+        drugdesc.image_name=query2
+    else:
+        drugdesc.image_name=query
+    drugdesc.save()
     drugslanding = drugslanding.filter(drug=query)
-    return render(request, 'drugslanding.html', {'drugslanding': drugslanding})
+    drugsample   = drugsample.filter(pert_iname=query)
+    return render(request, 'drugslanding.html', {'drugslanding': drugslanding,'drugsample':drugsample,'drugdesc':drugdesc})
 
 def disease(request):
     if request.method == 'GET':

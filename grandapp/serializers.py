@@ -1,17 +1,6 @@
 from rest_framework import serializers
 
-from .models import Drug, Disease, Cell, Tissue, Tissuelanding, Druglanding, Cancerlanding
-
-class DrugSerializer(serializers.ModelSerializer):
-	class Meta:
-		model  = Drug
-		fields = ('number','drug','nnets')
-
-	def to_representation(self, instance):
-		data = super().to_representation(instance)
-		#data['is_on_sale'] = instance.is_on_sale()
-		#data['current_price'] = instance.current_price()
-		return data
+from .models import Disease, Cell, Tissue, Tissuelanding, Druglanding, Cancerlanding, Genelanding
 
 class TissuelandingSerializer(serializers.ModelSerializer):
         class Meta:
@@ -31,6 +20,15 @@ class CellSerializer(serializers.ModelSerializer):
                 data = super().to_representation(instance)
                 return data
 
+class GenelandingSerializer(serializers.ModelSerializer):
+        class Meta:
+                model = Genelanding
+                fields = ('pr_gene_id','pr_gene_symbol','pr_gene_title','pr_is_lm','pr_is_bing')
+
+        def to_representation(self, instance):
+                data = super().to_representation(instance)
+                return data
+
 class CancerlandingSerializer(serializers.ModelSerializer):
         class Meta:
                 model = Cancerlanding
@@ -43,7 +41,7 @@ class CancerlandingSerializer(serializers.ModelSerializer):
 class DruglandingSerializer(serializers.ModelSerializer):
         class Meta:
                 model  = Druglanding
-                fields = ('number','drug','tool','netzoo','netzooRel','network','ppi','motif','expression','tfs','genes','ppiLink','refs','samples','expLink')
+                fields = ('number','drug','tool','netzoo','netzooRel','network','ppi','motif','expression','tfs','genes','ppiLink','refs','samples','expLink','nnets','druglink')
 
         def to_representation(self, instance):
                 data = super().to_representation(instance)

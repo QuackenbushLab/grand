@@ -3,7 +3,7 @@ from datetime import datetime
 
 from django.core.management import BaseCommand
 
-from grandapp.models import Drug
+from grandapp.models import Genelanding
 from pytz import UTC
 
 
@@ -31,10 +31,12 @@ class Command(BaseCommand):
     help = "Loads data from pet_data.csv into our Pet model"
 
     def handle(self, *args, **options):
-        print("Loading drug data!")
-        for row in DictReader(open('./drugs.csv')):
-            drug = Drug()
-            drug.number       = row['number']
-            drug.drug         = row['drug']
-            drug.nnets         = row['nnets']
-            drug.save()
+        print("Loading gene data!")
+        for row in DictReader(open('./GSE92742_Broad_LINCS_gene_info.csv')):
+            genelanding = Genelanding()
+            genelanding.pr_gene_id     = row['pr_gene_id']
+            genelanding.pr_gene_symbol = row['pr_gene_symbol']
+            genelanding.pr_gene_title  = row['pr_gene_title']
+            genelanding.pr_is_lm       = row['pr_is_lm']
+            genelanding.pr_is_bing     = row['pr_is_bing']
+            genelanding.save()
