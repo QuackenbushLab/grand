@@ -48,7 +48,7 @@ for drug in drugs:
         continue
     for netl in range(len(netTypes)):
         networkVec.append('https://granddb.s3.amazonaws.com/drugs/drugNetwork/' + netFolder[netl] + '/' + drug + '.csv')
-        expressionVec.append('https://granddb.s3.amazonaws.com/drugs/drugExpression/' + '' + '.txt')
+        expressionVec.append('https://granddb.s3.amazonaws.com/drugs/drugExpression/' + 'Drugs_Gene_Expression_AllSamples.csv')
         numbersVec.append(nDrugs)
         drugVec.append(drug)
         if cid[nDrugs] not in [0,-666]:

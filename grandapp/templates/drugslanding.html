@@ -293,13 +293,18 @@
                       data-placement="top"
                       data-content="Please refer to the Help page Network section for the network download formats.">
                     </i></th>
-                    <th>Size</th>
+                    <th>Infl.<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="Influence of observation on network reconstruction. 0=low, 1=high">
+                    </i></th>
                   </tr>
                 </thead>
                 <tbody>
                  {% for drug in drugsample %}
                     <tr>
-                    <td>{{ drug.cell_id }}<br> <i class="fas fa-info-circle"
+                    <td>{{ drug.cell_id }}<br><i class="fas fa-info-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
@@ -309,11 +314,11 @@
                     <td>{{ drug.pert_idose }}</td>
                     <td>{{ drug.pert_itime }}</td>
                     <td>{{ drug.distil_nsample }}</td>
-                    <td>{{ drug.cell_type }}</td>
-                    <td>{{ drug.modification }}</td>
+                    <td><small>{{ drug.cell_type }}</small></td>
+                    <td><small>{{ drug.modification }}</small></td>
                     <td>{{ drug.sample_type }}</td>
                     <td>{{ drug.primary_site }}</td>
-                    <td>{{ drug.subtype }}</td>
+                    <td><small>{{ drug.subtype }}</small></td>
                     <td>{{ drug.original_growth_pattern }}</td>
                     <td>{{ drug.donor_age }}</td>
                     <td>{{ drug.donor_sex }}</td>

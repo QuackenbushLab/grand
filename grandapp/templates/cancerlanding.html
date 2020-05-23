@@ -70,14 +70,14 @@
                     <th scope="col">Tissue</th>
                     <th scope="col">Tool</th>
                     <th scope="col">netZoo release</th>
-                    <th scope="col">Network <br><i class="far fa-question-circle"
+                    <th scope="col">Network<br><i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
                       title="Network format"
                       data-content="Please refer to the Help page Network section for the network download formats.">
                     </i></th>
-                    <th scope="col">PPI <br><i class="far fa-question-circle"
+                    <th scope="col">PPI<br><i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
@@ -155,50 +155,49 @@
                     </i></th>
                     <th scope="col">Gender</th>
                     <th scope="col">Race</th>
-                    <th scope="col">Weight <br><i class="far fa-question-circle"
+                    <th scope="col">Weight<br><i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
                       data-content="Weight at diagnosis (kg)">
                     </i></th>
-                     <th scope="col">Height <br><i class="far fa-question-circle"
+                     <th scope="col">Height<br><i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
                       data-content="Height at diagnosis (cm)">
                     </i></th>
-                    <th scope="col">Age <br><i class="far fa-question-circle"
+                    <th scope="col">Age<br><i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
                       data-content="Age at initial pathologic diagnosis">
                     </i></th>
-                    <th scope="col">Anatomic location <br><i class="far fa-question-circle"
+                    <th scope="col">Anatomic location<br><i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
-                      data-content="Anatomic neoplasm subdivision">
+                      data-content="Anatomic neoplasm subdivision. Empty entries are either missing or due to discrepancy.">
                     </i></th>
-                    <th scope="col">Stage <br><i class="far fa-question-circle"
+                    <th scope="col">Stage<br><i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
                       data-content="UICC stage">
                     </i></th>
-                    <th scope="col">Time <br><i class="far fa-question-circle"
+                    <th scope="col">Time<br><i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
                       data-content="Time to event">
                     </i></th>
-                    <th scope="col">Vital status <br></th>
+                    <th scope="col">Vital status<br></th>
                     <th scope="col">Network <br><i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
                       data-content="Please refer to the Help page Network section for the network download formats">
                     </i></th>
-                    <th scope="col">Size</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -225,11 +224,10 @@
                     <td>{{ tissue.time_to_event }}</td>
                     <td>{{ tissue.vital_status }}</td>
                     {% if tissue.sample == 'All' %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a></td>
+                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a><br><span class="badge badge-pill badge-secondary"><small>{{ tissue.size }}</small></span></td>
                     {% else %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a></td>
+                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a><br><span class="badge badge-pill badge-light"><small>{{ tissue.size }}</small></span></td>
                     {% endif %}
-                    <td>{{ tissue.size }}</td>
                  {% endfor %}
                 </tbody>
               </table>
@@ -284,7 +282,6 @@
                       data-placement="top"
                       data-content="Please refer to the Help page Network section for the network download formats">
                     </i></th>
-                    <th scope="col">Size</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -300,11 +297,10 @@
                     <td>{{ tissue.time_to_event }}</td>
                     <td>{{ tissue.vital_status }}</td>
                     {% if tissue.sample == 'All' %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a></td>
+                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a><br><span class="badge badge-pill badge-secondary"><small>{{ tissue.size }}</small></span></td>
                     {% else %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a></td>
+                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a><br><span class="badge badge-pill badge-light"><small>{{ tissue.size }}</small></span></td>
                     {% endif %}
-                    <td>{{ tissue.size }}</td>
                  {% endfor %}
                 </tbody>
               </table>

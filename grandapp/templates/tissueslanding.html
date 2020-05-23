@@ -209,7 +209,6 @@
                       data-placement="top"
                       data-content="Please refer to the Help page Network section for the network download formats">
                     </i></th>
-                    <th scope="col">Size</th>
                     {% endif %}
                   </tr>
                 </thead>
@@ -229,11 +228,10 @@
                     <td>{{ tissue.smtsisch }}</td>
                     {% if name == 'yes' %}
                     {% if tissue.sampleid == 'All' %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a></td>
+                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a><br><span class="badge badge-pill badge-secondary"><small>{{ tissue.size }}</small></span></td>
                     {% else %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a></td>
+                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a><br><span class="badge badge-pill badge-light"><small>{{ tissue.size }}</small></span></td>
                     {% endif %}
-                    <td>{{ tissue.size }}</td>
                     {% endif %}
                  {% endfor %}
                 </tbody>
