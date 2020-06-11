@@ -223,6 +223,9 @@ class Drugsample(models.Model):
     donor_ethnicity = models.CharField(max_length=200)
     network         = models.CharField(max_length=200)
     size            = models.CharField(max_length=200)
+    infl            = models.CharField(max_length=200) 
+    links           = models.CharField(max_length=200)
+    linksTF         = models.CharField(max_length=200)
 
 class Drugdesc(models.Model):
     expected_mass  = models.CharField(max_length=200)

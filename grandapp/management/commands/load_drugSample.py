@@ -49,4 +49,7 @@ class Command(BaseCommand):
             drugsample.donor_age = row['donor_age']
             drugsample.donor_sex = row['donor_sex']
             drugsample.donor_ethnicity = row['donor_ethnicity']
+            drugsample.infl      = row['infl']
+            drugsample.links     = row['links']
+            drugsample.linksTF   = row['linksTF']
             drugsample.save()

@@ -114,7 +114,11 @@
 <div class="col-md-3"><p class="font-weight-bold">Disease area</p></div>
 <div class="col-md-3">{{ drugdesc.disease_area }}</div>
 <div class="col-md-3"><p class="font-weight-bold">Pubchem ID</p></div>
+{% if drugdesc.pubchem_cid == 'NaN' %}
+<div class="col-md-3">-</div>
+{% else %}
 <div class="col-md-3"><a href="https://pubchem.ncbi.nlm.nih.gov/compound/{{ drugdesc.pubchem_cid }}">{{ drugdesc.pubchem_cid }}</a></div>
+{% endif %}
 </div>
 </li>
 
@@ -297,13 +301,16 @@
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
-                      data-content="Influence of observation on network reconstruction. 0=low, 1=high">
+                      data-content="Influence of observation on network reconstruction. 0=low, 1=high. High values could be due to outliers or strong transcriptional signatures.">
                     </i></th>
                   </tr>
                 </thead>
                 <tbody>
                  {% for drug in drugsample %}
                     <tr>
+                    {% if drug.cell_id == 'All' %}
+                    <td>{{ drug.cell_id }}</td>
+                    {% else %}
                     <td>{{ drug.cell_id }}<br><i class="fas fa-info-circle"
                       data-toggle="popover"
                       data-trigger="hover"
@@ -311,6 +318,7 @@
                       title="Signature ID"
                       data-content="{{ drug.sig_id }}">
                     </i></td>
+                    {% endif %}
                     <td>{{ drug.pert_idose }}</td>
                     <td>{{ drug.pert_itime }}</td>
                     <td>{{ drug.distil_nsample }}</td>
@@ -323,7 +331,8 @@
                     <td>{{ drug.donor_age }}</td>
                     <td>{{ drug.donor_sex }}</td>
                     <td>{{ drug.donor_ethnicity }}</td>
-                    <td><a href="" class="btn btn-outline-primary" role="button">go</a><br> <a href="" class="btn btn-outline-primary" role="button">tto</a></td>
+                    <td><a href="{{ drug.links }}" class="btn btn-outline-primary" role="button">go</a><br> <a href="{{ drug.linksTF }}" class="btn btn-outline-primary" role="button">tto</a></td>
+                    <td><small>{{ drug.infl }}</small></td>
                  {% endfor %}
                 </tbody>
               </table>
@@ -389,13 +398,13 @@ $(function () {
 $(document).ready(function() {
     //datatables
     $('#drugstable').DataTable({
-   
       "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
              "<'row'<'col-sm-12'tr>>" +
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
     });
 
     $('#drugstable2').DataTable({
+      "order": [[ 1, "asc" ]],
       "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
              "<'row'<'col-sm-12'tr>>" +
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",

@@ -231,7 +231,7 @@ def analysis(request):
              data = list(filter(None, data))
              sampleDown = pd.DataFrame(data, columns = ['Gene'])
              try:
-                 if tfgene=='Targeted genes':
+                 if tfgene=='Gene targeting':
                      gene=1
                  elif tfgene=='TF targeting':
                      gene=0
