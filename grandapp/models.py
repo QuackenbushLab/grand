@@ -98,6 +98,11 @@ class Tissue(models.Model):
     tissue    = models.CharField(max_length=200)
     nnets     = models.IntegerField(default=0)
 
+class Cancer(models.Model):
+    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    tissue    = models.CharField(max_length=200)
+    nnets     = models.IntegerField(default=0)
+
 class Tissuelanding(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
     tissue    = models.CharField(max_length=200)

@@ -19,7 +19,7 @@ Update to github is:
 
 1. Transfer .csv files
 
-` scp -r -i /Users/mab8354/Virginia.pem granddb/*.csv ubuntu@3.91.1.70:~/granddb/`
+` scp -r -i /Users/mab8354/Virginia.pem granddb/data/*.csv ubuntu@3.91.1.70:~/granddb/data/`
 
 2. set debug to false
 

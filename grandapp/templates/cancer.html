@@ -56,25 +56,25 @@
   </div>
 </nav>
 
-    <div class="container col-9 pb-5 mb-5 mt-4">
+<div class="container col-9 pb-5 mb-5 mt-4">
         <table id="tissuestable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Tissue</th>
+                    <th scope="col">Cancer type</th>
                     <th scope="col">Types of networks</th>
                   </tr>
                 </thead>
                 <tbody>
-		 {% for tissue in tissues %}
+		 {% for cc in cancer %}
 		    <tr>
 		    <th scope="row">{{ forloop.counter }}</th>
-		    <td><a href="{{ tissue.tissue}}_tissue">{{ tissue.tissue }}</a></td>
-                    <td>{{ tissue.nnets }}</td>
+		    <td><a href="{{ cc.tissue}}_cancer">{{ cc.tissue }}_cancer</a></td>
+                    <td>{{ cc.nnets }}</td>
                     </tr>
 		 {% endfor %}
                 </tbody>
-              </table>
+          </table>
 </div>
 
 </div>

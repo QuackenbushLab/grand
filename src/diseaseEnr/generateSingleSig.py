@@ -5,11 +5,11 @@ import os
 
 generateSample=1
 if generateSample==1:
-    pathToFile='Downloads/cmapreg/data/Drugs_TF_Targeting_AllSamples.csv'
+    pathToFile='Drugs_TF_Targeting_AllSamples.csv'
     df_train = pd.read_csv(pathToFile)
     k=df_train.shape[1]
     for sampleid in range(1, k):
-        sampleNet  = pd.DataFrame(data=df_train.iloc[: ,[0,sampleid+1]] )
+        sampleNet  = pd.DataFrame(data=df_train.iloc[: ,[0,sampleid]] )
         fileName   = 'TFtargeting_' + df_train.columns[sampleid] + '.csv'
         bucket     = 'granddb' # already created on S3
         csv_buffer = StringIO()
@@ -26,11 +26,11 @@ if generateSample==1:
 
 generateSample=1
 if generateSample==1:
-    pathToFile='Downloads/cmapreg/data/Drugs_Gene_Targeting_AllSamples.csv'
+    pathToFile='Drugs_Gene_Targeting_AllSamples.csv'
     df_train = pd.read_csv(pathToFile)
     k=df_train.shape[1]
     for sampleid in range(1, k):
-        sampleNet  = pd.DataFrame(data=df_train.iloc[: ,[0,sampleid+1]] )
+        sampleNet  = pd.DataFrame(data=df_train.iloc[: ,[0,sampleid]] )
         fileName   = 'Genetargeting_' + df_train.columns[sampleid] + '.csv'
         bucket     = 'granddb' # already created on S3
         csv_buffer = StringIO()

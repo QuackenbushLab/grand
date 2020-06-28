@@ -1,10 +1,9 @@
 library('stringr')
 setwd('/Users/mab8354/granddb/src/')
-load('GTEx_PANDA_tissues.RData')
+load('../data/GTEx_PANDA_tissues.RData')
 
-generateExpression=1
+generateExpression=1# Has to be on for Nsamples
 generateNetworks=0
-countSamples=1
 
 # Initialize dataframe
 nTissues = dim(net)[2]
@@ -34,7 +33,7 @@ colnames(df) = cols
 iterExp=0
 nSamples = vector()
 if(generateExpression){
-    setwd('/Users/mab8354/granddb/expression')
+    setwd('/Users/mab8354/granddb/data/expression')
     for(tissue in tissues2){
         iterExp=iterExp+1
         indTissue = which(samples[,2] == tissue)
@@ -67,27 +66,28 @@ for(i in 1:nTissues){
     expressionVec = c(expressionVec, paste0("https://granddb.s3.amazonaws.com/tissues/expression/",tissues[i], '.csv'))
     networkVec2 = c(networkVec2, paste0("https://granddb.s3.amazonaws.com/tissues/networks/lioness/",tissues[i],'_AllSamples','.csv'))
 }               
-tissueVec     = colnames(net)
+tissueVec     = gsub('_',' ',colnames(net))
+tissueVecWsc  = colnames(net)
 tissueVec2    = setdiff(tissueVec,notInLionessTissues2)
 tissueLinkVec = expLinkVec 
-toolVec1       = rep("PANDA", nTissues)
-toolVec2       = rep("LIONESS", nTissues-length(indnotInLionessTissues2))
+toolVec1      = rep("PANDA", nTissues)
+toolVec2      = rep("LIONESS", nTissues-length(indnotInLionessTissues2))
 netzooVec     = rep("netZooM", nTissues)
-netzooVec2     = rep("netZooM", nTissues-length(indnotInLionessTissues2))
+netzooVec2    = rep("netZooM", nTissues-length(indnotInLionessTissues2))
 netzooLinkVec = rep("https://github.com/netZoo/netZooM/releases", nTissues)
-netzooLinkVec2 = rep("https://github.com/netZoo/netZooM/releases", nTissues-length(indnotInLionessTissues2))
+netzooLinkVec2= rep("https://github.com/netZoo/netZooM/releases", nTissues-length(indnotInLionessTissues2))
 netzooRelVec  = rep("0.1", nTissues)
-#networkVec    = rep("https://granddb.s3.amazonaws.com/tissues/networks/GTEx_PANDA_tissues.RData", nTissues)
+#networkVec   = rep("https://granddb.s3.amazonaws.com/tissues/networks/GTEx_PANDA_tissues.RData", nTissues)
 ppiVec        = rep("https://granddb.s3.amazonaws.com/tissues/ppi/tissues_ppi.txt", nTissues)
 ppiLinkVec    = rep("http://string90.embl.de/", nTissues)
 motifVec      = rep("https://granddb.s3.amazonaws.com/tissues/motif/tissues_motif.txt", nTissues)
-motifVec2      = rep("https://granddb.s3.amazonaws.com/tissues/motif/tissues_lioness_motif.txt", nTissues)
+motifVec2     = rep("https://granddb.s3.amazonaws.com/tissues/motif/tissues_lioness_motif.txt", nTissues)
 #expressionVec = rep("https://granddb.s3.amazonaws.com/tissues/expression/tissues_expression.txt", nTissues)
 #expLinkVec    = 
 tfsVec        = rep(nTFs, nTissues)
 genesVec      = rep(dim(genes)[1], nTissues)
 refsVec1      = rep("https://www.cell.com/cell-reports/fulltext/S2211-1247(17)31418-3?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124717314183%3Fshowall%3Dtrue", nTissues)
-refsVec11     = rep("https://www.biorxiv.org/content/10.1101/082289v1.full", nTissues)
+refsVec11     = rep("https://www.cell.com/cell-reports/fulltext/S2211-1247(20)30776-2#.XvKB22ciE0k", nTissues)
 refsVec2      = rep("https://zenodo.org/record/838734", nTissues)
 
 # Populate df
@@ -111,16 +111,16 @@ df['refs2']      = c(refsVec2,rep('',nTissues-length(indnotInLionessTissues2)))
 
 # Save to csv
 setwd('/Users/mab8354/granddb/')
-write.csv(df,"tissueslanding.csv",row.names = FALSE)
+write.csv(df,"data/tissueslanding.csv",row.names = FALSE)
 
 cols = c('tissue','nnets')
 df2 <- data.frame(matrix(ncol = length(cols), nrow = nTissues))
 colnames(df2) = cols
-df2['tissue']     = c(tissueVec)
+df2['tissue']     = c(tissueVecWsc)
 nsamples=rep(2,length(tissues))
 nsamples[indnotInLionessTissues2]=1
 df2['nnets']      = nsamples
-write.csv(df2,"tissues.csv",row.names = FALSE)
+write.csv(df2,"data/tissues.csv",row.names = FALSE)
 #s3:// could not download so I switched to https://granddb.s3.amazonaws.com
 
 

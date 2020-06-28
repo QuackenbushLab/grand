@@ -35,7 +35,7 @@
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="index.html">Networks</a>
                       <div class="dropdown-menu">
               <a href="/drugs" class="dropdown-item">Small molecules</a>
-              <a href="/cancerlanding" class="dropdown-item">Cancer</a>
+              <a href="/cancers" class="dropdown-item">Cancer</a>
               <a href="/tissues" class="dropdown-item">Tissues</a>
               <a href="/cell" class="dropdown-item">Cell lines</a>
             </div>
@@ -60,9 +60,13 @@
   <h5 class="card-header">Networks</h5>
   <div class="card-body">
     <h5 class="card-title">Tool description</h5>
-    <p class="card-text"><a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. <a href="https://www.sciencedirect.com/science/article/pii/S2589004219300872">LIONESS</a> reconstructs patient-specific <a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> networks for each gene expression sample. 
+    <p class="card-text">{% if tool == 'panda' %}<a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. <a href="https://www.sciencedirect.com/science/article/pii/S2589004219300872">LIONESS</a> reconstructs patient-specific <a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> networks for each gene expression sample. 
 			    To download patient-specific networks, you can check <a href='#cardtissuetcga'>the phenotypic information of the TCGA dataset</a> or <a href='#cardtissuegeo'>the phenotypic information of the GEO dataset</a>. You can also select the networks by
-                            clinical variables or download all the samples in a single file.</p>
+                            clinical variables or download all the samples in a single file. 
+                            {% elif tool == 'otter' %}
+                            Like <a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a>, <a href="https://www.biorxiv.org/content/10.1101/2020.06.23.167999v2">OTTER</a> reconstructs a gene regulatory network from the TF PPI, TF DNA binding motif, and gene expression samples. 
+                            OTTER formulates network inference as a well-defined objective function that optimizes the graph matching of the three network priors. Check <a href='#cardtissuetcga'>the phenotypic information</a> for the clinical variables of the samples that were used to reconstruct the network.
+                            {% endif %}</p>
         <table id="tissuestable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
@@ -104,27 +108,15 @@
                     <tr>
                     <th scope="row">{{ forloop.counter }}</th>
                     <td><a href="{{ tissue.cancerLink }}">{{ tissue.cancer }}</a></td>
-                    {% if tissue.tool == 'LIONESS' %}
-                        <td>PANDA-{{ tissue.tool }}</td>
-                    {% else %}
-                        <td>{{ tissue.tool }}</td>
-                    {% endif %}
+                    <td>{{ tissue.tool }}</td>
                     <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}">{{ tissue.netzooRel }}</a></td>
-                    {% if tissue.tool == 'LIONESS' %}
-                        <td><a class="btn btn-outline-primary" role="button"  href="{{ tissue.cardref }}" role="button">co</a></td>
-                    {% else %}
-                        <td><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a></td>
-                    {% endif %}
+                    <td><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a></td>
                     <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}"><i class="fas fa-link"></i></a></td>
                     <td><a href="{{ tissue.motif }}"><i class="fas fa-download"></i></a></td>
                     <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}"><i class="fas fa-link"></i></a></td>
                     <td>{{ tissue.tfs }}</td>
                     <td>{{ tissue.genes }}</td>
-                    {% if tissue.tool == 'LIONESS' %}
-                         <td><a href="{{ tissue.cardref }}">{{ tissue.samples }}</a></td>
-                    {% else %}
-                         <td>{{ tissue.samples }}</td>
-                    {% endif %}
+                    <td><a href="{{ tissue.cardref }}">{{ tissue.samples }}</a></td>
                     <td><span class="badge badge-pill badge-primary">D</span></td>
                     <td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a></td>
                     </tr>
@@ -235,7 +227,7 @@
 </div>
 </div>
 
-
+{% if geo == 'yes' %}
 <div class="container col-10 pb-4 mb-4 mt-4">
         <div class="card " id="cardtissuegeo">
   <h5 class="card-header">Phenotypic information GEO</h5>
@@ -307,7 +299,7 @@
 </div>
 </div>
 </div>
-
+{% endif %}
 
 
 <!-- Footer -->

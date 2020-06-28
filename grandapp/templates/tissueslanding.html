@@ -38,7 +38,7 @@
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="index.html">Networks</a>
             <div class="dropdown-menu">
               <a href="/drugs" class="dropdown-item">Small molecules</a>
-              <a href="/cancerlanding" class="dropdown-item">Cancer</a>
+              <a href="/cancers" class="dropdown-item">Cancer</a>
               <a href="/tissues" class="dropdown-item">Tissues</a>
               <a href="/cell" class="dropdown-item">Cell lines</a>
             </div>
@@ -104,7 +104,6 @@
                 </thead>
                 <tbody>
                  {% for tissue in tissuelanding %}
-                    {% if "/tissues/"|add:tissue.tissue|add:"_tissue/" ==  request.path %}
                     <tr>
                     <th scope="row">{{ forloop.counter }}</th>
                     <td><a href="{{ tissue.tissueLink }}">{{ tissue.tissue }}</a></td>
@@ -132,7 +131,6 @@
                         <td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a> <a href="{{ tissue.refs2 }}"><i class="fas fa-book"></i></a></td>
                     {% endif %}
                     </tr>
-                    {% endif %}
                  {% endfor %}
                 </tbody>
               </table>
