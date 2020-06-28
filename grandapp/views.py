@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import Http404
 from django.core import serializers
-from .models import Cell, Disease
+from .models import Cell, Disease, Cancer
 from .models import Druglanding, DrugResultUp, DrugResultDown, Params, Tcgasample, Geosample, Genelanding
 from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding, Tissuesample, Cancerlanding, Drugsample
 from .models import Drugdesc
@@ -199,7 +199,7 @@ def tissue(request):
     return render(request, 'tissues.html', {'tissues': tissues})
 
 def tissuelanding(request,slug):
-    tissuelanding = Tissuelanding.objects.all()
+    tissuelanding = Tissuelanding.objects.filter(tissue=slug.replace('_',' ')[:-7])
     tissuesample = Tissuesample.objects.filter(grdid=slug) 
     name= 'yes'
     if slug in ['Lymphoblastoid_cell_line_tissue','Fibroblast_cell_line_tissue','Kidney_cortex_tissue','Minor_salivary_gland_tissue',
@@ -207,11 +207,20 @@ def tissuelanding(request,slug):
         name='no'
     return render(request, "tissueslanding.html", {'tissuelanding': tissuelanding, 'slug':slug,'tissuesample':tissuesample, 'name':name})
 
-def cancerlanding(request):
-    cancerlanding = Cancerlanding.objects.all()
-    tcgasample    = Tcgasample.objects.all()
-    geosample    = Geosample.objects.all()
-    return render(request, "cancerlanding.html", {'cancerlanding': cancerlanding, 'tcgasample':tcgasample,'geosample':geosample})
+def cancer(request):
+    cancer = Cancer.objects.all()
+    return render(request, 'cancer.html', {'cancer': cancer})
+
+def cancerlanding(request,slug):
+    cancerlanding = Cancerlanding.objects.filter(cancer=slug.replace('_',' '))
+    geo,tool='no','otter'
+    returntupl = {'cancerlanding': cancerlanding, 'slug':slug, 'geo':geo, 'tool':tool}
+    if slug == 'Colon_cancer':
+        tcgasample   = Tcgasample.objects.all()
+        geosample    = Geosample.objects.all()
+        geo,tool='yes','panda'
+        returntupl   = {'cancerlanding': cancerlanding, 'slug':slug, 'tcgasample':tcgasample,'geosample':geosample,'geo':geo,'tool':tool}
+    return render(request, "cancerlanding.html", returntupl)
 
 def analysis(request):
     if request.method == 'GET':
