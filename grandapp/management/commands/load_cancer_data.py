@@ -3,7 +3,7 @@ from datetime import datetime
 
 from django.core.management import BaseCommand
 
-from grandapp.models import TissueTar
+from grandapp.models import Cancer
 from pytz import UTC
 
 
@@ -31,14 +31,9 @@ class Command(BaseCommand):
     help = "Loads data from pet_data.csv into our Pet model"
 
     def handle(self, *args, **options):
-        print("Loading tissue target data!")
-        for row in DictReader(open('./data/tissue-target.csv')):
-            tissuetar = TissueTar()
-            tissuetar.idd       = row['idd']
-            tissuetar.tissue    = row['tissue']
-            tissuetar.count     = row['count']
-            tissuetar.intersect = row['intersect']
-            tissuetar.pval      = row['pval']
-            tissuetar.qval      = row['qval']
-            tissuetar.nuser     = row['nuser']
-            tissuetar.save()
+        print("Loading cancer data!")
+        for row in DictReader(open('./data/cancer.csv')):
+            cancer = Cancer()
+            cancer.tissue    = row['cancer']
+            cancer.nnets     = row['nnets']
+            cancer.save()

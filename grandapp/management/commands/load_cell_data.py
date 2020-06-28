@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading cell data!")
-        for row in DictReader(open('./cells.csv')):
+        for row in DictReader(open('./data/cells.csv')):
             cell = Cell()
             cell.cellLine     = row['cellLine']
             cell.cellLink     = row['cellLink']

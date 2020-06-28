@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading tissue data!")
-        for row in DictReader(open('./tissues.csv')):
+        for row in DictReader(open('./data/tissues.csv')):
             tissue = Tissue()
             tissue.tissue    = row['tissue']
             tissue.nnets     = row['nnets']

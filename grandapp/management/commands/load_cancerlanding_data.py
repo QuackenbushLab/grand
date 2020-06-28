@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading cancer landing data!")
-        for row in DictReader(open('./cancerlanding.csv')):
+        for row in DictReader(open('./data/cancerlanding.csv')):
             tissuelanding = Cancerlanding()
             tissuelanding.cancer       = row['cancer']
             tissuelanding.cancerLink   = row['cancerLink']

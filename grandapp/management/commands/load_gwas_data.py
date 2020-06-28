@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading gwas data!")
-        for row in DictReader(open('./gwas.csv')):
+        for row in DictReader(open('./data/gwas.csv')):
             gwas = Gwas()
             gwas.idd       = row['idd']
             gwas.disease   = row['disease']

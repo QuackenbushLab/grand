@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading drug results template data!")
-        for row in DictReader(open('./drugResultsDown.csv')):
+        for row in DictReader(open('./data/drugResultsDown.csv')):
             drugResult = DrugResultDown()
             drugResult.idd        = row['idd']
             drugResult.drug       = row['drug']

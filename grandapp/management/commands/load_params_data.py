@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading parameters data!")
-        for row in DictReader(open('./params.csv')):
+        for row in DictReader(open('./data/params.csv')):
             params = Params()
             params.id                = row['id']
             params.genesupin         = row['genesupin']

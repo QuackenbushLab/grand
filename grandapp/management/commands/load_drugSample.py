@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading drug sample data!")
-        for row in DictReader(open('./drug_vars.csv')):
+        for row in DictReader(open('./data/drug_vars.csv')):
             drugsample = Drugsample()
             drugsample.sig_id     = row['sig_id']
             drugsample.pert_iname = row['pert_iname']

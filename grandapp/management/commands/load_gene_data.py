@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading gene data!")
-        for row in DictReader(open('./GSE92742_Broad_LINCS_gene_info.csv')):
+        for row in DictReader(open('./data/GSE92742_Broad_LINCS_gene_info.csv')):
             genelanding = Genelanding()
             genelanding.pr_gene_id     = row['pr_gene_id']
             genelanding.pr_gene_symbol = row['pr_gene_symbol']
