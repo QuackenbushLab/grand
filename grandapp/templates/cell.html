@@ -103,7 +103,8 @@
                     {% if cell.cellLine == 'THP-1' %}
                     <td><a href="{{ cell.network }}" class="btn btn-outline-primary" role="button">co</a></td>
                     {% else %}
-                    <td><a href="{{ cell.network }}" class="btn btn-outline-primary" role="button">po</a></td>
+                    <td><div class="btn-group" role="group" aria-label="Basic example">
+                    <a href="{{ cell.network }}" class="btn btn-outline-primary" role="button">po</a><a href="{{ cell.script }}" class="btn btn-outline-danger" role="button">R</a></div></td>
                     {% endif %}
 	            <td><a href="{{ cell.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ cell.ppiLink }}"><i class="fas fa-link"></i></a></td>
                     <td><a href="{{ cell.motif }}"><i class="fas fa-download"></i></a></td>

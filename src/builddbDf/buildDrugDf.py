@@ -7,7 +7,7 @@ import os
 os.chdir('/Users/mab8354/granddb/')
 
 #0. read drug list
-dfd=pd.read_csv('drugs.csv')
+dfd=pd.read_csv('data/drugs.csv')
 drugs=dfd.drug.values
 cid=dfd.cid.values
 samples=dfd.samples.values
@@ -37,7 +37,7 @@ refsVecApi       = []
 toolVec,expLink  = [],[]
 samplesVec,druglink = [],[]
 missing=0
-netTypes  =['PANDA'] #,'optPANDA (ChIP-seq)','optPANDA (TFKD)','optPANDA (FunBind)']
+netTypes  =['PANDA-LIONESS'] #,'optPANDA (ChIP-seq)','optPANDA (TFKD)','optPANDA (FunBind)']
 netFolder =['PANDA'] #,'chipSeq','tfKd','funBind']
 
 # Loop through drugs
@@ -56,7 +56,7 @@ for drug in drugs:
         else:
             ref2add = '#'
         refsVec.append('https://pubchem.ncbi.nlm.nih.gov/compound/' + ref2add)
-        if netTypes[netl]=='PANDA':
+        if netTypes[netl]=='PANDA-LIONESS':
             tfsVec.append(652)
             ppilinkVec.append('http://string90.embl.de/')
             motifVec.append('https://granddb.s3.amazonaws.com/optPANDA/motifs/Hugo_motifCellLine.txt')
@@ -64,7 +64,7 @@ for drug in drugs:
             tfsVec.append(1603)
             ppilinkVec.append('https://string-db.org/')
             motifVec.append('https://granddb.s3.amazonaws.com/optPANDA/motifs/regMatPval1e3.csv')
-        if netTypes[netl] == 'PANDA':
+        if netTypes[netl] == 'PANDA-LIONESS':
             ppiVec.append('https://granddb.s3.amazonaws.com/drugs/drugs_ppi.txt')
         elif netTypes[netl] == 'optPANDA (FunBind)':
             ppiVec.append('https://granddb.s3.amazonaws.com/optPANDA/ppi/ppi_complete.txt')
@@ -106,4 +106,4 @@ df['druglink']  = druglink
 
 # save dataframe
 os.chdir('/Users/mab8354/granddb')
-df.to_csv('drugslanding.csv', index=False)
+df.to_csv('data/drugslanding.csv', index=False)

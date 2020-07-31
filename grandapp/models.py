@@ -18,6 +18,7 @@ class Cell(models.Model):
     genes     = models.IntegerField()
     refs      = models.URLField()
     samples   = models.IntegerField(default=0)
+    script    = models.CharField(max_length=200)
     #submitter = models.CharField(max_length=100)
     #species = models.CharField(max_length=30)
     #breed = models.CharField(max_length=30, blank=True)
@@ -111,10 +112,12 @@ class Tissuelanding(models.Model):
     netzoo    = models.CharField(max_length=200)
     netzooLink= models.URLField(max_length=200)
     netzooRel = models.CharField(max_length=200)
+    reg       = models.CharField(max_length=200)
     network   = models.URLField()
     ppi       = models.URLField()
     ppiLink   = models.URLField()
     motif     = models.URLField()
+    motifDesc = models.CharField(max_length=200)
     expression= models.URLField()
     expLink   = models.URLField()
     tfs       = models.IntegerField()
@@ -122,6 +125,7 @@ class Tissuelanding(models.Model):
     refs      = models.URLField()
     refs2     = models.URLField(default='#')
     samples   = models.IntegerField(default=0)
+    script    = models.CharField(max_length=200)
 
 class TissueTar(models.Model):
     idd          = models.IntegerField(default=0)
@@ -167,6 +171,51 @@ class Tcgasample(models.Model):
     size = models.CharField(max_length=200)
     link = models.CharField(max_length=200)
 
+class Breastsample(models.Model):
+    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    sample     = models.CharField(max_length=200)
+    gender     = models.CharField(max_length=200)
+    race       = models.CharField(max_length=200)
+    ethnicity  = models.CharField(max_length=200)
+    weight_kg_at_diagnosis  = models.CharField(max_length=200)
+    height_cm_at_diagnosis  = models.CharField(max_length=200)
+    age_at_initial_pathologic_diagnosis  = models.CharField(max_length=200)
+    primary_site        = models.CharField(max_length=200)
+    primary_diagnosis        = models.CharField(max_length=200)
+    uicc_stage   = models.CharField(max_length=200)
+    time_to_event= models.CharField(max_length=200)
+    vital_status = models.CharField(max_length=200)
+
+class Cervixsample(models.Model):
+    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    sample     = models.CharField(max_length=200)
+    gender     = models.CharField(max_length=200)
+    race       = models.CharField(max_length=200)
+    ethnicity  = models.CharField(max_length=200)
+    weight_kg_at_diagnosis  = models.CharField(max_length=200)
+    height_cm_at_diagnosis  = models.CharField(max_length=200)
+    age_at_initial_pathologic_diagnosis  = models.CharField(max_length=200)
+    primary_site        = models.CharField(max_length=200)
+    primary_diagnosis        = models.CharField(max_length=200)
+    uicc_stage   = models.CharField(max_length=200)
+    time_to_event= models.CharField(max_length=200)
+    vital_status = models.CharField(max_length=200)
+
+class Liversample(models.Model):
+    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    sample     = models.CharField(max_length=200)
+    gender     = models.CharField(max_length=200)
+    race       = models.CharField(max_length=200)
+    ethnicity  = models.CharField(max_length=200)
+    weight_kg_at_diagnosis  = models.CharField(max_length=200)
+    height_cm_at_diagnosis  = models.CharField(max_length=200)
+    age_at_initial_pathologic_diagnosis  = models.CharField(max_length=200)
+    primary_site        = models.CharField(max_length=200)
+    primary_diagnosis        = models.CharField(max_length=200)
+    uicc_stage   = models.CharField(max_length=200)
+    time_to_event= models.CharField(max_length=200)
+    vital_status = models.CharField(max_length=200)
+
 class Geosample(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
     sample     = models.CharField(max_length=200)
@@ -201,6 +250,7 @@ class Cancerlanding(models.Model):
     refs2     = models.URLField(default='#')
     samples   = models.IntegerField(default=0)
     cardref   = models.CharField(max_length=200)
+    script    = models.CharField(max_length=200)
 
 class Genelanding(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]

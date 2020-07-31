@@ -50,4 +50,5 @@ class Command(BaseCommand):
             cell.genes        = row['genes']
             cell.refs         = row['refs']
             cell.samples      = row['samples']
+            cell.script       = row['script']
             cell.save()

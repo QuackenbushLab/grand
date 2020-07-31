@@ -44,6 +44,7 @@ class Command(BaseCommand):
             tissuelanding.ppi          = row['ppi']
             tissuelanding.ppiLink      = row['ppiLink']
             tissuelanding.motif        = row['motif']
+            tissuelanding.motifDesc    = row['motifDesc']
             tissuelanding.expression   = row['expression']
             tissuelanding.expLink      = row['expLink']
             tissuelanding.tfs          = row['tfs']
@@ -51,4 +52,6 @@ class Command(BaseCommand):
             tissuelanding.refs         = row['refs']
             tissuelanding.refs2        = row['refs2']
             tissuelanding.samples      = row['samples']
+            tissuelanding.reg          = row['reg']
+            tissuelanding.script       = row['script']
             tissuelanding.save()

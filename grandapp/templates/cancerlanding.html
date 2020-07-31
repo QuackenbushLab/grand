@@ -79,7 +79,7 @@
                       data-trigger="hover"
                       data-placement="top"
                       title="Network format"
-                      data-content="Please refer to the Help page Network section for the network download formats.">
+                      data-content="Please refer to the Help page Network section for the network download formats. You can download the script to reproduce the network using the R button.">
                     </i></th>
                     <th scope="col">PPI<br><i class="far fa-question-circle"
                       data-toggle="popover"
@@ -110,7 +110,8 @@
                     <td><a href="{{ tissue.cancerLink }}">{{ tissue.cancer }}</a></td>
                     <td>{{ tissue.tool }}</td>
                     <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}">{{ tissue.netzooRel }}</a></td>
-                    <td><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a></td>
+                    <td><div class="btn-group" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a> 
+                    <a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">R</a></div></td>
                     <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}"><i class="fas fa-link"></i></a></td>
                     <td><a href="{{ tissue.motif }}"><i class="fas fa-download"></i></a></td>
                     <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}"><i class="fas fa-link"></i></a></td>
@@ -127,7 +128,7 @@
 </div>
 </div>
 
-
+{% if tool == 'panda' %}
 <div class="container col-10 mt-4">
         <div class="card " id="cardtissuetcga">
   <h5 class="card-header">Phenotypic information TCGA</h5>
@@ -181,10 +182,15 @@
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
-                      data-content="Time to event">
+                      data-content="Time to event (Death) in years">
                     </i></th>
-                    <th scope="col">Vital status<br></th>
-                    <th scope="col">Network <br><i class="far fa-question-circle"
+                    <th scope="col">Vital status<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="0: Alive, 1: Dead">
+                    </i></th>
+                    <th scope="col">Network<br><i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
@@ -226,6 +232,96 @@
 </div>
 </div>
 </div>
+{% elif tool == 'otter' %}
+  <div class="container col-10 mt-4 pb-4 mb-4">
+          <div class="card " id="cardtissuetcga">
+    <h5 class="card-header">Phenotypic information TCGA</h5>
+    <div class="card-body">
+      <h5 class="card-title">Variable description</h5>
+      <p class="card-text">This is a description of the primary clinical variables of the gene expression samples that were used to generate the gene regulatory network.</p>
+          <table id="tissuestabletcga" class="table table-hover" style="width: 100%">
+                  <thead>
+                    <tr>
+                      <th scope="col">Sample<br><i class="far fa-question-circle"
+                        data-toggle="popover"
+                        data-trigger="hover"
+                        data-placement="top"
+                        data-content="Sample ID">
+                      </i></th>
+                      <th scope="col">Gender</th>
+                      <th scope="col">Race</th>
+                      <th scope="col">Ethnicity</th>
+                      <th scope="col">Weight<br><i class="far fa-question-circle"
+                        data-toggle="popover"
+                        data-trigger="hover"
+                        data-placement="top"
+                        data-content="Weight at diagnosis (kg)">
+                      </i></th>
+                       <th scope="col">Height<br><i class="far fa-question-circle"
+                        data-toggle="popover"
+                        data-trigger="hover"
+                        data-placement="top"
+                        data-content="Height at diagnosis (cm)">
+                      </i></th>
+                      <th scope="col">Age<br><i class="far fa-question-circle"
+                        data-toggle="popover"
+                        data-trigger="hover"
+                        data-placement="top"
+                        data-content="Age at initial pathologic diagnosis">
+                      </i></th>
+                      <th scope="col">Anatomic location<br><i class="far fa-question-circle"
+                        data-toggle="popover"
+                        data-trigger="hover"
+                        data-placement="top"
+                        data-content="Empty entries are either missing or due to discrepancy.">
+                      </i></th>
+                      <th scope="col">Diagnosis<i class="far fa-question-circle"
+                        data-toggle="popover"
+                        data-trigger="hover"
+                        data-placement="top"
+                        data-content="ICD code">
+                      </i></th>
+                      <th scope="col">Stage<br><i class="far fa-question-circle"
+                        data-toggle="popover"
+                        data-trigger="hover"
+                        data-placement="top"
+                        data-content="Cancer stage">
+                      </i></th>
+                      <th scope="col">Time<br><i class="far fa-question-circle"
+                        data-toggle="popover"
+                        data-trigger="hover"
+                        data-placement="top"
+                        data-content="Time to event (Death) in days">
+                      </i></th>
+                      <th scope="col">Vital status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                   {% for tissue in tcgasample %}
+                      <tr>
+                      {% if tissue.sample == 'All' %}
+                          <td>{{ tissue.sample }}</td>
+                      {% else %}
+                          <td>{{ tissue.sample }}</td>
+                      {% endif %}
+                      <td>{{ tissue.gender }}</td>
+                      <td>{{ tissue.race }}</td>
+                      <td>{{ tissue.ethnicity }}</td>
+                      <td>{{ tissue.weight_kg_at_diagnosis }}</td>
+                      <td>{{ tissue.height_cm_at_diagnosis }}</td>
+                      <td>{{ tissue.age_at_initial_pathologic_diagnosis }}</td>
+                      <td>{{ tissue.primary_site }}</td>
+                      <td>{{ tissue.primary_diagnosis }}</td>
+                      <td>{{ tissue.uicc_stage }}</td>
+                      <td>{{ tissue.time_to_event }}</td>
+                      <td>{{ tissue.vital_status }}</td>
+                   {% endfor %}
+                  </tbody>
+                </table>
+  </div>
+  </div>
+  </div>
+{% endif %}
 
 {% if geo == 'yes' %}
 <div class="container col-10 pb-4 mb-4 mt-4">
@@ -265,9 +361,14 @@
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
-                      data-content="Time to event">
+                      data-content="Time to event (Death)">
                     </i></th>
-                    <th scope="col">Vital status <br></th>
+                    <th scope="col">Vital status<br><i class="far fa-question-circle"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="0: Alive, 1: Dead">
+                    </i></th>
                     <th scope="col">Network <br><i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"

@@ -159,7 +159,7 @@
                       title="Network format"
                       data-content="Please refer to the Help page Network section for the network download formats.">
                     </i></th>
-                    <th scope="col">PPI <br><i class="far fa-question-circle"
+                    <th scope="col">PPI<br><i class="far fa-question-circle"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-placement="top"
@@ -186,9 +186,10 @@
 		    <tr>
 		    <th scope="row">{{ drug.number }}</th>
 		    <td><a href = "{{ drug.refs }}" >{{ drug.drug }}</a></td>
-		    <td>{{ drug.tool }}-LIONESS</td>
+		    <td>{{ drug.tool }}</td>
 		    <td>{{ drug.netzoo }} <a href="https://github.com/netZoo/netZooM/releases">{{ drug.netzooRel }}</a></td>
-                    <td><a href="#carddrug" class="btn btn-outline-primary" role="button">go/tto</a></td>
+                    <td><div class="btn-group" role="group" aria-label="Basic example"><a href="#carddrug" class="btn btn-outline-primary" role="button">gto/tto</a>
+                    <a href="https://granddb.s3.amazonaws.com/drugs/scripts/reproducedrug1Network.m" class="btn btn-outline-danger" role="button">R</a></div></td>
 	            <td><a href="{{ drug.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ drug.ppiLink }}"><i class="fas fa-link"></i></a></td>
                     <td><a href="{{ drug.motif }}"><i class="fas fa-download"></i></a></td>
                     <td><a href="{{ drug.expression }}"><i class="fas fa-download"></i></a> <a href="{{ drug.expLink}}"><i class="fas fa-link"></i></a></td>
@@ -331,7 +332,8 @@
                     <td>{{ drug.donor_age }}</td>
                     <td>{{ drug.donor_sex }}</td>
                     <td>{{ drug.donor_ethnicity }}</td>
-                    <td><a href="{{ drug.links }}" class="btn btn-outline-primary" role="button">go</a><br> <a href="{{ drug.linksTF }}" class="btn btn-outline-primary" role="button">tto</a></td>
+                    <td><div class="btn-group-vertical"><a href="{{ drug.links }}" class="btn btn-outline-primary" role="button">gto</a>
+                    <a href="{{ drug.linksTF }}" class="btn btn-outline-primary" role="button">tto</a></div></td>
                     <td><small>{{ drug.infl }}</small></td>
                  {% endfor %}
                 </tbody>

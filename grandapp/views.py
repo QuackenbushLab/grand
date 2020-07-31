@@ -5,7 +5,7 @@ from django.core import serializers
 from .models import Cell, Disease, Cancer
 from .models import Druglanding, DrugResultUp, DrugResultDown, Params, Tcgasample, Geosample, Genelanding
 from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding, Tissuesample, Cancerlanding, Drugsample
-from .models import Drugdesc
+from .models import Drugdesc, Breastsample, Cervixsample, Liversample
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
 from .forms import ContactForm, GeneForm, DiseaseForm
 from django.conf import settings
@@ -213,8 +213,14 @@ def cancer(request):
 
 def cancerlanding(request,slug):
     cancerlanding = Cancerlanding.objects.filter(cancer=slug.replace('_',' '))
-    geo,tool='no','otter'
-    returntupl = {'cancerlanding': cancerlanding, 'slug':slug, 'geo':geo, 'tool':tool}
+    geo,tool,tcgasample='no','otter',''
+    if slug == 'Cervix_cancer':
+        tcgasample = Cervixsample.objects.all()
+    elif slug == 'Breast_cancer':
+        tcgasample = Breastsample.objects.all()
+    elif slug == 'Liver_cancer':
+        tcgasample = Liversample.objects.all()
+    returntupl = {'cancerlanding': cancerlanding, 'slug':slug, 'geo':geo, 'tool':tool,'tcgasample':tcgasample}
     if slug == 'Colon_cancer':
         tcgasample   = Tcgasample.objects.all()
         geosample    = Geosample.objects.all()
