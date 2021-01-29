@@ -1,63 +1,148 @@
-{% load static %} <!DOCTYPE html> <html lang="en"> <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.20/af-2.3.4/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/b-print-1.6.1/cr-1.5.2/fc-3.3.0/fh-3.1.6/kt-2.5.1/r-2.2.3/rg-1.1.1/rr-1.2.6/sc-2.0.1/sp-1.0.1/sl-1.3.1/datatables.min.css"/>
-  <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-  <title>GRAND</title>
-</head>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+{% load static %} 
+{% include "header.html" %}
 
-  gtag('config', 'UA-151168345-1');
-</script>
-<body class="d-flex flex-column min-vh-100">
-<div class="wrapper flex-grow-1">
-
-{% load widget_tweaks %}
-
-<!-- Header -->
-<nav class="navbar bg-dark navbar-dark navbar-expand-sm">
-  <div class="container">
-      <a class="navbar-brand m-0" href="/">
-          <img src="{% static 'images/logo.svg' %}" style="width: 400px;">
-      </a>
-      <div class="navbar-nav">
-          <a class="nav-item nav-link active" href="/">Home</a>
-          <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="index.html">Networks</a>
-                      <div class="dropdown-menu">
-              <a href="/drugs" class="dropdown-item">Small molecules</a>
-              <a href="/cancers" class="dropdown-item">Cancer</a>
-              <a href="/tissues" class="dropdown-item">Tissues</a>
-              <a href="/cell" class="dropdown-item">Cell lines</a>
-            </div>
-        </li>
-           <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Analysis</a>
-          <div class="dropdown-menu">
-            <a href="/analysis" class="dropdown-item">CLUEreg</a>
-            <a href="/disease" class="dropdown-item">Disease/Tissues</a>
-          </div>
-        </li>
-          <a class="nav-item nav-link" href="/help">Help</a>
-          <a class="nav-item nav-link" href="/about">Contact</a>
-          <a class="nav-item nav-link" href="/download">Download</a>
-          <a class="nav-item nav-link" href="https://github.com/QuackenbushLab/grand"><i class="fab fa-github fa-lg"></i></a>
-      </div>
+<div class="hidden">
+<div class="row">
+  <div class="col-5 offset-md-5 pt-4">
+    <h3 class="text-secondary">{{ slug }} cancer networks</h1>
   </div>
-</nav>
+</div>
 
-    <div class="container col-10 mt-4">
+<div class="row" id="main">
+<div class="col-1 mt-5">
+  <ul class="list-group">
+    {% if slug == 'Colon' %}
+    <a href="/cancers/Colon_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action active" aria-current="true">
+      Colon cancer
+      <span class="badge bg-secondary rounded-pill">2</span>
+    </a>
+    <a href="/cancers/Cervix_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Cervix cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Breast_cancer"  class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Breast cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Liver_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Liver cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Glioblastoma_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Glio-blastoma
+      <span class="badge bg-secondary rounded-pill">3</span>
+    </a>
+    {% elif slug == 'Cervix' %}
+    <a href="/cancers/Colon_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Colon cancer
+      <span class="badge bg-secondary rounded-pill">2</span>
+    </a>
+    <a href="/cancers/Cervix_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action active"  aria-current="true">
+      Cervix cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Breast_cancer"  class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Breast cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Liver_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Liver cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Glioblastoma_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Glio-blastoma 
+      <span class="badge bg-secondary rounded-pill">3</span>
+    </a>
+    {% elif slug == 'Breast' %}
+    <a href="/cancers/Colon_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Colon cancer
+      <span class="badge bg-secondary rounded-pill">2</span>
+    </a>
+    <a href="/cancers/Cervix_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Cervix cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Breast_cancer"  class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action active"  aria-current="true">
+      Breast cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Liver_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Liver cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Glioblastoma_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Glio-blastoma
+      <span class="badge bg-secondary rounded-pill">3</span>
+    </a>
+    {% elif slug == 'Liver' %}
+    <a href="/cancers/Colon_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Colon cancer
+      <span class="badge bg-secondary rounded-pill">2</span>
+    </a>
+    <a href="/cancers/Cervix_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Cervix cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Breast_cancer"  class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Breast cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Liver_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action active"  aria-current="true">
+      Liver cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Glioblastoma_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Glio-blastoma
+      <span class="badge bg-secondary rounded-pill">3</span>
+    </a>
+    {% elif slug == 'Glioblastoma' %}
+    <a href="/cancers/Colon_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Colon cancer
+      <span class="badge bg-secondary rounded-pill">2</span>
+    </a>
+    <a href="/cancers/Cervix_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Cervix cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Breast_cancer"  class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Breast cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Liver_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Liver cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Glioblastoma_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action active" aria-current="true">
+      Glio-blastoma
+      <span class="badge bg-secondary rounded-pill">3</span>
+    </a>
+    {% endif %}
+  </ul>
+</div>
+
+<div class="col-10 mt-4 pb-4 mb-4">
+  <div class="container row">
+  <div class="col">
+    <canvas id="scatterChart" width="50" height="30"></canvas>
+    <p style="font-family: Helvetica; color: #333; padding: 1em 2em; font-size: 12px">
+      To get the full list of phenotypic variables, please check the menu below.
+    </p>
+  </div>
+  <div class="col">
+    <canvas id="scatterChart2" width="50" height="30"></canvas>
+  </div>
+</div>
+  <div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingOne">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Networks
+        </button>
+      </h2>
+      <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <div class="container ">
         <div class="card ">
-  <h5 class="card-header">Networks</h5>
   <div class="card-body">
     <h5 class="card-title">Tool description</h5>
     <p class="card-text">{% if tool == 'panda' %}<a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. <a href="https://www.sciencedirect.com/science/article/pii/S2589004219300872">LIONESS</a> reconstructs patient-specific <a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> networks for each gene expression sample. 
@@ -75,18 +160,20 @@
                     <th scope="col">Tool</th>
                     <th scope="col">netZoo release</th>
                     <th scope="col">Network<br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
+                      data-bs-toggle="popover"
+                      data-bs-animation="false"
+                      data-bs-trigger="hover"
+                      data-bs-placement="top"
                       title="Network format"
-                      data-content="Please refer to the Help page Network section for the network download formats. You can download the script to reproduce the network using the R button.">
+                      data-bs-content="Please refer to the Help page Network section for the network download formats. You can download the script to reproduce the network using the R button.">
                     </i></th>
                     <th scope="col">PPI<br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
                       title="Data sources"
-                      data-content="Directly download the PPI prior used for the generation of the network and check the link to the original PPI database and its version.">
+                      data-bs-content="Directly download the PPI prior used for the generation of the network and check the link to the original PPI database and its version.">
                     </i></th>
                     <th scope="col">Motif</th>
                     <th scope="col">Expression</th>
@@ -94,11 +181,12 @@
                     <th scope="col">Genes</th>
                     <th scope="col">Samples</th>
                     <th scope="col">Precision<br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
                       title="Computation precision"
-                      data-content="S=Single, D=Double">
+                      data-bs-content="S=Single, D=Double">
                     </i></th>
                     <th scope="col">Reference</th>
                   </tr>
@@ -107,9 +195,9 @@
                  {% for tissue in cancerlanding %}
                     <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td><a href="{{ tissue.cancerLink }}">{{ tissue.cancer }}</a></td>
+                    <td><a href="{{ tissue.cancerLink }}" class="text-decoration-none">{{ tissue.cancer }}</a></td>
                     <td>{{ tissue.tool }}</td>
-                    <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}">{{ tissue.netzooRel }}</a></td>
+                    <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none">{{ tissue.netzooRel }}</a></td>
                     <td><div class="btn-group" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a> 
                     <a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">R</a></div></td>
                     <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}"><i class="fas fa-link"></i></a></td>
@@ -120,88 +208,153 @@
                     {% if tissue.tool == 'PANDA' %}
                     <td>{{ tissue.samples }}</td>
                     {% else %}
-                    <td><a href="{{ tissue.cardref }}">{{ tissue.samples }}</a></td>
+                    <td><a href="{{ tissue.cardref }}" class="text-decoration-none">{{ tissue.samples }}</a></td>
                     {% endif %}
-                    <td><span class="badge badge-pill badge-primary">D</span></td>
-                    <td><a href="{{ tissue.refs }}"><i class="fas fa-book"></i></a></td>
+                    <td><span class="badge rounded-pill bg-primary">D</span></td>
+                    <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal"></i></a></td>
+                      <!-- Modal -->
+                      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Publication</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              Please check the reference {{ tissue.refs2 }} at the following <a href="{{ tissue.refs }}">link</a>.
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </tr>
                  {% endfor %}
                 </tbody>
               </table>
     </div>
 </div>
+          </div>
+        </div>
+      </div>
 </div>
 
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingTwo">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" id="cardtissuetcga">
+      Phenotypic information TCGA
+    </button>
+  </h2>
+  <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+    <div class="accordion-body">
 {% if tool == 'panda' %}
-<div class="container col-10 mt-4">
+<div class="container ">
         <div class="card " id="cardtissuetcga">
-  <h5 class="card-header">Phenotypic information TCGA</h5>
   <div class="card-body">
     <h5 class="card-title">Variable description</h5>
     <p class="card-text">You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges
 			    is 661 * 12817 (number of TFs * number of genes) (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a TF-by-gene
-            		    matrix named after  the TCGA sample reference.</p>
+                    matrix named after  the TCGA sample reference.</p>
+        <div class="row pb-4">
+          <div class="col-3">
+            <canvas id="myPieChart" width="50" height="30"></canvas>   
+          </div>
+          <div class="col-3">
+            <canvas id="myPieChartETH" width="50" height="30"></canvas>   
+          </div>
+          <div class="col-3">
+            <canvas id="myPieChartAL" width="50" height="30"></canvas>   
+          </div>
+          <div class="col-3">
+            <canvas id="myPieChartStage" width="50" height="30"></canvas>   
+          </div>
+        </div>
         <table id="tissuestabletcga" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
                     <th scope="col">Sample<br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Sample and platform ID">
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-placement="top"
+                      data-bs-animation="false"
+                      data-bs-content="Sample and platform ID">
                     </i></th>
                     <th scope="col">Gender</th>
                     <th scope="col">Race</th>
                     <th scope="col">Weight<br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Weight at diagnosis (kg)">
+                      data-bs-toggle="popover"
+                      data-bs-animation="false"
+                      data-bs-trigger="hover"
+                      data-bs-placement="top"
+                      data-bs-content="Weight at diagnosis (kg)">
                     </i></th>
                      <th scope="col">Height<br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Height at diagnosis (cm)">
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="Height at diagnosis (cm)">
                     </i></th>
                     <th scope="col">Age<br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Age at initial pathologic diagnosis">
+                      data-bs-toggle="popover"
+                      data-bs-animation="false"
+                      data-bs-trigger="hover"
+                      data-bs-placement="top"
+                      data-bs-content="Age at initial pathologic diagnosis">
                     </i></th>
                     <th scope="col">Anatomic location<br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Anatomic neoplasm subdivision. Empty entries are either missing or due to discrepancy.">
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="Anatomic neoplasm subdivision. Empty entries are either missing or due to discrepancy.">
                     </i></th>
                     <th scope="col">Stage<br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="UICC stage">
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="UICC stage">
                     </i></th>
                     <th scope="col">Time<br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Time to event (Death) in years">
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="Time to event (Death) in years">
                     </i></th>
                     <th scope="col">Vital status<br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="0: Alive, 1: Dead">
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="0: Alive, 1: Dead">
                     </i></th>
                     <th scope="col">Network<br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Please refer to the Help page Network section for the network download formats">
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="Please refer to the Help page Network section for the network download formats">
                     </i></th>
                   </tr>
                 </thead>
+                <tfoot>
+                  <tr>
+                      <th>Sample</th>
+                      <th>Gender</th>
+                      <th>Race</th>
+                      <th>Weight</th>
+                      <th>Height</th>
+                      <th>Age</th>
+                      <th>Anatomic location</th>
+                      <th>Stage</th>
+                      <th>Time</th>
+                      <th>Vital status</th>
+                      <th>Network</th>
+                  </tr>
+                </tfoot>
                 <tbody>
                  {% for tissue in tcgasample %}
                     <tr>
@@ -209,11 +362,12 @@
                         <td>{{ tissue.sample }}</td>
                     {% else %}
                         <td>{{ tissue.sample }} <i class="fas fa-info-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
                       title="Platform ID"
-                      data-content="{{ tissue.platform }}">
+                      data-bs-content="{{ tissue.platform }}">
                     </i></td>
                     {% endif %}
                     <td>{{ tissue.gender }}</td>
@@ -226,9 +380,9 @@
                     <td>{{ tissue.time_to_event }}</td>
                     <td>{{ tissue.vital_status }}</td>
                     {% if tissue.sample == 'All' %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a><br><span class="badge badge-pill badge-secondary"><small>{{ tissue.size }}</small></span></td>
+                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a><br><span class="badge rounded-pill bg-secondary"><small>{{ tissue.size }}</small></span></td>
                     {% else %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a><br><span class="badge badge-pill badge-light"><small>{{ tissue.size }}</small></span></td>
+                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a><br><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span></td>
                     {% endif %}
                  {% endfor %}
                 </tbody>
@@ -237,65 +391,85 @@
 </div>
 </div>
 {% elif tool == 'otter' %}
-  <div class="container col-10 mt-4 pb-4 mb-4">
-          <div class="card " id="cardtissuetcga">
-    <h5 class="card-header">Phenotypic information TCGA</h5>
+  <div class="card " id="cardtissuetcga">
     <div class="card-body">
       <h5 class="card-title">Variable description</h5>
-      <p class="card-text">This is a description of the primary clinical variables of the gene expression samples that were used to generate the gene regulatory network.</p>
+        <p class="card-text">This is a description of the primary clinical variables of the gene expression samples that were used to generate the gene regulatory network.</p>
+        <div class="row pb-4">
+          <div class="col-3">
+            <canvas id="myPieChart" width="50" height="30"></canvas>   
+          </div>
+          <div class="col-3">
+            <canvas id="myPieChartETH" width="50" height="30"></canvas>   
+          </div>
+          <div class="col-3">
+            <canvas id="myPieChartAL" width="50" height="30"></canvas>   
+          </div>
+          <div class="col-3">
+            <canvas id="myPieChartStage" width="50" height="30"></canvas>   
+          </div>
+        </div>
           <table id="tissuestabletcga" class="table table-hover" style="width: 100%">
                   <thead>
                     <tr>
                       <th scope="col">Sample<br><i class="far fa-question-circle"
-                        data-toggle="popover"
-                        data-trigger="hover"
-                        data-placement="top"
-                        data-content="Sample ID">
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="Sample ID">
                       </i></th>
                       <th scope="col">Gender</th>
                       <th scope="col">Race</th>
                       <th scope="col">Ethnicity</th>
                       <th scope="col">Weight<br><i class="far fa-question-circle"
-                        data-toggle="popover"
-                        data-trigger="hover"
-                        data-placement="top"
-                        data-content="Weight at diagnosis (kg)">
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="Weight at diagnosis (kg)">
                       </i></th>
                        <th scope="col">Height<br><i class="far fa-question-circle"
-                        data-toggle="popover"
-                        data-trigger="hover"
-                        data-placement="top"
-                        data-content="Height at diagnosis (cm)">
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="Height at diagnosis (cm)">
                       </i></th>
                       <th scope="col">Age<br><i class="far fa-question-circle"
-                        data-toggle="popover"
-                        data-trigger="hover"
-                        data-placement="top"
-                        data-content="Age at initial pathologic diagnosis">
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="Age at initial pathologic diagnosis">
                       </i></th>
                       <th scope="col">Anatomic location<br><i class="far fa-question-circle"
-                        data-toggle="popover"
-                        data-trigger="hover"
-                        data-placement="top"
-                        data-content="Empty entries are either missing or due to discrepancy.">
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="Empty entries are either missing or due to discrepancy.">
                       </i></th>
                       <th scope="col">Diagnosis<i class="far fa-question-circle"
-                        data-toggle="popover"
-                        data-trigger="hover"
-                        data-placement="top"
-                        data-content="ICD code">
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="ICD code">
                       </i></th>
                       <th scope="col">Stage<br><i class="far fa-question-circle"
-                        data-toggle="popover"
-                        data-trigger="hover"
-                        data-placement="top"
-                        data-content="Cancer stage">
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="Cancer stage">
                       </i></th>
                       <th scope="col">Time<br><i class="far fa-question-circle"
-                        data-toggle="popover"
-                        data-trigger="hover"
-                        data-placement="top"
-                        data-content="Time to event (Death) in days">
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="Time to event (Death) in days">
                       </i></th>
                       <th scope="col">Vital status</th>
                     </tr>
@@ -324,13 +498,24 @@
                 </table>
   </div>
   </div>
-  </div>
+
 {% endif %}
+</div>
+    </div>
+  </div>
+</div>
 
 {% if geo == 'yes' %}
-<div class="container col-10 pb-4 mb-4 mt-4">
-        <div class="card " id="cardtissuegeo">
-  <h5 class="card-header">Phenotypic information GEO</h5>
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"  id="cardtissuegeo">
+      Phenotypic information GEO
+    </button>
+  </h2>
+  <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+    <div class="accordion-body">
+<div class="container">
+        <div class="card">
   <div class="card-body">
     <h5 class="card-title">Variable description</h5>
     <p class="card-text">You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges
@@ -344,40 +529,46 @@
                     <th scope="col">Race</th>
                     <th scope="col">GEO ID</th>
                     <th scope="col">Age <br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Age at initial pathologic diagnosis">
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="Age at initial pathologic diagnosis">
                     </i></th>
                     <th scope="col">Anatomic location <br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Anatomic neoplasm subdivision">
+                      data-bs-toggle="popover"
+                      data-bs-animation="false"
+                      data-bs-trigger="hover"
+                      data-bs-placement="top"
+                      data-bs-content="Anatomic neoplasm subdivision">
                     </i></th>
                     <th scope="col">Stage <br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="UICC stage">
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="UICC stage">
                     </i></th>
                     <th scope="col">Time <br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Time to event (Death)">
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="Time to event (Death)">
                     </i></th>
                     <th scope="col">Vital status<br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="0: Alive, 1: Dead">
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="0: Alive, 1: Dead">
                     </i></th>
                     <th scope="col">Network <br><i class="far fa-question-circle"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="Please refer to the Help page Network section for the network download formats">
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="Please refer to the Help page Network section for the network download formats">
                     </i></th>
                   </tr>
                 </thead>
@@ -394,9 +585,9 @@
                     <td>{{ tissue.time_to_event }}</td>
                     <td>{{ tissue.vital_status }}</td>
                     {% if tissue.sample == 'All' %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a><br><span class="badge badge-pill badge-secondary"><small>{{ tissue.size }}</small></span></td>
+                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a><br><span class="badge rounded-pill bg-secondary"><small>{{ tissue.size }}</small></span></td>
                     {% else %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a><br><span class="badge badge-pill badge-light"><small>{{ tissue.size }}</small></span></td>
+                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a><br><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span></td>
                     {% endif %}
                  {% endfor %}
                 </tbody>
@@ -404,64 +595,30 @@
 </div>
 </div>
 </div>
+</div>
+</div>
+</div>
 {% endif %}
 
+</div>
+</div>
 
-<!-- Footer -->
-<footer class="page-footer font-small lighten-3 pt-4">
-  <div class="container text-center text-md-left">
-    <div class="row">
-      <div class="col-md-6 col-lg-6">
-        <h6 class="text-uppercase mb-2">Contact</h6>
-        <p><a href="https://www.hsph.harvard.edu/biostatistics/">Department of Biostatistics</a>
-        <br><a href="https://www.hsph.harvard.edu/">Harvard T.H. Chan School of Public Health</a></p>
-      </div>
-      <div class="col-md-5 col-lg-5">
-        <!-- Social buttons -->
-        <h6 class="text-uppercase mb-2">License</h6>
-        <a class="nav-item nav-link" href="https://creativecommons.org/licenses/by-sa/4.0/"><i class="fab fa-creative-commons fa-2x"></i></a>
-      </div>
-      <div class="col-md-1 col-lg-1">
-        <h6 class="text-uppercase mb-2">Share</h6>
-        <!-- Facebook -->
-        <a href="http://www.facebook.com/sharer/sharer.php?u=http://hsph.harvard.edu" type="button" class="btn-floating btn-fb">
-          <i class="fab fa-facebook-square fa-2x"></i>
-        </a>
-        <!-- Twitter -->
-        <a type="button" class="btn-floating btn-fb" href="https://twitter.com/intent/tweet?text=GRAND: Integrated gene regulatory network database of cell lines, tissues, and small molecules. https://grand.networkmedicine.org">
-          <i class="fab fa-twitter-square fa-2x"></i>
-        </a>
-       <!-- Linkedin -->
-        <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://grand.networkmedicine.org" type="button" class="btn-floating btn-fb">
-          <i class="fab fa-linkedin fa-2x"></i>
-        </a>
-        <a href="/about" type="button" class="btn-floating btn-fb">
-          <i class="fas fa-envelope-square fa-2x"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-</footer>
+</div>
+</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css"></script>
-<script src="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"></script>
-<script src="https://kit.fontawesome.com/a076d05399.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.20/af-2.3.4/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/b-print-1.6.1/cr-1.5.2/fc-3.3.0/fh-3.1.6/kt-2.5.1/r-2.2.3/rg-1.1.1/rr-1.2.6/sc-2.0.1/sp-1.0.1/sl-1.3.1/datatables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-<script src="{% static 'js/popper.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<div class="hidden">
+{% include "footer.html" %}
+</div>
 
 <script>
-$(function () {
-  $('[data-toggle="popover"]').popover();
-})
-
 // Basic example
 $(document).ready(function() {
+      // Setup - add a text input to each footer cell
+      $('#tissuestabletcga tfoot th').each( function () {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    } );
+
     //datatables
     $('#tissuestable').DataTable({
      "serverSide": false,
@@ -480,18 +637,52 @@ $(document).ready(function() {
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
     });
 
-    $('#tissuestabletcga').DataTable({
+    var table = $('#tissuestabletcga').DataTable({
      "serverSide": false,
      "processing": true,
      
-            "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
-             "<'row'<'col-sm-12'tr>>" +
-             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+      "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'>>" +
+      "<'row'<'col-sm-12'tr>>" +
+      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+
+      initComplete: function () {
+      // Apply the search
+      this.api().columns().every( function () {
+      var that = this;
+ 
+      $( 'input', this.footer() ).on( 'keyup change clear', function () {
+         if ( that.search() !== this.value ) {
+            that
+            .search( this.value )
+            .draw();
+          }
+        } );
+      } );
+        }
     });
 
 } );
 </script>
+
+<script>var slug = "{{ slug }}";</script>
+{% if slug == 'Colon' %}
+  <script> var dataurl = "{% static 'data/clinical_tcga.csv' %}";</script>
+{% elif slug == 'Liver' %}
+  <script> var dataurl = "{% static 'data/metadata_liver_01232021.csv' %}";</script>
+{% elif slug == 'Cervix' %}
+  <script> var dataurl = "{% static 'data/metadata_cervix_01232021.csv' %}";</script>
+{% elif slug == 'Breast' %}
+  <script> var dataurl = "{% static 'data/metadata_breast_01292021.csv' %}";</script>
+{% endif %}
+
+<script src="{% static 'js/scatterChart.js' %}"></script>
+<script src="{% static 'js/pieChart.js' %}"></script>
+
+<script>
+  $(document).ready(function () {
+    $('div.hidden').fadeIn(300).removeClass('hidden');
+});
+</script>
+
 </body>
 </html>
-
-

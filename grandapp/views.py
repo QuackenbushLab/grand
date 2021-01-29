@@ -11,6 +11,7 @@ from .forms import ContactForm, GeneForm, DiseaseForm
 from django.conf import settings
 import os
 import random
+import time
 
 # for enrich disease
 import pandas as pd
@@ -220,12 +221,12 @@ def cancerlanding(request,slug):
         tcgasample = Breastsample.objects.all()
     elif slug == 'Liver_cancer':
         tcgasample = Liversample.objects.all()
-    returntupl = {'cancerlanding': cancerlanding, 'slug':slug, 'geo':geo, 'tool':tool,'tcgasample':tcgasample}
+    returntupl = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'geo':geo, 'tool':tool,'tcgasample':tcgasample}
     if slug == 'Colon_cancer':
         tcgasample   = Tcgasample.objects.all()
         geosample    = Geosample.objects.all()
         geo,tool='yes','panda'
-        returntupl   = {'cancerlanding': cancerlanding, 'slug':slug, 'tcgasample':tcgasample,'geosample':geosample,'geo':geo,'tool':tool}
+        returntupl   = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'tcgasample':tcgasample,'geosample':geosample,'geo':geo,'tool':tool}
     return render(request, "cancerlanding.html", returntupl)
 
 def analysis(request):

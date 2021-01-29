@@ -1,0 +1,132 @@
+{% load static %} 
+<!DOCTYPE html> <html lang="en"> <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+  <!-- Load libraries -->
+  <!-- Load Bootsrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <!-- Load datatables CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
+  <!-- Load misc CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+  <!-- Load Bootsrap JS-->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+  <!-- Load JQuery -->
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <!-- Load Highcharts -->
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/annotations.js"></script>
+  <!-- Load Chart.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+  <!-- Load PapaParse to read csv files -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+  <!-- Load Font Awesome -->
+  <script src="{% static 'js/all.js' %}"></script>
+  <!-- Load PDF make -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+  <!-- Load PDF make -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+  <!-- Load datatables JS -->
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
+  <title>GRAND</title>
+</head>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-151168345-1');
+</script>
+
+<!-- Start of body tag and large wrapper -->
+<body class="d-flex flex-column min-vh-100">
+
+
+
+<!-- Header -->
+<nav class="navbar navbar-dark bg-dark navbar-expand-sm ">
+  <div class="container">
+      <a class="navbar-brand m-0" href="/">
+          <img src="{% static 'images/logo.svg' %}" style="width: 400px;">
+      </a>
+      <div class="navbar-nav">
+          <a class="nav-item nav-link" href="/">Home</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Networks
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown1">
+              <li><a class="dropdown-item" href="/drugs">Small molecules</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/cancers">Cancer</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/tissues">Tissues</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/cell">Cell lines</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Analysis
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown2">
+              <li><a class="dropdown-item" href="/analysis">CLUEreg</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/disease">Disease/Tissues</a></li>
+            </ul>
+          </li>
+
+          <a class="nav-item nav-link" href="/help">Help</a>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{% static 'images/cog-solid.svg' %}" style="width: 15px;">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown3">
+              <li><a class="dropdown-item" href="https://github.com/QuackenbushLab/grand"><img src="{% static 'images/github-brands.svg' %}" style="width: 15px;"> GitHub</a></li>
+              <li><a class="dropdown-item" href="https://grand.networkmedicine.org/redoc/">API</a></li>
+              <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >Changelog</a></li>
+              <li><a class="dropdown-item" href="/about">Contact</a></li>
+            </ul>
+          </li>
+
+      </div>
+  </div>
+</nav> 
+              <!-- Modal -->
+              <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">Changelog</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      v0.1 cell line networks<br>
+                      v0.2 aggregate tissue networks<br>
+                      v0.3 TF enrichement tool<br>
+                      v0.4 single-sample tissue networks<br>
+                      v0.5 CLUEreg tool<br>
+                      v0.6 colon cancer networks<br>
+                      v0.7 drug networks<br>
+                      v0.7.1 API v1<br>
+                      v0.8 liver, cervix, and breast cancer Networks<br>
+                      <a href="https://github.com/QuackenbushLab/grand/releases/tag/0.9">v0.9</a> miRNA tissue networks</a><br>
+                      v0.9.1 bootstrap 5<br>
+                      v1.0 glioblastoma networks<br>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+<div class="wrapper flex-grow-1">
+

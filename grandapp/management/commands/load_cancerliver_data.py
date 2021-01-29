@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading cancer liver sample data!")
-        for row in DictReader(open('./data/metadata_liver_07202020.csv')):
+        for row in DictReader(open('./static/data/metadata_liver_01232021.csv')):
             breastsample = Liversample()
             breastsample.sample = row['gdc_cases.samples.portions.analytes.aliquots.submitter_id']
             breastsample.gender = row['gdc_cases.demographic.gender']

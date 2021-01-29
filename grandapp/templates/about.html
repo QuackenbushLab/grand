@@ -1,62 +1,6 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
-  <title>GRAND</title>
-</head>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-151168345-1');
-</script>
-<body class="d-flex flex-column min-vh-100">
-<div class="wrapper flex-grow-1">
-
+{% load static %} 
+{% include "header.html" %}
 {% load widget_tweaks %}
-
-<!-- Header -->
-<nav class="navbar bg-dark navbar-dark navbar-expand-sm">
-    <div class="container">
-        <a class="navbar-brand m-0" href="/">
-            <img src="{% static 'images/logo.svg' %}" style="width: 400px;">
-        </a>
-        <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="/">Home</a>
-            <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Networks</a>
-            <div class="dropdown-menu">
-              <a href="/drugs" class="dropdown-item">Small molecules</a>
-              <a href="/cancers" class="dropdown-item">Cancer</a>
-              <a href="/tissues" class="dropdown-item">Tissues</a>
-              <a href="/cell" class="dropdown-item">Cell lines</a>
-            </div>
-          </li>
-             <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Analysis</a>
-          <div class="dropdown-menu">
-            <a href="/analysis" class="dropdown-item">CLUEreg</a>
-            <a href="/disease" class="dropdown-item">Disease/Tissues</a>
-          </div>
-        </li>
-            <a class="nav-item nav-link" href="/help">Help</a>
-            <a class="nav-item nav-link" href="/about">Contact</a>
-          <a class="nav-item nav-link" href="/download">Download</a>
-            <a class="nav-item nav-link" href="https://github.com/QuackenbushLab/grand"><i class="fab fa-github fa-lg"></i></a>
-        </div>
-    </div>
-  </nav>
-
 
 <div class="container">
     <div class="row">
@@ -91,46 +35,9 @@
 </div>
 
 </div>
-<!-- Footer -->
-<footer class="page-footer font-small lighten-3 pt-4">
-  <div class="container text-center text-md-left">
-    <div class="row">
-      <div class="col-md-6 col-lg-6">
-        <h6 class="text-uppercase mb-2">Contact</h6>
-        <p><a href="https://www.hsph.harvard.edu/biostatistics/">Department of Biostatistics</a>
-        <br><a href="https://www.hsph.harvard.edu/">Harvard T.H. Chan School of Public Health</a></p>
-      </div>
-      <div class="col-md-5 col-lg-5">
-        <!-- Social buttons -->
-        <h6 class="text-uppercase mb-2">License</h6>
-        <a class="nav-item nav-link" href="https://creativecommons.org/licenses/by-sa/4.0/"><i class="fab fa-creative-commons fa-2x"></i></a>
-      </div>
-      <div class="col-md-1 col-lg-1">
-        <h6 class="text-uppercase mb-2">Share</h6>
-        <!-- Facebook -->
-        <a href="http://www.facebook.com/sharer/sharer.php?u=http://hsph.harvard.edu" type="button" class="btn-floating btn-fb">
-          <i class="fab fa-facebook-square fa-2x"></i>
-        </a>
-        <!-- Twitter -->
-        <a type="button" class="btn-floating btn-fb" href="https://twitter.com/intent/tweet?text=GRAND: Integrated gene regulatory network database of cell lines, tissues, and small molecules. https://grand.networkmedicine.org">
-          <i class="fab fa-twitter-square fa-2x"></i>
-        </a>
-       <!-- Linkedin -->
-        <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://grand.networkmedicine.org" type="button" class="btn-floating btn-fb">
-          <i class="fab fa-linkedin fa-2x"></i>
-        </a>
-        <a href="/about" type="button" class="btn-floating btn-fb">
-          <i class="fas fa-envelope-square fa-2x"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-</footer>
+{% include "footer.html" %}
 
-<script src="https://kit.fontawesome.com/a076d05399.js"></script>
-<script src="{% static 'js/jquery.slim.min.js' %}"></script>
-<script src="{% static 'js/popper.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
 </body>
 </html>
 

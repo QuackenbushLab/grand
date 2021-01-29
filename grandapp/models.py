@@ -100,9 +100,10 @@ class Tissue(models.Model):
     nnets     = models.IntegerField(default=0)
 
 class Cancer(models.Model):
-    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
     tissue    = models.CharField(max_length=200)
-    nnets     = models.IntegerField(default=0)
+    nnets     = models.CharField(max_length=200)
+    datasets  = models.CharField(max_length=200)
+    types     = models.CharField(max_length=200)
 
 class Tissuelanding(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
@@ -124,6 +125,7 @@ class Tissuelanding(models.Model):
     genes     = models.IntegerField()
     refs      = models.URLField()
     refs2     = models.URLField(default='#')
+    refs3     = models.URLField(default='#')
     samples   = models.IntegerField(default=0)
     script    = models.CharField(max_length=200)
 
@@ -231,7 +233,6 @@ class Geosample(models.Model):
     link = models.CharField(max_length=200)
 
 class Cancerlanding(models.Model):
-    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
     cancer    = models.CharField(max_length=200)
     cancerLink= models.URLField(default='#')
     tool      = models.CharField(max_length=200)

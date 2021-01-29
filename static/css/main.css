@@ -3,3 +3,24 @@
     box-shadow: 3px 4px 5px 3px rgba(153, 51, 51,0.1);
 }
 
+tfoot input {
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
+}
+
+div.hidden {
+    display: none
+}
+
+.padding-0{
+    padding-right:0;
+    padding-left:0;
+}
+
+.jumbotron {
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+    background-color: #e9ecef;
+    border-radius: .3rem;
+  }

@@ -36,4 +36,6 @@ class Command(BaseCommand):
             cancer = Cancer()
             cancer.tissue    = row['cancer']
             cancer.nnets     = row['nnets']
+            cancer.datasets  = row['datasets']
+            cancer.types     = row['types']
             cancer.save()

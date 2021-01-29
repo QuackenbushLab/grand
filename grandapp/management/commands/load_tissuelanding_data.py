@@ -51,6 +51,7 @@ class Command(BaseCommand):
             tissuelanding.genes        = row['genes']
             tissuelanding.refs         = row['refs']
             tissuelanding.refs2        = row['refs2']
+            tissuelanding.refs3        = row['refs3']
             tissuelanding.samples      = row['samples']
             tissuelanding.reg          = row['reg']
             tissuelanding.script       = row['script']
