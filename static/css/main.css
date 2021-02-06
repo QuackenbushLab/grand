@@ -24,3 +24,14 @@ div.hidden {
     background-color: #e9ecef;
     border-radius: .3rem;
   }
+
+.not-allowed {
+    cursor: not-allowed !important;
+}
+
+#mynetwork {
+    width: 1295px;
+    height: 500px;
+    border: 1px solid lightgray;
+  }
+  

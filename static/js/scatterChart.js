@@ -1,6 +1,10 @@
 $(document).ready(function() {
 
-  var TITLE = 'Height and weight at diagnosis';
+  if (slug == 'Breast'){
+    var TITLE = 'Sample quality control';
+  }else{
+    var TITLE = 'Height and weight at diagnosis';  
+  }
 
   if (slug == 'Colon'){
     var POINT_X = 'height_cm_at_diagnosis'; // column name for x values in data.csv
@@ -49,8 +53,6 @@ $(document).ready(function() {
         name: row[POINT_NAME]
       }
     })
-
-    console.log(data);
 
     var scatterChartData = {
 			datasets: [{

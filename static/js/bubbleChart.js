@@ -123,9 +123,7 @@ $(document).ready(function() {
         var chartData = activePoints[0]['_chart'].config.data;
         var idx = activePoints[0]['_index'];
   
-        var label = chartData.datasets[0].data[idx].name  //chartData.labels[idx]; 
-        var value = chartData.datasets[0].data[idx];
-        console.log(label);
+        var label = chartData.datasets[0].data[idx].name;
         table.search(label).draw();
       }
     };

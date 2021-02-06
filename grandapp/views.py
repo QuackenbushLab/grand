@@ -50,6 +50,14 @@ def genes(request):
     geneslanding = Genelanding.objects.all()
     return render(request, 'genes.html',{'geneslanding':geneslanding})
 
+def networksagg(request,slug):
+    cancerType=slug[:(len(slug)-8)].capitalize()
+    if int(slug[len(slug)-1])==1:
+        dataset='TCGA'
+    elif int(slug[len(slug)-1])==2:
+        dataset='GEO'
+    return render(request, 'networksagg.html', {'cancerType': cancerType, 'dataset':dataset})
+
 def drug(request):
     return render(request, 'drugs.html')
 
@@ -215,18 +223,33 @@ def cancer(request):
 def cancerlanding(request,slug):
     cancerlanding = Cancerlanding.objects.filter(cancer=slug.replace('_',' '))
     geo,tool,tcgasample='no','otter',''
+    #initialize data variables
+    nsamples,ndata,nagg=0,0,0
     if slug == 'Cervix_cancer':
         tcgasample = Cervixsample.objects.all()
+        nsamples,ndata,nagg=0,1,1
     elif slug == 'Breast_cancer':
         tcgasample = Breastsample.objects.all()
+        nsamples,ndata,nagg=0,1,1
     elif slug == 'Liver_cancer':
         tcgasample = Liversample.objects.all()
-    returntupl = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'geo':geo, 'tool':tool,'tcgasample':tcgasample}
+        nsamples,ndata,nagg=0,1,1
+    returntupl = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'geo':geo, 'tool':tool, 
+                  'tcgasample':tcgasample, 'nsamples':nsamples,'ndata':ndata, 'nagg':nagg}
     if slug == 'Colon_cancer':
         tcgasample   = Tcgasample.objects.all()
         geosample    = Geosample.objects.all()
         geo,tool='yes','panda'
-        returntupl   = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'tcgasample':tcgasample,'geosample':geosample,'geo':geo,'tool':tool}
+        nsamples,ndata,nagg=1638,2,2
+        returntupl   = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'tcgasample':tcgasample,
+                        'geosample':geosample,'geo':geo,'tool':tool, 'nsamples':nsamples,'ndata':ndata, 'nagg':nagg}
+    if slug == 'Glioblastoma_cancer':
+        tcgasample   = Tcgasample.objects.all()
+        geosample    = Geosample.objects.all()
+        geo,tool='yes','panda'
+        nsamples,ndata,nagg=1023,3,3
+        returntupl   = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'tcgasample':tcgasample,
+                        'geosample':geosample,'geo':geo,'tool':tool, 'nsamples':nsamples,'ndata':ndata, 'nagg':nagg}
     return render(request, "cancerlanding.html", returntupl)
 
 def analysis(request):

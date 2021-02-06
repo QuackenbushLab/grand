@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'_drug/$', view=views.druglanding, name='druglanding'),
     url(r'^thanks/', views.thanks, name='thanks'),
     url(r'^erroremail/', views.erroremail, name='erroremail'),
+    url(r'networks/aggregate/(\w+)/', view=views.networksagg, name='networksagg'),
     url('drugs/$', view=views.drug, name='drugs'),
     url('api/v1/drugapi/', api_views.DruglandingList.as_view()),
     url('api/v1/tissueapi/', api_views.TissuelandingList.as_view()),
