@@ -1,0 +1,68 @@
+{% load static %} 
+{% include "header.html" %}
+
+<div class='container pt-3 pb-4'>
+
+
+
+
+    <div class="card text-center">
+        <div class="card-header">
+            <ul class="nav nav-pills card-header-pills" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">Network</a>
+                  <img src="{% static 'images/network.svg' %}" style="width: 115px; height:25px">
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link disabled" id="profile-tab" data-bs-toggle="tab" role="tab" aria-selected="false">Input data:</a>
+                  </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#ppi" role="tab" aria-controls="ppi" aria-selected="false">PPI</a>
+                  <img src="{% static 'images/ppi.svg' %}" style="width: 65px; height:31px">
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#motif" role="tab" aria-controls="motif" aria-selected="false">Motif</a>
+                  <img src="{% static 'images/motif.svg' %}" style="width: 75px; height:30px">
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#coexpression" role="tab" aria-controls="coexpression" aria-selected="false" >Coexpression</a>
+                    <img src="{% static 'images/coexpression.svg' %}" style="width: 115px; height:28px">
+                  </li>
+              </ul>
+        </div>
+    
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="network" role="tabpanel" aria-labelledby="home-tab">
+                <div id="mynetwork" ></div> 
+                    <div class="card-body">
+                    <h5 class="card-title">{{ cancerType }} cancer gene regulatory network</h5>
+                    <p class="card-text">Aggregate network model of TCGA gene expression data set.</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Network parameters</li>
+                        <li class="list-group-item">TFs</li>
+                        <li class="list-group-item">Genes</li>
+                    </ul>
+            </div>
+            <div class="tab-pane fade" id="ppi" role="tabpanel" aria-labelledby="profile-tab">...</div>
+            <div class="tab-pane fade" id="motif" role="tabpanel" aria-labelledby="contact-tab">...</div>
+          </div>
+    
+      </div>
+    
+
+
+</div>
+
+
+
+
+
+{% include "footer.html" %}
+
+</div>
+<script> var dataurl = "{% static 'data/regMatQval005.csv' %}";</script>
+<script src="{% static 'js/networksagg.js' %}"></script>
+
+</body>
+</html>
