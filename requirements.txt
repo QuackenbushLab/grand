@@ -21,7 +21,7 @@ configobj==5.0.6
 constantly==15.1.0
 coreapi==2.3.3
 coreschema==0.0.4
-cryptography==2.1.4
+cryptography==3.2
 dask==2.14.0
 distributed==2.14.0
 distro-info===0.18ubuntu0.18.04.1
