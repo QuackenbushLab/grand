@@ -24,7 +24,7 @@ Update to github is:
 
 - molcluereg folder (can be skipped if no major changes)
 
-` scp -r -i /Users/mab8354/Virginia.pem granddb/static/molcluereg/ ubuntu@3.91.1.70:~/granddb/static/molcluereg/`
+` scp -r -i /Users/mab8354/Virginia.pem granddb/static/molcluereg/ ubuntu@3.91.1.70:~/granddb/static/`
 
 - static/data folder
 

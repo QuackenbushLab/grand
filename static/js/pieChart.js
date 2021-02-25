@@ -25,6 +25,9 @@ $(document).ready(function() {
         var dataVital = rows.map(function(row) {
             return row['vital_status'];
         })
+
+        var gbmtext3='Anatomic location'
+        var gbmtext4='Stage'
     }else if (slug == 'Glioblastoma'){
       var data2 = rows.map(function(row) {
         return row['gender'];
@@ -69,6 +72,8 @@ $(document).ready(function() {
         var dataVital = rows.map(function(row) {
             return row['gdc_cases.diagnoses.vital_status'];
         })
+        var gbmtext3='Anatomic location'
+        var gbmtext4='Stage'
     }
   
       function foo(arr) {
