@@ -19,7 +19,17 @@ Update to github is:
 
 1. Transfer .csv files
 
+- data folder
 ` scp -r -i /Users/mab8354/Virginia.pem granddb/data/*.csv ubuntu@3.91.1.70:~/granddb/data/`
+
+- molcluereg folder (can be skipped if no major changes)
+
+` scp -r -i /Users/mab8354/Virginia.pem granddb/static/molcluereg/ ubuntu@3.91.1.70:~/granddb/static/molcluereg/`
+
+- static/data folder
+
+` scp -r -i /Users/mab8354/Virginia.pem granddb/static/data/*.csv ubuntu@3.91.1.70:~/granddb/static/data/`
+
 
 2. set debug to false
 

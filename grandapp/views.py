@@ -406,10 +406,10 @@ def analysisexampletfs(request):
              tfgene      = request.POST['tfgene']
              brd         = request.POST.get('brd', False)
              try:
-                 u = open('src/cluereg/data/sampleUp.csv','w')
+                 u = open('src/clueReg/data/sampleUp.csv','w')
                  u.write(contentup)
                  u.close()
-                 d = open('src/cluereg/data/sampleDown.csv','w')
+                 d = open('src/clueReg/data/sampleDown.csv','w')
                  d.write(contentdown)
                  d.close()
                  if tfgene=='Targeted genes':
@@ -679,17 +679,17 @@ def enrichCmapReg(gene,sampleGenesUp,sampleGenesDown,brd):
     print('Reading drug database')
     #db         = pd.read_csv('cmapreg.csv', header=None,dtype=np.float64)
     if gene==1:
-	    sparse_matrix = scipy.sparse.load_npz('src/cluereg/data/sparse_cmapreg.npz')
+	    sparse_matrix = scipy.sparse.load_npz('src/clueReg/data/sparse_cmapreg.npz')
     elif gene==0:
-        sparse_matrix = scipy.sparse.load_npz('src/cluereg/data/sparse_cmapregtf.npz')
+        sparse_matrix = scipy.sparse.load_npz('src/clueReg/data/sparse_cmapregtf.npz')
 
 	#sparse_matrix = scipy.sparse.load_npz(sys.argv[1]) #('sparse_cmapreg.npz')
 	# None of python's sparse libraries allow storing colnames and rownames so they have to be maintained separetaly
     if gene==1:
-        genNames  = pd.read_csv('src/cluereg/data/geneNames.csv',header=None) #'geneNames.csv'
+        genNames  = pd.read_csv('src/clueReg/data/geneNames.csv',header=None) #'geneNames.csv'
     elif gene==0:
-        genNames    = pd.read_csv('src/cluereg/data/tfNames.csv',header=None) #'geneNames.csv'
-    drugDF = pd.read_csv('src/cluereg/data/drugNamesAug.csv', header=0,index_col=0)
+        genNames    = pd.read_csv('src/clueReg/data/tfNames.csv',header=None) #'geneNames.csv'
+    drugDF = pd.read_csv('src/clueReg/data/drugNamesAug.csv', header=0,index_col=0)
     drugNames = drugDF.iloc[:,0]
     #drugNames  = pd.read_csv('src/cluereg/data/drugNames.csv',header=None)
     #geneNames  = pd.read_csv(sys.argv[2],header=None) #'geneNames.csv'
