@@ -41,4 +41,5 @@ class Command(BaseCommand):
             gwas.pval      = row['pval']
             gwas.qval      = row['qval']
             gwas.nuser     = row['nuser']
+            gwas.logpval   = row['pval']
             gwas.save()

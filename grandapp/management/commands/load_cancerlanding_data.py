@@ -53,4 +53,5 @@ class Command(BaseCommand):
             tissuelanding.samples      = row['samples']
             tissuelanding.cardref      = row['cardref']
             tissuelanding.script       = row['script']
+            tissuelanding.dataset       = row['dataset']
             tissuelanding.save()

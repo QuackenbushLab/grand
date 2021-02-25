@@ -38,4 +38,5 @@ class Command(BaseCommand):
             cancer.nnets     = row['nnets']
             cancer.datasets  = row['datasets']
             cancer.types     = row['types']
+            cancer.subtype   = row['subtype']
             cancer.save()

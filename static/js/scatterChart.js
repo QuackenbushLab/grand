@@ -2,6 +2,8 @@ $(document).ready(function() {
 
   if (slug == 'Breast'){
     var TITLE = 'Sample quality control';
+  }else if (slug == 'Glioblastoma'){
+    var TITLE = 'Relationship between survival and performance score';
   }else{
     var TITLE = 'Height and weight at diagnosis';  
   }
@@ -10,6 +12,8 @@ $(document).ready(function() {
     var POINT_X = 'height_cm_at_diagnosis'; // column name for x values in data.csv
   }else if (slug == 'Breast'){
     var POINT_X = 'cgc_slide_percent_tumor_nuclei'; 
+  }else if (slug == 'Glioblastoma'){
+    var POINT_X = 'karnofskyperformancescore';
   }else{
     var POINT_X = 'gdc_cases.exposures.height'; 
   }
@@ -20,6 +24,8 @@ $(document).ready(function() {
     var POINT_Y = 'weight_kg_at_diagnosis'; // column name for y values in data.csv
   }else if (slug == 'Breast'){
     var POINT_Y = 'cgc_slide_percent_necrosis';   
+  }else if (slug == 'Glioblastoma'){
+    var POINT_Y = 'daystodeath';   
   }else{
     var POINT_Y = 'gdc_cases.exposures.weight'; 
   }
@@ -34,6 +40,9 @@ $(document).ready(function() {
   if (slug == 'Breast'){
     var X_AXIS = 'Tumor nuclei in sample (%)'; // x-axis label, label in tooltip
     var Y_AXIS = 'Necrosis in sample (%) '; // y-axis label, label in tooltip
+  }else if (slug == 'Glioblastoma'){
+    var X_AXIS = 'Karnofsky performance score'; // x-axis label, label in tooltip
+    var Y_AXIS = 'Days to death'; // y-axis label, label in tooltip
   }else{
     var X_AXIS = 'Height at diagnosis (cm)'; // x-axis label, label in tooltip
     var Y_AXIS = 'Weight at diagnosis (kg)'; // y-axis label, label in tooltip
@@ -136,9 +145,15 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 
-    var TITLE = 'Days to death and age at diagnosis';
+    if (slug == 'Glioblastoma'){
+        var TITLE = 'Days to death and age at diagnosis';
+    }else{
+        var TITLE = 'Relationship between survival and age';
+    }
     if (slug == 'Colon'){
       var POINT_X = 'time_to_event'; // column name for x values in data.csv
+    }else if (slug == 'Glioblastoma'){
+      var POINT_X = 'yearstobirth'; 
     }else{
       var POINT_X = 'gdc_cases.diagnoses.days_to_death'; // column name for x values in data.csv
     }
@@ -147,6 +162,8 @@ $(document).ready(function() {
   
     if (slug == 'Colon'){
       var POINT_Y = 'age_at_initial_pathologic_diagnosis'; // column name for y values in data.csv
+    }else if (slug == 'Glioblastoma'){
+      var POINT_Y = 'daystodeath'; 
     }else{
       var POINT_Y = 'cgc_case_age_at_diagnosis'; // column name for y values in data.csv
     }
@@ -157,8 +174,13 @@ $(document).ready(function() {
     var POINT_COLOR = 'rgba(0,0,255,0.7)'; // eg `black` or `rgba(10,100,44,0.8)`
     var POINT_RADIUS = 5; // radius of each data point
   
-    var X_AXIS = 'Days to death'; // x-axis label, label in tooltip
-    var Y_AXIS = 'Age at diagnosis (years)'; // y-axis label, label in tooltip
+    if (slug == 'Glioblastoma'){
+      var X_AXIS = 'Days to death'; // x-axis label, label in tooltip
+      var Y_AXIS = 'Age at diagnosis (years)'; // y-axis label, label in tooltip
+    }else{
+      var Y_AXIS = 'Age at diagnosis (years)'; // x-axis label, label in tooltip
+      var X_AXIS = 'Days to death'; // y-axis label, label in tooltip
+    }
   
     var SHOW_GRID = true; // `true` to show the grid, `false` to hide
   

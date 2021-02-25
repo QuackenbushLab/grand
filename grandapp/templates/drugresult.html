@@ -14,7 +14,11 @@
 </div>
 
 
+
 <div class="container col-9 pb-5 mb-5">
+  <canvas id="container" style="width:100%; height:400px;"></canvas>
+    
+
 <div class="card text-left">
   <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs">
@@ -46,6 +50,7 @@
         <table id="drugstbl1" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
+                    <th></th>
                     <th scope="col">Drug</th>
                     <th scope="col">Overlap <i class="far fa-question-circle"
                       data-bs-toggle="popover"
@@ -62,20 +67,27 @@
                       data-bs-content="Cosine similarity between the input vector and top 100 compounds. A cosine of 1 indicates a perfect alignment in the direction of the vectors and -1 means an opposite direction of 
                       the vectors in the n-dimensional gene space. See also Duan et al., NPJ Sys Biol Appl, 2016.">
                     </i></th>
+                    <th scope="col">Drug</th>
                   </tr>
                 </thead>
 
 		 <tbody>
 		 {% for dd in drugdown %}
 		    <tr>
-		    <td>{{ dd.drug }}</a></td>
+        <td class="details-control"><i class="fa fa-plus-circle" aria-hidden="true"></i></td>
+		    <td>{{ dd.drug }}</td>
 		    <td>{{ dd.overlap }}</td>
 		    <td>{{ dd.cosine }}</td>
-                    </tr>
+        <td>{{ dd.altid }} </td>
+        <td>{{ dd.inchi_key_prefix }} </td>
+        <td>{{ dd.inchi_key }} </td>
+        <td>{{ dd.canonical_smiles }} </td>
+        <td>{{ dd.pubchem_cid }} </td>
+        </tr>
 		 {% endfor %}
 
-                </tbody>
-         </table>
+      </tbody>
+    </table>
 </div>
 </div>
 
@@ -94,14 +106,52 @@
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
 
 <script>
+    function format(dd,d){
+        
+        // `d` is the original data object for the row
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+            '<tr>' +
+                '<td>Broad ID name:</td>' +
+                '<td>' + dd[4] + '</td>' +
+            '</tr>' +
+            '<tr>' +
+                '<td>Inchi key prefix:</td>' +
+                '<td>' + dd[5] + '</td>' +
+            '</tr>' +
+            '<tr>' +
+                '<td>Inchi key:</td>' +
+                '<td>' + dd[6] + '</td>' +
+            '</tr>' +
+            '<tr>' +
+                '<td>Canonical smiles:</td>' +
+                '<td>' + dd[7] + '</td>' +
+            '</tr>' +
+            '<tr>' +
+                '<td>Pubchem cid:</td>' +
+                '<td><a href="https://pubchem.ncbi.nlm.nih.gov/compound/'+dd[8]+'">' + dd[8] + '</a></td>' +
+            '</tr>' +
+            '<tr>' +
+              '<img src="/static/molcluereg/'+dd[1]+'.svg" width="300" height="300" >'
+            '</tr>' +
+        '</table>';  
+   }
+
 // Basic example
 $(document).ready(function() {
     //datatables
-    $('#drugstbl1').DataTable({
-
+    var table = $('#drugstbl1').DataTable({
+      select:"single",
+      columnDefs: [
+        { orderable: false, targets: 0 },
+            {
+                "targets": [ 4,5,6,7,8 ],
+                "visible": false,
+            }
+          ],
       "serverSide": false,
       "processing": true,
-      "order": [[ 1, "desc" ]],
+      "order": [[ 2, "desc" ]],
+
 
       buttons: [
             'copy', 'csv', 'pdf', 'print'
@@ -112,6 +162,32 @@ $(document).ready(function() {
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
     });
 
+         // Add event listener for opening and closing details
+         $('#drugstbl1 tbody').on('click', 'td.details-control', function () {
+             var tr = $(this).closest('tr');
+             var row = table.row(tr);
+             //console.log(row.data()[4])
+
+             if (row.child.isShown()) {
+                 // This row is already open - close it
+                 row.child.hide();
+                 tr.find('svg').attr('color', 'green'); // FontAwesome 5
+                 tr.find('svg').attr('data-icon', 'plus-circle');    // FontAwesome 5
+             }
+             else {
+                 // Open this row
+                 row.child(format(row.data())).show();
+                 tr.find('svg').attr('color', 'red'); // FontAwesome 5
+                 tr.find('svg').attr('data-icon', 'minus-circle'); // FontAwesome 5
+             }
+         });
+
+         table.on("user-select", function (e, dt, type, cell, originalEvent) {
+             if ($(cell.node()).hasClass("details-control")) {
+                 e.preventDefault();
+             }
+         });
+
 } );
 </script>
 
@@ -120,6 +196,13 @@ $(document).ready(function() {
     $('div.hidden').fadeIn(500).removeClass('hidden');
 });
 </script>
+
+<script> 
+  var data2 = JSON.parse("{{data|escapejs}}");  
+  var sense = "{{ sense }}";
+</script>
+
+<script src="{% static 'js/barChart.js' %}"></script>
 
 </body>
 </html>

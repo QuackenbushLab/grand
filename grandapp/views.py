@@ -5,13 +5,14 @@ from django.core import serializers
 from .models import Cell, Disease, Cancer
 from .models import Druglanding, DrugResultUp, DrugResultDown, Params, Tcgasample, Geosample, Genelanding
 from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding, Tissuesample, Cancerlanding, Drugsample
-from .models import Drugdesc, Breastsample, Cervixsample, Liversample
+from .models import Drugdesc, Breastsample, Cervixsample, Liversample, Ggbmd1sample, Ggbmd2sample, Ggnsample
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
 from .forms import ContactForm, GeneForm, DiseaseForm
 from django.conf import settings
 import os
 import random
 import time
+from django.core import serializers
 
 # for enrich disease
 import pandas as pd
@@ -244,12 +245,14 @@ def cancerlanding(request,slug):
         returntupl   = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'tcgasample':tcgasample,
                         'geosample':geosample,'geo':geo,'tool':tool, 'nsamples':nsamples,'ndata':ndata, 'nagg':nagg}
     if slug == 'Glioblastoma_cancer':
-        tcgasample   = Tcgasample.objects.all()
-        geosample    = Geosample.objects.all()
+        ggbmd1sample   = Ggbmd1sample.objects.all()
+        ggbmd2sample   = Ggbmd2sample.objects.all()
+        ggnsample      = Ggnsample.objects.all()
         geo,tool='yes','panda'
         nsamples,ndata,nagg=1023,3,3
-        returntupl   = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'tcgasample':tcgasample,
-                        'geosample':geosample,'geo':geo,'tool':tool, 'nsamples':nsamples,'ndata':ndata, 'nagg':nagg}
+        returntupl   = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'ggbmd1sample':ggbmd1sample,
+                        'geosample':ggnsample,'geo':geo,'tool':tool, 'nsamples':nsamples,'ndata':ndata, 'nagg':nagg, 
+                        'ggbmd2sample':ggbmd2sample,}
     return render(request, "cancerlanding.html", returntupl)
 
 def analysis(request):
@@ -262,11 +265,11 @@ def analysis(request):
              contentdown = request.POST['contentdown']
              tfgene      = request.POST['tfgene']
              brd         = request.POST.get('brd', False)
+             max_display = int(request.POST['ngenes'])
              data=contentup.split('\r\n')
              data = list(filter(None, data))
              sampleUp = pd.DataFrame(data, columns = ['Gene'])
              data=contentdown.split('\r\n')
-             print(data)
              data = list(filter(None, data))
              sampleDown = pd.DataFrame(data, columns = ['Gene'])
              try:
@@ -274,29 +277,38 @@ def analysis(request):
                      gene=1
                  elif tfgene=='TF targeting':
                      gene=0
-                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4 = enrichCmapReg(gene,sampleUp,sampleDown,brd)
-                 print(len(drugNames))
-                 max_display=100
+                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4, drugDF = enrichCmapReg(gene,sampleUp,sampleDown,brd)
+                 #max_display=100
                  randid      =random.randint(1,1000000)
                  counter= Params.objects.get(id=-1)
                  newID  = counter.genesupin % 10
                  i=0
                  for i in range(max_display):
                      drug=DrugResultUp.objects.get(idd=i+1, nuser=newID)
-                     currDrugName = drugNames.iloc[indSort[i]].values[0]
+                     currDrugName = drugNames[indSort[i]]
                      drug.drug    = currDrugName[0].upper() + currDrugName[1:]
                      drug.cosine  = round(cosDist[indSort[i]],4)
                      drug.overlap = overlap[indSort[i]]
                      drug.druglink= 'https://grand.networkmedicine.org/drugs/' + drug.drug + '-drug/'
                      drug.query   = randid
+                     drug.altid           =drugDF.iloc[indSort[i],1]
+                     drug.inchi_key_prefix=drugDF.iloc[indSort[i],5]
+                     drug.inchi_key       =drugDF.iloc[indSort[i],6]
+                     drug.canonical_smiles=drugDF.iloc[indSort[i],7]
+                     drug.pubchem_cid     =drugDF.iloc[indSort[i],8]
                      drug.save()
                      drug=DrugResultDown.objects.get(idd=i+1, nuser=newID)
-                     currDrugName = drugNames.iloc[indSort[-1-i]].values[0]
+                     currDrugName = drugNames[indSort[-1-i]]
                      drug.drug    = currDrugName[0].upper() + currDrugName[1:]
                      drug.cosine  = round(cosDist[indSort[-1-i]],4)
                      drug.overlap = overlap[indSort[-1-i]]
                      drug.druglink= 'https://grand.networkmedicine.org/drugs/' + drug.drug + '-drug/'
                      drug.query   = randid
+                     drug.altid           =drugDF.iloc[indSort[-1-i],1]
+                     drug.inchi_key_prefix=drugDF.iloc[indSort[-1-i],5]
+                     drug.inchi_key       =drugDF.iloc[indSort[-1-i],6]
+                     drug.canonical_smiles=drugDF.iloc[indSort[-1-i],7]
+                     drug.pubchem_cid     =drugDF.iloc[indSort[-1-i],8]
                      drug.save()
                      i+=1
                      #payload = {'drug':drugNames.iloc[indSort[-1-i]],'cosine':round(cosDist[indSort[-1-i]],4),'overlap':overlap[indSort[-1-i]]}
@@ -325,6 +337,7 @@ def analysisexample(request): #all the else part can be deleted
              contentup   = request.POST['contentup']
              contentdown = request.POST['contentdown']
              tfgene      = request.POST['tfgene']
+             brd         = request.POST.get('brd', False)
              data=contentup.split('\r\n')
              data = list(filter(None, data))
              sampleUp = pd.DataFrame(data, columns = ['Gene'])
@@ -343,22 +356,32 @@ def analysisexample(request): #all the else part can be deleted
                      gene = 1 
                  elif tfgene=='TF targeting':
                      gene=0
-                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4 = enrichCmapReg(gene,sampleUp,sampleDown)
+                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4, drugDF = enrichCmapReg(gene,sampleUp,sampleDown,brd)
                  max_display=100
                  for i in range(max_display):
                      drug=DrugResultUp.objects.get(id=i+1)
-                     currDrugName  = drugNames.iloc[indSort[i]].values[0]
+                     currDrugName  = drugNames[indSort[i]]
                      drug.drug     = currDrugName.capitalize()
                      drug.cosine   = round(cosDist[indSort[i]],4)
                      drug.overlap  = overlap[indSort[i]]
                      drug.druglink = 'https://grand.networkmedicine.org/drugs/' + drug.drug + '-drug/'
+                     drug.altid           =drugDF.iloc[indSort[i],1]
+                     drug.inchi_key_prefix=drugDF.iloc[indSort[i],5]
+                     drug.inchi_key       =drugDF.iloc[indSort[i],6]
+                     drug.canonical_smiles=drugDF.iloc[indSort[i],7]
+                     drug.pubchem_cid     =drugDF.iloc[indSort[i],8]
                      drug.save()
                      drug=DrugResultDown.objects.get(id=i+1).values[0]
-                     currDrugName  = drugNames.iloc[indSort[-1-i]].values[0]
+                     currDrugName  = drugNames[indSort[-1-i]]
                      drug.drug     = currDrugName.capitalize()
                      drug.cosine   = round(cosDist[indSort[-1-i]],4)
                      drug.overlap  = overlap[indSort[-1-i]]
                      drug.druglink = 'https://grand.networkmedicine.org/drugs/' + drug.drug + '-drug/'
+                     drug.altid           =drugDF.iloc[indSort[-1-i],1]
+                     drug.inchi_key_prefix=drugDF.iloc[indSort[-1-i],5]
+                     drug.inchi_key       =drugDF.iloc[indSort[-1-i],6]
+                     drug.canonical_smiles=drugDF.iloc[indSort[-1-i],7]
+                     drug.pubchem_cid     =drugDF.iloc[indSort[-1-i],8]
                      drug.save()
                  param  = Params.objects.get(id=1)
                  param.genesupin   = stat1
@@ -381,6 +404,7 @@ def analysisexampletfs(request):
              contentup   = request.POST['contentup']
              contentdown = request.POST['contentdown']
              tfgene      = request.POST['tfgene']
+             brd         = request.POST.get('brd', False)
              try:
                  u = open('src/cluereg/data/sampleUp.csv','w')
                  u.write(contentup)
@@ -392,18 +416,28 @@ def analysisexampletfs(request):
                      gene = 1
                  elif tfgene=='TF targeting':
                      gene=0
-                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4 = enrichCmapReg(gene)
+                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4, drugDF = enrichCmapReg(gene,sampleUp,sampleDown,brd)
                  max_display=100
                  for i in range(max_display):
                      drug=DrugResultUp.objects.get(id=i+1)
-                     drug.drug   =drugNames.iloc[indSort[i]].values[0]
-                     drug.cosine =round(cosDist[indSort[i]],4)
-                     drug.overlap=overlap[indSort[i]]
+                     drug.drug            =drugNames[indSort[i]]
+                     drug.cosine          =round(cosDist[indSort[i]],4)
+                     drug.overlap         =overlap[indSort[i]]
+                     drug.altid           =drugDF.iloc[indSort[i],1]
+                     drug.inchi_key_prefix=drugDF.iloc[indSort[i],5]
+                     drug.inchi_key       =drugDF.iloc[indSort[i],6]
+                     drug.canonical_smiles=drugDF.iloc[indSort[i],7]
+                     drug.pubchem_cid     =drugDF.iloc[indSort[i],8]
                      drug.save()
                      drug=DrugResultDown.objects.get(id=i+1).values[0]
-                     drug.drug   =drugNames.iloc[indSort[-1-i]]
-                     drug.cosine =round(cosDist[indSort[-1-i]],4)
-                     drug.overlap=overlap[indSort[-1-i]]
+                     drug.drug            =drugNames[indSort[-1-i]]
+                     drug.cosine          =round(cosDist[indSort[-1-i]],4)
+                     drug.overlap         =overlap[indSort[-1-i]]
+                     drug.altid           =drugDF.iloc[indSort[-1-i],1]
+                     drug.inchi_key_prefix=drugDF.iloc[indSort[-1-i],5]
+                     drug.inchi_key       =drugDF.iloc[indSort[-1-i],6]
+                     drug.canonical_smiles=drugDF.iloc[indSort[-1-i],7]
+                     drug.pubchem_cid     =drugDF.iloc[indSort[-1-i],8]
                      drug.save()
                  param  = Params.objects.get(id=1)
                  param.genesupin   = stat1
@@ -420,32 +454,72 @@ def analysisexampletfs(request):
 def drugresult(request, id):
     params   = Params.objects.filter(query=id)
     drugdown = DrugResultDown.objects.filter(query=id)
-    return render(request, 'drugresult.html', {'params':params,'drugdown':drugdown,'id':id})
+    data = serializers.serialize("json", drugdown)
+    sense='reverse'
+    return render(request, 'drugresult.html', {'params':params,'drugdown':drugdown,'id':id, 'data': data, 'sense':sense})
 
 def drugresultsimilar(request, id):
     params = Params.objects.filter(query=id)
     drugup = DrugResultUp.objects.filter(query=id)
-    return render(request, 'drugresultsimilar.html', {'params':params,'drugup':drugup,'id':id})
+    data = serializers.serialize("json", drugup)
+    sense='similar'
+    return render(request, 'drugresultsimilar.html', {'params':params,'drugup':drugup,'id':id, 'data': data, 'sense':sense})
 
 def diseasegwas(request, id):
     params  = Params.objects.filter(query=id)
+    gwas    = Gwas.objects.filter(disease='Response to anti-retroviral therapy ddI d4T in HIV-1 infection grade 3 peripheral neuropathy')
+    for objectgwas in gwas:
+        objectgwas.disease ='Response to anti-retroviral therapy'
+        objectgwas.save()
+    gwas    = Gwas.objects.filter(disease='Primary tooth development time to first tooth eruption')
+    for objectgwas in gwas:
+        objectgwas.disease ='Primary tooth to first tooth eruption'
+        objectgwas.save()
     gwas    = Gwas.objects.filter(query=id)
-    return render(request, 'diseaseresultgwas.html', {'params':params,'gwas':gwas,'id':id})
+    for objectgwas in gwas:
+        objectgwas.logpval = -np.log10(objectgwas.pval )
+        objectgwas.save()
+    gwas    = Gwas.objects.filter(query=id)
+    data = serializers.serialize("json", gwas)
+    sense='gwas'
+    return render(request, 'diseaseresultgwas.html', {'params':params,'gwas':gwas,'id':id, 'data': data, 'sense':sense})
 
 def diseasehpo(request, id):
     params  = Params.objects.filter(query=id)
     disease = Disease.objects.filter(query=id)
-    return render(request, 'diseaseresulthpo.html', {'params':params,'disease':disease,'id':id})
+    sense='disease'
+    for objectdisease in disease:
+        objectdisease.logpval = -np.log10(objectdisease.pval )
+        objectdisease.save()
+        disease = Disease.objects.filter(query=id)
+    data = serializers.serialize("json", disease)
+    return render(request, 'diseaseresulthpo.html', {'params':params,'disease':disease,'id':id, 'data': data, 'sense':sense})
 
 def diseasetissueex(request, id):
     params  = Params.objects.filter(query=id)
     tissueex   = TissueEx.objects.filter(query=id)
-    return render(request, 'diseaseresulttissueex.html', {'params':params,'tissueex':tissueex,'id':id})
+    sense='tissueex'
+    tissueex   = TissueEx.objects.filter(query=id)
+    for objecttissuex in tissueex:
+        objecttissuex.logpval = -np.log10(objecttissuex.pval)
+        if np.isinf(objecttissuex.logpval):
+            objecttissuex.logpval = 10
+        objecttissuex.save()
+    data = serializers.serialize("json", tissueex)
+    return render(request, 'diseaseresulttissueex.html', {'params':params,'tissueex':tissueex,'id':id, 'data': data, 'sense':sense})
 
 def diseasetissuetar(request, id):
-    params  = Params.objects.filter(query=id)
+    params     = Params.objects.filter(query=id)
     tissuetar  = TissueTar.objects.filter(query=id)
-    return render(request, 'diseaseresulttissuetar.html', {'params':params,'tissuetar':tissuetar,'id':id})
+    sense='tissuetar'
+    tissuetar  = TissueTar.objects.filter(query=id)
+    for objecttissutar in tissuetar:
+        objecttissutar.logpval = -np.log10(objecttissutar.pval)
+        if np.isinf(objecttissutar.logpval):
+            objecttissutar.logpval = 10
+        objecttissutar.save()
+    data = serializers.serialize("json", tissuetar)
+    return render(request, 'diseaseresulttissuetar.html', {'params':params,'tissuetar':tissuetar,'id':id, 'data': data, 'sense':sense})
 
 def about(request):
     if request.method == 'GET':
@@ -615,7 +689,9 @@ def enrichCmapReg(gene,sampleGenesUp,sampleGenesDown,brd):
         genNames  = pd.read_csv('src/cluereg/data/geneNames.csv',header=None) #'geneNames.csv'
     elif gene==0:
         genNames    = pd.read_csv('src/cluereg/data/tfNames.csv',header=None) #'geneNames.csv'
-    drugNames  = pd.read_csv('src/cluereg/data/drugNames.csv',header=None) #'drugNames.csv'
+    drugDF = pd.read_csv('src/cluereg/data/drugNamesAug.csv', header=0,index_col=0)
+    drugNames = drugDF.iloc[:,0]
+    #drugNames  = pd.read_csv('src/cluereg/data/drugNames.csv',header=None)
     #geneNames  = pd.read_csv(sys.argv[2],header=None) #'geneNames.csv'
     #drugNames  = pd.read_csv(sys.argv[3],header=None) #'drugNames.csv'
     #db.columns = drugNames
@@ -680,9 +756,11 @@ def enrichCmapReg(gene,sampleGenesUp,sampleGenesDown,brd):
     stat3=np.count_nonzero(intersectUp)
     stat4=np.count_nonzero(intersectDown)
     if brd=='on':
-        indBrd=[False if d[0:4]=='BRD-' else True for d in drugNames.iloc[:,0]]
-        drugNames= drugNames.iloc[indBrd,]
+        indBrd=[False if d[0:4]=='BRD-' else True for d in drugNames]
+        drugNames= drugNames[indBrd]
+        drugNames.index=list(range(0,len(drugNames)))
         cosDist  = cosDist[indBrd]
         overlap  = overlap[indBrd]
         indSort  = np.argsort(overlap)
-    return drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4
+        drugDF   = drugDF.iloc[indBrd]
+    return drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4, drugDF

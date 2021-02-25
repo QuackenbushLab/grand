@@ -55,6 +55,11 @@ class DrugResultUp(models.Model):
     druglink  = models.URLField()
     query     = models.IntegerField(default=0)
     nuser     = models.IntegerField(default=0)
+    altid           = models.CharField(max_length=400)
+    inchi_key_prefix= models.CharField(max_length=400)
+    inchi_key       = models.CharField(max_length=400)
+    canonical_smiles= models.CharField(max_length=400)
+    pubchem_cid     = models.CharField(max_length=400)
 
 class DrugResultDown(models.Model):
     idd       = models.IntegerField(default=0)
@@ -64,6 +69,11 @@ class DrugResultDown(models.Model):
     druglink  = models.URLField()
     query     = models.IntegerField(default=0)
     nuser     = models.IntegerField(default=0)
+    altid           = models.CharField(max_length=400)
+    inchi_key_prefix= models.CharField(max_length=400)
+    inchi_key       = models.CharField(max_length=400)
+    canonical_smiles= models.CharField(max_length=400)
+    pubchem_cid     = models.CharField(max_length=400)
 
 class Params(models.Model):
     id         = models.AutoField(primary_key=True)
@@ -83,6 +93,7 @@ class Disease(models.Model):
     hpoId        = models.CharField(max_length=200)
     query        = models.IntegerField(default=0)
     nuser        = models.IntegerField(default=0)
+    logpval      = models.FloatField()
 
 class Gwas(models.Model):
     idd          = models.IntegerField(default=0)
@@ -93,6 +104,7 @@ class Gwas(models.Model):
     qval         = models.FloatField()
     query        = models.IntegerField(default=0)
     nuser        = models.IntegerField(default=0)
+    logpval      = models.FloatField()
 
 class Tissue(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
@@ -104,6 +116,7 @@ class Cancer(models.Model):
     nnets     = models.CharField(max_length=200)
     datasets  = models.CharField(max_length=200)
     types     = models.CharField(max_length=200)
+    subtype   = models.CharField(max_length=200)
 
 class Tissuelanding(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
@@ -139,6 +152,7 @@ class TissueTar(models.Model):
     tissueLink   = models.URLField('#')
     query        = models.IntegerField(default=0)
     nuser        = models.IntegerField(default=0)
+    logpval      = models.FloatField()
 
 class Tissuesample(models.Model):
     sampleid    = models.CharField(max_length=600)
@@ -232,6 +246,14 @@ class Geosample(models.Model):
     size = models.CharField(max_length=200)
     link = models.CharField(max_length=200)
 
+
+class Ggnsample(models.Model):
+    sample     = models.CharField(max_length=200)
+    survival = models.CharField(max_length=200)
+    size = models.CharField(max_length=200)
+    link = models.CharField(max_length=200)
+
+
 class Cancerlanding(models.Model):
     cancer    = models.CharField(max_length=200)
     cancerLink= models.URLField(default='#')
@@ -252,6 +274,7 @@ class Cancerlanding(models.Model):
     samples   = models.IntegerField(default=0)
     cardref   = models.CharField(max_length=200)
     script    = models.CharField(max_length=200)
+    dataset   = models.CharField(max_length=200)
 
 class Genelanding(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
@@ -306,6 +329,45 @@ class TissueEx(models.Model):
     tissueLink   = models.URLField('#')
     query        = models.IntegerField(default=0)
     nuser        = models.IntegerField(default=0)
+    logpval      = models.FloatField()
+
+class Ggbmd1sample(models.Model):
+    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    submitter_id        = models.CharField(max_length=200)
+    yearstobirth        = models.CharField(max_length=200)
+    vitalstatus         = models.CharField(max_length=200)
+    daystodeath         = models.CharField(max_length=200)
+    daystolastfollowup  = models.CharField(max_length=200)
+    gender              = models.CharField(max_length=200)
+    dateofinitialpathologicdiagnosis  = models.CharField(max_length=200)
+    radiationtherapy    = models.CharField(max_length=200)
+    karnofskyperformancescore        = models.CharField(max_length=200)
+    histologicaltype    = models.CharField(max_length=200)
+    radiationsradiationregimenindication= models.CharField(max_length=200)
+    race                = models.CharField(max_length=200)
+    ethnicity           = models.CharField(max_length=200)
+    neoadjuvanttherapy  = models.CharField(max_length=200)
+    size                = models.CharField(max_length=200)
+    link                = models.CharField(max_length=200)
+
+class Ggbmd2sample(models.Model):
+    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    submitter_id        = models.CharField(max_length=200)
+    yearstobirth        = models.CharField(max_length=200)
+    vitalstatus         = models.CharField(max_length=200)
+    daystodeath         = models.CharField(max_length=200)
+    daystolastfollowup  = models.CharField(max_length=200)
+    gender              = models.CharField(max_length=200)
+    dateofinitialpathologicdiagnosis  = models.CharField(max_length=200)
+    radiationtherapy    = models.CharField(max_length=200)
+    karnofskyperformancescore        = models.CharField(max_length=200)
+    histologicaltype    = models.CharField(max_length=200)
+    radiationsradiationregimenindication= models.CharField(max_length=200)
+    race                = models.CharField(max_length=200)
+    ethnicity           = models.CharField(max_length=200)
+    neoadjuvanttherapy  = models.CharField(max_length=200)
+    size                = models.CharField(max_length=200)
+    link                = models.CharField(max_length=200)
 
     def __str__(self):
        return self.name

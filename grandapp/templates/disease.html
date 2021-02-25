@@ -3,6 +3,7 @@
 {% load widget_tweaks %}
 
 <div class="container mt-5 mb-5">
+	
 <div class="row">
         <div class="col-sm-6"> 
         <div class="card h-100">
@@ -18,12 +19,16 @@
 	                        {% render_field diseaseform.content class="form-control" placeholder="TF list" %}                
 	                    </div>
 	                   <div class="form-actions button-box">
-	                   &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="/diseaseexample" class="btn btn-info" role="button">Example</a>
-	                   <button type="submit"  name="submit" class="btn btn-primary" id="btnFetch">
-	                   <span id="mySpinner" class="d-none">
-	                   <span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
-	                   </span>
-	                    Submit</button>
+						   <br>
+	                   &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+					   <div class="btn-group" role="group" aria-label="Basic example">
+							<a href="/diseaseexample" class="btn btn-outline-primary" role="button">Example</a>
+							<button type="submit"  name="submit" class="btn btn-success" id="btnFetch">
+							<span id="mySpinner" class="d-none">
+							<span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
+							</span>
+								Submit</button>
+						</div>
 	                    </div>
 	               </form>
 		</div>

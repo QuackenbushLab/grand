@@ -41,4 +41,5 @@ class Command(BaseCommand):
             disease.pval      = row['pval']
             disease.qval      = row['qval']
             disease.nuser     = row['nuser']
+            disease.logpval   = row['pval']
             disease.save()

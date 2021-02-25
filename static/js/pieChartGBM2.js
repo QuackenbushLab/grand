@@ -1,39 +1,12 @@
 $(document).ready(function() {
   
     // Read data file and create a chart
-    $.get(dataurl2, function(csvString) {
+    $.get(dataurl3, function(csvString) {
   
       var rows = Papa.parse(csvString, {header: true}).data;
 
-      var tablegeo= $('#tissuestablegeo').DataTable({
-        "serverSide": false,
-        "processing": true,
-        
-               "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'>>" +
-                "<'row'<'col-sm-12'tr>>" +
-                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-
-
-                  initComplete: function () {
-                      // Apply the search
-                      this.api().columns().every( function () {
-                          var that = this;
-           
-                          $( 'input', this.footer() ).on( 'keyup change clear', function () {
-                              if ( that.search() !== this.value ) {
-                                  that
-                                      .search( this.value )
-                                      .draw();
-                              }
-                          } );
-                      } );
-                  }
-       });
-
-       $('#tissuestablegeo tfoot tr').appendTo('#tissuestablegeo thead');
-
       if (slug == 'Colon'){
-        var data = rows.map(function(row) {
+        var data2 = rows.map(function(row) {
             return row['gender'];
         })
 
@@ -42,7 +15,7 @@ $(document).ready(function() {
         })
 
         var dataAL = rows.map(function(row) {
-            return row['tumor_location'];
+            return row['anatomic_neoplasm_subdivision'];
         })
 
         var dataStage = rows.map(function(row) {
@@ -52,13 +25,50 @@ $(document).ready(function() {
         var dataVital = rows.map(function(row) {
             return row['vital_status'];
         })
+    }else if (slug == 'Glioblastoma'){
+      var data2 = rows.map(function(row) {
+        return row['gender'];
+      })
 
-        var text5='Anatomic location'
-      }else if (slug == 'Glioblastoma'){
-        var dataAL = rows.map(function(row) {
-          return row['survival'];
+      var dataETH = rows.map(function(row) {
+          return row['race'];
+      })
+
+      var dataAL = rows.map(function(row) {
+          return row['neoadjuvanttherapy'];
+      })
+
+      var dataStage = rows.map(function(row) {
+          return row['radiationsradiationregimenindication'];
+      })
+
+      var dataVital = rows.map(function(row) {
+          return row['vitalstatus'];
+      })
+
+      var gbmtext3='Neoadjuvant therapy'
+      var gbmtext4='Radiotherapy'
+
+    }else{
+        var data2 = rows.map(function(row) {
+            return row['gdc_cases.demographic.gender'];
         })
-        var text5='Survival';
+
+        var dataETH = rows.map(function(row) {
+            return row['gdc_cases.demographic.race'];
+        })
+
+        var dataAL = rows.map(function(row) {
+            return row['gdc_cases.project.primary_site'];
+        })
+
+        var dataStage = rows.map(function(row) {
+            return row['gdc_cases.diagnoses.tumor_stage'];
+        })
+
+        var dataVital = rows.map(function(row) {
+            return row['gdc_cases.diagnoses.vital_status'];
+        })
     }
   
       function foo(arr) {
@@ -78,13 +88,11 @@ $(document).ready(function() {
         return [a, b];
     }
 
+    var result = foo(data2);
+    var resultETH = foo(dataETH);
     var resultAL = foo(dataAL);
-    if (slug == 'Colon'){
-      var resultETH = foo(dataETH);
-      var result = foo(data);
-      var resultStage = foo(dataStage);//#dd979f
-      var resultVital = foo(dataVital);
-    }
+    var resultStage = foo(dataStage);
+    var resultVital = foo(dataVital);
     var colorArray = ['#c6bebe', '#FFB399', '#78c186', '#e7f1ff', '#ba7fa5', 
 		  '#E6B333', '#7394e0', '#999966', '#99FF99', '#B34D4D',
 		  '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
@@ -96,16 +104,16 @@ $(document).ready(function() {
 		  '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
 		  '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
 
-    var pieChartDataAL2 = {
-        labels: resultAL[0],
+    var pieChartData = {
+        labels: result[0],
         datasets: [{
-                data: resultAL[1],
-                backgroundColor: colorArray.slice(0,resultAL[1].length-1),
-                hoverBorderColor: colorArray.slice(0,resultAL[1].length-1)
+                data: result[1],
+                backgroundColor: colorArray.slice(0,result[1].length-1),
+                hoverBorderColor: colorArray.slice(0,result[1].length-1)
               }]
       };
 
-    if (slug == 'Colon'){
+  
     var pieChartDataETH = {
         labels: resultETH[0],
         datasets: [{
@@ -115,16 +123,16 @@ $(document).ready(function() {
         }]
     };
 
-    var pieChartData = {
-        labels: result[0],
+    var pieChartDataAL = {
+        labels: resultAL[0],
         datasets: [{
-          data: result[1],
-          backgroundColor: colorArray.slice(0,result[1].length-1),
-          hoverBorderColor: colorArray.slice(0,result[1].length-1)
+          data: resultAL[1],
+          backgroundColor: colorArray.slice(0,resultAL[1].length-1),
+          hoverBorderColor: colorArray.slice(0,resultAL[1].length-1)
         }]
     };
 
-    var pieChartDataStage2 = {
+    var pieChartDataStage = {
         labels: resultStage[0],
         datasets: [{
           data: resultStage[1],
@@ -133,7 +141,7 @@ $(document).ready(function() {
         }]
     };
 
-    var pieChartDataVital2 = {
+    var pieChartDataVital = {
         labels: resultVital[0],
         datasets: [{
           data: resultVital[1],
@@ -142,58 +150,22 @@ $(document).ready(function() {
         }]
     };
 
-  }
-
-
-      var canvasAL2     = document.getElementById('myPieChartAL2');
-      if (slug == 'Colon'){
-        var canvasETH2  = document.getElementById('myPieChartETH2');
-        var canvas2     = document.getElementById('myPieChart2');
-        var canvasStage2= document.getElementById('myPieChartStage2');
-        var canvasVital2= document.getElementById('myPieChartVital2');
-      }
-      var ctxAL2        = canvasAL2.getContext('2d');
-      if (slug == 'Colon'){
-        var ctxETH2      = canvasETH2.getContext('2d');
-        var ctx2         = canvas2.getContext('2d');
-        var ctxStage2    = canvasStage2.getContext('2d');
-        var ctxVital2    = canvasVital2.getContext('2d');
-      }
+      var canvas     = document.getElementById('myPieChart22');
+      var canvasETH  = document.getElementById('myPieChartETH22');
+      var canvasAL   = document.getElementById('myPieChartAL22');
+      var canvasStage= document.getElementById('myPieChartStage22');
+      var canvasVital= document.getElementById('myPieChartVital22');
+      var ctx        = canvas.getContext('2d');
+      var ctxETH     = canvasETH.getContext('2d');
+      var ctxAL      = canvasAL.getContext('2d');
+      var ctxStage   = canvasStage.getContext('2d');
+      var ctxVital   = canvasVital.getContext('2d');
 
       var options = {
         backgroundColor: 'rgba(54, 162, 235,0.7)',
       }
   
-      var myPieChartAL2 = new Chart(ctxAL2, {
-        type: 'pie',
-        data: pieChartDataAL2,
-        options: {
-            title: {
-              display: true,
-              text: text5,
-              fontSize: 10,
-            },
-            tooltips: {
-                callbacks: {
-                    title: function(tooltipItem, data) {
-                        return data['labels'][tooltipItem[0]['index']];
-                      },
-                  label: function(tooltipItem, data) {
-                    //get the concerned dataset
-                    var dataset = data.datasets[tooltipItem.datasetIndex];
-                    var currentValue = dataset.data[tooltipItem.index];
-                    return currentValue;
-                  }
-                }
-              },
-            legend: {
-                display: false
-            } 
-        }
-    });
-
-      if (slug == 'Colon'){
-      var myPieChart2 = new Chart(ctx2, {
+      var myPieChart = new Chart(ctx, {
         type: 'pie',
         data: pieChartData,
         options: {
@@ -221,7 +193,7 @@ $(document).ready(function() {
         }
     });
 
-    var myPieChartETH2 = new Chart(ctxETH2, {
+    var myPieChartETH = new Chart(ctxETH, {
         type: 'pie',
         data: pieChartDataETH,
         options: {
@@ -249,13 +221,13 @@ $(document).ready(function() {
         }
     });
 
-    var myPieChartStage2 = new Chart(ctxStage2, {
+    var myPieChartAL = new Chart(ctxAL, {
         type: 'pie',
-        data: pieChartDataStage2,
+        data: pieChartDataAL,
         options: {
             title: {
               display: true,
-              text: 'Stage',
+              text: gbmtext3,
               fontSize: 10,
             },
             tooltips: {
@@ -277,9 +249,37 @@ $(document).ready(function() {
         }
     });
 
-    var myPieChartVital2= new Chart(ctxVital2, {
+    var myPieChartStage= new Chart(ctxStage, {
         type: 'pie',
-        data: pieChartDataVital2,
+        data: pieChartDataStage,
+        options: {
+            title: {
+              display: true,
+              text: gbmtext4,
+              fontSize: 10,
+            },
+            tooltips: {
+                callbacks: {
+                    title: function(tooltipItem, data) {
+                        return data['labels'][tooltipItem[0]['index']];
+                      },
+                  label: function(tooltipItem, data) {
+                    //get the concerned dataset
+                    var dataset = data.datasets[tooltipItem.datasetIndex];
+                    var currentValue = dataset.data[tooltipItem.index];
+                    return currentValue;
+                  }
+                }
+              },
+            legend: {
+                display: false
+            } 
+        }
+    });
+
+    var myPieChartVital= new Chart(ctxVital, {
+        type: 'pie',
+        data: pieChartDataVital,
         options: {
             title: {
               display: true,
@@ -304,83 +304,161 @@ $(document).ready(function() {
             } 
         }
     });
-  }
 
-  if (slug == 'Colon'){
-    canvas2.onclick = function(evt) {
-      var activePoints = myPieChart2.getElementsAtEvent(evt);
-      if (activePoints[0]) {
-        var chartData = activePoints[0]['_chart'].config.data;
-        var idx = activePoints[0]['_index'];
-  
-        var label = chartData.labels[idx];
-        tablegeo.column(1).search("^"+label+"$", true, false, true).draw();
-        $("#id"+1+101+offset).val(label);
-      }
-    };
+    var table = $('#tissuestabletcga22').DataTable({
+        "serverSide": false,
+        "processing": true,
+        
+         "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'>>" +
+         "<'row'<'col-sm-12'tr>>" +
+         "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+   
+            initComplete: function () {
+              // Apply the search
+              this.api().columns().every( function () {
+                  var that = this;
 
-    canvasETH2.onclick = function(evt) {
-        var activePoints = myPieChartETH2.getElementsAtEvent(evt);
+                  $( 'input', this.footer() ).on( 'keyup change clear', function () {
+                      if ( that.search() !== this.value ) {
+                          that
+                          .search( this.value )
+                          .draw();
+                      }
+                  } );
+              } );
+            }
+    });
+
+    $('#tissuestabletcga22 tfoot tr').appendTo('#tissuestabletcga22 thead');
+       
+    if (slug == 'Glioblastoma') {
+      canvas.onclick = function(evt) {
+        var activePoints = myPieChart.getElementsAtEvent(evt);
         if (activePoints[0]) {
           var chartData = activePoints[0]['_chart'].config.data;
           var idx = activePoints[0]['_index'];
     
           var label = chartData.labels[idx];
-          tablegeo.column(2).search("^"+label+"$", true, false, true).draw();
-          $("#id"+2+101+offset).val(label);
+          table.column(1).search("^"+label+"$", true, false, true).draw();
+          $("#id"+1+100+offset).val(label);
         }
       };
 
-      canvasAL2.onclick = function(evt) {
-        var activePoints = myPieChartAL2.getElementsAtEvent(evt);
+
+    canvasETH.onclick = function(evt) {
+        var activePoints = myPieChartETH.getElementsAtEvent(evt);
         if (activePoints[0]) {
           var chartData = activePoints[0]['_chart'].config.data;
           var idx = activePoints[0]['_index'];
     
           var label = chartData.labels[idx];
-          tablegeo.column(5).search("^"+label+"$", true, false, true).draw();
-          $("#id"+5+101+offset).val(label);
+          table.column(2).search("^"+label+"$", true, false, true).draw();
+          $("#id"+2+100+offset).val(label);
         }
       };
 
-      canvasStage2.onclick = function(evt) {
-        var activePoints = myPieChartStage2.getElementsAtEvent(evt);
+      canvasAL.onclick = function(evt) {
+        var activePoints = myPieChartAL.getElementsAtEvent(evt);
         if (activePoints[0]) {
           var chartData = activePoints[0]['_chart'].config.data;
           var idx = activePoints[0]['_index'];
     
           var label = chartData.labels[idx];
-          tablegeo.column(6).search("^"+label+"$", true, false, true).draw();
-          $("#id"+6+101+offset).val(label);
+          table.column(7).search("^"+label+"$", true, false, true).draw();
+          $("#id"+7+100+offset).val(label);
         }
       };
 
-      canvasVital2.onclick = function(evt) {
-        var activePoints = myPieChartVital2.getElementsAtEvent(evt);
+      canvasStage.onclick = function(evt) {
+        var activePoints = myPieChartStage.getElementsAtEvent(evt);
         if (activePoints[0]) {
           var chartData = activePoints[0]['_chart'].config.data;
           var idx = activePoints[0]['_index'];
     
           var label = chartData.labels[idx];
-          tablegeo.column(8).search("^"+label+"$", true, false, true).draw();
-          $("#id"+8+101+offset).val(label);
+          table.column(8).search("^"+label+"$", true, false, true).draw();
+          $("#id"+8+100+offset).val(label);
         }
       };
-    }else if(slug == 'Glioblastoma'){
 
-      canvasAL2.onclick = function(evt) {
-        var activePoints = myPieChartAL2.getElementsAtEvent(evt);
+      canvasVital.onclick = function(evt) {
+        var activePoints = myPieChartVital.getElementsAtEvent(evt);
         if (activePoints[0]) {
           var chartData = activePoints[0]['_chart'].config.data;
           var idx = activePoints[0]['_index'];
     
           var label = chartData.labels[idx];
-          tablegeo.column(1).search("^"+label+"$", true, false, true).draw();
-          $("#id"+1+101+offset).val(label);
+          table.column(9).search("^"+label+"$", true, false, true).draw();
+          $("#id"+9+100+offset).val(label);
         }
       };
 
+
+    }else{
+      canvas.onclick = function(evt) {
+        var activePoints = myPieChart.getElementsAtEvent(evt);
+        if (activePoints[0]) {
+          var chartData = activePoints[0]['_chart'].config.data;
+          var idx = activePoints[0]['_index'];
+    
+          var label = chartData.labels[idx];
+          table.column(1).search("^"+label+"$", true, false, true).draw();
+          $("#id"+1+offset).val(label);
+        }
+      };
+
+
+    canvasETH.onclick = function(evt) {
+        var activePoints = myPieChartETH.getElementsAtEvent(evt);
+        if (activePoints[0]) {
+          var chartData = activePoints[0]['_chart'].config.data;
+          var idx = activePoints[0]['_index'];
+    
+          var label = chartData.labels[idx];
+          table.column(2).search("^"+label+"$", true, false, true).draw();
+          console.log("#id"+2+offset)
+          $("#id"+2+offset).val(label);
+        }
+      };
+
+      canvasAL.onclick = function(evt) {
+        var activePoints = myPieChartAL.getElementsAtEvent(evt);
+        if (activePoints[0]) {
+          var chartData = activePoints[0]['_chart'].config.data;
+          var idx = activePoints[0]['_index'];
+    
+          var label = chartData.labels[idx];
+          table.column(6).search("^"+label+"$", true, false, true).draw();
+          $("#id"+6+offset).val(label);
+        }
+      };
+
+      canvasStage.onclick = function(evt) {
+        var activePoints = myPieChartStage.getElementsAtEvent(evt);
+        if (activePoints[0]) {
+          var chartData = activePoints[0]['_chart'].config.data;
+          var idx = activePoints[0]['_index'];
+    
+          var label = chartData.labels[idx];
+          table.column(7).search("^"+label+"$", true, false, true).draw();
+          $("#id"+7+offset).val(label);
+        }
+      };
+
+      canvasVital.onclick = function(evt) {
+        var activePoints = myPieChartVital.getElementsAtEvent(evt);
+        if (activePoints[0]) {
+          var chartData = activePoints[0]['_chart'].config.data;
+          var idx = activePoints[0]['_index'];
+    
+          var label = chartData.labels[idx];
+          table.column(9).search("^"+label+"$", true, false, true).draw();
+          $("#id"+9+offset).val(label);
+        }
+      };
 
     }
+  
     });
+
   });

@@ -20,13 +20,18 @@
                    <div class="form-group">
                         {% render_field geneform.contentdown class="form-control" placeholder="Low-targeted genes/TFs" %}
                    </div>
+                   <br>
                    <div class="form-actions button-box">
-                   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="/analysisexampletfs" class="btn btn-info" role="button">Example TFs</a>&nbsp;<a href="/analysisexample" class="btn btn-info" role="button">Example genes</a>
-                   <button type="submit"  name="submit" class="btn btn-primary" id="btnFetch">
-                   <span id="mySpinner" class="d-none">
-                   <span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
-                   </span>
-                   Submit</button>
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                      <a href="/analysisexampletfs" class="btn btn-outline-primary" role="button">Example TFs</a>
+                      <a href="/analysisexample" class="btn btn-outline-primary" role="button">Example genes</a>
+                      <button type="submit"  name="submit" class="btn btn-success" id="btnFetch">
+                        <span id="mySpinner" class="d-none">
+                        <span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
+                        </span>
+                        Submit</button>
+                    </div>
                    </div>
                    </div>
                    </p>
@@ -39,13 +44,20 @@
 			  <div class="card-body">
 			    <p class="card-text">Select parameters for the analysis.
                     <div class="col">
-                       <br> <br> <br> <br> <br> <br> <br> 
+                       <br> <br> <br> <br> <br> <br> 
+                       
+                       <div>
+                        <label for="myRange" class="form-label">Display results</label>
+                        {{ geneform.ngenes }} 
+
+                        <p>Value: <span id="demo"></span></p>
+                      </div>
                        <div class="form-group">
                        {% for radio in geneform.tfgene %}
-		       <div>
-    		          <small>{{ radio }}</small>
-		       </div>
-		       {% endfor %}
+                        <div>
+    		                  <small>{{ radio }}</small>
+                        </div>
+		                   {% endfor %}
                        </div>
                        {{ geneform.brd }} <small>Remove investigational drugs</small>
                     </div>
@@ -80,11 +92,22 @@
 {% include "footer.html" %}
 
 <script>
+  var slider = document.getElementById("myRange");
+  var output = document.getElementById("demo");
+  output.innerHTML = slider.value;
+  
+  slider.oninput = function() {
+    output.innerHTML = this.value;
+  }
+  </script> 
+
+<script>
 $(document).ready(function() {
     $("#btnFetch").click(function() {
         $("#mySpinner").removeClass("d-none")
     })
 });
+
 </script>
 </body>
 </html>

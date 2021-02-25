@@ -3,7 +3,7 @@ from datetime import datetime
 
 from django.core.management import BaseCommand
 
-from grandapp.models import TissueEx
+from grandapp.models import Ggnsample
 from pytz import UTC
 
 
@@ -31,15 +31,11 @@ class Command(BaseCommand):
     help = "Loads data from pet_data.csv into our Pet model"
 
     def handle(self, *args, **options):
-        print("Loading tissue expression data!")
-        for row in DictReader(open('./data/tissue-expression.csv')):
-            tissueex = TissueEx()
-            tissueex.idd       = row['idd']
-            tissueex.tissue    = row['tissue']
-            tissueex.count     = row['count']
-            tissueex.intersect = row['intersect']
-            tissueex.pval      = row['pval']
-            tissueex.qval      = row['qval']
-            tissueex.nuser     = row['nuser']
-            tissueex.logpval   = row['pval']
-            tissueex.save()
+        print("Loading cancer ggn sample data!")
+        for row in DictReader(open('./static/data/GBM_v_clinvar.csv')):
+            ggnsample = Ggnsample()
+            ggnsample.sample     = row['sample']
+            ggnsample.survival   = row['survival']
+            ggnsample.size       = row['size']
+            ggnsample.link       = row['link']
+            ggnsample.save()

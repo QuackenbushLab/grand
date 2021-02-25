@@ -24,6 +24,9 @@ class GeneForm(forms.Form):
     )
     tfgene = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
     brd    = forms.BooleanField(widget=forms.CheckboxInput, required = False )
+    ngenes = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'type':'range', 'step': '10', 'min': '50', 'max': '150', 'value':'100','id':'myRange'}), required=False
+    )
 
 class DiseaseForm(forms.Form):
     content = forms.CharField(

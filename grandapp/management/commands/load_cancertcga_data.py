@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading cancer sample data!")
-        for row in DictReader(open('./data/clinical_tcga.csv')):
+        for row in DictReader(open('./static/data/clinical_tcga.csv')):
             tcgasample = Tcgasample()
             tcgasample.sample     = row['sample']
             tcgasample.platform   = row['Platform']

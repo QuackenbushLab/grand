@@ -9,6 +9,7 @@ tfoot input {
     box-sizing: border-box;
 }
 
+
 div.hidden {
     display: none
 }
@@ -33,5 +34,9 @@ div.hidden {
     width: 1295px;
     height: 500px;
     border: 1px solid lightgray;
-  }
+}
   
+.fa-plus-circle {
+    color:green;
+ }
+

@@ -41,4 +41,5 @@ class Command(BaseCommand):
             tissuetar.pval      = row['pval']
             tissuetar.qval      = row['qval']
             tissuetar.nuser     = row['nuser']
+            tissuetar.logpval   = row['pval']
             tissuetar.save()

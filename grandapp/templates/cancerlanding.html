@@ -3,7 +3,11 @@
 
 <div class="hidden">
 <div class="row pt-3">
+  {% if slug == 'Glioblastoma' %}
+  <h3 class="text-secondary" align="center">{{ slug }} networks </h3>
+  {% else %}
   <h3 class="text-secondary" align="center">{{ slug }} cancer networks </h3>
+  {% endif %}
   <center>
     <div class="btn-group">
 
@@ -191,6 +195,7 @@
                     <th scope="col">Expression</th>
                     <th scope="col">TFs</th>
                     <th scope="col">Genes</th>
+                    <th scope="col">Data</th>
                     <th scope="col">Samples</th>
                     <th scope="col">Precision<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
@@ -200,47 +205,48 @@
                       title="Computation precision"
                       data-bs-content="S=Single, D=Double">
                     </i></th>
-                    <th scope="col">Reference</th>
+                    <th scope="col">Ref.</th>
                   </tr>
                 </thead>
                 <tbody>
                  {% for tissue in cancerlanding %}
                     <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td><a href="{{ tissue.cancerLink }}" class="text-decoration-none">{{ tissue.cancer }}</a></td>
-                    <td>{{ tissue.tool }}</td>
-                    <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none">{{ tissue.netzooRel }}</a></td>
-                    <td><div class="btn-group" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a> 
-                    <a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">R</a></div></td>
-                    <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}"><i class="fas fa-link"></i></a></td>
-                    <td><a href="{{ tissue.motif }}"><i class="fas fa-download"></i></a></td>
-                    <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}"><i class="fas fa-link"></i></a></td>
-                    <td>{{ tissue.tfs }}</td>
-                    <td>{{ tissue.genes }}</td>
-                    {% if tissue.tool == 'PANDA' %}
-                    <td>{{ tissue.samples }}</td>
-                    {% else %}
-                    <td><a href="{{ tissue.cardref }}" class="text-decoration-none">{{ tissue.samples }}</a></td>
-                    {% endif %}
-                    <td><span class="badge rounded-pill bg-primary">D</span></td>
-                    <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal"></i></a></td>
-                      <!-- Modal -->
-                      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Publication</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                              Please check the reference {{ tissue.refs2 }} at the following <a href="{{ tissue.refs }}">link</a>.
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td><a href="{{ tissue.cancerLink }}" class="text-decoration-none">{{ tissue.cancer }}</a></td>
+                      <td>{{ tissue.tool }}</td>
+                      <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none">{{ tissue.netzooRel }}</a></td>
+                      <td><div class="btn-group" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a> 
+                      <a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">R</a></div></td>
+                      <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}"><i class="fas fa-link"></i></a></td>
+                      <td><a href="{{ tissue.motif }}"><i class="fas fa-download"></i></a></td>
+                      <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}"><i class="fas fa-link"></i></a></td>
+                      <td>{{ tissue.tfs }}</td>
+                      <td>{{ tissue.genes }}</td>
+                      <td>{{ tissue.dataset }}</td>
+                      {% if tissue.tool == 'PANDA' %}
+                      <td>{{ tissue.samples }}</td>
+                      {% else %}
+                      <td><a href="{{ tissue.cardref }}" class="text-decoration-none">{{ tissue.samples }}</a></td>
+                      {% endif %}
+                      <td><span class="badge rounded-pill bg-primary">D</span></td>
+                      <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal"></i></a></td>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Publication</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                Please check the reference {{ tissue.refs2 }} at the following <a href="{{ tissue.refs }}">link</a>.
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
                     </tr>
                  {% endfor %}
                 </tbody>
@@ -255,12 +261,238 @@
 <div class="accordion-item">
   <h2 class="accordion-header" id="headingTwo">
     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" id="cardtissuetcga">
-      Phenotypic information TCGA
+      Phenotypic information TCGA {% if slug == 'Glioblastoma' %}1{% endif %}
     </button>
   </h2>
   <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
     <div class="accordion-body">
 {% if tool == 'panda' %}
+  {% if slug == 'Glioblastoma' %}
+  <script>var offset=30</script>
+  <div class="container ">
+    <div class="card " id="cardtissuetcga">
+      <div class="card-body">
+      <h5 class="card-title">Variable description</h5>
+        <p class="card-text">You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges
+      is 661 * 12817 (number of TFs * number of genes) (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a TF-by-gene
+                matrix named after  the TCGA sample reference.</p>
+      <div class="row pb-4">
+      <div class="col">
+        <canvas id="myPieChart" width="50" height="30"></canvas>   
+      </div>
+      <div class="col">
+        <canvas id="myPieChartETH" width="50" height="30"></canvas>   
+      </div>
+      <div class="col">
+        <canvas id="myPieChartAL" width="50" height="30"></canvas>   
+      </div>
+      <div class="col">
+        <canvas id="myPieChartStage" width="50" height="30"></canvas>   
+      </div>
+      <div class="col">
+        <canvas id="myPieChartVital" width="50" height="30"></canvas>   
+      </div>
+      </div>
+      <table id="tissuestabletcga" class="table table-hover" style="width: 100%">
+            <thead>
+              <tr>
+                <th scope="col">Sample<br><i class="far fa-question-circle"
+                  data-bs-toggle="popover"
+                  data-bs-trigger="hover"
+                  data-bs-placement="top"
+                  data-bs-animation="false"
+                  data-bs-content="Sample and platform ID">
+                </i></th>
+                <th scope="col">Gender</th>
+                <th scope="col">Race</th>
+                <th scope="col">Histological type</th>
+                <th scope="col">Age</th>
+                 <th scope="col">Days to death</th>
+                <th scope="col">Date of diagnosis</th>
+                <th scope="col">Neo-adjuvant<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-animation="false"
+                      data-bs-trigger="hover"
+                      data-bs-placement="top"
+                      data-bs-content="Neoadjuvant therapy">
+                    </i></th>
+                <th scope="col">Radio-therapy</th>
+                <th scope="col">Vital status</th>
+                <th scope="col">Network<br><i class="far fa-question-circle"
+                  data-bs-toggle="popover"
+                  data-bs-trigger="hover"
+                  data-bs-animation="false"
+                  data-bs-placement="top"
+                  data-bs-content="Please refer to the Help page Network section for the network download formats">
+                </i></th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr id='tfoot30'>
+                  <th>Sample</th>
+                  <th>Gender</th>
+                  <th>Race</th>
+                  <th>Histological type</th>
+                  <th>Age</th>
+                  <th>Days to death</th>
+                  <th>Date of diagnosis</th>
+                  <th>Neoadjuvant therapy</th>
+                  <th>Radiotherapy</th>
+                  <th>Vital status</th>
+                  <th>Network</th>
+              </tr>
+            </tfoot>
+            <tbody>
+             {% for tissue in ggbmd1sample %}
+              <tr>
+                {% if tissue.submitter_id == 'All' %}
+                    <td>{{ tissue.submitter_id }}</td>
+                {% else %}
+                    <td>{{ tissue.submitter_id }} </td>
+                {% endif %}
+                <td>{{ tissue.gender }}</td>
+                <td>{{ tissue.race }}</td>
+                <td>{{ tissue.histologicaltype }}</td>
+                <td>{{ tissue.yearstobirth }}</td>
+                <td>{{ tissue.daystodeath }}</td>
+                <td>{{ tissue.dateofinitialpathologicdiagnosis }}</td>
+                <td>{{ tissue.neoadjuvanttherapy }}</td>
+                <td>{{ tissue.radiationtherapy }}</td>
+                <td>{{ tissue.vitalstatus }}</td>
+                {% if tissue.submitter_id == 'All' %}
+                    <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a><br><span class="badge rounded-pill bg-secondary"><small>{{ tissue.size }}</small></span></td>
+                {% else %}
+                    <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a><br><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span></td>
+                {% endif %}
+              </tr>
+             {% endfor %}
+            </tbody>
+          </table>
+    </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingTwo2">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo2" aria-expanded="false" aria-controls="collapseTwo2" id="cardtissuetcga2">
+      Phenotypic information TCGA {% if slug == 'Glioblastoma' %}2{% endif %}
+    </button>
+  </h2>
+  <div id="collapseTwo2" class="accordion-collapse collapse" aria-labelledby="headingTwo2" data-bs-parent="#accordionExample">
+    <div class="accordion-body">
+<div class="container ">
+    <div class="card " id="cardtissuetcga2">
+      <div class="card-body">
+      <h5 class="card-title">Variable description</h5>
+        <p class="card-text">You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges
+      is 661 * 12817 (number of TFs * number of genes) (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a TF-by-gene
+                matrix named after  the TCGA sample reference.</p>
+      <div class="row pb-4">
+      <div class="col">
+        <canvas id="myPieChart22" width="50" height="30"></canvas>   
+      </div>
+      <div class="col">
+        <canvas id="myPieChartETH22" width="50" height="30"></canvas>   
+      </div>
+      <div class="col">
+        <canvas id="myPieChartAL22" width="50" height="30"></canvas>   
+      </div>
+      <div class="col">
+        <canvas id="myPieChartStage22" width="50" height="30"></canvas>   
+      </div>
+      <div class="col">
+        <canvas id="myPieChartVital22" width="50" height="30"></canvas>   
+      </div>
+      </div>
+      <table id="tissuestabletcga22" class="table table-hover" style="width: 100%">
+            <thead>
+              <tr>
+                <th scope="col">Sample<br><i class="far fa-question-circle"
+                  data-bs-toggle="popover"
+                  data-bs-trigger="hover"
+                  data-bs-placement="top"
+                  data-bs-animation="false"
+                  data-bs-content="Sample and platform ID">
+                </i></th>
+                <th scope="col">Gender</th>
+                <th scope="col">Race</th>
+                <th scope="col">Histological type</th>
+                <th scope="col">Age</th>
+                 <th scope="col">Days to death</th>
+                <th scope="col">Date of diagnosis</th>
+                <th scope="col">Neo-adjuvant<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-animation="false"
+                      data-bs-trigger="hover"
+                      data-bs-placement="top"
+                      data-bs-content="Neoadjuvant therapy">
+                    </i></th>
+                <th scope="col">Radio-therapy</th>
+                <th scope="col">Vital status</th>
+                <th scope="col">Network<br><i class="far fa-question-circle"
+                  data-bs-toggle="popover"
+                  data-bs-trigger="hover"
+                  data-bs-animation="false"
+                  data-bs-placement="top"
+                  data-bs-content="Please refer to the Help page Network section for the network download formats">
+                </i></th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr id='tfoot302'>
+                  <th>Sample</th>
+                  <th>Gender</th>
+                  <th>Race</th>
+                  <th>Histological type</th>
+                  <th>Age</th>
+                  <th>Days to death</th>
+                  <th>Date of diagnosis</th>
+                  <th>Neoadjuvant therapy</th>
+                  <th>Radiotherapy</th>
+                  <th>Vital status</th>
+                  <th>Network</th>
+              </tr>
+            </tfoot>
+            <tbody>
+             {% for tissue in ggbmd2sample %}
+              <tr>
+                {% if tissue.submitter_id == 'All' %}
+                    <td>{{ tissue.submitter_id }}</td>
+                {% else %}
+                    <td>{{ tissue.submitter_id }} </td>
+                {% endif %}
+                <td>{{ tissue.gender }}</td>
+                <td>{{ tissue.race }}</td>
+                <td>{{ tissue.histologicaltype }}</td>
+                <td>{{ tissue.yearstobirth }}</td>
+                <td>{{ tissue.daystodeath }}</td>
+                <td>{{ tissue.dateofinitialpathologicdiagnosis }}</td>
+                <td>{{ tissue.neoadjuvanttherapy }}</td>
+                <td>{{ tissue.radiationtherapy }}</td>
+                <td>{{ tissue.vitalstatus }}</td>
+                {% if tissue.submitter_id == 'All' %}
+                    <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a><br><span class="badge rounded-pill bg-secondary"><small>{{ tissue.size }}</small></span></td>
+                {% else %}
+                    <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a><br><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span></td>
+                {% endif %}
+              </tr>
+             {% endfor %}
+            </tbody>
+          </table>
+</div>
+</div>
+</div>
+
+    </div>  
+  </div>
+</div>
+
+
+  {% else %}
+  <script>var offset=2</script>
 <div class="container ">
         <div class="card " id="cardtissuetcga">
           <div class="card-body">
@@ -355,57 +587,64 @@
                     </i></th>
                   </tr>
                 </thead>
-                <thead>
-                  <tr id='tfoot2'>
-                      <th>Sample</th>
-                      <th>Gender</th>
-                      <th>Race</th>
-                      <th>Weight</th>
-                      <th>Height</th>
-                      <th>Age</th>
-                      <th>Anatomic location</th>
-                      <th>Stage</th>
-                      <th>Time</th>
-                      <th>Vital status</th>
-                      <th>Network</th>
-                  </tr>
-                </thead>
                 <tbody>
                  {% for tissue in tcgasample %}
                     <tr>
-                    {% if tissue.sample == 'All' %}
-                        <td>{{ tissue.sample }}</td>
-                    {% else %}
-                        <td>{{ tissue.sample }} <i class="fas fa-info-circle"
-                      data-bs-toggle="popover"
-                      data-bs-trigger="hover"
-                      data-bs-animation="false"
-                      data-bs-placement="top"
-                      title="Platform ID"
-                      data-bs-content="{{ tissue.platform }}">
-                    </i></td>
-                    {% endif %}
-                    <td>{{ tissue.gender }}</td>
-                    <td>{{ tissue.race }}</td>
-                    <td>{{ tissue.weight_kg_at_diagnosis }}</td>
-                    <td>{{ tissue.height_cm_at_diagnosis }}</td>
-                    <td>{{ tissue.age_at_initial_pathologic_diagnosis }}</td>
-                    <td>{{ tissue.anatomic_neoplasm_subdivision }}</td>
-                    <td>{{ tissue.uicc_stage }}</td>
-                    <td>{{ tissue.time_to_event }}</td>
-                    <td>{{ tissue.vital_status }}</td>
-                    {% if tissue.sample == 'All' %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a><br><span class="badge rounded-pill bg-secondary"><small>{{ tissue.size }}</small></span></td>
-                    {% else %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a><br><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span></td>
-                    {% endif %}
+                      {% if tissue.sample == 'All' %}
+                          <td>{{ tissue.sample }}</td>
+                      {% else %}
+                          <td>{{ tissue.sample }} <i class="fas fa-info-circle"
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        title="Platform ID"
+                        data-bs-content="{{ tissue.platform }}">
+                      </i></td>
+                      {% endif %}
+                      <td>{{ tissue.gender }}</td>
+                      <td>{{ tissue.race }}</td>
+                      <td>{{ tissue.weight_kg_at_diagnosis }}</td>
+                      <td>{{ tissue.height_cm_at_diagnosis }}</td>
+                      <td>{{ tissue.age_at_initial_pathologic_diagnosis }}</td>
+                      <td>{{ tissue.anatomic_neoplasm_subdivision }}</td>
+                      <td>{{ tissue.uicc_stage }}</td>
+                      <td>{{ tissue.time_to_event }}</td>
+                      <td>{{ tissue.vital_status }}</td>
+                      {% if tissue.sample == 'All' %}
+                          <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a><br><span class="badge rounded-pill bg-secondary"><small>{{ tissue.size }}</small></span></td>
+                      {% else %}
+                          <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a><br><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span></td>
+                      {% endif %}
+                    </tr>
                  {% endfor %}
                 </tbody>
+                <tfoot>
+                  <tr id='tfoot2'>
+                    <th>Sample</th>
+                    <th>Gender</th>
+                    <th>Race</th>
+                    <th>Weight</th>
+                    <th>Height</th>
+                    <th>Age</th>
+                    <th>Anatomic location</th>
+                    <th>Stage</th>
+                    <th>Time</th>
+                    <th>Vital status</th>
+                    <th>Network</th>
+                  </tr>
+                </tfoot>
               </table>
 </div>
 </div>
 </div>
+</div>
+</div>
+</div>
+
+  {% endif %}
 {% elif tool == 'otter' %}
+<script>var offset=320</script>
   <div class="card " id="cardtissuetcga">
     <div class="card-body">
       <h5 class="card-title">Variable description</h5>
@@ -493,64 +732,62 @@
                       </i></th>
                     </tr>
                   </thead>
-                  <thead>
-                    <tr id='tfoot2'>
-                        <th>Sample</th>
-                        <th>Gender</th>
-                        <th>Race</th>
-                        <th>Ethnicity</th>
-                        <th>Weight</th>
-                        <th>Height</th>
-                        <th>Anatomic location</th>
-                        <th>Stage</th>
-                        <th>Diagnosis</th>
-                        <th>Vital status</th>
-                        <th>Time</th>
-                        <th>Age</th>
-                    </tr>
-                  </thead>
                   <tbody>
                    {% for tissue in tcgasample %}
                       <tr>
-                      {% if tissue.sample == 'All' %}
-                          <td>{{ tissue.sample }}</td>
-                      {% else %}
-                          <td>{{ tissue.sample }}</td>
-                      {% endif %}
-                      <td>{{ tissue.gender }}</td>
-                      <td>{{ tissue.race }}</td>
-                      <td>{{ tissue.ethnicity }}</td>
-                      <td>{{ tissue.weight_kg_at_diagnosis }}</td>
-                      <td>{{ tissue.height_cm_at_diagnosis }}</td>
-                      <td>{{ tissue.primary_site }}</td>
-                      <td>{{ tissue.uicc_stage }}</td>
-                      <td>{{ tissue.primary_diagnosis }}</td>
-                      <td>{{ tissue.vital_status }}</td>
-                      <td>{{ tissue.time_to_event }}</td>
-                      <td>{{ tissue.age_at_initial_pathologic_diagnosis }}</td>
+                        {% if tissue.sample == 'All' %}
+                            <td>{{ tissue.sample }}</td>
+                        {% else %}
+                            <td>{{ tissue.sample }}</td>
+                        {% endif %}
+                        <td>{{ tissue.gender }}</td>
+                        <td>{{ tissue.race }}</td>
+                        <td>{{ tissue.ethnicity }}</td>
+                        <td>{{ tissue.weight_kg_at_diagnosis }}</td>
+                        <td>{{ tissue.height_cm_at_diagnosis }}</td>
+                        <td>{{ tissue.primary_site }}</td>
+                        <td>{{ tissue.uicc_stage }}</td>
+                        <td>{{ tissue.primary_diagnosis }}</td>
+                        <td>{{ tissue.vital_status }}</td>
+                        <td>{{ tissue.time_to_event }}</td>
+                        <td>{{ tissue.age_at_initial_pathologic_diagnosis }}</td>
+                      </tr>
                    {% endfor %}
                   </tbody>
+                  <tfoot>
+                    <tr id='tfoot320'>
+                      <th>Sample</th>
+                      <th>Gender</th>
+                      <th>Race</th>
+                      <th>Ethnicity</th>
+                      <th>Weight</th>
+                      <th>Height</th>
+                      <th>Anatomic location</th>
+                      <th>Stage</th>
+                      <th>Diagnosis</th>
+                      <th>Vital status</th>
+                      <th>Time to event</th>
+                      <th>Age</th>
+                    </tr>
+                  </tfoot>
                 </table>
   </div>
   </div>
 
 {% endif %}
-</div>
-    </div>
-  </div>
-</div>
 
 {% if geo == 'yes' %}
+<script>var offset=220</script>
 <div class="accordion-item">
   <h2 class="accordion-header">
     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"  id="cardtissuegeo">
-      Phenotypic information GEO
+      Phenotypic information {% if slug == 'Glioblastoma' %}GGN{% else %}GEO{% endif %}
     </button>
   </h2>
   <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
     <div class="accordion-body">
 <div class="container">
-        <div class="card">
+  <div class="card">
   <div class="card-body">
     <h5 class="card-title">Variable description</h5>
     <p class="card-text">You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges
@@ -577,6 +814,7 @@
                 <thead>
                   <tr>
                     <th scope="col">Sample</th>
+                    {% if slug == 'Colon' %}
                     <th scope="col">Gender</th>
                     <th scope="col">Race</th>
                     <th scope="col">GEO ID</th>
@@ -615,6 +853,9 @@
                       data-bs-placement="top"
                       data-bs-content="0: Alive, 1: Dead">
                     </i></th>
+                    {% elif slug == 'Glioblastoma' %}
+                    <th scope="col">Survival</th>
+                    {% endif %}
                     <th scope="col">Network <br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
@@ -624,9 +865,10 @@
                     </i></th>
                   </tr>
                 </thead>
-                <thead>
-                  <tr id='tfoot22'>
+                <tfoot>
+                  <tr id='tfoot220'>
                       <th>Sample</th>
+                      {% if slug == 'Colon' %}
                       <th>Gender</th>
                       <th>Race</th>
                       <th>GEO ID</th>
@@ -635,13 +877,17 @@
                       <th>Stage</th>
                       <th>Time</th>
                       <th>Vital status</th>
+                      {% elif slug == 'Glioblastoma' %}
+                      <th>Survival</th>
+                      {% endif %}
                       <th>Network</th>
                   </tr>
-                </thead>
+                </tfoot>
                 <tbody>
                  {% for tissue in geosample %}
-                    <tr>
+                  <tr>
                     <td>{{ tissue.sample }}</td>
+                    {% if slug == 'Colon' %}
                     <td>{{ tissue.gender }}</td>
                     <td>{{ tissue.race }}</td>
                     <td>{{ tissue.geoid }}</td>
@@ -650,11 +896,15 @@
                     <td>{{ tissue.uicc_stage }}</td>
                     <td>{{ tissue.time_to_event }}</td>
                     <td>{{ tissue.vital_status }}</td>
+                    {% elif slug == 'Glioblastoma' %}
+                    <td>{{ tissue.survival }}</td>
+                    {% endif %}
                     {% if tissue.sample == 'All' %}
                         <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a><br><span class="badge rounded-pill bg-secondary"><small>{{ tissue.size }}</small></span></td>
                     {% else %}
                         <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a><br><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span></td>
                     {% endif %}
+                  </tr>
                  {% endfor %}
                 </tbody>
               </table>
@@ -668,7 +918,7 @@
 
 </div>
 </div>
-
+</div>
 </div>
 </div>
 
@@ -680,16 +930,33 @@
 // Basic example
 $(document).ready(function() {
       // Setup - add a text input to each footer cell
-    $('#tfoot2 th').each( function (i) {
+    $('#tfoot2 th').each( function (i) { //tcga
         var title = $(this).text();
-        $(this).html( '<input size=7 id="id'+i+'" type="text" placeholder="Search '+title+'" />' );
+        $(this).html( '<input size=7 id="id'+i+offset+'" type="text" placeholder="Search '+title+'" />' );
         i++;
     } );
 
-
-    $('#tfoot22 th').each( function (i) {
+    $('#tfoot30 th').each( function (i) { //glioblastoma tcga1
         var title = $(this).text();
-        $(this).html( '<input size=7 id="id'+i+20+'" type="text" placeholder="Search '+title+'" />' );
+        $(this).html( '<input size=7 id="id'+i+offset+'" type="text" placeholder="Search '+title+'" />' );
+        i++;
+    } );
+
+    $('#tfoot302 th').each( function (i) { //glioblastoma tcga2
+        var title = $(this).text();
+        $(this).html( '<input size=7 id="id'+i+100+offset+'" type="text" placeholder="Search '+title+'" />' );
+        i++;
+    } );
+
+    $('#tfoot220 th').each( function (i) { //geo
+        var title = $(this).text();
+        $(this).html( '<input size=7 id="id'+i+101+offset+'" type="text" placeholder="Search '+title+'" />' );
+        i++;
+    } );
+
+    $('#tfoot320 th').each( function (i) { //otter
+        var title = $(this).text();
+        $(this).html( '<input size=7 id="id'+i+offset+'" type="text" placeholder="Search '+title+'" />' );
         i++;
     } );
 
@@ -717,6 +984,12 @@ $(document).ready(function() {
   <script> var dataurl = "{% static 'data/metadata_cervix_01232021.csv' %}";</script>
 {% elif slug == 'Breast' %}
   <script> var dataurl = "{% static 'data/metadata_breast_01292021.csv' %}";</script>
+{% elif slug == 'Glioblastoma' %}
+  <script> var dataurl = "{% static 'data/GBM_d1_clinvar.csv' %}";</script>
+  <script> var dataurl3 = "{% static 'data/GBM_d2_clinvar.csv' %}";</script>
+  <script> var dataurl2 = "{% static 'data/GBM_v_clinvar.csv' %}";</script>
+  <script src="{% static 'js/pieChartGBM2.js' %}"></script>
+  <script src="{% static 'js/pieChartGeo.js' %}"></script>
 {% endif %}
 
 <script src="{% static 'js/scatterChart.js' %}"></script>

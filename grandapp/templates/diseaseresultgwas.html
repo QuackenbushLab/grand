@@ -11,6 +11,7 @@
 </div>
 
 <div class="container col-9 pb-5 mb-5">
+  <canvas id="container" style="width:100%; height:400px;"></canvas>
 <div class="card text-left">
   <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs">
@@ -169,6 +170,14 @@ $(document).ready(function() {
 
 } );
 </script>
+
+
+<script> 
+  var data2 = JSON.parse("{{data|escapejs}}");  
+  var sense = "{{ sense }}";
+</script>
+
+<script src="{% static 'js/barChart.js' %}"></script>
 </body>
 </html>
 

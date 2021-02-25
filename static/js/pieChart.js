@@ -25,6 +25,30 @@ $(document).ready(function() {
         var dataVital = rows.map(function(row) {
             return row['vital_status'];
         })
+    }else if (slug == 'Glioblastoma'){
+      var data2 = rows.map(function(row) {
+        return row['gender'];
+      })
+
+      var dataETH = rows.map(function(row) {
+          return row['race'];
+      })
+
+      var dataAL = rows.map(function(row) {
+          return row['neoadjuvanttherapy'];
+      })
+
+      var dataStage = rows.map(function(row) {
+          return row['radiationsradiationregimenindication'];
+      })
+
+      var dataVital = rows.map(function(row) {
+          return row['vitalstatus'];
+      })
+
+      var gbmtext3='Neoadjuvant therapy'
+      var gbmtext4='Radiotherapy'
+
     }else{
         var data2 = rows.map(function(row) {
             return row['gdc_cases.demographic.gender'];
@@ -137,6 +161,8 @@ $(document).ready(function() {
       var ctxStage   = canvasStage.getContext('2d');
       var ctxVital   = canvasVital.getContext('2d');
 
+      console.log(offset)
+
       var options = {
         backgroundColor: 'rgba(54, 162, 235,0.7)',
       }
@@ -203,7 +229,7 @@ $(document).ready(function() {
         options: {
             title: {
               display: true,
-              text: 'Anatomic location',
+              text: gbmtext3,
               fontSize: 10,
             },
             tooltips: {
@@ -231,7 +257,7 @@ $(document).ready(function() {
         options: {
             title: {
               display: true,
-              text: 'Stage',
+              text: gbmtext4,
               fontSize: 10,
             },
             tooltips: {
@@ -289,23 +315,26 @@ $(document).ready(function() {
          "<'row'<'col-sm-12'tr>>" +
          "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
    
-         initComplete: function () {
-         // Apply the search
-         this.api().columns().every( function () {
-         var that = this;
+            initComplete: function () {
+              // Apply the search
+              this.api().columns().every( function () {
+                  var that = this;
 
-         $( 'input', this.header() ).on( 'keyup change clear', function () {
-            if ( that.search() !== this.value ) {
-               that
-               .search( this.value )
-               .draw();
-             }
-           });
-         });
-        }
-       });
+                  $( 'input', this.footer() ).on( 'keyup change clear', function () {
+                      if ( that.search() !== this.value ) {
+                          that
+                          .search( this.value )
+                          .draw();
+                      }
+                  } );
+              } );
+          }
+    });
+
+    $('#tissuestabletcga tfoot tr').appendTo('#tissuestabletcga thead');
        
-    canvas.onclick = function(evt) {
+    if (slug == 'Glioblastoma') {
+      canvas.onclick = function(evt) {
         var activePoints = myPieChart.getElementsAtEvent(evt);
         if (activePoints[0]) {
           var chartData = activePoints[0]['_chart'].config.data;
@@ -313,7 +342,7 @@ $(document).ready(function() {
     
           var label = chartData.labels[idx];
           table.column(1).search("^"+label+"$", true, false, true).draw();
-          $("#id1").val(label);
+          $("#id"+1+offset).val(label);
         }
       };
 
@@ -326,7 +355,7 @@ $(document).ready(function() {
     
           var label = chartData.labels[idx];
           table.column(2).search("^"+label+"$", true, false, true).draw();
-          $("#id2").val(label);
+          $("#id"+2+offset).val(label);
         }
       };
 
@@ -337,8 +366,8 @@ $(document).ready(function() {
           var idx = activePoints[0]['_index'];
     
           var label = chartData.labels[idx];
-          table.column(6).search("^"+label+"$", true, false, true).draw();
-          $("#id6").val(label);
+          table.column(7).search("^"+label+"$", true, false, true).draw();
+          $("#id"+7+offset).val(label);
         }
       };
 
@@ -349,8 +378,8 @@ $(document).ready(function() {
           var idx = activePoints[0]['_index'];
     
           var label = chartData.labels[idx];
-          table.column(7).search("^"+label+"$", true, false, true).draw();
-          $("#id7").val(label);
+          table.column(8).search("^"+label+"$", true, false, true).draw();
+          $("#id"+8+offset).val(label);
         }
       };
 
@@ -362,9 +391,76 @@ $(document).ready(function() {
     
           var label = chartData.labels[idx];
           table.column(9).search("^"+label+"$", true, false, true).draw();
-          $("#id9").val(label);
+          $("#id"+9+offset).val(label);
         }
       };
+
+
+    }else{
+      canvas.onclick = function(evt) {
+        var activePoints = myPieChart.getElementsAtEvent(evt);
+        if (activePoints[0]) {
+          var chartData = activePoints[0]['_chart'].config.data;
+          var idx = activePoints[0]['_index'];
+    
+          var label = chartData.labels[idx];
+          table.column(1).search("^"+label+"$", true, false, true).draw();
+          $("#id"+1+offset).val(label);
+        }
+      };
+
+
+    canvasETH.onclick = function(evt) {
+        var activePoints = myPieChartETH.getElementsAtEvent(evt);
+        if (activePoints[0]) {
+          var chartData = activePoints[0]['_chart'].config.data;
+          var idx = activePoints[0]['_index'];
+    
+          var label = chartData.labels[idx];
+          table.column(2).search("^"+label+"$", true, false, true).draw();
+          console.log("#id"+2+offset)
+          $("#id"+2+offset).val(label);
+        }
+      };
+
+      canvasAL.onclick = function(evt) {
+        var activePoints = myPieChartAL.getElementsAtEvent(evt);
+        if (activePoints[0]) {
+          var chartData = activePoints[0]['_chart'].config.data;
+          var idx = activePoints[0]['_index'];
+    
+          var label = chartData.labels[idx];
+          table.column(6).search("^"+label+"$", true, false, true).draw();
+          $("#id"+6+offset).val(label);
+        }
+      };
+
+      canvasStage.onclick = function(evt) {
+        var activePoints = myPieChartStage.getElementsAtEvent(evt);
+        if (activePoints[0]) {
+          var chartData = activePoints[0]['_chart'].config.data;
+          var idx = activePoints[0]['_index'];
+    
+          var label = chartData.labels[idx];
+          table.column(7).search("^"+label+"$", true, false, true).draw();
+          $("#id"+7+offset).val(label);
+        }
+      };
+
+      canvasVital.onclick = function(evt) {
+        var activePoints = myPieChartVital.getElementsAtEvent(evt);
+        if (activePoints[0]) {
+          var chartData = activePoints[0]['_chart'].config.data;
+          var idx = activePoints[0]['_index'];
+    
+          var label = chartData.labels[idx];
+          table.column(9).search("^"+label+"$", true, false, true).draw();
+          $("#id"+9+offset).val(label);
+        }
+      };
+
+    }
   
     });
+
   });

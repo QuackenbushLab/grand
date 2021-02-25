@@ -22,6 +22,13 @@
                   <tr>
                     <th scope="col">Number</th>
                     <th scope="col">Cancer type</th>
+                    <th scope="col">Subtype <i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="Merged means that several subtypes were included in the aggregate network.">
+                    </i></th>
                     <th scope="col">Methods</th>
                     <th scope="col">Network Types</th>
                     <th scope="col">Datasets</th>
@@ -32,6 +39,7 @@
 		    <tr>
 		    <th scope="row">{{ forloop.counter }}</th>
 		    <td><a href="{{ cc.tissue}}_cancer" class="text-decoration-none">{{ cc.tissue }}_cancer</a></td>
+        <td>{{ cc.subtype }}</td>
         <td>{{ cc.nnets }}</td>
         <td>{{ cc.types }}</td>
         <td>{{ cc.datasets }}</td>
