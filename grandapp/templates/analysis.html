@@ -5,7 +5,7 @@
 <div class="offset-sm-1 col-10 mt-5 mb-5">
         <div class="form-area"> 
               <form action="{% url 'analysis' %}" role="form" method="post">
-	 	   {% csrf_token %}
+	 	               {% csrf_token %}
                    <div class="row">
 
                    <div class="col-md-5"> 
@@ -99,7 +99,7 @@
   slider.oninput = function() {
     output.innerHTML = this.value;
   }
-  </script> 
+</script> 
 
 <script>
 $(document).ready(function() {
@@ -107,7 +107,6 @@ $(document).ready(function() {
         $("#mySpinner").removeClass("d-none")
     })
 });
-
 </script>
 </body>
 </html>

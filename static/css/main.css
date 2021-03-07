@@ -31,12 +31,19 @@ div.hidden {
 }
 
 #mynetwork {
-    width: 1295px;
+    width: 1076px;
     height: 500px;
-    border: 1px solid lightgray;
 }
   
 .fa-plus-circle {
     color:green;
  }
+
+.padding-0{
+    padding-right:0;
+    padding-left:0;
+}
+
+
+
 

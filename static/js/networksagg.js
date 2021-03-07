@@ -1,62 +1,78 @@
 $(document).ready(function() {
+  //var nodes = null;
+  //var edges = null;
+  var network = null;
   
+  function destroy() {
+    if (network !== null) {
+      network.destroy();
+      network = null;
+    }
+  }
 
-
-    //$.each(rows.data, function(i) { //reduce to t tfs
-    //    nodes2[i] = rows.data[i][""] ;
-    //});
-
-    //console.log(nodes);
-
-    //var nodes = [
-    //    { id: 0, label: "Myriel", group: 1 },
-    //    { id: 1, label: "Napoleon", group: 1 },
-    //    { id: 2, label: "Mlle.Baptistine", group: 2 },
-    //  ];
-
-
-
-function draw() {
-    // create some nodes
-    //var nodes = [
-    //  { id: 0, label: "Myriel", group: 1 },
-    //  { id: 1, label: "Napoleon", group: 1 },
-    //  { id: 2, label: "Mlle.Baptistine", group: 1 },
+  function draw() {
+    destroy();
+    // create people.
+    // value corresponds with the age of the person
+    //nodes = [
+    //  { id: 1, label: "Algie" },
+    //  { id: 2, label: "Alston" },
+     // { id: 3, label: "Barney" },
+     // { id: 4, label: "Coley" },
+     // { id: 5, label: "Grant" },
+     // { id: 6, label: "Langdon" },
+     // { id: 7, label: "Lee" },
+     // { id: 8, label: "Merlin" },
+     // { id: 9, label: "Mick" },
+    //  { id: 10, label: "Tod" },
     //];
-        // Read data file and create a chart
-        $.get(dataurl, function(csvString) {
   
-            var rows = Papa.parse(csvString, 
-              {
-                  header: true,
-                  delimiter: ",",
-                  preview:10
-              }
-          );
-      
-      
-          //console.log('Done!');
-          var nodes = [];
-      
-          //var nodes = [];
-          //var nodes2=[];
-          $.each(rows.meta['fields'], function(i) { //reduce to n genes
-              nodes[i] = {id:i, label: rows.meta['fields'][i], group: i};
-              if(i === 2) {
-                  return false; // breaks
-              }
-          });
-
+    // create connections between people
+    // value corresponds with the amount of contact between two people
+    //edges = [
+    //  { from: 2, to: 8, value: 3 },
+    //  { from: 2, to: 9, value: 5 },
+    //  { from: 2, to: 10, value: 1 },
+    //  { from: 4, to: 6, value: 8 },
+    //  { from: 5, to: 7, value: 2 },
+    //  { from: 4, to: 5, value: 1 },
+    //  { from: 9, to: 10, value: 2 },
+    //  { from: 2, to: 3, value: 6 },
+    //  { from: 3, to: 9, value: 4 },
+    //  { from: 5, to: 3, value: 1 },
+    //  { from: 2, to: 7, value: 4 },
+    //];
   
-    // create some edges
-    var edges = [
-      { from: 1, to: 0 },
-      { from: 2, to: 0 },
-      { from: 3, to: 0 },
-    ];
-  
-    // create a network
+    // Instantiate our network object.
     var container = document.getElementById("mynetwork");
+    var x = -container.clientWidth +50 ;
+    var y = -container.clientHeight / 2 + 50;
+    var step = 170;
+    nodes.push({
+      id: 1000,
+      x: x,
+      y: y,
+      label: "TF",
+      shape: "triangle",
+      value: 36,
+      color: "#98c4e1",
+      fixed: true,
+      physics: false,
+      font: { size: 24},
+    });
+    nodes.push({
+      id: 1001,
+      x: x,
+      y: y + step,
+      label: "Gene",
+      shape: "circle",
+      value: 36,
+      color: "#d7cad1",
+      fixed: true,
+      physics: false,
+      font: { size: 24},
+    });
+
     var data = {
       nodes: nodes,
       edges: edges,
@@ -64,30 +80,65 @@ function draw() {
     var options = {
       nodes: {
         shape: "dot",
-        size: 16,
-      },
-      physics: {
-        forceAtlas2Based: {
-          gravitationalConstant: -26,
-          centralGravity: 0.005,
-          springLength: 230,
-          springConstant: 0.18,
+        scaling: {
+          min: 10,
+          max: 30,
         },
-        maxVelocity: 146,
-        solver: "forceAtlas2Based",
-        timestep: 0.35,
-        stabilization: { iterations: 150 },
+        font: {
+          size: 8,
+          face: "Helvetica",
+        },
       },
+      edges: {
+        width: 0.15,
+        smooth: {
+          type: "continuous",
+        },
+      },
+      interaction: {
+        navigationButtons: true,
+        keyboard: true,
+      },
+
+      configure: {
+        container: document.getElementById("config"),
+        showButton: false,
+      },
+      //configure: {
+      //  filter: function (option, path) {
+      //    if (option === "type" && path.indexOf("smooth") !== -1) {
+      //      return true;
+      //    }
+      //    if (option === "roundness") {
+      //      return true;
+      //    }
+      //    if (path.indexOf("hierarchical") !== -1) {
+      //      return true;
+      //    }
+      //    return false;
+      //  },
+      //  container: document.getElementById("optionsContainer"),
+      //  showButton: false,
+      //},
+      physics: true,
     };
-    var network = new vis.Network(container, data, options);
-});
+
+
+    
+    network = new vis.Network(container, data, options);
+    
+
+
+    network.on("select", function (params) {
+      document.getElementById("selection").innerText =
+        "Selection: " + nodes[params.nodes]['label'];
+    });
+
   }
   
-
   window.addEventListener("load", () => {
     draw();
   });
-
 
 });
 

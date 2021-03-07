@@ -14,9 +14,9 @@
   <a class="btn btn-outline-primary not-allowed" role="button">Data sets <span class="badge bg-secondary">{{ ndata }}</span></a>
 
   <a class="btn btn-outline-primary not-allowed active" role="button">Networks</a>
-
+  {% if nagg != 0 %}
   <a class="btn btn-outline-primary not-allowed" role="button">Aggregate <span class="badge bg-secondary">{{ nagg }}</span></a>
-
+  {% endif %}
   {% if nsamples != 0 %}
     <a class="btn btn-outline-primary not-allowed" role="button">Single-sample <span class="badge bg-secondary">{{ nsamples }}</span></a>
   {% endif %}
@@ -48,6 +48,18 @@
       GBM
       <span class="badge bg-secondary rounded-pill">3</span>
     </a>
+    <a href="/cancers/Kidney_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Kidney cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Lung_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Lung cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Pancreas_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      PDAC
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
     {% elif slug == 'Cervix' %}
     <a href="/cancers/Colon_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
       Colon cancer
@@ -68,6 +80,18 @@
     <a href="/cancers/Glioblastoma_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
       GBM
       <span class="badge bg-secondary rounded-pill">3</span>
+    </a>
+    <a href="/cancers/Kidney_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Kidney cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Lung_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Lung cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Pancreas_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      PDAC
+      <span class="badge bg-secondary rounded-pill">1</span>
     </a>
     {% elif slug == 'Breast' %}
     <a href="/cancers/Colon_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
@@ -90,6 +114,18 @@
       GBM
       <span class="badge bg-secondary rounded-pill">3</span>
     </a>
+    <a href="/cancers/Kidney_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Kidney cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Lung_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Lung cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Pancreas_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      PDAC
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
     {% elif slug == 'Liver' %}
     <a href="/cancers/Colon_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
       Colon cancer
@@ -110,6 +146,18 @@
     <a href="/cancers/Glioblastoma_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
       GBM
       <span class="badge bg-secondary rounded-pill">3</span>
+    </a>
+    <a href="/cancers/Kidney_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Kidney cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Lung_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Lung cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Pancreas_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      PDAC
+      <span class="badge bg-secondary rounded-pill">1</span>
     </a>
     {% elif slug == 'Glioblastoma' %}
     <a href="/cancers/Colon_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
@@ -132,21 +180,144 @@
       GBM
       <span class="badge bg-secondary rounded-pill">3</span>
     </a>
+    <a href="/cancers/Kidney_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Kidney cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Lung_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Lung cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Pancreas_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      PDAC
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    {% elif slug == 'Kidney' %}
+    <a href="/cancers/Colon_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Colon cancer
+      <span class="badge bg-secondary rounded-pill">2</span>
+    </a>
+    <a href="/cancers/Cervix_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Cervix cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Breast_cancer"  class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Breast cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Liver_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Liver cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Glioblastoma_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      GBM
+      <span class="badge bg-secondary rounded-pill">3</span>
+    </a>
+    <a href="/cancers/Kidney_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action active" aria-current="true">
+      Kidney cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Lung_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Lung cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Pancreas_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      PDAC
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    {% elif slug == 'Lung' %}
+    <a href="/cancers/Colon_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Colon cancer
+      <span class="badge bg-secondary rounded-pill">2</span>
+    </a>
+    <a href="/cancers/Cervix_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Cervix cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Breast_cancer"  class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Breast cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Liver_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Liver cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Glioblastoma_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      GBM
+      <span class="badge bg-secondary rounded-pill">3</span>
+    </a>
+    <a href="/cancers/Kidney_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Kidney cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Lung_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action active" aria-current="true">
+      Lung cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Pancreas_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      PDAC
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    {% elif slug == 'Pancreas' %}
+    <a href="/cancers/Colon_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Colon cancer
+      <span class="badge bg-secondary rounded-pill">2</span>
+    </a>
+    <a href="/cancers/Cervix_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Cervix cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Breast_cancer"  class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Breast cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Liver_cancer" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Liver cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Glioblastoma_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      GBM
+      <span class="badge bg-secondary rounded-pill">3</span>
+    </a>
+    <a href="/cancers/Kidney_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Kidney cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Lung_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action">
+      Lung cancer
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
+    <a href="/cancers/Pancreas_cancer/" class="list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action active" aria-current="true">
+      PDAC
+      <span class="badge bg-secondary rounded-pill">1</span>
+    </a>
     {% endif %}
   </ul>
 </div>
 
 <div class="col-10 mt-4 pb-4 mb-4">
   <div class="container row">
-  <div class="col">
-    <canvas id="scatterChart" width="50" height="30"></canvas>
-    <p style="font-family: Helvetica; color: #333; padding: 1em 2em; font-size: 12px">
-      To get the full list of phenotypic variables, please check the menu below.
-    </p>
-  </div>
-  <div class="col">
-    <canvas id="scatterChart2" width="50" height="30"></canvas>
-  </div>
+    {% if slug == 'Pancreas' %}
+    <div class="col">
+      <canvas id="scatterChart" width="50" height="45"></canvas>
+    </div>
+    <div class="col">
+      <canvas id="scatterChartPancreas2" width="50" height="45"></canvas>
+    </div> 
+    <div class="col">
+      <canvas id="scatterChart2" width="50" height="45"></canvas>
+    </div>
+    {% else %}
+    <div class="col">
+      <canvas id="scatterChart" width="50" height="30"></canvas>
+    </div>
+    <div class="col">
+      <canvas id="scatterChart2" width="50" height="30"></canvas>
+    </div>
+    {% endif %}
+  <p style="font-family: Helvetica; color: #333; padding: 1em 2em; font-size: 12px">
+    To get the full list of phenotypic variables, please check the menu below.
+  </p>
 </div>
   <div class="accordion" id="accordionExample">
     <div class="accordion-item">
@@ -162,7 +333,7 @@
   <div class="card-body" id="networks">
     <h5 class="card-title">Tool description</h5>
     <p class="card-text">{% if tool == 'panda' %}<a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. <a href="https://www.sciencedirect.com/science/article/pii/S2589004219300872">LIONESS</a> reconstructs patient-specific <a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> networks for each gene expression sample. 
-			    To download patient-specific networks, you can check <a href='#cardtissuetcga'>the phenotypic information of the TCGA dataset</a> or <a href='#cardtissuegeo'>the phenotypic information of the {% if slug == 'Glioblastoma' %}GGN{% else %}GEO{% endif %} dataset</a>. You can also select the networks by
+			    To download patient-specific networks, you can check <a href='#cardtissuetcga'>the phenotypic information of the TCGA dataset</a>{% if geo == 'yes' %} or <a href='#cardtissuegeo'>the phenotypic information of the {% if slug == 'Glioblastoma' %}GGN{% else %}GEO{% endif %} dataset</a>{% endif %}. You can also select the networks by
                             clinical variables or download all the samples in a single file. 
                             {% elif tool == 'otter' %}
                             Like <a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a>, <a href="https://www.biorxiv.org/content/10.1101/2020.06.23.167999v2">OTTER</a> reconstructs a gene regulatory network from the TF PPI, TF DNA binding motif, and gene expression samples. 
@@ -216,7 +387,11 @@
                       <td>{{ tissue.tool }}</td>
                       <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none">{{ tissue.netzooRel }}</a></td>
                       <td><div class="btn-group" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a> 
-                      <a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">R</a></div></td>
+                        {% if slug != 'Pancreas' %}
+                        <a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">R</a></div></td>
+                        {% else %}
+                        <a href="{{ tissue.script }}" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#netbookModal" role="button">R</a></div></td>
+                        {% endif %}
                       <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}"><i class="fas fa-link"></i></a></td>
                       <td><a href="{{ tissue.motif }}"><i class="fas fa-download"></i></a></td>
                       <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}"><i class="fas fa-link"></i></a></td>
@@ -230,7 +405,7 @@
                       {% endif %}
                       <td><span class="badge rounded-pill bg-primary">D</span></td>
                       <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal"></i></a></td>
-                        <!-- Modal -->
+                        <!-- Modal 1-->
                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div class="modal-dialog">
                             <div class="modal-content">
@@ -240,6 +415,23 @@
                               </div>
                               <div class="modal-body">
                                 Please check the reference {{ tissue.refs2 }} at the following <a href="{{ tissue.refs }}">link</a>.
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Netbook modal -->
+                        <div class="modal fade" id="netbookModal" tabindex="-1" aria-labelledby="exampleModalLabelnetbook" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabelnetbook">Jupyter notebook</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                To reproduce the network, please check <b>{{ tissue.script }}</b> tutorial in netbooks server at the following <a href="http://netbooks.networkmedicine.org">link</a>.
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -348,7 +540,14 @@
                 {% if tissue.submitter_id == 'All' %}
                     <td>{{ tissue.submitter_id }}</td>
                 {% else %}
-                    <td>{{ tissue.submitter_id }} </td>
+                    <td>{{ tissue.submitter_id }} <i class="fas fa-info-circle"
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        title="Platform ID"
+                        data-bs-content="{{ tissue.platform }}">
+                      </i></td>
                 {% endif %}
                 <td>{{ tissue.gender }}</td>
                 <td>{{ tissue.race }}</td>
@@ -462,7 +661,14 @@
                 {% if tissue.submitter_id == 'All' %}
                     <td>{{ tissue.submitter_id }}</td>
                 {% else %}
-                    <td>{{ tissue.submitter_id }} </td>
+                    <td>{{ tissue.submitter_id }} <i class="fas fa-info-circle"
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        title="Platform ID"
+                        data-bs-content="{{ tissue.platform }}">
+                      </i></td>
                 {% endif %}
                 <td>{{ tissue.gender }}</td>
                 <td>{{ tissue.race }}</td>
@@ -529,6 +735,10 @@
                     </i></th>
                     <th scope="col">Gender</th>
                     <th scope="col">Race</th>
+                    {% if slug == 'Pancreas' %}
+                    <th scope="col">Ethnicity</th>
+                    <th scope="col">Primary site</th>
+                    {% else %}
                     <th scope="col">Weight<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-animation="false"
@@ -543,6 +753,7 @@
                       data-bs-placement="top"
                       data-bs-content="Height at diagnosis (cm)">
                     </i></th>
+                    {% endif %}
                     <th scope="col">Age<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-animation="false"
@@ -550,6 +761,15 @@
                       data-bs-placement="top"
                       data-bs-content="Age at initial pathologic diagnosis">
                     </i></th>
+                    {% if slug == 'Pancreas' %}
+                    <th scope="col">Subtype<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="1: Basal-like, 2: Classical">
+                    </i></th>
+                    {% else %}
                     <th scope="col">Anatomic location<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
@@ -557,6 +777,7 @@
                       data-bs-placement="top"
                       data-bs-content="Anatomic neoplasm subdivision. Empty entries are either missing or due to discrepancy.">
                     </i></th>
+                    {% endif %}
                     <th scope="col">Stage<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
@@ -593,21 +814,30 @@
                       {% if tissue.sample == 'All' %}
                           <td>{{ tissue.sample }}</td>
                       {% else %}
-                          <td>{{ tissue.sample }} <i class="fas fa-info-circle"
+                          <td>{{ tissue.sample }} {% if slug != 'Pancreas' %}<i class="fas fa-info-circle"
                         data-bs-toggle="popover"
                         data-bs-trigger="hover"
                         data-bs-animation="false"
                         data-bs-placement="top"
                         title="Platform ID"
                         data-bs-content="{{ tissue.platform }}">
-                      </i></td>
+                      </i>{% endif %}</td>
                       {% endif %}
                       <td>{{ tissue.gender }}</td>
                       <td>{{ tissue.race }}</td>
+                      {% if slug == 'Pancreas' %}
+                      <td>{{ tissue.ethnicity }}</td>
+                      <td>{{ tissue.primary_site }}</td>
+                      {% else %}
                       <td>{{ tissue.weight_kg_at_diagnosis }}</td>
                       <td>{{ tissue.height_cm_at_diagnosis }}</td>
+                      {% endif %}
                       <td>{{ tissue.age_at_initial_pathologic_diagnosis }}</td>
+                      {% if slug == 'Pancreas' %}
+                      <td>{{ tissue.subtype }}</td>
+                      {% else %}
                       <td>{{ tissue.anatomic_neoplasm_subdivision }}</td>
+                      {% endif %}
                       <td>{{ tissue.uicc_stage }}</td>
                       <td>{{ tissue.time_to_event }}</td>
                       <td>{{ tissue.vital_status }}</td>
@@ -984,6 +1214,8 @@ $(document).ready(function() {
   <script> var dataurl = "{% static 'data/metadata_cervix_01232021.csv' %}";</script>
 {% elif slug == 'Breast' %}
   <script> var dataurl = "{% static 'data/metadata_breast_01292021.csv' %}";</script>
+{% elif slug == 'Pancreas' %}
+  <script> var dataurl = "{% static 'data/pancreas_tcga.csv' %}";</script>
 {% elif slug == 'Glioblastoma' %}
   <script> var dataurl = "{% static 'data/GBM_d1_clinvar.csv' %}";</script>
   <script> var dataurl3 = "{% static 'data/GBM_d2_clinvar.csv' %}";</script>
@@ -999,6 +1231,7 @@ $(document).ready(function() {
   $(document).ready(function () {
     $('div.hidden').fadeIn(300).removeClass('hidden');
 });
+
 </script>
 
 </body>

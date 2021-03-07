@@ -6,8 +6,9 @@ from .models import Cell, Disease, Cancer
 from .models import Druglanding, DrugResultUp, DrugResultDown, Params, Tcgasample, Geosample, Genelanding
 from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding, Tissuesample, Cancerlanding, Drugsample
 from .models import Drugdesc, Breastsample, Cervixsample, Liversample, Ggbmd1sample, Ggbmd2sample, Ggnsample
+from .models import Pancreassample
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
-from .forms import ContactForm, GeneForm, DiseaseForm
+from .forms import ContactForm, GeneForm, DiseaseForm, NetForm
 from django.conf import settings
 import os
 import random
@@ -52,12 +53,95 @@ def genes(request):
     return render(request, 'genes.html',{'geneslanding':geneslanding})
 
 def networksagg(request,slug):
+    if request.method == 'GET':
+        form = NetForm({'dt':'no','topbottom':'Largest','nedges':100})
+        nodes = pd.DataFrame(data=['TF','Gene'])
+        nodes['id']=[0,1]
+        nodes.columns = ['label','id']
+        nodes['shape']= ['triangle'] + ['circle']
+        nodes['color']=['#98c4e1']   + ['#d7cad1']
+        edges= pd.DataFrame(data=[0.5])
+        edges.columns=['value']
+        edges['from']=0
+        edges['to']  =1
+        edges['arrows']='to'
+        nodes=nodes.to_json(orient='records')
+        edges=edges.to_json(orient='records')
+    else:
+        form = NetForm(request.POST)
+        if form.is_valid():
+            seconds = time.time()
+            fetchNet='local'
+            nedges    = int(request.POST['nedges'])
+            topbottom = request.POST['topbottom']
+            dt         = request.POST.get('dt', False)
+            brd        = request.POST.get('brd', False)
+            print('The number of edges is',nedges)
+            print(brd)
+            if fetchNet=='server':
+                client = boto3.client('s3')
+                bucket_name = 'granddb'
+                object_key = 'cancer/colon_cancer/networks/panda/Colon_cancer_TCGA.csv'
+                csv_obj = client.get_object(Bucket=bucket_name, Key=object_key)
+                body = csv_obj['Body']
+                csv_string = body.read().decode('utf-8')
+                df = pd.read_csv(StringIO(csv_string),index_col=0,sep=',')
+            elif fetchNet=='local':
+                df = pd.read_csv('/Users/mab8354/Colon_cancer_TCGA.csv',index_col=0,sep=',')
+            if dt=='dtt':
+                tftar  = df.sum(axis=1) 
+                genetar= df.sum(axis=0)
+            if dt=='dee':
+                deDf = pd.read_csv('/Users/mab8354/cancer_colon_expression_tcga.txt',index_col=0,sep='\t')
+                deDfmean = deDf.values.mean()
+                deDf = deDf.mean(axis=1)
+            df=df.stack().reset_index().rename(columns={'TF':'source','level_1':'target', 0:'value'})
+            df=df.sort_values(by=['value'])
+            if topbottom=='Smallest':
+                df=df.iloc[0:nedges,]
+            elif topbottom=='Largest':
+                df=df.iloc[(len(df)-nedges):len(df),]
+            b1, c1 = np.unique(df.source, return_inverse=True)    
+            b2, c2 = np.unique(df.target, return_inverse=True)  
+            nodes = pd.DataFrame(data=np.concatenate((b1,b2)))
+            nodes['id']=list(range(0,len(b1)+len(b2)))
+            nodes.columns  = ['label','id']
+            nodes['shape'] = ['triangle']*len(b1) + ['circle']*len(b2)
+            nodes['color'] = ['#98c4e1']*len(b1) + ['#d7cad1']*len(b2)
+            if dt=='dee':
+                nodes['value'] = deDfmean
+                bb1  = np.intersect1d(b1,deDf.index)
+                bb2  = np.intersect1d(b2,deDf.index)
+                indInter = np.in1d(nodes.label, np.concatenate((bb1,bb2)))
+                nodes['value'][indInter] = np.concatenate((deDf[bb1],deDf[bb2]))
+                bb1,bb2,deDf=[],[],[]
+            if dt=='dtt':
+                nodes['value'] = np.concatenate((tftar[b1],genetar[b2]))
+            edges          = df
+            edges['from']  = c1
+            edges['to']    = np.max(c1)+1+c2
+            edges['color'] = 'green'
+            edges['color'][df.value < 0] = 'red'
+            print(brd)
+            if brd==False:
+                del edges['value']
+            elif brd=='on':
+                edges.value   = np.abs(edges.value)
+            edges['arrows']= 'to'
+            del edges['source'] 
+            del edges['target']
+            df=''
+            nodes=nodes.to_json(orient='records')
+            edges=edges.to_json(orient='records')
+            seconds2 = time.time()
+            print(seconds2-seconds)
     cancerType=slug[:(len(slug)-8)].capitalize()
     if int(slug[len(slug)-1])==1:
         dataset='TCGA'
     elif int(slug[len(slug)-1])==2:
         dataset='GEO'
-    return render(request, 'networksagg.html', {'cancerType': cancerType, 'dataset':dataset})
+    outputDict = {'cancerType': cancerType, 'dataset':dataset, 'netform':form, 'nodes':nodes, 'edges':edges}
+    return render(request, 'networksagg.html', outputDict)
 
 def drug(request):
     return render(request, 'drugs.html')
@@ -253,6 +337,12 @@ def cancerlanding(request,slug):
         returntupl   = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'ggbmd1sample':ggbmd1sample,
                         'geosample':ggnsample,'geo':geo,'tool':tool, 'nsamples':nsamples,'ndata':ndata, 'nagg':nagg, 
                         'ggbmd2sample':ggbmd2sample,}
+    if slug == 'Pancreas_cancer':
+        pancreassample   = Pancreassample.objects.all()
+        geo,tool='no','panda'
+        nsamples,ndata,nagg=150,1,0
+        returntupl   = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'tcgasample':pancreassample,
+                        'geo':geo,'tool':tool, 'nsamples':nsamples,'ndata':ndata, 'nagg':nagg}
     return render(request, "cancerlanding.html", returntupl)
 
 def analysis(request):

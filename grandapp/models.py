@@ -349,6 +349,7 @@ class Ggbmd1sample(models.Model):
     neoadjuvanttherapy  = models.CharField(max_length=200)
     size                = models.CharField(max_length=200)
     link                = models.CharField(max_length=200)
+    platform            = models.CharField(max_length=200)
 
 class Ggbmd2sample(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
@@ -368,6 +369,22 @@ class Ggbmd2sample(models.Model):
     neoadjuvanttherapy  = models.CharField(max_length=200)
     size                = models.CharField(max_length=200)
     link                = models.CharField(max_length=200)
+    platform            = models.CharField(max_length=200)
+
+class Pancreassample(models.Model):
+    sample     = models.CharField(max_length=200)
+    race       = models.CharField(max_length=200)
+    gender     = models.CharField(max_length=200)
+    primary_site       = models.CharField(max_length=200)
+    ethnicity          = models.CharField(max_length=200)
+    primary_diagnosis  = models.CharField(max_length=200)
+    age_at_initial_pathologic_diagnosis	         = models.CharField(max_length=200)
+    uicc_stage	 = models.CharField(max_length=200)
+    time_to_event= models.CharField(max_length=200)
+    vital_status = models.CharField(max_length=200)
+    size         = models.CharField(max_length=200)
+    link         = models.CharField(max_length=200)
+    subtype      = models.CharField(max_length=200)
 
     def __str__(self):
        return self.name

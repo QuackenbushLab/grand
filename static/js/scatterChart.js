@@ -14,6 +14,8 @@ $(document).ready(function() {
     var POINT_X = 'cgc_slide_percent_tumor_nuclei'; 
   }else if (slug == 'Glioblastoma'){
     var POINT_X = 'karnofskyperformancescore';
+  }else if (slug == 'Pancreas'){
+    var POINT_X = 'subtype';
   }else{
     var POINT_X = 'gdc_cases.exposures.height'; 
   }
@@ -26,6 +28,8 @@ $(document).ready(function() {
     var POINT_Y = 'cgc_slide_percent_necrosis';   
   }else if (slug == 'Glioblastoma'){
     var POINT_Y = 'daystodeath';   
+  }else if (slug == 'Pancreas'){
+    var POINT_Y = 'gdc_cases.diagnoses.days_to_death';
   }else{
     var POINT_Y = 'gdc_cases.exposures.weight'; 
   }
@@ -33,7 +37,12 @@ $(document).ready(function() {
   var POINT_Y_PREFIX = ''; // prefix for x values, eg 'USD '
   var POINT_Y_POSTFIX = ''; // postfix for x values, eg ' kg'
 
-  var POINT_NAME = 'district'; // point names that appear in tooltip
+  var POINT_NAME = 'sample'; // point names that appear in tooltip
+  if (slug == 'Cervix' || slug == 'Breast' || slug == 'Liver' || slug == 'Pancreas'){
+    var POINT_NAME = 'gdc_cases.samples.portions.analytes.aliquots.submitter_id'; // point names that appear in tooltip
+  }else if (slug == 'Glioblastoma'){
+    var POINT_NAME = 'submitter_id';
+  }
   var POINT_COLOR = 'rgba(54, 162, 235,0.7)'; // eg `black` or `rgba(10,100,44,0.8)`
   var POINT_RADIUS = 5; // radius of each data point
 
@@ -63,18 +72,159 @@ $(document).ready(function() {
       }
     })
 
-    var scatterChartData = {
-			datasets: [{
-				label: 'height weight data',
-				backgroundColor: POINT_COLOR,
-        data: data,
-        pointRadius: POINT_RADIUS,
-        pointHoverRadius:  POINT_RADIUS + 2,
-			}]
-    };
+    if( slug == 'Pancreas' ){
+      var data2 = rows.map(function(row) {
+        return {
+          x: row[POINT_X],
+          y: row['cgc_case_age_at_diagnosis'],
+          name: row[POINT_NAME]
+        }
+      })
+      function averageFemale(list) {
+        var sum1 = 0,
+            count1 = 0,
+            sum2 = 0,
+            count2 = 0,
+            i;
+    
+        for (i = 0; i < list.length; i++) {
+            if (list[i].x === '1') {
+              if(list[i].y != 'NA'){
+                sum1 += Number(list[i].y);
+                ++count1;
+              }
+            }else if(list[i].x === '2') {
+              if(list[i].y != 'NA'){
+                sum2 += Number(list[i].y);
+                ++count2;
+              }
+            }
+        }
+        return [sum1 / count1, sum2 / count2];
+       }   
+      var barData = averageFemale(data)
+      var barData2 = averageFemale(data2)
+    }else{
+      var scatterChartData = {
+        datasets: [{
+          label: 'height weight data',
+          backgroundColor: POINT_COLOR,
+          data: data,
+          pointRadius: POINT_RADIUS,
+          pointHoverRadius:  POINT_RADIUS + 2,
+        }]
+      };
+  }
 
     var ctx = document.getElementById('scatterChart').getContext('2d');
 
+    if( slug == 'Pancreas'){
+      var ctx2 = document.getElementById('scatterChartPancreas2').getContext('2d');
+      var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Basal-like', 'Classical'],
+            datasets: [{
+                label: 'Average survival ',
+                data: barData,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Average survival and subtype',
+            fontSize: 14,
+          },
+            legend: {
+              display: false
+          },
+          scales: {
+            xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Subtype'
+              },
+              gridLines: {
+                display: SHOW_GRID,
+              }
+            }],
+            yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Average survival (Days)'
+              },
+              gridLines: {
+                display: SHOW_GRID,
+              },
+              ticks: {
+                beginAtZero: true
+            }
+            }]
+          }
+        }
+    });
+    var myChart2 = new Chart(ctx2, {
+      type: 'bar',
+      data: {
+          labels: ['Basal-like', 'Classical'],
+          datasets: [{
+              label: 'Average age ',
+              data: barData2,
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Average age and subtype',
+          fontSize: 14,
+        },
+          legend: {
+            display: false
+        },
+        scales: {
+          xAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Subtype'
+            },
+            gridLines: {
+              display: SHOW_GRID,
+            }
+          }],
+          yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Average age (Years)'
+            },
+            gridLines: {
+              display: SHOW_GRID,
+            },
+            ticks: {
+              beginAtZero: true
+          }
+          }]
+        }
+      }
+    });
+    }else{
     var myScatterChart = new Chart.Scatter(ctx, {
       data: scatterChartData,
       options: {
@@ -134,6 +284,7 @@ $(document).ready(function() {
         }
       }
     });
+  }
 
   });
 
@@ -170,7 +321,12 @@ $(document).ready(function() {
     var POINT_Y_PREFIX = ''; // prefix for x values, eg 'USD '
     var POINT_Y_POSTFIX = ''; // postfix for x values, eg ' kg'
   
-    var POINT_NAME = 'district'; // point names that appear in tooltip
+    var POINT_NAME = 'sample'; // point names that appear in tooltip
+    if (slug == 'Cervix' || slug == 'Breast' || slug == 'Liver' || slug == 'Pancreas'){
+      var POINT_NAME = 'gdc_cases.samples.portions.analytes.aliquots.submitter_id'; // point names that appear in tooltip
+    }else if (slug == 'Glioblastoma'){
+      var POINT_NAME = 'submitter_id';
+    }
     var POINT_COLOR = 'rgba(0,0,255,0.7)'; // eg `black` or `rgba(10,100,44,0.8)`
     var POINT_RADIUS = 5; // radius of each data point
   

@@ -1,11 +1,8 @@
 {% load static %} 
 {% include "header.html" %}
+{% load widget_tweaks %}
 
 <div class='container pt-3 pb-4'>
-
-
-
-
     <div class="card text-center">
         <div class="card-header">
             <ul class="nav nav-pills card-header-pills" id="myTab" role="tablist">
@@ -33,7 +30,91 @@
     
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="network" role="tabpanel" aria-labelledby="home-tab">
-                <div id="mynetwork" ></div> 
+                <div class='container'>
+                  <div class="row">
+                    <div class="col-2 border border-secondary">
+                      <h5><span class="badge bg-secondary">Edges</span></h5>
+                      <div>
+                        <label for="myEdge" class="form-label">Number of edges</label>
+                        <form action="{% url 'networksagg' 'colon_cancer1' %}" role="form" method="post">
+                          {% csrf_token %}
+                          {{ netform.nedges }}
+                          <p>Value: <span id="demo2"></span></p>
+                          <div class="form-group">
+                            {% for radio in netform.topbottom %}
+                              <small>{{ radio }}</small>
+                            {% endfor %}
+                          </div>
+                          <div style="float: center;">
+                          {{ netform.brd }} <small>Weighted edges</small>
+                        </div>
+                        <br>
+                          <h5><span class="badge bg-secondary">Scaling</span></h5>
+                          <div class='row'>
+                            <div class='col-md-10 offset-md-2'>
+                          <div style="float: left;">
+                          {{ netform.dt.0 }} <small>No scaling</small>
+                          </div>
+                          <div style="float: left;">
+                          {{ netform.dt.1 }} <small>Scale by <a href="#"
+                            data-bs-toggle="popover"
+                            data-bs-animation="false"
+                            data-bs-placement="top"
+                            data-bs-html="true"
+                            data-bs-content="Scale node size by targeting score. More about targeting score in <a href='https://grand.networkmedicine.org/help/#wiki'>GRAND help page</a>">
+                          targeting</a></small>
+                        </div>
+                        <div style="float: left;">
+                          {{ netform.dt.2 }} <small>Scale by <a href="#"
+                            data-bs-toggle="popover"
+                            data-bs-animation="false"
+                            data-bs-placement="top"
+                            data-bs-html="true"
+                            data-bs-content="Scale node size by average expression across samples for aggregate networks and by sample for single-sample networks.">
+                          expression</a></small>
+                        </div>
+                        </div> <!-- grid offset -->
+                        </div> <!-- row -->
+                        <br>
+                        <br>
+                        <div class="form-actions button-box">
+                          <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                              Info
+                            </button>
+                          <button type="submit"  name="submit" class="btn btn-primary" id="btnFetch">
+                            <span id="mySpinner" class="d-none">
+                            <span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
+                            </span>
+                            Submit</button>
+                            </div>
+                        </div>
+                        </form>
+                        <br>
+                        <br>
+                        <p id="selection"></p>
+                      </div>
+                    </div>
+                    
+                    <div class="col-10 border border-secondary padding-0">
+                      <div id="mynetwork" width=100% height=100%></div> 
+                      <div class="accordion" id="accordionExampleNN">
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="headingOneNN">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOneNN" aria-expanded="true" aria-controls="collapseOneNN">
+                              Configuration panel
+                            </button>
+                          </h2>
+                          <div id="collapseOneNN" class="accordion-collapse collapse" aria-labelledby="headingOneNN" data-bs-parent="#accordionExampleNN">
+                            <div class="accordion-body">
+                              <div id="config"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                     <div class="card-body">
                     <h5 class="card-title">{{ cancerType }} cancer gene regulatory network</h5>
                     <p class="card-text">Aggregate network model of TCGA gene expression data set.</p>
@@ -51,17 +132,49 @@
       </div>
     
 
-
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Legend information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p style="text-align:left">After submitting network preferences, a configuration panel will appear at the bottom to allow to modify a large set of
+          network properties dynamically. To export the network, you can right-click the canvas and save as png.</p>
+          <p style="text-align:left">Positive edge weights are colored in green, negative edge weights are colored in red.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 
-
-
+</div>
 
 
 {% include "footer.html" %}
 
-</div>
-<script> var dataurl = "{% static 'data/regMatQval005.csv' %}";</script>
+<script>
+  var slider = document.getElementById("myEdge");
+  var output = document.getElementById("demo2");
+  output.innerHTML = slider.value;
+  
+  slider.oninput = function() {
+    output.innerHTML = this.value;
+  }
+  var nodes = JSON.parse("{{nodes|escapejs}}");  
+  var edges = JSON.parse("{{edges|escapejs}}"); 
+</script> 
+<script>
+  $(document).ready(function() {
+      $("#btnFetch").click(function() {
+          $("#mySpinner").removeClass("d-none")
+      })
+  });
+  </script>
 <script src="{% static 'js/networksagg.js' %}"></script>
 
 </body>

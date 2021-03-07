@@ -42,7 +42,7 @@ $(document).ready(function() {
       })
 
       var dataStage = rows.map(function(row) {
-          return row['radiationsradiationregimenindication'];
+          return row['radiationtherapy'];
       })
 
       var dataVital = rows.map(function(row) {
@@ -61,9 +61,17 @@ $(document).ready(function() {
             return row['gdc_cases.demographic.race'];
         })
 
-        var dataAL = rows.map(function(row) {
+        if (slug == 'Pancreas'){
+          var dataAL = rows.map(function(row) {
+              return row['subtype'];
+          })
+          var gbmtext3='Subtype'
+      }else{
+          var dataAL = rows.map(function(row) {
             return row['gdc_cases.project.primary_site'];
         })
+        var gbmtext3='Anatomic location'
+      }
 
         var dataStage = rows.map(function(row) {
             return row['gdc_cases.diagnoses.tumor_stage'];
@@ -72,7 +80,7 @@ $(document).ready(function() {
         var dataVital = rows.map(function(row) {
             return row['gdc_cases.diagnoses.vital_status'];
         })
-        var gbmtext3='Anatomic location'
+
         var gbmtext4='Stage'
     }
   

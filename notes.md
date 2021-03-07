@@ -30,6 +30,9 @@ Update to github is:
 
 ` scp -r -i /Users/mab8354/Virginia.pem granddb/static/data/*.csv ubuntu@3.91.1.70:~/granddb/static/data/`
 
+- static/js folder
+
+` scp -r -i /Users/mab8354/Virginia.pem granddb/static/js/ ubuntu@3.91.1.70:~/granddb/static/`
 
 2. set debug to false
 

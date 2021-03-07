@@ -124,6 +124,11 @@ $(document).ready(function() {
         var idx = activePoints[0]['_index'];
   
         var label = chartData.datasets[0].data[idx].name;
+        if(label.substring(0, 12) == 'Glioblastoma'){
+          label = label.substring(0, 12)
+        }else if (label.substring(0, 8) == 'Pancreas'){
+          label = label.substring(0, 8)
+        }
         table.search(label).draw();
       }
     };

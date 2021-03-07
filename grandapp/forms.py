@@ -34,3 +34,13 @@ class DiseaseForm(forms.Form):
         widget=forms.Textarea(attrs={'rows':14, 'cols':20}),
         label="disease"
     )
+
+class NetForm(forms.Form):
+    CHOICES = [('Largest','Largest'),('Smallest','Smallest')]
+    CHOICES2 = [('no',''),('dtt',''),('dee','')]
+    dt        = forms.ChoiceField(choices=CHOICES2, widget=forms.RadioSelect)
+    topbottom = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
+    brd    = forms.BooleanField(widget=forms.CheckboxInput, required = False )
+    nedges = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'type':'range', 'step': '10', 'min': '50', 'max': '150', 'value':'100','id':'myEdge'}), required=False
+    )

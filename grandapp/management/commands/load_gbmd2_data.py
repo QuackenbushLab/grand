@@ -50,4 +50,5 @@ class Command(BaseCommand):
             gbmd2sample.neoadjuvanttherapy  = row['neoadjuvanttherapy']
             gbmd2sample.size                = row['size']
             gbmd2sample.link                = row['link']
+            gbmd2sample.platform            = row['platform']
             gbmd2sample.save()
