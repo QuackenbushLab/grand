@@ -376,6 +376,7 @@ def analysis(request):
                  for i in range(max_display):
                      drug=DrugResultUp.objects.get(idd=i+1, nuser=newID)
                      currDrugName = drugNames[indSort[i]]
+                     drug.orig    = currDrugName
                      drug.drug    = currDrugName[0].upper() + currDrugName[1:]
                      drug.cosine  = round(cosDist[indSort[i]],4)
                      drug.overlap = overlap[indSort[i]]
@@ -389,6 +390,7 @@ def analysis(request):
                      drug.save()
                      drug=DrugResultDown.objects.get(idd=i+1, nuser=newID)
                      currDrugName = drugNames[indSort[-1-i]]
+                     drug.orig    = currDrugName
                      drug.drug    = currDrugName[0].upper() + currDrugName[1:]
                      drug.cosine  = round(cosDist[indSort[-1-i]],4)
                      drug.overlap = overlap[indSort[-1-i]]

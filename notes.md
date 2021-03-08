@@ -19,6 +19,9 @@ Update to github is:
 
 1. Transfer .csv files
 
+- mysql database
+` scp -r -i /Users/mab8354/Virginia.pem granddb/db.sqlite3 ubuntu@3.91.1.70:~/granddb/`
+
 - data folder
 ` scp -r -i /Users/mab8354/Virginia.pem granddb/data/*.csv ubuntu@3.91.1.70:~/granddb/data/`
 
@@ -36,7 +39,7 @@ Update to github is:
 
 2. set debug to false
 
-3. change API adress in tempaltes
+3. change API adress in templates
 
 4. change API address in help page redoc
 

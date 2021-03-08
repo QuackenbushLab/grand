@@ -60,6 +60,7 @@ class DrugResultUp(models.Model):
     inchi_key       = models.CharField(max_length=400)
     canonical_smiles= models.CharField(max_length=400)
     pubchem_cid     = models.CharField(max_length=400)
+    orig      = models.CharField(max_length=400)
 
 class DrugResultDown(models.Model):
     idd       = models.IntegerField(default=0)
@@ -74,6 +75,7 @@ class DrugResultDown(models.Model):
     inchi_key       = models.CharField(max_length=400)
     canonical_smiles= models.CharField(max_length=400)
     pubchem_cid     = models.CharField(max_length=400)
+    orig      = models.CharField(max_length=400)
 
 class Params(models.Model):
     id         = models.AutoField(primary_key=True)

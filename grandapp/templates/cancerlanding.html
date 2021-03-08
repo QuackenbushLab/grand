@@ -387,11 +387,7 @@
                       <td>{{ tissue.tool }}</td>
                       <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none">{{ tissue.netzooRel }}</a></td>
                       <td><div class="btn-group" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a> 
-                        {% if slug != 'Pancreas' %}
                         <a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">R</a></div></td>
-                        {% else %}
-                        <a href="{{ tissue.script }}" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#netbookModal" role="button">R</a></div></td>
-                        {% endif %}
                       <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}"><i class="fas fa-link"></i></a></td>
                       <td><a href="{{ tissue.motif }}"><i class="fas fa-download"></i></a></td>
                       <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}"><i class="fas fa-link"></i></a></td>
@@ -415,23 +411,6 @@
                               </div>
                               <div class="modal-body">
                                 Please check the reference {{ tissue.refs2 }} at the following <a href="{{ tissue.refs }}">link</a>.
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- Netbook modal -->
-                        <div class="modal fade" id="netbookModal" tabindex="-1" aria-labelledby="exampleModalLabelnetbook" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabelnetbook">Jupyter notebook</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
-                              <div class="modal-body">
-                                To reproduce the network, please check <b>{{ tissue.script }}</b> tutorial in netbooks server at the following <a href="http://netbooks.networkmedicine.org">link</a>.
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
