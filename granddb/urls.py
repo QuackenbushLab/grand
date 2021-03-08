@@ -49,8 +49,6 @@ urlpatterns = [
     url('disease/',view=views.disease, name='disease'),
     url('help/',view=views.help, name='help'),
     url('download/',view=views.download, name='download'),
-    url('analysisexample/', view=views.analysisexample, name='analysisexample'),
-    url('analysisexampletfs/', view=views.analysisexampletfs, name='analysisexampletfs'),
     url(r'^diseaseexample/', view=views.diseaseexample, name='diseaseexample'),
     url(r'^drugresult/(\d+)/reverse/', view=views.drugresult, name='drugresult'),
     url(r'^drugresult/(\d+)/similar/', view=views.drugresultsimilar, name='drugresultsimilar'),
