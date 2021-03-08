@@ -83,6 +83,7 @@
         <td>{{ dd.inchi_key }} </td>
         <td>{{ dd.canonical_smiles }} </td>
         <td>{{ dd.pubchem_cid }} </td>
+        <td>{{ dd.orig }} </td>
         </tr>
 		 {% endfor %}
 
@@ -144,7 +145,7 @@ $(document).ready(function() {
       columnDefs: [
         { orderable: false, targets: 0 },
             {
-                "targets": [ 4,5,6,7,8 ],
+                "targets": [ 4,5,6,7,8,9 ],
                 "visible": false,
             }
           ],
