@@ -128,9 +128,10 @@ $(document).ready(function() {
 
     //console.log(datasets)
 
-    var ctx = document.getElementById('container').getContext('2d');
+    var canvasbar = document.getElementById('container');
+    var ctx    = canvasbar.getContext('2d');
 
-    new Chart(ctx, {
+    var barchart = new Chart(ctx, {
       type: HORIZONTAL ? 'horizontalBar' : 'bar',
       data: barChartData,
       
@@ -190,6 +191,142 @@ $(document).ready(function() {
       }
     });
 
+        //datatables
+        var table = $('#drugstbl1').DataTable({
+          select:"single",
+          columnDefs: [
+            { orderable: false, targets: 0 },
+                {
+                    "targets": [ 7,8,9,10,11,12 ],
+                    "visible": false,
+                }
+              ],
+          "serverSide": false,
+          "processing": true,
+          "order": [[ 2, "desc" ]],
+    
+    
+          buttons: [
+                'copy', 'csv', 'pdf', 'print'
+            ],
+    
+          "dom": "B" + "<'row'<'col-sm-12 col-md-6 mt-2'l><'col-sm-12 col-md-5'f>>" +
+                 "<'row'<'col-sm-12'tr>>" +
+                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        });
+    
+             // Add event listener for opening and closing details
+        $('#drugstbl1 tbody').on('click', 'td.details-control', function () {
+                 var tr = $(this).closest('tr');
+                 var row = table.row(tr);
+                 //console.log(row.data()[4])
+    
+                 if (row.child.isShown()) {
+                     // This row is already open - close it
+                     row.child.hide();
+                     tr.find('svg').attr('color', 'green'); // FontAwesome 5
+                     tr.find('svg').attr('data-icon', 'plus-circle');    // FontAwesome 5
+                 }
+                 else {
+                     // Open this row
+                     row.child(format(row.data())).show();
+                     tr.find('svg').attr('color', 'red'); // FontAwesome 5
+                     tr.find('svg').attr('data-icon', 'minus-circle'); // FontAwesome 5
+                 }
+             });
+    
+             table.on("user-select", function (e, dt, type, cell, originalEvent) {
+                 if ($(cell.node()).hasClass("details-control")) {
+                     e.preventDefault();
+                 }
+             });
+    
+    
+             $('#drugstblcombin').on('click', 'tbody td', function() {
+    
+              //get textContent of the TD
+              console.log('TD cell textContent : ', isNaN(Number(this.textContent))  )
+              
+              if (isNaN(Number(this.textContent))) {
+                
+                $('div.dataTables_filter input', table.table().container()).focus();
+                table.search( this.textContent ).draw()
+              }
+    
+              })
+
+  //datatables
+  var tablesim = $('#drugstbl2').DataTable({
+    select:"single",
+    columnDefs: [
+      { orderable: false, targets: 0 },
+          {
+              "targets": [ 7,8,9,10,11,12 ],
+              "visible": false,
+          }
+        ],
+    "serverSide": false,
+    "processing": true,
+    "order": [[ 2, "desc" ]],
+
+
+    buttons: [
+          'copy', 'csv', 'pdf', 'print'
+      ],
+
+    "dom": "B" + "<'row'<'col-sm-12 col-md-6 mt-2'l><'col-sm-12 col-md-5'f>>" +
+           "<'row'<'col-sm-12'tr>>" +
+           "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+  });
+
+       // Add event listener for opening and closing details
+       $('#drugstbl2 tbody').on('click', 'td.details-control', function () {
+           var tr = $(this).closest('tr');
+           var row = tablesim.row(tr);
+           //console.log(row.data()[4])
+
+           if (row.child.isShown()) {
+               // This row is already open - close it
+               row.child.hide();
+               tr.find('svg').attr('color', 'green'); // FontAwesome 5
+               tr.find('svg').attr('data-icon', 'plus-circle');    // FontAwesome 5
+           }
+           else {
+               // Open this row
+               row.child(format(row.data())).show();
+               tr.find('svg').attr('color', 'red'); // FontAwesome 5
+               tr.find('svg').attr('data-icon', 'minus-circle'); // FontAwesome 5
+           }
+       });
+
+       tablesim.on("user-select", function (e, dt, type, cell, originalEvent) {
+           if ($(cell.node()).hasClass("details-control")) {
+               e.preventDefault();
+           }
+       });
+
+       $('#drugstblcombinsimilar').on('click', 'tbody td', function() {
+
+        //get textContent of the TD
+        console.log('TD cell textContent : ', isNaN(Number(this.textContent))  )
+
+        if (isNaN(Number(this.textContent))) {
+          
+          $('div.dataTables_filter input', tablesim.table().container()).focus();
+          tablesim.search( this.textContent ).draw()
+            
+        }
+
+        })
+
+    canvasbar.onclick = function(evt) {
+      var activePoints = barchart.getElementsAtEvent(evt);
+      if (activePoints[0]) {
+        var label = activePoints[0]._view['label'];
+        table.search(label).draw();
+        tablesim.search(label).draw();
+      }
+    };
 
 
 });

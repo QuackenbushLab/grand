@@ -61,6 +61,9 @@ class DrugResultUp(models.Model):
     canonical_smiles= models.CharField(max_length=400)
     pubchem_cid     = models.CharField(max_length=400)
     orig      = models.CharField(max_length=400)
+    pval = models.FloatField(default=0.1)
+    qval = models.FloatField(default=0.1)
+    tval = models.FloatField(default=0.1)
 
 class DrugResultDown(models.Model):
     idd       = models.IntegerField(default=0)
@@ -76,6 +79,27 @@ class DrugResultDown(models.Model):
     canonical_smiles= models.CharField(max_length=400)
     pubchem_cid     = models.CharField(max_length=400)
     orig      = models.CharField(max_length=400)
+    pval = models.FloatField(default=0.1)
+    qval = models.FloatField(default=0.1)
+    tval = models.FloatField(default=0.1)
+
+class Drugcombsup(models.Model):
+    drug1      = models.CharField(max_length=400)
+    drug2      = models.CharField(max_length=400)
+    cosine     = models.FloatField(default=0.1)
+    abscosine     = models.FloatField(default=0.1)
+    nuser      = models.IntegerField(default=0)
+    idd        = models.IntegerField(default=0)
+    query      = models.IntegerField(default=0)
+
+class Drugcombsdown(models.Model):
+    drug1      = models.CharField(max_length=400)
+    drug2      = models.CharField(max_length=400)
+    cosine     = models.FloatField(default=0.1)
+    abscosine     = models.FloatField(default=0.1)
+    nuser      = models.IntegerField(default=0)
+    idd        = models.IntegerField(default=0)
+    query      = models.IntegerField(default=0)
 
 class Params(models.Model):
     id         = models.AutoField(primary_key=True)
@@ -84,6 +108,7 @@ class Params(models.Model):
     genesup    = models.IntegerField(default=0)
     genesdown  = models.IntegerField(default=0)
     query      = models.IntegerField(default=0)
+    combin     = models.CharField(max_length=400)
 
 class Disease(models.Model):
     idd          = models.IntegerField(default=0)
@@ -255,7 +280,6 @@ class Ggnsample(models.Model):
     size = models.CharField(max_length=200)
     link = models.CharField(max_length=200)
 
-
 class Cancerlanding(models.Model):
     cancer    = models.CharField(max_length=200)
     cancerLink= models.URLField(default='#')
@@ -388,9 +412,58 @@ class Pancreassample(models.Model):
     link         = models.CharField(max_length=200)
     subtype      = models.CharField(max_length=200)
 
+class Gobp(models.Model):
+    term      = models.CharField(max_length=400)
+    goid      = models.CharField(max_length=400)
+    genelist  = models.CharField(max_length=3000)
+    idd       = models.IntegerField()
+
+
+class Lala(models.Model):
+    CHOICES   = [('Largest','Largest'),('Smallest','Smallest')]
+    CHOICES2  = [('Histone','Histone'),('CNV','CNV'),('Methylation','Methylation'),('miRNA','miRNA'),('mRNA','mRNA'),
+    ('Protein','Protein'),('Metabolism','Metabolism'),('Drugs','Drugs'),('Dependency','Dependency')]
+    topbottom = models.CharField(choices=CHOICES, max_length=200)
+    connex    = models.CharField(choices=CHOICES2, max_length=200)
+    methyl    = models.BooleanField()
+    mir       = models.BooleanField()
+    hm        = models.BooleanField()
+    dep       = models.BooleanField()
+    exp       = models.BooleanField()
+    prot      = models.BooleanField()
+    met       = models.BooleanField()
+    cnv       = models.BooleanField()
+    agg       = models.BooleanField()
+    absval    = models.BooleanField()
+    nedges    = models.IntegerField()
+    gp        = models.BooleanField()
+    allay     = models.BooleanField()
+
     def __str__(self):
        return self.name
 
     def natural_key(self):
        return self.my_natural_key
+
+
+class netmod(models.Model):
+    CHOICES   = [('Largest','Largest'),('Smallest','Smallest')]
+    CHOICES2  = [('no',''),('dtt',''),('dee','')]
+    CHOICES3  = [('nosel','nosel'),('by gene','by gene'),('by tf','by tf'),('by GO','by GO')]
+    dt        = models.CharField(choices=CHOICES2, max_length=200)
+    topbottom = models.CharField(choices=CHOICES, max_length=200)
+    brd       = models.BooleanField()
+    nedges    = models.IntegerField()
+    absval    = models.BooleanField()
+    tfgenesel = models.CharField(choices=CHOICES3, max_length=200)
+    geneform  = models.CharField(max_length=200)
+    tfform    = models.CharField(max_length=200)
+    goform    = models.CharField(max_length=200)
+
+    def __str__(self):
+       return self.name
+
+    def natural_key(self):
+       return self.my_natural_key
+
 

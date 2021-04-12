@@ -1,0 +1,273 @@
+{% load static %} 
+{% include "header.html" %}
+{% load widget_tweaks %}
+
+<div class='container pt-3 pb-4'>
+    <div class="card text-center">
+        <div class="card-header">
+            <h4 class="text-center">Babelomic map: Multi-layer omic network to study regulatory interactions</h4>
+        </div>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="network" role="tabpanel" aria-labelledby="home-tab">
+                <div class='container'>
+                  <div class="row">
+                    <div class="col-2 border border-secondary">
+                      <h5><span class="badge bg-secondary">Edges</span></h5>
+                      <div>
+                        <label for="myEdge" class="form-label">Number of <a href="#"
+                            data-bs-toggle="popover"
+                            data-bs-animation="false"
+                            data-bs-placement="top"
+                            data-bs-html="true"
+                            data-bs-content="Selects largest/smallest partial correlations">
+                          edges</a></label>
+                        <form action="{% url 'babelomic' %}" role="form" method="post">
+                          {% csrf_token %}
+                          {{ netform.nedges }}
+                          <p>Value: <span id="demo2"></span></p>
+                          <div class="form-group">
+                            {% for radio in netform.topbottom %}
+                              <small>{{ radio }}</small>
+                            {% endfor %}
+                          </div>
+                          {{ netform.absval }} <small><a href="#"
+                            data-bs-toggle="popover"
+                            data-bs-animation="false"
+                            data-bs-placement="top"
+                            data-bs-html="true"
+                            data-bs-content="Selects largest/smallest partial correlations based on absolute value or signed value">
+                          Absolute value</a></small>
+                        <br>
+                        <br>
+                        <h5><span class="badge bg-secondary">Layers</span></h5>
+                        <div class='row'>
+                            <div class='col-md-10 offset-md-2'>
+                            <div style="float: left;">
+                                {{ netform.agg }}  <small><a href="#"
+                                    data-bs-toggle="popover"
+                                    data-bs-animation="false"
+                                    data-bs-placement="top"
+                                    data-bs-html="true"
+                                    data-bs-content="This will aggregate all the multi-omics layer and show the largest/smallest edges in the whole network. This is different from selecting all the layers. This is the default if no checkbox is selected.">
+                                  Aggregate(Default)</a></small>
+                            </div><br>
+                          <div style="float: left;">
+                            {{ netform.methyl }}  <small>Methylation</small>
+                          </div><br>
+                          <div style="float: left;">
+                            {{ netform.cnv }}  <small>Copy number</small>
+                          </div><br>
+                          <div style="float: left;">
+                            {{ netform.hm }}  <small>Histone marks</small>
+                          </div><br>
+                          <div style="float: left;">
+                            {{ netform.mir }} <small>miRNA</small>
+                        </div><br>
+                        <div style="float: left;">
+                            {{ netform.exp }} <small>Expression</small>
+                        </div><br>
+                        <div style="float: left;">
+                            {{ netform.prot }} <small>Protein</small>
+                        </div><br>
+                        <div style="float: left;">
+                            {{ netform.allay }} <small>All</small>
+                        </div>
+                        </div> <!-- grid offset -->
+                        </div> <!-- row -->
+                        <br>
+                        <h5><span class="badge bg-secondary">Genotype to phenotype</span></h5>
+                        <div class='row'>
+                            <div class='col-md-10 offset-md-2'>
+                                <div style="float: left;">
+                                    {{ netform.gp }} <small><a href="#"
+                                        data-bs-toggle="popover"
+                                        data-bs-animation="false"
+                                        data-bs-placement="top"
+                                        data-bs-html="true"
+                                        data-bs-content="Starting from the selected layer, the largest/smallest edges are selected then the target nodes in the next layer are identified. From these nodes, the largest/smallest egdges are selected until the final layer is reached.">
+                                        connex graph</a></small>
+                                </div>
+                            </div>
+                        </div>
+                        <small>Starting layer:</small> 
+                        <small>{{ netform.connex }}</small>
+                        <br>
+                        <br>
+                        <br>
+                        <div class="form-actions button-box">
+                          <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                              Info
+                            </button>
+                          <button type="submit"  name="submit" class="btn btn-primary" id="btnFetch">
+                            <span id="mySpinner" class="d-none">
+                            <span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
+                            </span>
+                            Submit</button>
+                            </div>
+                        </div>
+                        </form>
+                        <br>
+                        <br>
+                        <p id="selection"></p>
+                      </div>
+                    </div>
+                    
+                    <div class="col-10 border border-secondary padding-0">
+                      <div id="mynetwork" width=100% height=100%></div> 
+                      <div class="accordion" id="accordionExampleNN">
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="headingOneNN">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOneNN" aria-expanded="true" aria-controls="collapseOneNN">
+                              Configuration panel
+                            </button>
+                          </h2>
+                          <div id="collapseOneNN" class="accordion-collapse collapse" aria-labelledby="headingOneNN" data-bs-parent="#accordionExampleNN">
+                            <div class="accordion-body">
+                              <div id="config"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                    <div class="card-body">
+                    <h5 class="card-title">Building a genotype-to-phenotype map</h5>
+                    <p class="card-text"><a href='https://en.wikipedia.org/wiki/Tower_of_Babel'>Babel</a>omic map is a genotype-to-phenotype network that connects mutli-layer omics.
+                    The network was built using data from the <a href="https://portals.broadinstitute.org/ccle">CCLE</a>, <a href="https://depmap.org/portal/">DepMap</a>, project <a href="https://ocg.cancer.gov/node/1071">ACHILLES</a>,and <a href="https://www.theprismlab.org/">PRISM</a> projects that characterized several omic layers in more than 1700 cell lines.
+                    Connecting the components of the network using Pearson Correlation Coefficient can show spurrious correlations that are not biologically meaningful. Approaches such Gaussian Graphical Models (GGMs) use partial correlations
+                    that allow to find direct regulatory interactions by conditioning the correlation on all other variables of the system. However, such approach requires a large sample size.
+                    Therefore, we built Babelomic map as a hypothesis generation tool using a novel method called DRAGON, that estimates partial correlations using a <a href="https://www.sciencedirect.com/science/article/abs/pii/S187493991930224X">covariance shrinkage approach</a> and requires fewer samples to simulatenously estimates the coefficients 
+                    in multiomic layers. </p>
+                    </div>
+            </div>
+
+          </div>
+    
+      </div>
+    
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Legend information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p style="text-align:left">After submitting network preferences, a configuration panel will appear at the bottom to allow to modify a large set of
+          network properties dynamically. To export the network, you can right-click the canvas and save as png.</p>
+          <p style="text-align:left">Edge weights are partial correlation between two species. Positive edge weights are colored in green, negative edge weights are colored in red.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+{% include "footer.html" %}
+
+<script>
+  var slider = document.getElementById("myEdge2");
+  var output = document.getElementById("demo2");
+  output.innerHTML = slider.value;
+  
+  slider.oninput = function() {
+    output.innerHTML = this.value;
+  }
+  var nodes = JSON.parse("{{nodes|escapejs}}");  
+  var edges = JSON.parse("{{edges|escapejs}}"); 
+</script> 
+<script>
+  $(document).ready(function() {
+      $("#btnFetch").click(function() {
+          $("#mySpinner").removeClass("d-none")
+      })
+
+  if(document.getElementById('agg')==null){
+    document.getElementById('id_agg').onchange = function() {
+        document.getElementById('id_methyl').disabled = this.checked;
+        document.getElementById('id_mir').disabled    = this.checked;
+        document.getElementById('id_exp').disabled    = this.checked;
+        document.getElementById('id_prot').disabled   = this.checked;
+        document.getElementById('id_allay').disabled  = this.checked;
+        document.getElementById('id_cnv').disabled    = this.checked;
+        document.getElementById('id_hm').disabled     = this.checked;
+        document.getElementById('id_dep').disabled    = this.checked;
+    };
+  }else if(document.getElementById('id_agg')==null){
+    document.getElementById('agg').onchange = function() {
+        document.getElementById('methyl').disabled = this.checked;
+        document.getElementById('mir').disabled    = this.checked;
+        document.getElementById('exp').disabled    = this.checked;
+        document.getElementById('prot').disabled   = this.checked;
+        document.getElementById('allay').disabled  = this.checked;
+        document.getElementById('cnv').disabled    = this.checked;
+        document.getElementById('hm').disabled     = this.checked;
+        document.getElementById('dep').disabled    = this.checked;
+    };
+  }
+
+  if(document.getElementById('allay')==null){
+    document.getElementById('id_allay').onchange = function() {
+        document.getElementById('id_methyl').checked = this.checked;
+        document.getElementById('id_mir').checked    = this.checked;
+        document.getElementById('id_exp').checked    = this.checked;
+        document.getElementById('id_prot').checked   = this.checked;
+        document.getElementById('id_agg').disabled   = this.checked;
+        document.getElementById('id_cnv').checked    = this.checked;
+        document.getElementById('id_hm').checked     = this.checked;
+        document.getElementById('id_dep').checked     = this.checked;
+    };
+  }else if(document.getElementById('id_allay')==null){
+    document.getElementById('allay').onchange = function() {
+        document.getElementById('methyl').checked = this.checked;
+        document.getElementById('mir').checked    = this.checked;
+        document.getElementById('exp').checked    = this.checked;
+        document.getElementById('prot').checked   = this.checked;
+        document.getElementById('agg').disabled   = this.checked;
+        document.getElementById('cnv').checked    = this.checked;
+        document.getElementById('hm').checked    = this.checked;
+        document.getElementById('dep').checked    = this.checked;
+    };
+  }
+
+  if(document.getElementById('gp')==null){
+    document.getElementById('id_gp').onchange = function() {
+        document.getElementById('id_methyl').disabled = this.checked;
+        document.getElementById('id_mir').disabled    = this.checked;
+        document.getElementById('id_exp').disabled    = this.checked;
+        document.getElementById('id_prot').disabled   = this.checked;
+        document.getElementById('id_agg').disabled    = this.checked;
+        document.getElementById('id_allay').disabled  = this.checked;
+        document.getElementById('id_cnv').disabled    = this.checked;
+        document.getElementById('id_hm').disabled    = this.checked;
+        document.getElementById('id_dep').disabled    = this.checked;
+    };
+  }else if(document.getElementById('id_gp')==null){
+    document.getElementById('gp').onchange = function() {
+        document.getElementById('methyl').disabled = this.checked;
+        document.getElementById('mir').disabled    = this.checked;
+        document.getElementById('exp').disabled    = this.checked;
+        document.getElementById('prot').disabled   = this.checked;
+        document.getElementById('agg').disabled    = this.checked;
+        document.getElementById('allay').disabled  = this.checked;
+        document.getElementById('cnv').disabled    = this.checked;
+        document.getElementById('hm').disabled    = this.checked;
+        document.getElementById('dep').disabled    = this.checked;
+    };
+  }
+
+
+});
+  </script>
+<script src="{% static 'js/networksaggBabel.js' %}"></script>
+
+</body>
+</html>

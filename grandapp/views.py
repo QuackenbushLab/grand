@@ -6,9 +6,9 @@ from .models import Cell, Disease, Cancer
 from .models import Druglanding, DrugResultUp, DrugResultDown, Params, Tcgasample, Geosample, Genelanding
 from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding, Tissuesample, Cancerlanding, Drugsample
 from .models import Drugdesc, Breastsample, Cervixsample, Liversample, Ggbmd1sample, Ggbmd2sample, Ggnsample
-from .models import Pancreassample
+from .models import Pancreassample, Drugcombsup, Drugcombsdown, Gobp
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
-from .forms import ContactForm, GeneForm, DiseaseForm, NetForm
+from .forms import ContactForm, GeneForm, DiseaseForm, NetForm, BabelForm
 from django.conf import settings
 import os
 import random
@@ -32,6 +32,28 @@ import scipy.sparse
 import sys # for arguments
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy.sparse.linalg import inv
+import statsmodels
+import math
+
+# for gene conversion
+import mygene
+mg = mygene.MyGeneInfo()
+
+def convertGenelist(geneform,how='sym'):
+    #geneform=str.split(geneform,'\r\n')
+    # convert to gene symbols
+    if how=='ens':
+        geneSyms = mg.querymany(geneform , scopes=["ensemblgene", "symbol"], fields='ensembl.gene', species='human',as_dataframe=True)
+    else:
+        geneSyms = mg.querymany(geneform , scopes=["ensemblgene", "symbol"], fields='symbol', species='human',as_dataframe=True)
+    #remove nonconverted genes
+    if 'notfound' in geneSyms.columns:
+        geneSyms=geneSyms[geneSyms.notfound != True]
+    if how=='ens':
+        geneform = geneSyms['ensembl.gene'].values
+    else:
+        geneform = geneSyms.symbol.values
+    return geneform
 
 def home(request):
     params  = Params.objects.filter(id=-1)
@@ -52,23 +74,27 @@ def genes(request):
     geneslanding = Genelanding.objects.all()
     return render(request, 'genes.html',{'geneslanding':geneslanding})
 
+def pathways(request):
+    gobp = Gobp.objects.all()
+    return render(request, 'pathways.html',{'gobp':gobp})
+
 def networksagg(request,slug):
     if request.method == 'GET':
-        form = NetForm({'dt':'no','topbottom':'Largest','nedges':100})
+        form = NetForm({'dt':'no','topbottom':'Largest','nedges':100,'tfgenesel':'nosel'})
         nodes = pd.DataFrame(data=['TF','Gene'])
-        nodes['id']=[0,1]
+        nodes['id']   = [0,1]
         nodes.columns = ['label','id']
         nodes['shape']= ['triangle'] + ['circle']
-        nodes['color']=['#98c4e1']   + ['#d7cad1']
+        nodes['color']= ['#98c4e1']   + ['#d7cad1']
         edges= pd.DataFrame(data=[0.5])
-        edges.columns=['value']
-        edges['from']=0
-        edges['to']  =1
+        edges.columns= ['value']
+        edges['from']= 0
+        edges['to']  = 1
         edges['arrows']='to'
         nodes=nodes.to_json(orient='records')
         edges=edges.to_json(orient='records')
     else:
-        form = NetForm(request.POST)
+        form = NetForm(request.POST, auto_id=True)
         if form.is_valid():
             seconds = time.time()
             fetchNet='local'
@@ -76,6 +102,11 @@ def networksagg(request,slug):
             topbottom = request.POST['topbottom']
             dt         = request.POST.get('dt', False)
             brd        = request.POST.get('brd', False)
+            absval     = request.POST.get('absval', False)
+            tfgenesel  = request.POST.get('tfgenesel', False)
+            geneform   = request.POST.get('geneform', False)
+            tfform     = request.POST.get('tfform', False)
+            goform     = request.POST.get('goform', False)
             print('The number of edges is',nedges)
             print(brd)
             if fetchNet=='server':
@@ -95,7 +126,43 @@ def networksagg(request,slug):
                 deDf = pd.read_csv('/Users/mab8354/cancer_colon_expression_tcga.txt',index_col=0,sep='\t')
                 deDfmean = deDf.values.mean()
                 deDf = deDf.mean(axis=1)
+            
+            if tfgenesel=='by gene':
+                geneform=str.split(geneform,'\r\n')
+                try:
+                    geneform = convertGenelist(geneform)
+                    print(geneform)
+                    print( np.intersect1d(geneform,df.columns).size )
+                except:
+                    print('no intersection')
+                intergenes=np.intersect1d(geneform,df.columns)
+                if intergenes.size > 0:
+                    df=df.loc[:,intergenes]
+            elif tfgenesel=='by tf':
+                tfform=str.split(tfform,'\r\n')
+                # convert to gene symbols
+                try:
+                    tfform=str.split(tfform,'\r\n')
+                    tfform = convertGenelist(tfform)
+                except:
+                    print('no intersection')
+                intertfs=np.intersect1d(tfform,df.index)
+                if intertfs.size> 0:
+                    df=df.loc[intertfs]
+            elif tfgenesel=='by GO':
+                goform=str.split(goform,'\r\n')
+                try:
+                    gobp  = Gobp.objects.get(goid=goform[0])
+                    genelist=str.split(gobp.genelist,',')
+                    intergo=np.intersect1d(genelist,df.columns)
+                    if intergo.size > 0:
+                        df=df.loc[:,intergo]
+                except:
+                    print('no intersection')
             df=df.stack().reset_index().rename(columns={'TF':'source','level_1':'target', 0:'value'})
+            if absval == 'on':
+                df['sigval']=df['value']
+                df['value'] =np.abs(df['value'])
             df=df.sort_values(by=['value'])
             if topbottom=='Smallest':
                 df=df.iloc[0:nedges,]
@@ -121,7 +188,10 @@ def networksagg(request,slug):
             edges['from']  = c1
             edges['to']    = np.max(c1)+1+c2
             edges['color'] = 'green'
-            edges['color'][df.value < 0] = 'red'
+            if absval == 'on':
+                edges['color'][df.sigval < 0] = 'red'
+            elif absval == False:
+                edges['color'][df.value < 0] = 'red'
             print(brd)
             if brd==False:
                 del edges['value']
@@ -135,6 +205,7 @@ def networksagg(request,slug):
             edges=edges.to_json(orient='records')
             seconds2 = time.time()
             print(seconds2-seconds)
+            form.save()
     cancerType=slug[:(len(slug)-8)].capitalize()
     if int(slug[len(slug)-1])==1:
         dataset='TCGA'
@@ -165,11 +236,12 @@ def disease(request):
     if request.method == 'GET':
          form = DiseaseForm()
     else:
-         form = DiseaseForm(request.POST)
+         form = DiseaseForm(request.POST, auto_id=True)
          if form.is_valid():
              content   = request.POST['content']
              data = content.split('\r\n')
              data = list(filter(None, data))
+             data = convertGenelist(data)
              contentdf = pd.DataFrame(data, columns = ['Gene'])
              try:
                  #u = open('src/diseaseEnr/sampleTFGWAS.csv','w')
@@ -238,59 +310,227 @@ def disease(request):
              return redirect('/diseaseresult/'+str(accessKey)+'/gwas/')
     return render(request, 'disease.html', {'diseaseform':form})
 
-def diseaseexample(request):
-    if request.method == 'GET':
-         form = DiseaseForm({'content':'BHLHE23\nMAX\nMYOD1\nARNTL\nBHLHE40\nMYCN\nCLOCK\nHEY2\nASCL1\nTCF12\nHES6\nFERD3L\nMSGN1\nUSF1\nNEUROD1\nHAND2\nHEY1\nMESP1\nPTF1A\nNPAS2\nNEUROD2\nNHLH1\nATOH1\nARNT2\nOLIG3\nNHLH2\nNEUROG2\nMSC\nHES7\nFOXL1\nTCF3\nVAX1\nBATF\nMAF\nMYC\nDLX2\nIRF4\nIRF8\nKLF4\nCEBPE\n'})
-    else:
-         form = DiseaseForm(request.POST)
-         if form.is_valid():
-             content   = request.POST['content']
-             data=content.split('\r\n')
-             data = list(filter(None, data))
-             contentdf = pd.DataFrame(data, columns = ['Gene'])
-             try:
-                 #u = open('src/diseaseEnr/sampleTFGWAS.csv','w')
-                 #u.write(content)
-                 #u.close()
-                 qval, pvalVec, tfdb, nCondVec, qval1, pvalVec1, tfdb1, nCondVec1,stat1,stat2=enrichDisease(contentdf)
-                 indSortP  = np.argsort(pvalVec)
-                 pvalVec   = pvalVec[indSortP]
-                 qval      = qval[indSortP]
-                 nCondVec  = nCondVec[indSortP]
-                 tfdb      = tfdb.iloc[indSortP]
-                 max_display=100
-                 for i in range(max_display):
-                     disease = Disease.objects.get(id=i+1)
-                     disease.disease  =tfdb.iloc[i,0]
-                     disease.count    =tfdb.iloc[i,3]
-                     disease.intersect=nCondVec[i]
-                     disease.pval     =round(pvalVec[i],5)
-                     disease.qval     =round(qval[i],5)
-                     disease.query    =disease.query+1
-                     disease.save()
-                 for i in range(len(qval1)):
-                     gwas   = Gwas.objects.get(id=i+1)
-                     gwas.disease     =tfdb1.iloc[i,0]
-                     gwas.count       =tfdb1.iloc[i,3]
-                     gwas.intersect   =nCondVec1[i]
-                     gwas.pval        =round(pvalVec1[i],5)
-                     gwas.qval        =round(qval1[i],5)
-                     gwas.save()
-                 accessKey = disease.query
-                 counter= Params.objects.get(id=0)
-                 newID  = counter.genesupin % 10
-                 param=Params.objects.get(id=newID+1)
-                 param.genesdownin   =stat1
-                 param.genesupin     =stat2
-                 param.save()
-             except BadHeaderError: #find a better exception
-                 return HttpResponse('Invalid header found.')
-             return redirect('/diseaseresult/'+str(accessKey)+'/')
-    return render(request, 'disease.html', {'diseaseform':form})
-
 def tissue(request):
     tissues = Tissue.objects.all()
     return render(request, 'tissues.html', {'tissues': tissues})
+
+def babelomic(request):
+    if request.method == 'GET':
+        form = BabelForm({'topbottom':'Largest','nedges':70,'mir':'on'})
+        nodes = pd.DataFrame(data=['CNV','Methylation','Histone marks','miRNA','Gene','Protein','Metabolite','Drug','Dependency'])
+        nodes['id']    = [0,1,2,3,4,5,6,7,8]
+        nodes.columns  = ['label','id']
+        nodes['group'] = ['cnv','methyl','hm','mir','exp','prot','met','drugs','dep'] 
+        edges= pd.DataFrame(data=[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5])
+        edges.columns  = ['value']
+        edges['from']  = [0,1,2,3,4,5,5,5]
+        edges['to']    = [4,4,4,4,5,6,7,8]
+        edges['arrows']= 'to'
+        nodes=nodes.to_json(orient='records')
+        edges=edges.to_json(orient='records')
+    else:
+        form = BabelForm(request.POST, auto_id=True)
+        print(form.is_valid())
+        if form.is_valid():
+            # Read form
+            nedges    = int(request.POST['nedges'])
+            topbottom = request.POST['topbottom']
+            agg       = request.POST.get('agg', False)
+            exp       = request.POST.get('exp', False)
+            methyl    = request.POST.get('methyl', False)
+            cnv       = request.POST.get('cnv', False)
+            hm        = request.POST.get('hm', False)
+            prot      = request.POST.get('prot', False)
+            met       = request.POST.get('met', False)
+            dep       = request.POST.get('dep', False)
+            mir       = request.POST.get('mir', False)
+            absval    = request.POST.get('absval', False)
+            gp        = request.POST.get('gp', False)
+            allay     = request.POST.get('allay', False)
+            connex = request.POST['connex']
+            # Read data
+            edges=pd.read_csv('data/finalMatEdges.csv',index_col=0)
+            edges['absvalue']=np.abs(edges['value'])
+            print(connex)
+            print(gp)
+            if gp=='on':
+                form.fields['mir'].widget.attrs['disabled']    = 'disabled'
+                form.fields['exp'].widget.attrs['disabled']    = 'disabled'
+                form.fields['methyl'].widget.attrs['disabled'] = 'disabled'
+                form.fields['prot'].widget.attrs['disabled']   = 'disabled'
+                form.fields['met'].widget.attrs['disabled']    = 'disabled'
+                form.fields['hm'].widget.attrs['disabled']     = 'disabled'
+                form.fields['agg'].widget.attrs['disabled']    = 'disabled'
+                form.fields['allay'].widget.attrs['disabled']  = 'disabled'
+                form.fields['cnv'].widget.attrs['disabled']    = 'disabled'
+                form.fields['dep'].widget.attrs['disabled']    = 'disabled'
+                if connex=='Methylation':
+                    methylEdges=edges[edges.sourcegroup=='methyl']
+                    methylEdges=selectEdges(methylEdges,topbottom,nedges,absval)
+                    expdf=findTarget(methylEdges,edges)
+                    expEdges=selectEdges(expdf,topbottom,nedges,absval)
+                    #print(expEdges)
+                    protdf=findTarget(expEdges,edges)
+                    protEdges=selectEdges(protdf,topbottom,nedges,absval)
+                    #print(protEdges)
+                    mirEdges=pd.DataFrame(data=[])
+                elif connex=='Histone':
+                    methylEdges=edges[edges.sourcegroup=='hm']
+                    methylEdges=selectEdges(methylEdges,topbottom,nedges,absval)
+                    expdf=findTarget(methylEdges,edges)
+                    expEdges=selectEdges(expdf,topbottom,nedges,absval)
+                    #print(expEdges)
+                    protdf=findTarget(expEdges,edges)
+                    protEdges=selectEdges(protdf,topbottom,nedges,absval)
+                    #print(protEdges)
+                    mirEdges=pd.DataFrame(data=[])
+                elif connex=='CNV':
+                    methylEdges=edges[edges.sourcegroup=='cnv']
+                    methylEdges=selectEdges(methylEdges,topbottom,nedges,absval)
+                    expdf=findTarget(methylEdges,edges)
+                    expEdges=selectEdges(expdf,topbottom,nedges,absval)
+                    #print(expEdges)
+                    protdf=findTarget(expEdges,edges)
+                    protEdges=selectEdges(protdf,topbottom,nedges,absval)
+                    #print(protEdges)
+                    mirEdges=pd.DataFrame(data=[])
+                elif connex=='miRNA':
+                    mirEdges=edges[edges.sourcegroup=='mir']
+                    mirEdges=selectEdges(mirEdges,topbottom,nedges,absval)
+                    expdf=findTarget(mirEdges,edges)
+                    expEdges=selectEdges(expdf,topbottom,nedges,absval)
+                    #print(expEdges)
+                    protdf=findTarget(expEdges,edges)
+                    protEdges=selectEdges(protdf,topbottom,nedges,absval)
+                    #print(protEdges)
+                    methylEdges=pd.DataFrame(data=[])
+                elif connex=='mRNA':
+                    #down
+                    expEdges=edges[edges.targetgroup=='exp']
+                    expEdges=selectEdges(expEdges,topbottom,nedges,absval)
+                    #up
+                    protEdges=edges[edges.sourcegroup=='exp']
+                    protEdges=selectEdges(protEdges,topbottom,nedges,absval)
+                    expdf=findTarget(protEdges,edges)
+                    methylEdges=selectEdges(expdf,topbottom,nedges,absval)
+                    mirEdges=pd.DataFrame(data=[])
+                elif connex=='Protein':
+                    protEdges=edges[edges.sourcegroup=='prot']
+                    protEdges=selectEdges(protEdges,topbottom,nedges,absval)
+                    expEdges=edges[edges.targetgroup=='prot']
+                    expEdges=selectEdges(expEdges,topbottom,nedges,absval)
+                    expdf=findTarget(expEdges,edges,'source')
+                    methylEdges=selectEdges(expdf,topbottom,nedges,absval)
+                    mirEdges=pd.DataFrame(data=[])
+                elif connex=='Metabolism':
+                    protEdges=edges[edges.targetgroup=='met']
+                    protEdges=selectEdges(protEdges,topbottom,nedges,absval)
+                    protdf=findTarget(protEdges,edges,'source')
+                    expEdges=selectEdges(protdf,topbottom,nedges,absval)
+                    expdf=findTarget(expEdges,edges,'source')
+                    methylEdges=selectEdges(expdf,topbottom,nedges,absval)
+                    mirEdges=pd.DataFrame(data=[])
+                elif connex=='Drugs':
+                    protEdges=edges[edges.targetgroup=='drugs']
+                    protEdges=selectEdges(protEdges,topbottom,nedges,absval)
+                    protdf=findTarget(protEdges,edges,'source')
+                    expEdges=selectEdges(protdf,topbottom,nedges,absval)
+                    expdf=findTarget(expEdges,edges,'source')
+                    methylEdges=selectEdges(expdf,topbottom,nedges,absval)
+                    mirEdges=pd.DataFrame(data=[])
+                elif connex=='Dependency':
+                    protEdges=edges[edges.targetgroup=='dep']
+                    protEdges=selectEdges(protEdges,topbottom,nedges,absval)
+                    protdf=findTarget(protEdges,edges,'source')
+                    expEdges=selectEdges(protdf,topbottom,nedges,absval)
+                    expdf=findTarget(expEdges,edges,'source')
+                    methylEdges=selectEdges(expdf,topbottom,nedges,absval)
+                    mirEdges=pd.DataFrame(data=[])
+                edges=pd.concat((methylEdges,mirEdges,expEdges,protEdges))
+                print(edges)
+            elif gp==False:
+                if agg==False:
+                    if (hm=='on') | (allay=='on'):
+                        hmEdges=edges[edges.sourcegroup=='hm']
+                        hmEdges=selectEdges(hmEdges,topbottom,nedges,absval)
+                    elif hm==False: 
+                        hmEdges=pd.DataFrame(data=[])
+                    if (cnv=='on') | (allay=='on'):
+                        cnvEdges=edges[edges.sourcegroup=='cnv']
+                        cnvEdges=selectEdges(cnvEdges,topbottom,nedges,absval)
+                    elif cnv==False: 
+                        cnvEdges=pd.DataFrame(data=[])
+                    if (methyl=='on') | (allay=='on'):
+                        methylEdges=edges[edges.sourcegroup=='methyl']
+                        methylEdges=selectEdges(methylEdges,topbottom,nedges,absval)
+                    elif methyl==False: 
+                        methylEdges=pd.DataFrame(data=[])
+                    if (mir=='on') | (allay=='on'):
+                        mirEdges=edges[edges.sourcegroup=='mir']
+                        mirEdges=selectEdges(mirEdges,topbottom,nedges,absval)
+                    elif mir==False:
+                        mirEdges=pd.DataFrame(data=[])
+                    if (exp=='on') | (allay=='on'):
+                        expEdges=edges[edges.sourcegroup=='exp']
+                        expEdges=selectEdges(expEdges,topbottom,nedges,absval)
+                    elif exp==False:
+                        expEdges=pd.DataFrame(data=[])
+                    if (prot=='on') | (allay=='on'):
+                        protEdges=edges[edges.sourcegroup=='prot']
+                        protEdges=selectEdges(protEdges,topbottom,nedges,absval)
+                    elif prot==False:
+                        protEdges=pd.DataFrame(data=[])
+                    if allay=='on':
+                        form.fields['agg'].widget.attrs['disabled']  = 'disabled'
+                    if (methyl==False) & (mir==False) & (allay==False) & (exp==False) & (prot==False) & (cnv==False) & (hm==False):
+                        agg='on'
+                        form.fields['agg'].widget.attrs['checked']    = 'checked'
+                    else:
+                        edges=pd.concat((cnvEdges,methylEdges,mirEdges,expEdges,protEdges,hmEdges))
+                if agg=='on':
+                    form.fields['mir'].widget.attrs['disabled']    = 'disabled'
+                    form.fields['exp'].widget.attrs['disabled']    = 'disabled'
+                    form.fields['methyl'].widget.attrs['disabled'] = 'disabled'
+                    form.fields['prot'].widget.attrs['disabled']   = 'disabled'
+                    form.fields['met'].widget.attrs['disabled']    = 'disabled'
+                    form.fields['hm'].widget.attrs['disabled']     = 'disabled'
+                    form.fields['allay'].widget.attrs['disabled']  = 'disabled'
+                    form.fields['cnv'].widget.attrs['disabled']    = 'disabled'
+                    form.fields['dep'].widget.attrs['disabled']    = 'disabled'
+                    if absval=='on':
+                        edges=edges.sort_values(by=['absvalue'])
+                    elif absval==False:
+                        edges=edges.sort_values(by=['value'])
+                    if topbottom=='Smallest':
+                        edges=edges.iloc[0:nedges,]
+                    elif topbottom=='Largest':
+                        edges=edges.iloc[(len(edges)-nedges):len(edges),]
+            print('The number of edges is',edges.shape)
+            b1, c1 = np.unique(pd.concat((edges.source,edges.target)), return_inverse=True)    
+            #b2, c2 = np.unique(edges.target, return_inverse=True)  
+            nodes = pd.DataFrame(data=b1)
+            nodes['id']    = list(range(0,len(b1)))
+            nodes.columns  = ['label','id']
+            aa,bb = np.unique(c1, return_index=True)
+            #aa1,bb1= np.unique(c2, return_index=True)
+            vv = pd.concat((edges.sourcegroup,edges.targetgroup))
+            vv.index=range(0,len(vv))
+            nodes['group'] = vv.iloc[bb].values
+            edges['from']  = c1[:edges.shape[0]]
+            edges['to']    = c1[edges.shape[0]:]
+            edges['arrows']= 'to'
+            edges['color'] = 'green'
+            edges['color'][edges.value < 0] = 'red'
+            edges['value'] = np.abs(edges['value'])
+            del edges['source'] 
+            del edges['target']
+            del edges['absvalue']
+            print(edges)
+            nodes=nodes.to_json(orient='records')
+            edges=edges.to_json(orient='records')
+            form.save()
+    outputDict = {'netform':form, 'nodes':nodes, 'edges':edges}
+    return render(request, 'babelomic.html', outputDict)
 
 def tissuelanding(request,slug):
     tissuelanding = Tissuelanding.objects.filter(tissue=slug.replace('_',' ')[:-7])
@@ -304,6 +544,27 @@ def tissuelanding(request,slug):
 def cancer(request):
     cancer = Cancer.objects.all()
     return render(request, 'cancer.html', {'cancer': cancer})
+
+def selectEdges(edges,topbottom,nedges,absval):
+    if absval=='on':
+        edges=edges.sort_values(by=['absvalue'])
+    elif absval==False:
+        edges=edges.sort_values(by=['value'])
+    if topbottom=='Smallest':
+        edges=edges.iloc[0:nedges,]
+    elif topbottom=='Largest':
+        edges=edges.iloc[(len(edges)-nedges):len(edges),]
+    return edges
+
+def findTarget(methylEdges,edges,source='target'):
+    if source=='source':
+        dd=np.unique(methylEdges.source)
+        ss=np.in1d(edges.target, dd)
+    elif source=='target':
+        dd=np.unique(methylEdges.target)
+        ss=np.in1d(edges.source, dd)
+    expEdges=edges[ss]
+    return expEdges
 
 def cancerlanding(request,slug):
     cancerlanding = Cancerlanding.objects.filter(cancer=slug.replace('_',' '))
@@ -348,6 +609,7 @@ def cancerlanding(request,slug):
 def analysis(request):
     if request.method == 'GET':
          form = GeneForm({'tfgene':''}, auto_id=True)
+         combin = False
     else:
          form = GeneForm(request.POST)
          if form.is_valid():
@@ -355,30 +617,83 @@ def analysis(request):
              contentdown = request.POST['contentdown']
              tfgene      = request.POST['tfgene']
              brd         = request.POST.get('brd', False)
+             combin      = request.POST.get('combin', False)
              max_display = int(request.POST['ngenes'])
-             data=contentup.split('\r\n')
-             data = list(filter(None, data))
-             sampleUp = pd.DataFrame(data, columns = ['Gene'])
-             data=contentdown.split('\r\n')
-             data = list(filter(None, data))
-             sampleDown = pd.DataFrame(data, columns = ['Gene'])
+             if tfgene=='Gene targeting':
+                data = contentup.split('\r\n')
+                data = list(filter(None, data))
+                data = convertGenelist(data,how='ens')
+                sampleUp = pd.DataFrame(data, columns = ['Gene'])
+                data = contentdown.split('\r\n')
+                data = list(filter(None, data))
+                data = convertGenelist(data,how='ens')
+                sampleDown = pd.DataFrame(data, columns = ['Gene'])
+             elif tfgene=='TF targeting':
+                data = contentup.split('\r\n')
+                data = list(filter(None, data))
+                data = convertGenelist(data)
+                sampleUp = pd.DataFrame(data, columns = ['Gene'])
+                data = contentdown.split('\r\n')
+                data = list(filter(None, data))
+                data = convertGenelist(data)
+                sampleDown = pd.DataFrame(data, columns = ['Gene'])
              try:
                  if tfgene=='Gene targeting':
                      gene=1
                  elif tfgene=='TF targeting':
                      gene=0
-                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4, drugDF = enrichCmapReg(gene,sampleUp,sampleDown,brd)
+                 drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4, drugDF, resdfcombup, resdfcombdown = \
+                            enrichCmapReg(gene,sampleUp,sampleDown,brd,max_display,combin)
+                 if gene==0:
+                     # load pvals
+                     name='resDfTF'
+                     c=np.append(indSort[0:max_display]+1,0)
+                     d=np.append(indSort[-max_display:]+1,0)
+                     pvalDfUp = loadPvals(d,name)
+                     pvalDfDown = loadPvals(c,name)
+                     # load tvals
+                     name='resDfTF'
+                     c=np.append(indSort[0:max_display]+1,0)
+                     d=np.append(indSort[-max_display:]+1,0)
+                     tvalDfUp = loadPvals(d,name,how='tau')
+                     tvalDfDown = loadPvals(c,name,how='tau')
+                 elif gene==1:
+                     # load pvals
+                     c=np.append(indSort[0:max_display]+1,0)
+                     d=np.append(indSort[-max_display:]+1,0)
+                     name='resDfGene'
+                     pvalDfUp = loadPvals(d,name)
+                     pvalDfDown = loadPvals(c,name)
+                     # load tvals
+                     c=np.append(indSort[0:max_display]+1,0)
+                     d=np.append(indSort[-max_display:]+1,0)
+                     name='resDfGene'
+                     tvalDfUp = loadPvals(d,name,how='tau')
+                     tvalDfDown = loadPvals(c,name,how='tau')
                  #max_display=100
                  randid      =random.randint(1,1000000)
                  counter= Params.objects.get(id=-1)
                  newID  = counter.genesupin % 10
                  i=0
+                 pvalsUp,pvalsDown=[],[]
                  for i in range(max_display):
                      drug=DrugResultUp.objects.get(idd=i+1, nuser=newID)
+                     # drug combs up
+                     if combin=='on':
+                        drugcombup=Drugcombsup.objects.get(idd=i+1, nuser=newID)
+                        drugcombup.drug1 = resdfcombup['drug1'].iloc[i]
+                        drugcombup.drug2 = resdfcombup['drug2'].iloc[i]
+                        drugcombup.cosine= round(resdfcombup['cosine'].iloc[i],4)
+                        drugcombup.abscosine= np.abs(drugcombup.cosine)
+                        drugcombup.query = randid
+                        drugcombup.save()
                      currDrugName = drugNames[indSort[i]]
                      drug.orig    = currDrugName
                      drug.drug    = currDrugName[0].upper() + currDrugName[1:]
                      drug.cosine  = round(cosDist[indSort[i]],4)
+                     drug.pval    = np.sum( pvalDfUp.iloc[i,:] >= drug.cosine )/pvalDfUp.shape[1]
+                     pvalsUp.append(drug.pval)
+                     drug.tval    = round(np.sum( tvalDfUp.iloc[i,:] >= drug.cosine )/tvalDfUp.shape[1],4)
                      drug.overlap = overlap[indSort[i]]
                      drug.druglink= 'https://grand.networkmedicine.org/drugs/' + drug.drug + '-drug/'
                      drug.query   = randid
@@ -387,12 +702,25 @@ def analysis(request):
                      drug.inchi_key       =drugDF.iloc[indSort[i],6]
                      drug.canonical_smiles=drugDF.iloc[indSort[i],7]
                      drug.pubchem_cid     =drugDF.iloc[indSort[i],8]
+                     # save 
                      drug.save()
                      drug=DrugResultDown.objects.get(idd=i+1, nuser=newID)
+                     # drug combs down
+                     if combin=='on':
+                        drugcombdown=Drugcombsdown.objects.get(idd=i+1, nuser=newID)
+                        drugcombdown.drug1 = resdfcombdown['drug1'].iloc[i]
+                        drugcombdown.drug2 = resdfcombdown['drug2'].iloc[i]
+                        drugcombdown.cosine= round(resdfcombdown['cosine'].iloc[i],4)
+                        drugcombdown.abscosine= np.abs(drugcombdown.cosine)
+                        drugcombdown.query = randid
+                        drugcombdown.save()
                      currDrugName = drugNames[indSort[-1-i]]
                      drug.orig    = currDrugName
                      drug.drug    = currDrugName[0].upper() + currDrugName[1:]
                      drug.cosine  = round(cosDist[indSort[-1-i]],4)
+                     drug.pval    = np.sum( pvalDfDown.iloc[i,:] <= drug.cosine )/pvalDfDown.shape[1]
+                     drug.tval    = round(np.sum( tvalDfDown.iloc[i,:] <= drug.cosine )/tvalDfDown.shape[1],4)
+                     pvalsDown.append(drug.pval)
                      drug.overlap = overlap[indSort[-1-i]]
                      drug.druglink= 'https://grand.networkmedicine.org/drugs/' + drug.drug + '-drug/'
                      drug.query   = randid
@@ -401,9 +729,19 @@ def analysis(request):
                      drug.inchi_key       =drugDF.iloc[indSort[-1-i],6]
                      drug.canonical_smiles=drugDF.iloc[indSort[-1-i],7]
                      drug.pubchem_cid     =drugDF.iloc[indSort[-1-i],8]
+                     # save 
                      drug.save()
                      i+=1
                      #payload = {'drug':drugNames.iloc[indSort[-1-i]],'cosine':round(cosDist[indSort[-1-i]],4),'overlap':overlap[indSort[-1-i]]}
+                 qvalsUp = statsmodels.stats.multitest.multipletests(pvalsUp, alpha=0.05) 
+                 qvalsDown = statsmodels.stats.multitest.multipletests(pvalsDown, alpha=0.05) 
+                 for i in range(max_display):
+                     drug=DrugResultUp.objects.get(idd=i+1, nuser=newID)
+                     drug.qval=round(qvalsUp[1][i],4)
+                     drug.save()
+                     drug=DrugResultDown.objects.get(idd=i+1, nuser=newID)
+                     drug.qval=round(qvalsDown[1][i],4)
+                     drug.save()
                  accessKey = randid
                  param  = Params.objects.get(id=newID)
                  param.genesupin   = stat1
@@ -411,6 +749,7 @@ def analysis(request):
                  param.genesup     = stat3
                  param.genesdown   = stat4
                  param.query       = randid
+                 param.combin     = combin
                  param.save()
                  counter=Params.objects.get(id=-1)
                  counter.genesupin+=1
@@ -423,16 +762,18 @@ def analysis(request):
 def drugresult(request, id):
     params   = Params.objects.filter(query=id)
     drugdown = DrugResultDown.objects.filter(query=id)
+    drugdowncomb = Drugcombsdown.objects.filter(query=id)
     data = serializers.serialize("json", drugdown)
     sense='reverse'
-    return render(request, 'drugresult.html', {'params':params,'drugdown':drugdown,'id':id, 'data': data, 'sense':sense})
+    return render(request, 'drugresult.html', {'params':params,'drugdown':drugdown,'id':id, 'data': data, 'sense':sense, 'drugdowncomb':drugdowncomb})
 
 def drugresultsimilar(request, id):
     params = Params.objects.filter(query=id)
     drugup = DrugResultUp.objects.filter(query=id)
+    drugupcomb = Drugcombsup.objects.filter(query=id)
     data = serializers.serialize("json", drugup)
     sense='similar'
-    return render(request, 'drugresultsimilar.html', {'params':params,'drugup':drugup,'id':id, 'data': data, 'sense':sense})
+    return render(request, 'drugresultsimilar.html', {'params':params,'drugup':drugup,'id':id, 'data': data, 'sense':sense, 'drugupcomb':drugupcomb})
 
 def diseasegwas(request, id):
     params  = Params.objects.filter(query=id)
@@ -644,8 +985,37 @@ def enrichDisease(tflist):
     stat2=len(tflist)
     return qval, pvalVec, tfdbdisease, nCondVec, qval1, pvalVec1, tfdbgwas, nCondVec1, stat1, stat2, qvalTE, pvalVecTE, nCondVecTE, qvalTT, pvalVecTT, nCondVecTT, tftissueex, tftissuetar
 
-def enrichCmapReg(gene,sampleGenesUp,sampleGenesDown,brd):
+def combDf(sparse_matrix_combined,max_display,drugNames,indSort,mode):
+    if mode == 'up':
+        sparse_matrix_combined = sparse_matrix_combined[:,indSort[0:max_display]]
+        drugNamesComb = drugNames[indSort[0:max_display]]
+    elif mode == 'down':
+        sparse_matrix_combined = sparse_matrix_combined[:,indSort[-max_display:]]
+        drugNamesComb = drugNames[indSort[-max_display:]]
+    print('Computing combinations !')
+    resmatcomb=[]
+    for i in range(max_display-1):
+        cosDistComb = cosine_similarity(np.transpose(sparse_matrix_combined[:,i]), np.transpose(sparse_matrix_combined[:,i+1:]))
+        resmatcomb  = np.concatenate((resmatcomb,cosDistComb.flatten()))
+    newcols=[]
+    drug1,drug2=[],[]
+    for i in range(max_display):
+        for j in range(i+1,max_display):
+            newcols.append(drugNamesComb.iloc[i] + '_' + drugNamesComb.iloc[j])
+            drug1.append(drugNamesComb.iloc[i])
+            drug2.append(drugNamesComb.iloc[j])
+    resdfcomb=pd.DataFrame(data=resmatcomb, columns=['cosine'], index=newcols)
+    resdfcomb['drug1']=drug1
+    resdfcomb['drug2']=drug2
+    resdfcomb['abscosine']=np.abs(resdfcomb['cosine'])
+    resdfcomb = resdfcomb.sort_values(by=['abscosine'])
+    print(resdfcomb)
+    return resdfcomb
+
+def enrichCmapReg(gene,sampleGenesUp,sampleGenesDown,brd,max_display,combin):
     print('Reading drug database')
+    # init variables
+    resdfcombup, resdfcombdown = [],[]
     #db         = pd.read_csv('cmapreg.csv', header=None,dtype=np.float64)
     if gene==1:
 	    sparse_matrix = scipy.sparse.load_npz('src/clueReg/data/sparse_cmapreg.npz')
@@ -660,21 +1030,7 @@ def enrichCmapReg(gene,sampleGenesUp,sampleGenesDown,brd):
         genNames    = pd.read_csv('src/clueReg/data/tfNames.csv',header=None) #'geneNames.csv'
     drugDF = pd.read_csv('src/clueReg/data/drugNamesAug.csv', header=0,index_col=0)
     drugNames = drugDF.iloc[:,0]
-    #drugNames  = pd.read_csv('src/cluereg/data/drugNames.csv',header=None)
-    #geneNames  = pd.read_csv(sys.argv[2],header=None) #'geneNames.csv'
-    #drugNames  = pd.read_csv(sys.argv[3],header=None) #'drugNames.csv'
-    #db.columns = drugNames
-    #geneNames  = geneNames.append(geneNames)
 
-	# Save to sparse
-	#sparse_matrix = sp.sparse.csc_matrix(db)
-	#sp.sparse.save_npz('sparse_cmapreg.npz', sparse_matrix)
-
-    # Read genes
-    #sampleGenesUp  = pd.read_csv('src/cluereg/data/sampleUp.csv',header=None,dtype=str) #'sampleUp.csv'
-    #sampleGenesDown= pd.read_csv('src/cluereg/data/sampleDown.csv',header=None,dtype=str) #'sampleDown.csv'
-    #sampleGenesUp  = pd.read_csv(sys.argv[4],header=None,dtype=str) #'sampleUp.csv'
-	#sampleGenesDown= pd.read_csv(sys.argv[5],header=None,dtype=str) #'sampleDown.csv'
     print(str(len(sampleGenesUp)) + ' Genes are Up')
     print(str(len(sampleGenesDown)) + ' Genes are Down')
 
@@ -698,28 +1054,17 @@ def enrichCmapReg(gene,sampleGenesUp,sampleGenesDown,brd):
     cosDist  = cosDist.transpose()
     cosDist  = np.concatenate( cosDist, axis=0 )
 
-    # print results
+    # Print results
     indSort  = np.argsort(overlap)
-    #d = {'overlapScore': overlap[list(reversed(indSort))], 'cosine similarity': cosDist[list(reversed(indSort))] }
-    #res = pd.DataFrame(data=d)
-    #res.index = drugNames.iloc[list(reversed(indSort))]
-    #res.to_csv('results.csv')
 
-    #print('Results written to results.csv')
+    max_display=20 # combinations between the first 20 drugs
+    if combin=='on':
+        if brd==False:
+            # Compute combinations
+            resdfcombup   = combDf(sparse_matrix_combined,max_display,drugNames,indSort,mode='up')
+            resdfcombdown = combDf(sparse_matrix_combined,max_display,drugNames,indSort,mode='down')  
 
-	# post to API
-	#max_display = 100
-	#for i in range(max_display):
-		#payload = {'drug':drugNames.iloc[indSort[i]],'cosine':round(cosDist[indSort[i]],4),'overlap':overlap[indSort[i]]}
-		#r = requests.put('http://localhost:8000/api/v1/drugresultup/' + str(i+1) + '/', data=payload)
-		#print(r.status_code)
-
-	#for i in range(max_display):
-	        #payload = {'drug':drugNames.iloc[indSort[-1-i]],'cosine':round(cosDist[indSort[-1-i]],4),'overlap':overlap[indSort[-1-i]]}
-	        #r = requests.put('http://localhost:8000/api/v1/drugresultdown/' + str(i+1) + '/', data=payload)
-	        #print(r.status_code)
-
-	# stats about query
+	# Stats about query
     stat1=len(sampleGenesUp)
     stat2=len(sampleGenesDown)
     stat3=np.count_nonzero(intersectUp)
@@ -732,4 +1077,22 @@ def enrichCmapReg(gene,sampleGenesUp,sampleGenesDown,brd):
         overlap  = overlap[indBrd]
         indSort  = np.argsort(overlap)
         drugDF   = drugDF.iloc[indBrd]
-    return drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4, drugDF
+        sparse_matrix_combined = sparse_matrix_combined[:,indBrd]
+        if combin=="on":
+            # Compute combinations
+            resdfcombup   = combDf(sparse_matrix_combined,max_display,drugNames,indSort,mode='up')
+            resdfcombdown = combDf(sparse_matrix_combined,max_display,drugNames,indSort,mode='down')  
+    return drugNames, cosDist, overlap, indSort, stat1, stat2, stat3, stat4, drugDF, resdfcombup, resdfcombdown
+
+def loadPvals(includedIndex,name,how='pval'):
+    skiprowVecs   = []
+    ndrugs=19792
+    if how=='pval':
+        addStr=''
+    elif how=='tau':
+        addStr='Tau'
+    for i in range(ndrugs):
+        if i not in includedIndex:
+            skiprowVecs.append(i)
+    a=pd.read_csv('data/'+name+addStr+'.csv',index_col=0,skiprows=skiprowVecs)
+    return a

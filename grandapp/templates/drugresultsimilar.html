@@ -39,7 +39,7 @@
                      data-bs-trigger="hover"
                      data-bs-placement="top"
                      data-bs-animation="false"
-                     data-bs-content="Top 100 compounds that have a similar profile with the query set.">
+                     data-bs-content="Top compounds that have a similar profile with the query set.">
         </i>
       </div>
       <div class="col-10 padding-0"></div>
@@ -62,8 +62,29 @@
                       data-bs-trigger="hover"
                       data-bs-placement="top"
                       data-bs-animation="false"
-                      data-bs-content="Cosine similarity between the input vector and top 100 compounds. A cosine of 1 indicates a perfect alignment in the direction of the vectors and -1 means an opposite direction of 
+                      data-bs-content="Cosine similarity between the input vector and the top compounds. A cosine of 1 indicates a perfect alignment in the direction of the vectors and -1 means an opposite direction of 
                       the vectors in the n-dimensional gene space. See also Duan et al., NPJ Sys Biol Appl, 2016.">
+                    </i></th>
+                    <th scope="col">P-value <i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-placement="top"
+                      data-bs-animation="false"
+                      data-bs-content="P-value on null distribution of cosine similarity of 10,000 bootstrapped random lists.">
+                    </i></th>
+                    <th scope="col">Q-value <i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-placement="top"
+                      data-bs-animation="false"
+                      data-bs-content="Multiple testing corrected p-value.">
+                    </i></th>
+                    <th scope="col">Tau <i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-placement="top"
+                      data-bs-animation="false"
+                      data-bs-content="Tau is a P-value using the database as a null model as implemented in https://clue.io. Large value could indicate promiscuous compounds.">
                     </i></th>
                     <th scope="col">Drug</th>
                   </tr>
@@ -76,6 +97,9 @@
 		    <td>{{ dd.drug }}</td>
 		    <td>{{ dd.overlap }}</td>
 		    <td>{{ dd.cosine }}</td>
+        <td>{{ dd.pval }}</td>
+        <td>{{ dd.qval }}</td>
+        <td>{{ dd.tval }}</td>
         <td>{{ dd.altid }} </td>
         <td>{{ dd.inchi_key_prefix }} </td>
         <td>{{ dd.inchi_key }} </td>
@@ -87,6 +111,67 @@
 
         </tbody>
         </table>
+        {% if params.0.combin == 'on' %}
+        &nbsp; <div class="row">
+          &nbsp; &nbsp; <div class="col-1 padding-0">
+          <h3><span class="badge bg-danger">Combinations</span></h3>
+          </div>
+          <div class="col-1 padding-0">
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<i class="far fa-question-circle"
+                         data-bs-toggle="popover"
+                         data-bs-trigger="hover"
+                         data-bs-placement="top"
+                         data-bs-animation="false"
+                         data-bs-content="Optimal drug combinations among the 20 top drugs.">
+            </i>
+          </div>
+          <div class="col-10 padding-0"></div>
+          </div>
+          <table id="drugstblcombinsimilar" class="table table-hover" style="width: 100%">
+            <thead>
+              <tr>
+                <th scope="col">Drug 1 <i class="far fa-question-circle"
+                  data-bs-toggle="popover"
+                  data-bs-trigger="hover"
+                  data-bs-placement="top"
+                  data-bs-animation="false"
+                  data-bs-content="The first drug in the combination.">
+                </i></th>
+                <th scope="col">Drug 2 <i class="far fa-question-circle"
+                  data-bs-toggle="popover"
+                  data-bs-trigger="hover"
+                  data-bs-placement="top"
+                  data-bs-animation="false"
+                  data-bs-content="The second drug in the combination.">
+                </i></th>
+                <th scope="col">Abs. Cosine <i class="far fa-question-circle"
+                  data-bs-toggle="popover"
+                  data-bs-trigger="hover"
+                  data-bs-placement="top"
+                  data-bs-animation="false"
+                  data-bs-content="Absolute value of Cosine similarity between the drug pair. An optimal drug combination has a cosine of 0, See also Duan et al., NPJ Sys Biol Appl, 2016.">
+                </i></th>
+                <th scope="col">Cosine <i class="far fa-question-circle"
+                  data-bs-toggle="popover"
+                  data-bs-trigger="hover"
+                  data-bs-placement="top"
+                  data-bs-animation="false"
+                  data-bs-content="Cosine similarity between the drug pair. An optimal drug combination has a cosine of 0, See also Duan et al., NPJ Sys Biol Appl, 2016.">
+                </i></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ddcomb in drugupcomb %}
+                 <tr>
+                  <td><a onclick="return theFunction();" href="#drugstbl1" style="text-decoration:none">{{ ddcomb.drug1 }}</a></td>
+                  <td><a onclick="return theFunction();" href="#drugstbl1" style="text-decoration:none">{{ ddcomb.drug2 }}</a></td>
+                 <td>{{ ddcomb.abscosine }}</td>
+                 <td>{{ ddcomb.cosine }}</td>
+                 </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
 </div>
 </div>
 
@@ -112,83 +197,47 @@
       return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
           '<tr>' +
               '<td>Broad ID name:</td>' +
-              '<td>' + dd[4] + '</td>' +
-          '</tr>' +
-          '<tr>' +
-              '<td>Inchi key prefix:</td>' +
-              '<td>' + dd[5] + '</td>' +
-          '</tr>' +
-          '<tr>' +
-              '<td>Inchi key:</td>' +
-              '<td>' + dd[6] + '</td>' +
-          '</tr>' +
-          '<tr>' +
-              '<td>Canonical smiles:</td>' +
               '<td>' + dd[7] + '</td>' +
           '</tr>' +
           '<tr>' +
-              '<td>Pubchem cid:</td>' +
-              '<td><a href="https://pubchem.ncbi.nlm.nih.gov/compound/'+dd[8]+'">' + dd[8] + '</a></td>' +
+              '<td>Inchi key prefix:</td>' +
+              '<td>' + dd[8] + '</td>' +
           '</tr>' +
           '<tr>' +
-            '<img src="/static/molcluereg/'+dd[9]+'.svg" width="300" height="300" >'
+              '<td>Inchi key:</td>' +
+              '<td>' + dd[9] + '</td>' +
+          '</tr>' +
+          '<tr>' +
+              '<td>Canonical smiles:</td>' +
+              '<td>' + dd[10] + '</td>' +
+          '</tr>' +
+          '<tr>' +
+              '<td>Pubchem cid:</td>' +
+              '<td><a href="https://pubchem.ncbi.nlm.nih.gov/compound/'+dd[11]+'">' + dd[11] + '</a></td>' +
+          '</tr>' +
+          '<tr>' +
+            '<img src="/static/molcluereg/'+dd[12]+'.svg" width="300" height="300" >'
           '</tr>' +
       '</table>';  
  }
 
 // Basic example
 $(document).ready(function() {
-  //datatables
-  var table = $('#drugstbl2').DataTable({
-    select:"single",
-    columnDefs: [
-      { orderable: false, targets: 0 },
-          {
-              "targets": [ 4,5,6,7,8,9 ],
-              "visible": false,
-          }
+
+  var table2 = $('#drugstblcombinsimilar').DataTable({
+      "order": [[ 2, "asc" ]],
+      buttons: [
+            'copy', 'csv', 'pdf', 'print'
         ],
-    "serverSide": false,
-    "processing": true,
-    "order": [[ 2, "desc" ]],
-
-
-    buttons: [
-          'copy', 'csv', 'pdf', 'print'
-      ],
-
-    "dom": "B" + "<'row'<'col-sm-12 col-md-6 mt-2'l><'col-sm-12 col-md-5'f>>" +
-           "<'row'<'col-sm-12'tr>>" +
-           "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-  });
-
-       // Add event listener for opening and closing details
-       $('#drugstbl2 tbody').on('click', 'td.details-control', function () {
-           var tr = $(this).closest('tr');
-           var row = table.row(tr);
-           //console.log(row.data()[4])
-
-           if (row.child.isShown()) {
-               // This row is already open - close it
-               row.child.hide();
-               tr.find('svg').attr('color', 'green'); // FontAwesome 5
-               tr.find('svg').attr('data-icon', 'plus-circle');    // FontAwesome 5
-           }
-           else {
-               // Open this row
-               row.child(format(row.data())).show();
-               tr.find('svg').attr('color', 'red'); // FontAwesome 5
-               tr.find('svg').attr('data-icon', 'minus-circle'); // FontAwesome 5
-           }
-       });
-
-       table.on("user-select", function (e, dt, type, cell, originalEvent) {
-           if ($(cell.node()).hasClass("details-control")) {
-               e.preventDefault();
-           }
-       });
+      "dom": "B" + "<'row'<'col-sm-12 col-md-6 mt-2'l><'col-sm-12 col-md-5'f>>" +
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+    });
 
 } );
+function theFunction () {
+    return false
+    }
 </script>
 
 <script>

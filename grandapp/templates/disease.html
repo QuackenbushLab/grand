@@ -10,7 +10,7 @@
         <h5 class="card-header">TF list</h5>
         <div class="card-body">
         <h5 class="card-title">Enter TF list below.</h5>
-        <p class="card-text">All TF genes have to be in gene names.
+        <p class="card-text">TF genes can be in gene symbols, gene IDs, or mixed lists.
   
 	        <div class="form-area"> 
 	               <form action="{% url 'disease' %}" role="form" method="post">
@@ -22,7 +22,7 @@
 						   <br>
 	                   &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
 					   <div class="btn-group" role="group" aria-label="Basic example">
-							<a href="/diseaseexample" class="btn btn-outline-primary" role="button">Example</a>
+							<a class="btn btn-outline-primary" role="button" onclick="setImage()">Example</a>
 							<button type="submit"  name="submit" class="btn btn-success" id="btnFetch">
 							<span id="mySpinner" class="d-none">
 							<span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
@@ -50,7 +50,7 @@
 	        <p align="justify">The <a href="http://humantfs.ccbr.utoronto.ca/download.php">GWAS library</a> connects several traits to transcription factors through assigning hits to TFs if they fall near their coding regions. 
 	        The second library is a list of TF genes extracted from the list of genes in <a href="http://humantfs.ccbr.utoronto.ca/download.php">Human Phenotype Ontology</a>.</p>
 	        <p align="justify">Morevoer, the TF list is tested for significant enrichment in two tissue-specific libraries, namely, tissue-specific TF expression and tissue-specific TF targeting as computed in <a href="https://www.cell.com/cell-reports/comments/S2211-1247(17)31418-3">Sonawane et al, Cell reports, 2017</a>. </p>
-	        <p align="justify">The input is a list of TFs in gene symbols as in the <a href="/diseaseexample">example</a>. 1639 genes define TFs as per the list established in <a href="http://humantfs.ccbr.utoronto.ca/download.php">Lambert et al, Cell, 2018</a>.</p>
+	        <p align="justify">The input is a list of TFs in gene symbols, gene IDs, or mixed lists as in the example. 1639 genes define TFs as per the list established in <a href="http://humantfs.ccbr.utoronto.ca/download.php">Lambert et al, Cell, 2018</a>.</p>
 	        </div>
         </p>
         </div>
@@ -68,6 +68,10 @@ $(document).ready(function() {
         $("#mySpinner").removeClass("d-none")
     })
 });
+
+function setImage() {
+    document.getElementById("id_content").value='BHLHE23\nMAX\nMYOD1\nARNTL\nBHLHE40\nMYCN\nCLOCK\nHEY2\nASCL1\nTCF12\nHES6\nFERD3L\nMSGN1\nUSF1\nNEUROD1\nHAND2\nHEY1\nMESP1\nPTF1A\nNPAS2\nNEUROD2\nNHLH1\nATOH1\nARNT2\nOLIG3\nNHLH2\nNEUROG2\nMSC\nHES7\nFOXL1\nTCF3\nVAX1\nBATF\nMAF\nMYC\nDLX2\nIRF4\nIRF8\nKLF4\nCEBPE\n';
+  }
 </script>
 </body>
 </html>

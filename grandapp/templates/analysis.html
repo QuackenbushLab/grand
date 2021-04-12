@@ -13,7 +13,7 @@
                    <h5 class="card-header">Gene/TF list</h5>
 		  <div class="card-body">
 		    <h5 class="card-title">Enter the Gene/TF list below.</h5>
-		    <p class="card-text">The gene format is in ENSEMBL gene id like in <a href="/analysisexample">the example</a>. TF gene format is in <a href="https://www.genenames.org/">gene symbol</a> as in the <a href="/analysisexampletfs">the example</a>.
+		    <p class="card-text">The gene format for TFs and target genes can be in ENSEMBL gene ID, <a href="https://www.genenames.org/" style="text-decoration: none;">gene symbol</a>, or mixed lists as in the example.
                    <div class="form-group">
                         {% render_field geneform.contentup class="form-control" placeholder="High-targeted genes/TFs" %}                
                    </div>
@@ -44,8 +44,7 @@
 			  <div class="card-body">
 			    <p class="card-text">Select parameters for the analysis.
                     <div class="col">
-                       <br> <br> <br> <br> <br> <br> 
-                       
+                       <br> <br> <br> <br> <br> 
                        <div>
                         <label for="myRange" class="form-label">Display results</label>
                         {{ geneform.ngenes }} 
@@ -59,7 +58,8 @@
                         </div>
 		                   {% endfor %}
                        </div>
-                       {{ geneform.brd }} <small>Remove investigational drugs</small>
+                       {{ geneform.brd }} <small>Remove investigational drugs</small><br>
+                       {{ geneform.combin }} <small>Drug combinations</small>
                     </div>
                     </div>
                     </p>
@@ -72,13 +72,13 @@
 		  <div class="card-body">
 		    <h5 class="card-title">Drug network reconstruction</h5>
 		    <p class="card-text">
-                        <p align="justify">CLUEreg is a webserver that finds small molecule candidates that reverse a given regulatory signature. The regulatory signature of each compound was estimated from their differential expression from the <a href="http://clue.io">CLUE</a> resource.
+                        <p align="justify">CLUEreg is a webserver that finds small molecule candidates that reverse a given regulatory signature. The regulatory signature of each compound was estimated from their differential expression from the <a href="http://clue.io" style="text-decoration: none;">CLUE</a> resource.
 	           </p>
-        	   <p align="justify">Using <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0064832">PANDA</a> to reconstruct TF-gene bipartite regulatory network, we computed differential targeting scores for 19789 small molecules and derived the drug-induced up-targeted and down-targeted 
-                   genes among 12328 genes. The targeting score for each gene is the weighted in-degree for that gene in the network. You can submit your list of up-targeted and down-targeted genes for a given condition or disease and get back a list of compounds that
+        	   <p align="justify">Using <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration: none;">PANDA</a> to reconstruct TF-gene bipartite regulatory network, we computed differential targeting scores for 19789 small molecules and derived the drug-induced up-targeted and down-targeted 
+                   genes among <a href="https://grand.networkmedicine.org/genes/" style="text-decoration: none;">12328 genes</a>. The targeting score for each gene is the weighted in-degree for that gene in the network. You can submit your list of up-targeted and down-targeted genes for a given condition or disease and get back a list of compounds that
                    optimally either reverse or exacerbate the input signature.</p>
-                   <p align="justify">Similarly, TF targeting of genes can be used as a surrograte for drug activity. We computed the TF targeting of  644 TFs from <a href="/drugs"> PANDA drug networks</a> as the weighted outdegree of each TF.
-                   If you would like to perform the analysis on gene expression, check these excellent tools: <a href="https://clue.io">CLUE</a>, <a href="http://amp.pharm.mssm.edu/L1000FWD/">L1000 Fireworks</a>, <a href="https://amp.pharm.mssm.edu/L1000CDS2/#/index">L1000 CDS2</a>, and <a href="http://www.maayanlab.net/LINCS/LCB/#.XYO9d5NKi_U">L1000 Canvas Browser</a>.</p>
+                   <p align="justify">Similarly, TF targeting of genes can be used as a surrograte for drug activity. We computed the TF targeting of  644 TFs from <a href="/drugs" style="text-decoration: none;"> PANDA drug networks</a> as the weighted outdegree of each TF.
+                   If you would like to perform the analysis on gene expression, check these excellent tools: <a href="https://clue.io" style="text-decoration: none;">CLUE</a>, <a href="http://amp.pharm.mssm.edu/L1000FWD/" style="text-decoration: none;">L1000 Fireworks</a>, <a href="https://amp.pharm.mssm.edu/L1000CDS2/#/index" style="text-decoration: none;">L1000 CDS2</a>, and <a href="http://www.maayanlab.net/LINCS/LCB/#.XYO9d5NKi_U" style="text-decoration: none;">L1000 Canvas Browser</a>.</p>
                    </p>
                    </div>
                    </div>

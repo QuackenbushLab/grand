@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Disease, Cell, Tissue, Tissuelanding, Druglanding, Cancerlanding, Genelanding
+from .models import Disease, Cell, Tissue, Tissuelanding, Druglanding, Cancerlanding, Genelanding, Gobp
 
 class TissuelandingSerializer(serializers.ModelSerializer):
         class Meta:
@@ -24,6 +24,15 @@ class GenelandingSerializer(serializers.ModelSerializer):
         class Meta:
                 model = Genelanding
                 fields = ('pr_gene_id','pr_gene_symbol','pr_gene_title','pr_is_lm','pr_is_bing')
+
+        def to_representation(self, instance):
+                data = super().to_representation(instance)
+                return data
+
+class GobplandingSerializer(serializers.ModelSerializer):
+        class Meta:
+                model = Gobp
+                fields = ('idd','term','goid','genelist')
 
         def to_representation(self, instance):
                 data = super().to_representation(instance)

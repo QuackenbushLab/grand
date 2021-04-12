@@ -319,12 +319,14 @@
 $(document).ready(function() {
     //datatables
     $('#drugstable').DataTable({
+      "scrollX": true,
       "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
              "<'row'<'col-sm-12'tr>>" +
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
     });
 
     $('#drugstable2').DataTable({
+      "scrollX": true,
       "order": [[ 1, "asc" ]],
       "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
              "<'row'<'col-sm-12'tr>>" +

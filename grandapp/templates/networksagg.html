@@ -22,7 +22,7 @@
                   <img src="{% static 'images/motif.svg' %}" style="width: 75px; height:30px">
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#coexpression" role="tab" aria-controls="coexpression" aria-selected="false" >Coexpression</a>
+                    <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#coexpression" role="tab" aria-controls="coexpression" aria-selected="false" >Expression</a>
                     <img src="{% static 'images/coexpression.svg' %}" style="width: 115px; height:28px">
                   </li>
               </ul>
@@ -45,9 +45,22 @@
                               <small>{{ radio }}</small>
                             {% endfor %}
                           </div>
-                          <div style="float: center;">
-                          {{ netform.brd }} <small>Weighted edges</small>
-                        </div>
+                          <div class='row'>
+                            <div class='col-md-10 offset-md-2'>
+                              <div style="float: left;">
+                                {{ netform.brd }} <small>Weighted edges</small>
+                              </div>
+                              <div style="float: left;">
+                                {{ netform.absval }} <small><a href="#"
+                                  data-bs-toggle="popover"
+                                  data-bs-animation="false"
+                                  data-bs-placement="top"
+                                  data-bs-html="true"
+                                  data-bs-content="Absolute value of edges">
+                                Absolute value</a></small>
+                              </div>
+                            </div>
+                          </div>
                         <br>
                           <h5><span class="badge bg-secondary">Scaling</span></h5>
                           <div class='row'>
@@ -73,8 +86,53 @@
                             data-bs-content="Scale node size by average expression across samples for aggregate networks and by sample for single-sample networks.">
                           expression</a></small>
                         </div>
-                        </div> <!-- grid offset -->
-                        </div> <!-- row -->
+                          </div>
+                        </div>
+                        <br>
+                        <h5><span class="badge bg-secondary">Selection</span></h5>
+                        <div class='row'>
+                          <div class='col-md-10 offset-md-2'>
+                        <div style="float: left;">
+                        {{ netform.tfgenesel.0 }} <small>No selection</small>
+                        </div>
+                        <br>
+                        <div style="float: left;">
+                        {{ netform.tfgenesel.1 }} <small>by <a href="#"
+                          data-bs-toggle="popover"
+                          data-bs-animation="false"
+                          data-bs-placement="top"
+                          data-bs-html="true"
+                          data-bs-content="Enter Gene names by ENSG ID, gene symbols, or mixed lists, with each gene in a new line">
+                        gene</a></small>
+                      </div>
+                      <br>
+                      {{ netform.geneform }}
+                      <br>
+                      <div style="float: left;">
+                        {{ netform.tfgenesel.2 }} <small>by <a href="#"
+                          data-bs-toggle="popover"
+                          data-bs-animation="false"
+                          data-bs-placement="top"
+                          data-bs-html="true"
+                          data-bs-content="Enter TF names by ENSG ID, gene symbols, or mixed lists, with TF in a new line">
+                        TF</a></small>
+                      </div>
+                      <br>
+                      {{ netform.tfform }}
+                      <br>
+                      <div style="float: left;">
+                        {{ netform.tfgenesel.3 }} <small>by <a href="#"
+                          data-bs-toggle="popover"
+                          data-bs-animation="false"
+                          data-bs-placement="top"
+                          data-bs-html="true"
+                          data-bs-content="Enter GO term ID for example GO:0060148. Please check <a href='https://grand.networkmedicine.org/pathways/'>the pathway page</a> for a full term list.">
+                        GO</a></small>
+                      </div>
+                      <br>
+                      {{ netform.goform }}
+                        </div>
+                      </div>
                         <br>
                         <br>
                         <div class="form-actions button-box">
@@ -177,5 +235,18 @@
   </script>
 <script src="{% static 'js/networksagg.js' %}"></script>
 
+<script>
+
+  if(document.getElementById('absval')==null){
+    document.getElementById('id_absval').onchange = function() {
+        document.getElementById('id_brd').checked = this.checked;
+
+    };
+  }else if(document.getElementById('id_absval')==null){
+    document.getElementById('absval').onchange = function() {
+        document.getElementById('brd').checked = this.checked;
+    };
+  }
+</script>
 </body>
 </html>

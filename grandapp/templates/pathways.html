@@ -1,0 +1,58 @@
+{% load static %} 
+{% include "header.html" %}
+
+
+<div class="container col-10 pb-5 mt-4">
+  <div class="card">
+  <h5 class="card-header">Pathways</h5>
+  <div class="card-body">
+    <h5 class="card-title">Gene Ontology Biological Process </h5>
+    <p class="card-text">The table contains Gene Ontology (GO) Biological Process terms, GO ids, and the list of genes.</p>
+        <table id="pathwaystable" class="table table-hover" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th scope="col">Number</th>
+                    <th scope="col">GO term</th>
+                    <th scope="col">GO ID</th>
+                   <th scope="col">Gene list</th>
+                  </tr>
+                </thead>
+          </table>
+  </div>
+  </div>
+</div>
+
+</div>
+{% include "footer.html" %}
+
+
+
+<script>
+  // Basic example
+  $(document).ready(function() {
+      //datatables
+      $('#pathwaystable').DataTable({
+       "ajax": "http://127.0.0.1:8000/api/v1/pathwayapi/?format=datatables",
+  
+       "serverSide": true,
+       "processing": true,
+       "scrollX": true,
+
+       "columns": [
+          {"data": "idd"},
+          {"data": "term"},
+          {"data": "goid"},
+          {"data": "genelist"},
+      ],
+  
+        "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
+               "<'row'<'col-sm-12'tr>>" +
+               "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+      });
+  } );
+  </script>
+
+</body>
+</html>
+
+

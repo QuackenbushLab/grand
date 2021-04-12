@@ -1,7 +1,7 @@
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
-from .serializers import CellSerializer, TissuelandingSerializer, DruglandingSerializer, CancerlandingSerializer, GenelandingSerializer
+from .serializers import CellSerializer, TissuelandingSerializer, DruglandingSerializer, CancerlandingSerializer, GenelandingSerializer, GobplandingSerializer
 from .models import DrugResultUp, DrugResultDown, Disease, Gwas, TissueTar, TissueEx, Cell, Druglanding, Tissuelanding, Cancerlanding
-from .models import Genelanding
+from .models import Genelanding, Gobp
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework_datatables.filters import DatatablesFilterBackend
 from django_filters.rest_framework import DjangoFilterBackend
@@ -36,3 +36,9 @@ class GenelandingList(ListAPIView):
         serializer_class = GenelandingSerializer
         filter_backends  = (DatatablesFilterBackend,DjangoFilterBackend,)
         filter_fields    = ('pr_gene_id','pr_gene_symbol','pr_gene_title','pr_is_lm','pr_is_bing')
+
+class GobplandingList(ListAPIView):
+        queryset         = Gobp.objects.all()
+        serializer_class = GobplandingSerializer
+        filter_backends  = (DatatablesFilterBackend,DjangoFilterBackend,)
+        filter_fields    = ('idd','term','goid','genelist')
