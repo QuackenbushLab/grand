@@ -32,23 +32,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading cell data!")
-        for row in DictReader(open('./data/cells.csv')):
+        for row in DictReader(open('./data/cellsinfofilter.csv')):
             cell = Cell()
-            cell.cellLine     = row['cellLine']
-            cell.cellLink     = row['cellLink']
-            cell.tool         = row['tool']
-            cell.netzoo       = row['netzoo']
-            cell.netzooLink   = row['netzooLink']
-            cell.netzooRel    = row['netzooRel']
-            cell.network      = row['network']
-            cell.ppi          = row['ppi']
-            cell.ppiLink      = row['ppiLink']
-            cell.motif        = row['motif']
-            cell.expression   = row['expression']
-            cell.expLink      = row['expLink']
-            cell.tfs          = row['tfs']
-            cell.genes        = row['genes']
-            cell.refs         = row['refs']
-            cell.samples      = row['samples']
-            cell.script       = row['script']
+            cell.disease    = row['disease']
+            cell.ncells     = row['ncells']
             cell.save()

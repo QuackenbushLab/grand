@@ -7,8 +7,19 @@
         <div class="card-header">
             <ul class="nav nav-pills card-header-pills" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
+                  {% if activetab == 'tar' %}
+                  <a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">Network</a>
+                  {% else %}
                   <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">Network</a>
+                  {% endif %}
                   <img src="{% static 'images/network.svg' %}" style="width: 115px; height:25px">
+                </li>
+                <li class="nav-item" role="presentation">
+                  {% if activetab == 'tar' %}
+                  <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">Targeting</a>
+                  {% else %}
+                  <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">Targeting</a>
+                  {% endif %}
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link disabled" id="profile-tab" data-bs-toggle="tab" role="tab" aria-selected="false">Input data:</a>
@@ -28,8 +39,16 @@
               </ul>
         </div>
     
+
+
+
+        <!-- NETWORK -->
         <div class="tab-content" id="myTabContent">
+          {% if activetab == 'tar' %}
+            <div class="tab-pane fade" id="network" role="tabpanel" aria-labelledby="home-tab">
+          {% else %}
             <div class="tab-pane fade show active" id="network" role="tabpanel" aria-labelledby="home-tab">
+          {% endif %}
                 <div class='container'>
                   <div class="row">
                     <div class="col-2 border border-secondary">
@@ -86,6 +105,15 @@
                             data-bs-content="Scale node size by average expression across samples for aggregate networks and by sample for single-sample networks.">
                           expression</a></small>
                         </div>
+                        <div style="float: left;">
+                          {{ netform.dt.3 }} <small>Scale by <a href="#"
+                            data-bs-toggle="popover"
+                            data-bs-animation="false"
+                            data-bs-placement="top"
+                            data-bs-html="true"
+                            data-bs-content="Scale node size by betweness centrality measured in the selected subnetwork.">
+                          betweeness</a></small>
+                        </div>
                           </div>
                         </div>
                         <br>
@@ -131,21 +159,35 @@
                       </div>
                       <br>
                       {{ netform.goform }}
+                      <br>
+                      <div style="float: left;">
+                        {{ netform.tfgenesel.4 }} <small>by <a href="#"
+                          data-bs-toggle="popover"
+                          data-bs-animation="false"
+                          data-bs-placement="top"
+                          data-bs-html="true"
+                          data-bs-content="Enter GWAS catalog term for example AIDS progression. Please check <a href='https://grand.networkmedicine.org/gwas/'>the GWAS catalog page</a> for a full term list.">
+                        GWAS</a></small>
+                      </div>
+                      <br>
+                      {{ netform.gwasform }}
                         </div>
                       </div>
                         <br>
                         <br>
                         <div class="form-actions button-box">
-                          <div class="btn-group" role="group" aria-label="Basic example">
+                          <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                              Info
+                            Info
                             </button>
+                            <a href="#" class="btn btn-outline-success" id="btn-download" download="subnetwork.png" >Save</a>
                           <button type="submit"  name="submit" class="btn btn-primary" id="btnFetch">
                             <span id="mySpinner" class="d-none">
                             <span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
                             </span>
                             Submit</button>
                             </div>
+
                         </div>
                         </form>
                         <br>
@@ -185,8 +227,157 @@
             </div>
             <div class="tab-pane fade" id="ppi" role="tabpanel" aria-labelledby="profile-tab">...</div>
             <div class="tab-pane fade" id="motif" role="tabpanel" aria-labelledby="contact-tab">...</div>
+
+        <!-- Targeting -->
+        {% if activetab == 'tar' %}
+          <div class="tab-pane fade show active" id="tar" role="tabpanel" aria-labelledby="home-tab">
+        {% else %}
+        <div class="tab-pane fade " id="tar" role="tabpanel" aria-labelledby="home-tab">
+        {% endif %}
+          <div class='container'>
+            <div class="row">
+              <div class="col-2 border border-secondary">
+                <h5><span class="badge bg-secondary">Genes</span></h5>
+                <div>
+                  <form action="{% url 'taragg' 'colon_cancer1' %}" role="form" method="post">
+                    {% csrf_token %}
+                    {{ tarform.nedgestar }}
+                    <p>Value: <span id="demo2Tar"></span></p>
+                    <div class="form-group">
+                      {% for radio in tarform.topbottomtar %}
+                        <small>{{ radio }}</small>
+                      {% endfor %}
+                    </div>
+                    <div class='row'>
+                      <div class='col-md-10 offset-md-2'>
+                        <div style="float: left;">
+                          {{ tarform.absvaltar }} <small><a href="#"
+                            data-bs-toggle="popover"
+                            data-bs-animation="false"
+                            data-bs-placement="top"
+                            data-bs-html="true"
+                            data-bs-content="Absolute value of targeting score">
+                          Absolute value</a></small>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <h5><span class="badge bg-secondary">Selection</span></h5>
+                    <div class='row'>
+                      <div class='col-md-10 offset-md-2'>
+                    <div style="float: left;">
+                    {{ tarform.tfgeneseltar.0 }} <small>No selection</small>
+                    </div>
+                    <br>
+                    <div style="float: left;">
+                    {{ tarform.tfgeneseltar.1 }} <small>by <a href="#"
+                      data-bs-toggle="popover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-html="true"
+                      data-bs-content="Enter Gene names by ENSG ID, gene symbols, or mixed lists, with each gene in a new line">
+                    gene</a></small>
+                  </div>
+                  <br>
+                  {{ tarform.geneformtar }}
+                  <br>
+                  <div style="float: left;">
+                    {{ tarform.tfgeneseltar.2 }} <small>by <a href="#"
+                      data-bs-toggle="popover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-html="true"
+                      data-bs-content="Enter GO term ID for example GO:0060148. Please check <a href='https://grand.networkmedicine.org/pathways/'>the pathway page</a> for a full term list.">
+                    GO</a></small>
+                  </div>
+                  <br>
+                  {{ tarform.goformtar }}
+                  <br>
+                  <div style="float: left;">
+                    {{ tarform.tfgeneseltar.3 }} <small>by <a href="#"
+                      data-bs-toggle="popover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-html="true"
+                      data-bs-content="Enter GWAS catalog term for example AIDS progression. Please check <a href='https://grand.networkmedicine.org/gwas/'>the GWAS catalog page</a> for a full term list.">
+                    GWAS</a></small>
+                  </div>
+                  <br>
+                  {{ tarform.gwasformtar }}
+                    </div>
+                  </div>
+                  <br>
+
+                    <h5><span class="badge bg-secondary">TFs</span></h5>
+                        {{ tarform.nedgestartf }}
+                        <p>Value: <span id="demo2Tartf"></span></p>
+                        <div class="form-group">
+                          {% for radio in tarform.topbottomtartf %}
+                            <small>{{ radio }}</small>
+                          {% endfor %}
+                        </div>
+                        <div class='row'>
+                          <div class='col-md-10 offset-md-2'>
+                            <div style="float: left;">
+                              {{ tarform.absvaltartf }} <small><a href="#"
+                                data-bs-toggle="popover"
+                                data-bs-animation="false"
+                                data-bs-placement="top"
+                                data-bs-html="true"
+                                data-bs-content="Absolute value of targeting score">
+                              Absolute value</a></small>
+                            </div>
+                          </div>
+                        </div>
+                  <br>
+                  <br>
+                  <div class="form-actions button-box">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                      <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Info
+                      </button>
+                    <button type="submit"  name="submit" class="btn btn-primary" id="btnFetchTar">
+                      <span id="mySpinnerTar" class="d-none">
+                      <span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
+                      </span>
+                      Submit</button>
+                      </div>
+                  </div>
+                  <br>
+                  <h5><span class="badge bg-secondary">Analysis</span></h5>
+                  <small>Analyze the submitted list of targeted genes/TFs for downstream analysis.</small>
+                  <br>
+                  <br>
+                  <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModalenrich">
+                      Info
+                    </button>
+                    <a class="btn btn-outline-primary disabled" role="button">Enrich</a>
+                    <a class="btn btn-outline-primary" href="{% url 'disease' %}" role="button">TFs</a>
+                  </div>
+                  <br><br>
+                  <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
+                    <a class="btn btn-outline-primary disabled" role="button">CLUEreg</a>
+                    <a class="btn btn-outline-primary" href="{% url 'analysis' %}" role="button">TFs</a>
+                    <a class="btn btn-outline-primary" href="{% url 'analysis' %}" role="button">Genes</a>
+                  </div>
+                  </form>
+                  <br>
+                  <br>
+                </div>
+              </div>
+              <div class='col border border-secondary padding-0'> 
+              <div class="row-4 ">
+                <canvas id="tftardiv" style="width:100%; height:400px;"></canvas>
+              </div>
+              <div class="row-4 ">
+                <canvas id="genetardiv" style="width:100%; height:400px;"></canvas>
+              </div>
+              </div>
+            </div>
           </div>
-    
+          </div>
+          </div>
       </div>
     
 
@@ -199,9 +390,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p style="text-align:left">After submitting network preferences, a configuration panel will appear at the bottom to allow to modify a large set of
-          network properties dynamically. To export the network, you can right-click the canvas and save as png.</p>
-          <p style="text-align:left">Positive edge weights are colored in green, negative edge weights are colored in red.</p>
+        <p style="text-align:left">Targeting refers to a bipartite network metric. For genes, targeting is the weighted indegree. For TFs, it represents the weighted outdegree.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -210,12 +399,44 @@
   </div>
 </div>
 
+<!-- Modal Enrich-->
+<div class="modal fade" id="exampleModalenrich" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p style="text-align:left">The enrich function submits the selected TFs for enrichment analysis.</p> 
+        <p style="text-align:left">The CLUEreg function submits the selected TFs/Genes in CLUEreg, which finds optimal compounds that reverse the TF/Gene profile. High-targeted genes/TFs are those that have a positive z-score and low-targeted genes are those with negative z-score. CLUEreg requires both high-targeted and low-targeted genes/TFs to be nonempty sets.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
+
 
 
 {% include "footer.html" %}
 
 <script>
+  var slidertartf = document.getElementById("myEdgeTartf");
+  var outputtartf = document.getElementById("demo2Tartf");
+  outputtartf.innerHTML = slidertartf.value;
+  
+  slidertartf.oninput = function() {
+    outputtartf.innerHTML = this.value;
+  }
+  var slidertar = document.getElementById("myEdgeTar");
+  var outputtar = document.getElementById("demo2Tar");
+  outputtar.innerHTML = slidertar.value;
+  
+  slidertar.oninput = function() {
+    outputtar.innerHTML = this.value;
+  }
   var slider = document.getElementById("myEdge");
   var output = document.getElementById("demo2");
   output.innerHTML = slider.value;
@@ -227,9 +448,13 @@
   var edges = JSON.parse("{{edges|escapejs}}"); 
 </script> 
 <script>
+
   $(document).ready(function() {
       $("#btnFetch").click(function() {
           $("#mySpinner").removeClass("d-none")
+      })
+      $("#btnFetchTar").click(function() {
+          $("#mySpinnerTar").removeClass("d-none")
       })
   });
   </script>
@@ -248,5 +473,13 @@
     };
   }
 </script>
+
+<script>
+var tftarscore = JSON.parse("{{tftarscore|escapejs}}");  
+var genetarscore = JSON.parse("{{genetarscore|escapejs}}"); 
+</script>
+<script src="{% static 'js/bartar.js' %}"></script>
+
+</script> 
 </body>
 </html>

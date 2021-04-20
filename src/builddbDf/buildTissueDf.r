@@ -118,6 +118,10 @@ df['refs3']       = c(refsVec3,refsVec33[-indnotInLionessTissues2])
 df['reg']        = c(regVec,regVec[-indnotInLionessTissues2])
 df['motifDesc']  = c(motifDescVec,motifDescVec[-indnotInLionessTissues2])
 
+nn1=which(tissues=="Lymphoblastoid_cell_line")
+nn2=which(tissues=="Fibroblast_cell_line")
+# remove cell lines
+tissues=tissues[-c(nn1,nn2)]
 cols = c('tissue','nnets')
 df2 <- data.frame(matrix(ncol = length(cols), nrow = nTissues))
 colnames(df2) = cols

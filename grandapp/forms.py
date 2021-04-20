@@ -1,5 +1,5 @@
 from django import forms
-from .models import Lala, netmod
+from .models import Lala, netmod, tarmod
 
 class ContactForm(forms.Form):
     contact_name    = forms.CharField(required=True, label="Name")
@@ -39,8 +39,8 @@ class DiseaseForm(forms.Form):
 
 class NetForm(forms.ModelForm):
     CHOICES   = [('Largest','Largest'),('Smallest','Smallest')]
-    CHOICES2  = [('no',''),('dtt',''),('dee','')]
-    CHOICES3  = [('nosel',''),('by gene',''),('by tf',''),('by GO','')]
+    CHOICES2  = [('no',''),('dtt',''),('dee',''),('bc','')]
+    CHOICES3  = [('nosel',''),('by gene',''),('by tf',''),('by GO',''),('by GWAS','')]
     dt        = forms.ChoiceField(choices=CHOICES2, widget=forms.RadioSelect)
     topbottom = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
     brd       = forms.BooleanField(widget=forms.CheckboxInput, required = False )
@@ -65,8 +65,46 @@ class NetForm(forms.ModelForm):
         widget=forms.Textarea(attrs={'rows':1, 'cols':7}),
         label="go"
     )
+    gwasform = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows':1, 'cols':7}),
+        label="gwas"
+    )
     class Meta:
         model = netmod
+        fields = '__all__'
+
+class TarForm(forms.ModelForm):
+    CHOICES   = [('Largest','Largest'),('Smallest','Smallest')]
+    CHOICES3  = [('nosel',''),('by gene',''),('by GO',''),('by GWAS','')]
+    absvaltar    = forms.BooleanField(widget=forms.CheckboxInput, required = False )
+    tfgeneseltar = forms.ChoiceField(choices=CHOICES3, widget=forms.RadioSelect)
+    topbottomtar = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
+    nedgestar = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'type':'range', 'step': '10', 'min': '50', 'max': '150', 'value':'100','id':'myEdgeTar'}), required=False
+    )
+    absvaltartf    = forms.BooleanField(widget=forms.CheckboxInput, required = False )
+    topbottomtartf = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
+    nedgestartf = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'type':'range', 'step': '10', 'min': '50', 'max': '150', 'value':'100','id':'myEdgeTartf'}), required=False
+    )
+    geneformtar = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows':3, 'cols':7}),
+        label="genetar"
+    )
+    goformtar = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows':1, 'cols':7}),
+        label="gotar"
+    )
+    gwasformtar = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows':1, 'cols':7}),
+        label="gwastar"
+    )
+    class Meta:
+        model = tarmod
         fields = '__all__'
 
 class BabelForm(forms.ModelForm):

@@ -71,6 +71,7 @@ $(document).ready(function() {
         name: row[POINT_NAME]
       }
     })
+    console.log(data)
 
     if( slug == 'Pancreas' ){
       var data2 = rows.map(function(row) {

@@ -1,20 +1,11 @@
 from rest_framework import serializers
 
-from .models import Disease, Cell, Tissue, Tissuelanding, Druglanding, Cancerlanding, Genelanding, Gobp
+from .models import Disease, Cell, Tissue, Tissuelanding, Druglanding, Cancerlanding, Genelanding, Gobp, Gwascata
 
 class TissuelandingSerializer(serializers.ModelSerializer):
         class Meta:
                 model = Tissuelanding
                 fields = ('tissue','tissueLink','tool','netzoo','netzooLink','netzooRel','network','ppi','ppiLink','motif','expression','expLink','tfs','genes','refs','refs2','samples')
-
-        def to_representation(self, instance):
-                data = super().to_representation(instance)
-                return data
-
-class CellSerializer(serializers.ModelSerializer):
-        class Meta:
-                model = Cell
-                fields = ('cellLine','cellLink','tool','netzoo','netzooLink','network','ppi','ppiLink','motif','expression','expLink','tfs','genes','refs')
 
         def to_representation(self, instance):
                 data = super().to_representation(instance)
@@ -33,6 +24,15 @@ class GobplandingSerializer(serializers.ModelSerializer):
         class Meta:
                 model = Gobp
                 fields = ('idd','term','goid','genelist')
+
+        def to_representation(self, instance):
+                data = super().to_representation(instance)
+                return data
+
+class GwaslandingSerializer(serializers.ModelSerializer):
+        class Meta:
+                model = Gwascata
+                fields = ('idd','term','genelist')
 
         def to_representation(self, instance):
                 data = super().to_representation(instance)

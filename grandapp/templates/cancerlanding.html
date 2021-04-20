@@ -410,7 +410,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body">
-                                Please check the reference {{ tissue.refs2 }} at the following <a href="{{ tissue.refs }}">link</a>.
+                                Please check the reference {{ tissue.refs2 }} at the following <a class="text-decoration-none" href="{{ tissue.refs }}" target="_blank">link</a>.
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -1127,6 +1127,9 @@
 
 </div>
 </div>
+{% if tool == 'otter' %}
+{% include "otteracc.html" %}
+{% endif %}
 </div>
 </div>
 </div>

@@ -1,88 +1,77 @@
 {% load static %} 
 {% include "header.html" %}
 
-    <div class="container col-10 bm-4 bp-4 mt-4">
-        <table id="cellstable" class="table table-hover" style="width: 100%">
+<div class="container pb-5 mb-5 mt-4">
+  <div class="row">
+  <div class=" col-md-8">
+    <canvas id="cellbar" style="width:100%; height:400px;"></canvas>
+  </div>
+  <div class=" col-md-4">
+    <canvas id="cancerbubble" style="width:100%; height:400px;"></canvas>
+    <p style="font-family: Helvetica; color: #333; padding: 1em 2em; font-size: 12px">
+      Bubble size reflects the number of regulators (TFs/miRNA) in the network.
+    </p>
+  </div>
+</div>
+  <div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingOne">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Cancer types
+        </button>
+      </h2>
+      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+        <table id="tissuestable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Cell line</th>
-                    <th scope="col">Tool</th>
-                    <th scope="col">netZoo release</th>
-                    <th scope="col">Network <br><i class="far fa-question-circle"
-                      data-bs-toggle="popover"
-                      data-bs-trigger="hover"
-                      data-bs-placement="top"
-                      data-bs-animation="false"
-                      title="Network format"
-                      data-bs-content="Please refer to the Help page Network section for the network download formats.">
-                    </i></th>
-                    <th scope="col">PPI <br><i class="far fa-question-circle"
-                      data-bs-toggle="popover"
-                      data-bs-trigger="hover"
-                      data-bs-placement="top"
-                      data-bs-animation="false"
-                      title="Data sources"
-                      data-bs-content="Directly download the PPI prior used for the generation of the network and check the link to the original PPI database and its version.">
-                    </i></th>
-                    <th scope="col">Motif</th>
-                    <th scope="col">Expression</th>
-                    <th scope="col">TFs</th>
-                    <th scope="col">Genes</th>
-                    <th scope="col">Samples</th>
-                    <th scope="col">Precision<br><i class="far fa-question-circle"
-                      data-bs-toggle="popover"
-                      data-bs-trigger="hover"
-                      data-bs-placement="top"
-                      data-bs-animation="false"
-                      title="Computation precision"
-                      data-bs-content="S=Single, D=Double">
-                    </i></th>
-                    <th scope="col">Reference</th>
+                    <th scope="col">Number</th>
+                    <th scope="col">Tissue type</th>
+                    <th scope="col">Methods</th>
+                    <th scope="col">Regulator</th>
+                    <th scope="col">Condition</th>
+                    <th scope="col">Network types</th>
+                    <th scope="col">Datasets</th>
                   </tr>
                 </thead>
                 <tbody>
-		 {% for cell in cells %}
-		    <tr>
-		    <th scope="row">{{ forloop.counter }}</th>
-		    <td><a href="{{ cell.cellLink }}" class="text-decoration-none">{{ cell.cellLine }}</a></td>
-		    <td>{{ cell.tool }}</td>
-		    <td>{{ cell.netzoo }} <a href="{{ cell.netzooLink }}" class="text-decoration-none">{{ cell.netzooRel }}</a></td>
-                    {% if cell.cellLine == 'THP-1' %}
-                    <td><a href="{{ cell.network }}" class="btn btn-outline-primary" role="button">co</a></td>
-                    {% else %}
-                    <td><div class="btn-group" role="group" aria-label="Basic example">
-                    <a href="{{ cell.network }}" class="btn btn-outline-primary" role="button">po</a><a href="{{ cell.script }}" class="btn btn-outline-danger" role="button">R</a></div></td>
-                    {% endif %}
-	            <td><a href="{{ cell.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ cell.ppiLink }}"><i class="fas fa-link"></i></a></td>
-                    <td><a href="{{ cell.motif }}"><i class="fas fa-download"></i></a></td>
-                    <td><a href="{{ cell.expression }}"><i class="fas fa-download"></i></a> <a href="{{ cell.expLink }}"><i class="fas fa-link"></i></a></td>
-                    <td>{{ cell.tfs }}</td>
-                    <td>{{ cell.genes }}</td>
-                    <td>{{ cell.samples }}</td>
-                    <td><span class="badge rounded-pill bg-primary">D</span></td>
-                    <td><a href="{{ cell.refs }}"><i class="fas fa-book"></i></a></td>
-                    </tr>
-		 {% endfor %}
-
+                  {% for tissue in cellspage %}
+                  <tr>
+                  <th scope="row">{{ forloop.counter }}</th>
+                  <td><a href="{{ tissue.urllinks }}" class="text-decoration-none">{{ tissue.tissue }}</a></td>
+                  {% if tissue.methodrefs2 == '' %}
+                    <td><a href="{{ tissue.methodrefs }}" target="_blank" class="text-decoration-none">{{ tissue.method }}</a></td>
+                  {% else %}
+                    <td><a href="{{ tissue.methodrefs }}" target="_blank" class="text-decoration-none">{{ tissue.method }}</a>, <a href="{{ tissue.methodrefs2 }}" target="_blank" class="text-decoration-none">{{ tissue.method2 }}</a></td>
+                  {% endif %}
+                  {% if tissue.reg2 == '' %}
+                    <td>{{ tissue.reg }}</td>
+                  {% else %}
+                    <td>{{ tissue.reg }}, {{ tissue.reg2 }}</td>
+                  {% endif %}
+                  <td>{{ tissue.condition }}</td>
+                  <td>{{ tissue.typenet }}</td>
+                  <td><a href="{{ tissue.datarefs }}" target="_blank" class="text-decoration-none">{{ tissue.data }}</a></td>
+                  </tr>
+                  {% endfor %}
                 </tbody>
-              </table>
+          </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-</div>
+
 {% include "footer.html" %}
-
-<script>
-// Basic example
-$(document).ready(function() {
-    $('#cellstable').DataTable({
-      "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
-             "<'row'<'col-sm-12'tr>>" +
-             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-    });
-} );
+<script> 
+  var data2 = JSON.parse("{{data|escapejs}}");  
 </script>
+<script> var dataurl = "{% static 'js/datacell.csv' %}";</script>
+
+<script src="{% static 'js/bubbleChartcells.js' %}"></script>
+
+
 </body>
 </html>
-
-

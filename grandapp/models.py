@@ -1,9 +1,8 @@
 from django.db import models
 
-class Cell(models.Model):
-    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
-    cellLine  = models.CharField(max_length=200)
-    cellLink  = models.URLField(default='#')
+class Celllanding(models.Model):
+    cancer    = models.CharField(max_length=200)
+    cancerLink= models.URLField(default='#')
     tool      = models.CharField(max_length=200)
     netzoo    = models.CharField(max_length=200)
     netzooLink= models.URLField(max_length=200)
@@ -17,16 +16,52 @@ class Cell(models.Model):
     tfs       = models.IntegerField()
     genes     = models.IntegerField()
     refs      = models.URLField()
+    refs2     = models.URLField(default='#')
     samples   = models.IntegerField(default=0)
+    cardref   = models.CharField(max_length=200)
     script    = models.CharField(max_length=200)
-    #submitter = models.CharField(max_length=100)
-    #species = models.CharField(max_length=30)
-    #breed = models.CharField(max_length=30, blank=True)
-    #description = models.TextField()
-    #sex = models.CharField(choices=SEX_CHOICES, max_length=1, blank=True)
-    #submission_date = models.DateTimeField()
-    #age = models.IntegerField(null=True)
-    #vaccinations = models.ManyToManyField('Vaccine', blank=True)
+    dataset   = models.CharField(max_length=200)
+    cancerref = models.CharField(max_length=200)
+    reg = models.CharField(max_length=200)
+
+class Cell(models.Model):
+    disease    = models.CharField(max_length=400)
+    ncells     = models.IntegerField()
+
+class Cellpage(models.Model):
+    tissue   = models.CharField(max_length=400)
+    method   = models.CharField(max_length=400)
+    data     = models.CharField(max_length=400)
+    typenet  = models.CharField(max_length=400)
+    condition=  models.CharField(max_length=400)
+    methodrefs   = models.CharField(max_length=400)
+    datarefs     = models.CharField(max_length=400)
+    urllinks     = models.CharField(max_length=400)
+    reg       = models.CharField(max_length=400)
+    reg2      = models.CharField(max_length=400)
+    method2   = models.CharField(max_length=400)
+    methodrefs2  = models.CharField(max_length=400)
+
+class Cellsample(models.Model):
+    depmap        = models.CharField(max_length=400)
+    stripcellname = models.CharField(max_length=400)
+    cclename      = models.CharField(max_length=400)
+    cosmicid      = models.CharField(max_length=400)
+    sex           = models.CharField(max_length=400)
+    source        = models.CharField(max_length=400)
+    culture       = models.CharField(max_length=400)
+    cas9act       = models.CharField(max_length=400)
+    collsite      = models.CharField(max_length=400)
+    prim          = models.CharField(max_length=400)
+    disease       = models.CharField(max_length=400)
+    subtype       = models.CharField(max_length=400)
+    age           = models.CharField(max_length=400)
+    mutrate       = models.CharField(max_length=400)
+    doublt        = models.CharField(max_length=400)
+    tcga          = models.CharField(max_length=400)
+    link          = models.CharField(max_length=400)
+    race          = models.CharField(max_length=400)
+    size          = models.CharField(max_length=400)
 
 class Druglanding(models.Model):
     number    = models.IntegerField(default=0)
@@ -140,8 +175,15 @@ class Tissue(models.Model):
 
 class Cancer(models.Model):
     tissue    = models.CharField(max_length=200)
+    cancerref = models.CharField(max_length=200)
     nnets     = models.CharField(max_length=200)
+    nnets2    = models.CharField(max_length=200)
+    nnetsref  = models.CharField(max_length=200)
+    nnets2ref = models.CharField(max_length=200)
     datasets  = models.CharField(max_length=200)
+    datasets2  = models.CharField(max_length=200)
+    datasetsref  = models.CharField(max_length=200)
+    datasets2ref  = models.CharField(max_length=200)
     types     = models.CharField(max_length=200)
     subtype   = models.CharField(max_length=200)
 
@@ -197,6 +239,7 @@ class Tissuesample(models.Model):
     grdid       = models.CharField(max_length=600)
     size        = models.CharField(max_length=600)
     link        = models.CharField(max_length=600)
+    smtstptref  = models.CharField(max_length=600)
 
 class Tcgasample(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
@@ -272,7 +315,6 @@ class Geosample(models.Model):
     vital_status = models.CharField(max_length=200)
     size = models.CharField(max_length=200)
     link = models.CharField(max_length=200)
-
 
 class Ggnsample(models.Model):
     sample     = models.CharField(max_length=200)
@@ -412,12 +454,50 @@ class Pancreassample(models.Model):
     link         = models.CharField(max_length=200)
     subtype      = models.CharField(max_length=200)
 
+class Otterac(models.Model):
+    aurocbr      = models.FloatField()
+    auroccer     = models.FloatField()
+    aurocliv     = models.FloatField()
+    auprbr       = models.FloatField()
+    auprcer      = models.FloatField()
+    auprliv      = models.FloatField()
+    method       = models.CharField(max_length=200)
+
+class Pandaac(models.Model):
+    ko     = models.FloatField()
+    cc     = models.FloatField()
+    sr     = models.FloatField()
+    method       = models.CharField(max_length=200)
+
+class Dragonac(models.Model):
+    ko     = models.FloatField()
+    cc     = models.FloatField()
+    method       = models.CharField(max_length=200)
+
 class Gobp(models.Model):
     term      = models.CharField(max_length=400)
     goid      = models.CharField(max_length=400)
     genelist  = models.CharField(max_length=3000)
     idd       = models.IntegerField()
 
+class Gwascata(models.Model):
+    term      = models.CharField(max_length=400)
+    genelist  = models.CharField(max_length=3000)
+    idd       = models.IntegerField()
+
+class Sendto(models.Model):
+    preload       = models.IntegerField(default=0)
+    idd           = models.IntegerField(default=0)
+    genelistup    = models.CharField(max_length=10000)
+    genelistdown  = models.CharField(max_length=10000)
+
+class Gobpbygene(models.Model):
+    gene      = models.CharField(max_length=400)
+    termlist  = models.CharField(max_length=3000)
+
+class Gwascatabygene(models.Model):
+    gene      = models.CharField(max_length=400)
+    termlist  = models.CharField(max_length=3000)
 
 class Lala(models.Model):
     CHOICES   = [('Largest','Largest'),('Smallest','Smallest')]
@@ -448,8 +528,8 @@ class Lala(models.Model):
 
 class netmod(models.Model):
     CHOICES   = [('Largest','Largest'),('Smallest','Smallest')]
-    CHOICES2  = [('no',''),('dtt',''),('dee','')]
-    CHOICES3  = [('nosel','nosel'),('by gene','by gene'),('by tf','by tf'),('by GO','by GO')]
+    CHOICES2  = [('no',''),('dtt',''),('dee',''),('bc','')]
+    CHOICES3  = [('nosel','nosel'),('by gene','by gene'),('by tf','by tf'),('by GO','by GO'),('by GWAS','by GWAS')]
     dt        = models.CharField(choices=CHOICES2, max_length=200)
     topbottom = models.CharField(choices=CHOICES, max_length=200)
     brd       = models.BooleanField()
@@ -459,6 +539,27 @@ class netmod(models.Model):
     geneform  = models.CharField(max_length=200)
     tfform    = models.CharField(max_length=200)
     goform    = models.CharField(max_length=200)
+    gwasform    = models.CharField(max_length=200)
+
+    def __str__(self):
+       return self.name
+
+    def natural_key(self):
+       return self.my_natural_key
+
+class tarmod(models.Model):
+    CHOICES   = [('Largest','Largest'),('Smallest','Smallest')]
+    CHOICES3  = [('nosel','nosel'),('by gene','by gene'),('by GO','by GO'),('by GWAS','by GWAS')]
+    tfgeneseltar = models.CharField(choices=CHOICES3, max_length=200)
+    topbottomtar = models.CharField(choices=CHOICES, max_length=200)
+    nedgestar    = models.IntegerField()
+    absvaltar    = models.BooleanField()
+    topbottomtartf= models.CharField(choices=CHOICES, max_length=200)
+    nedgestartf   = models.IntegerField()
+    absvaltartf   = models.BooleanField()
+    geneformtar   = models.CharField(max_length=200)
+    goformtar     = models.CharField(max_length=200)
+    gwasformtar   = models.CharField(max_length=200)
 
     def __str__(self):
        return self.name

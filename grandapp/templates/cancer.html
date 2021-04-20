@@ -12,7 +12,7 @@
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingOne">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          Cancer types
+          Cell lines network types
         </button>
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
@@ -38,11 +38,19 @@
 		 {% for cc in cancer %}
 		    <tr>
 		    <th scope="row">{{ forloop.counter }}</th>
-		    <td><a href="{{ cc.tissue}}_cancer" class="text-decoration-none">{{ cc.tissue }}_cancer</a></td>
+		    <td><a href="{{ cc.cancerref }}" class="text-decoration-none">{{ cc.tissue }} cancer</a></td>
         <td>{{ cc.subtype }}</td>
-        <td>{{ cc.nnets }}</td>
+        {% if cc.nnets2 == "" %}
+          <td><a href="{{ cc.nnetsref }}" class="text-decoration-none">{{ cc.nnets }}</a></td>
+        {% else %}
+          <td><a href="{{ cc.nnetsref }}" class="text-decoration-none">{{ cc.nnets }}</a>, <a href="{{ cc.nnets2ref }}" class="text-decoration-none">{{ cc.nnets2 }}</a></td>
+        {% endif %}
         <td>{{ cc.types }}</td>
-        <td>{{ cc.datasets }}</td>
+        {% if cc.datasets2 == "" %}
+          <td><a href="{{ cc.datasetsref }}" class="text-decoration-none">{{ cc.datasets }}</a></td>
+        {% else %}
+          <td><a href="{{ cc.datasetsref }}" class="text-decoration-none">{{ cc.datasets }}</a>, <a href="{{ cc.datasets2ref }}" class="text-decoration-none">{{ cc.datasets2 }}</a></td>
+        {% endif %}
         </tr>
 		 {% endfor %}
                 </tbody>

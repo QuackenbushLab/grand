@@ -45,6 +45,7 @@ $(document).ready(function() {
   
     // Instantiate our network object.
     var container = document.getElementById("mynetwork");
+
     var x = -container.clientWidth +50 ;
     var y = -container.clientHeight / 2 + 50;
     var step = 170;
@@ -134,11 +135,26 @@ $(document).ready(function() {
         "Selection: " + nodes[params.nodes]['label'];
     });
 
+    network.on("afterDrawing", function (ctx) {
+      var dataURL = ctx.canvas.toDataURL();
+      document.getElementById('mynetwork').src = dataURL;
+    });
+
   }
-  
+
+
+
+  var button = document.getElementById('btn-download');
+  button.addEventListener('click', function (e) {
+      var dataURL = document.getElementById('mynetwork').src;
+      button.href = dataURL;
+  });
+
   window.addEventListener("load", () => {
     draw();
   });
+
+
 
 });
 

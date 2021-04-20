@@ -67,6 +67,8 @@ Requires
 
 `pip3 install scipy pandas sklearn requests statsmodels`
 
+` /home/ubuntu/venv/bin/python3 -m pip install mygene`
+
 `apt: python3-pip python3-dev libpq-dev postgresql-contrib nginx curl`
 
 Firewall
@@ -93,9 +95,9 @@ SCP transfer
 
 `sudo -H pip3 install virtualenv`
 
-`virtualenv venv`
+`virtualenv venv38 --python=/usr/bin/python3.8`
 
-`source venv/bin/activate`
+`source venv38/bin/activate`
 
 /!\ inside venv only
 

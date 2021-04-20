@@ -49,4 +49,5 @@ class Command(BaseCommand):
             tissuesample.grdid       = row['grdID']
             tissuesample.size        = row['size']
             tissuesample.link        = row['link']
+            tissuesample.smtstptref  = row['SMTSTPTREF']
             tissuesample.save()
