@@ -113,9 +113,9 @@ def networksagg(request,slug):
         formtar = TarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100})
         if form.is_valid():
             seconds = time.time()
-            fetchNet='local'
+            fetchNet  ='server'
             nedges    = int(request.POST['nedges'])
-            topbottom = request.POST['topbottom']
+            topbottom  = request.POST['topbottom']
             dt         = request.POST.get('dt', False)
             brd        = request.POST.get('brd', False)
             absval     = request.POST.get('absval', False)
