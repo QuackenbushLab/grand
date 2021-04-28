@@ -1,5 +1,5 @@
 from django import forms
-from .models import Lala, netmod, tarmod
+from .models import Lala, netmod, tarmod, cluemod
 
 class ContactForm(forms.Form):
     contact_name    = forms.CharField(required=True, label="Name")
@@ -46,6 +46,7 @@ class NetForm(forms.ModelForm):
     brd       = forms.BooleanField(widget=forms.CheckboxInput, required = False )
     nosel     = forms.BooleanField(widget=forms.CheckboxInput, required = False )
     absval    = forms.BooleanField(widget=forms.CheckboxInput, required = False )
+    edgetargeting    = forms.BooleanField(widget=forms.CheckboxInput, required = False )
     tfgenesel = forms.ChoiceField(choices=CHOICES3, widget=forms.RadioSelect)
     nedges = forms.IntegerField(
         widget=forms.NumberInput(attrs={'type':'range', 'step': '10', 'min': '50', 'max': '150', 'value':'100','id':'myEdge'}), required=False
@@ -130,3 +131,15 @@ class BabelForm(forms.ModelForm):
         model = Lala
         fields = '__all__'
 
+class ClueForm(forms.ModelForm):
+    CHOICES3  = [('by gene',''),('by tf','')]
+    tfgeneselclue = forms.ChoiceField(choices=CHOICES3, widget=forms.RadioSelect)
+    class Meta:
+        model = cluemod
+        fields = '__all__'
+
+class DocumentForm(forms.Form):
+    docfile = forms.FileField(
+        label='Select a file',
+        help_text='max. 42 megabytes'
+    )

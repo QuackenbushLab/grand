@@ -54,4 +54,11 @@ df3.to_csv('granddb/data/dragonacc.csv')
 
 
 
-genetarscore.loc[genetarscore['index'].isin(intergenes)]
+
+
+
+
+
+
+
+

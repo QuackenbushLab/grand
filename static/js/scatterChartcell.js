@@ -1,6 +1,28 @@
 $(document).ready(function() {
 
+if (slug=='lcl' || slug=='fibroblast_gtex'){
+  var TITLE = 'Sample expression quality control 1: Mean coverage as a function of genes detected';  
 
+  var POINT_X = 'smgnsdtc'; 
+
+  var POINT_X_PREFIX = ''; // prefix for x values, eg '$'
+  var POINT_X_POSTFIX = ''; // postfix for x values, eg '%'
+
+  var POINT_Y = 'smmncpb'; 
+
+  var POINT_Y_PREFIX = ''; // prefix for x values, eg 'USD '
+  var POINT_Y_POSTFIX = ''; // postfix for x values, eg ' kg'
+
+  var POINT_NAME = 'sampleid'; // point names that appear in tooltip
+
+  var POINT_COLOR = 'rgba(54, 162, 235,0.7)'; // eg `black` or `rgba(10,100,44,0.8)`
+  var POINT_RADIUS = 5; // radius of each data point
+
+  var X_AXIS = 'Number of genes detected'; // x-axis label, label in tooltip
+  var Y_AXIS = 'Mean coverage per base'; // y-axis label, label in tooltip
+
+  var SHOW_GRID = true; // `true` to show the grid, `false` to hide
+}else{
   var TITLE = 'Mutation rate as a function of doubling time';  
 
   var POINT_X = 'mutrate'; 
@@ -22,7 +44,7 @@ $(document).ready(function() {
   var Y_AXIS = 'Doubling time'; // y-axis label, label in tooltip
 
   var SHOW_GRID = true; // `true` to show the grid, `false` to hide
-
+}
   // Read data file and create a chart
 
 
@@ -119,28 +141,50 @@ $(document).ready(function() {
 
   // Scatter chart 2
 
-  var TITLE = 'Donor age and CAS9 activity';  
+  if(slug=='lcl' || slug=='fibroblast_gtex'){
+    var POINT_X = 'smrin'; 
+    var POINT_Y = 'smtsisch'; 
+  
+    var TITLE = 'Sample expression quality control 2: Ischemic time as a function of RNA integrity';  
 
-  var POINT_X = 'age'; 
+    var POINT_X_PREFIX = ''; // prefix for x values, eg '$'
+    var POINT_X_POSTFIX = ''; // postfix for x values, eg '%'
 
-  var POINT_X_PREFIX = ''; // prefix for x values, eg '$'
-  var POINT_X_POSTFIX = ' years'; // postfix for x values, eg '%'
+    var POINT_Y_PREFIX = ''; // prefix for x values, eg 'USD '
+    var POINT_Y_POSTFIX = ''; // postfix for x values, eg ' kg'
 
-  var POINT_Y = 'cas9act'; 
+    var POINT_NAME = 'sampleid'; // point names that appear in tooltip
 
-  var POINT_Y_PREFIX = ''; // prefix for x values, eg 'USD '
-  var POINT_Y_POSTFIX = ''; // postfix for x values, eg ' kg'
+    var POINT_COLOR = 'rgba(54, 162, 235,0.7)'; // eg `black` or `rgba(10,100,44,0.8)`
+    var POINT_RADIUS = 5; // radius of each data point
 
-  var POINT_NAME = 'depmap'; // point names that appear in tooltip
+    var X_AXIS = 'RNA integrity number'; // x-axis label, label in tooltip
+    var Y_AXIS = 'Total ischemic time'; // y-axis label, label in tooltip
 
-  var POINT_COLOR = 'rgba(54, 162, 235,0.7)'; // eg `black` or `rgba(10,100,44,0.8)`
-  var POINT_RADIUS = 5; // radius of each data point
+    var SHOW_GRID = true; // `true` to show the grid, `false` to hide
+  }else{
+    var TITLE = 'Donor age and CAS9 activity';  
 
-  var X_AXIS = 'Age'; // x-axis label, label in tooltip
-  var Y_AXIS = 'CAS9 activity'; // y-axis label, label in tooltip
+    var POINT_X = 'age'; 
 
-  var SHOW_GRID = true; // `true` to show the grid, `false` to hide
+    var POINT_X_PREFIX = ''; // prefix for x values, eg '$'
+    var POINT_X_POSTFIX = ' years'; // postfix for x values, eg '%'
 
+    var POINT_Y = 'cas9act'; 
+
+    var POINT_Y_PREFIX = ''; // prefix for x values, eg 'USD '
+    var POINT_Y_POSTFIX = ''; // postfix for x values, eg ' kg'
+
+    var POINT_NAME = 'depmap'; // point names that appear in tooltip
+
+    var POINT_COLOR = 'rgba(54, 162, 235,0.7)'; // eg `black` or `rgba(10,100,44,0.8)`
+    var POINT_RADIUS = 5; // radius of each data point
+
+    var X_AXIS = 'Age'; // x-axis label, label in tooltip
+    var Y_AXIS = 'CAS9 activity'; // y-axis label, label in tooltip
+
+    var SHOW_GRID = true; // `true` to show the grid, `false` to hide
+  }
   // Read data file and create a chart
 
 

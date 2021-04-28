@@ -31,13 +31,13 @@ class Command(BaseCommand):
     help = "Loads data from pet_data.csv into our Pet model"
 
     def handle(self, *args, **options):
-        print("Loading cancer landing data!")
+        print("Loading cell landing data!")
         for row in DictReader(open('./data/celllanding.csv')):
             tissuelanding = Celllanding()
             tissuelanding.cancer       = row['cancer']
+            tissuelanding.tool         = row['tool']
             tissuelanding.cancerref    = row['cancerref']
             tissuelanding.cancerLink   = row['cancerLink']
-            tissuelanding.tool         = row['tool']
             tissuelanding.netzoo       = row['netzoo']
             tissuelanding.netzooLink   = row['netzooLink']
             tissuelanding.netzooRel    = row['netzooRel']

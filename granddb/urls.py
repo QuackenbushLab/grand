@@ -41,9 +41,13 @@ urlpatterns = [
     url(r'_drug/$', view=views.druglanding, name='druglanding'),
     url(r'^thanks/', views.thanks, name='thanks'),
     url(r'^babelomic/', views.babelomic, name='babelomic'),
+    url(r'^upload/', views.upload, name='upload'),
+    url(r'^ownnet/(\w+)/', views.ownnet, name='ownnet'),
+    url(r'^ownnetar/(\w+)/', views.owntaragg, name='owntaragg'),
     url(r'^erroremail/', views.erroremail, name='erroremail'),
     url(r'networks/aggregate/(\w+)/', view=views.networksagg, name='networksagg'),
     url(r'networks/targeting/(\w+)/', view=views.taragg, name='taragg'),
+    url(r'networks/cluesbmit/(\w+)/', view=views.cluesubmit, name='cluesubmit'),
     url('drugs/$', view=views.drug, name='drugs'),
     url('api/v1/drugapi/', api_views.DruglandingList.as_view()),
     url('api/v1/tissueapi/', api_views.TissuelandingList.as_view()),
@@ -63,4 +67,4 @@ urlpatterns = [
     url(r'^diseaseresult/(\d+)/tissuetar/', view=views.diseasetissuetar, name='diseasetar'),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -29,24 +29,21 @@
     <h4>Download</h4>
     <div class="ml-3">The networks can be downloaded with two different properties.
     <h5>Format:</h5>
-    <code>p:</code> stands for <code>.pairs</code> format. The network is written in a text or csv file with the following format:
+    <code>Edg:</code> stands for <code>edges</code> format. The network is written in a text or csv file with the following format:
     <pre>                node1    node2    edge_weight 
     <br>          e.g.,  A        B        1.0</pre>
     <br> or in the following format for multi-sample files:
     <pre>                node1:node2    edge_weight_sample_1   edge_weight_sample_n
     <br>          e.g.,  A:B            1.0                    2.0</pre>
-    <br><code>c:</code> stands for <code>.csv</code> format. The bipartite network is saved as the weighted adjacency matrix W(TFs,Genes).
-    <br><code>m:</code> stands for <code>.mat</code> format. The bipartite network is saved as the weighted adjacency matrix W(TFs,Genes) in MATLAB format.
+    <br><code>Adj:</code> stands for <code>Adjacency</code> matrix format. The bipartite network is saved as the weighted adjacency matrix W(TFs,Genes).
     <br><code>gt:</code> stands for gene targeting. Gene targeting is the sum of weighted in-degrees in the network.
     <br><code>tt:</code> stands for TF targeting. TF targeting is the sum of weighted out-degrees in the network.
     <h5>Edge weights:</h5>
-    <code>o:</code> stands for original edge weights. These are the original edges weights computed by the <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0064832">PANDA</a> algorithm. They usually vary between -20 and 20.
-    A large value means a high likelihood of the existence of an edge between two nodes, a low negative value means a small probability of interaction between two given nodes.
-    <br><code>t1:</code> stands for transformation 1. This is the transformation of original edge weights into a positive quantity. The transformation is detailed in <a href="https://www.sciencedirect.com/science/article/pii/S2211124717314183">Sonawane et al, Cell reports, 2017</a>.
-    <br><code>t2:</code> stands for transformation 2. This is a transformation of the original edge weights into a quantity between 0 and 1 using a logistic regression of parameter 0.3.
-    <br>Download options will be in <code>&lt;format&gt;&lt;edge weights&gt;</code>. For example <button type="button" class="btn btn-outline-primary">po</button> allows to download a network in <code>.pairs</code> format with original edge weights.</p>
+    The edges weights computed by PANDA, PUMA, OTTER, and LIONESS algorithms. They usually vary between -20 and 20.
+    A large value means a high likelihood of the existence of an edge between two nodes, a low negative value means a small probability of interaction between two given nodes. For DRAGON, edges weights are partial correlations between the nodes.
+    <br>Download options are available in different formats. For example <button type="button" class="btn btn-outline-primary">Edg</button> allows to download a network in <code>edges</code> format with original edge weights.</p>
     <div class="container alert alert-warning alert-dismissible fade show" role="alert">
-    <strong>Important!</strong> All the formats and edge weight transformations keeps the structure of the gene regulatory network as a complete bipartite graph of genes*TFs edges.
+    <strong>Important!</strong> All gene regulatory networks are complete bipartite graphs of genes*TFs edges.
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
     </button>
     </div>

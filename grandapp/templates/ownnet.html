@@ -7,55 +7,48 @@
         <div class="card-header">
             <ul class="nav nav-pills card-header-pills" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                  {% if activetab == 'tar' %}
-                  <a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">Network</a>
+                  {% if activetab == 'uptab' %}
+                    <a class="nav-link active" id="up-tab" data-bs-toggle="tab" href="#up" role="tab" aria-controls="ppi" aria-selected="false">1. Upload network</a>
                   {% else %}
-                  <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">Network</a>
+                    <a class="nav-link" id="up-tab" data-bs-toggle="tab" href="#up" role="tab" aria-controls="ppi" aria-selected="false">1. Upload network</a>
+                  {% endif %}
+                </li>
+                <li class="nav-item" role="presentation">
+                  {% if activetab == 'tar' %}
+                    <a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">2. Visualize network</a>
+                  {% elif activetab == 'uptab' %}
+                    <a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">2. Visualize network</a>
+                  {% else %}
+                    <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">2. Visualize network</a>
                   {% endif %}
                   <img src="{% static 'images/network.svg' %}" style="width: 115px; height:25px">
                 </li>
                 <li class="nav-item" role="presentation">
                   {% if activetab == 'tar' %}
-                  <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">Targeting</a>
+                    <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">3. Compute targeting</a>
                   {% else %}
-                  <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">Targeting</a>
+                    <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">3. Compute targeting</a>
                   {% endif %}
                 </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link disabled" id="profile-tab" data-bs-toggle="tab" role="tab" aria-selected="false">Input data:</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#ppi" role="tab" aria-controls="ppi" aria-selected="false">PPI</a>
-                  <img src="{% static 'images/ppi.svg' %}" style="width: 65px; height:31px">
-                </li>
-                <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#motif" role="tab" aria-controls="motif" aria-selected="false">Motif</a>
-                  <img src="{% static 'images/motif.svg' %}" style="width: 75px; height:30px">
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#coexpression" role="tab" aria-controls="coexpression" aria-selected="false" >Expression</a>
-                    <img src="{% static 'images/coexpression.svg' %}" style="width: 115px; height:28px">
-                </li>
-              </ul>
+          </ul>
         </div>
-    
 
 
-
-        <!-- NETWORK -->
         <div class="tab-content" id="myTabContent">
           {% if activetab == 'tar' %}
+            <div class="tab-pane fade" id="network" role="tabpanel" aria-labelledby="home-tab">
+          {% elif activetab == 'uptab' %}
             <div class="tab-pane fade" id="network" role="tabpanel" aria-labelledby="home-tab">
           {% else %}
             <div class="tab-pane fade show active" id="network" role="tabpanel" aria-labelledby="home-tab">
           {% endif %}
-                <div class='container'>
+          <div class='container'>
                   <div class="row">
                     <div class="col-2 border border-secondary">
                       <h5><span class="badge bg-secondary">Edges</span></h5>
                       <div>
                         <label for="myEdge" class="form-label">Number of edges</label>
-                        <form action="{% url 'networksagg' slug %}" role="form" method="post">
+                        <form action="{% url 'ownnet' slug %}" role="form" method="post">
                           {% csrf_token %}
                           {{ netform.nedges }}
                           <p>Value: <span id="demo2"></span></p>
@@ -78,15 +71,6 @@
                                   data-bs-content="Absolute value of edges">
                                 Absolute value</a></small>
                               </div>
-                              <div style="float: left;">
-                                {{ netform.edgetargeting }} <small><a href="#"
-                                  data-bs-toggle="popover"
-                                  data-bs-animation="false"
-                                  data-bs-placement="top"
-                                  data-bs-html="true"
-                                  data-bs-content="Draws motif prior edges as dashed lines.">
-                                Prior edges</a></small>
-                              </div>
                             </div>
                           </div>
                         <br>
@@ -104,15 +88,6 @@
                             data-bs-html="true"
                             data-bs-content="Scale node size by targeting score. More about targeting score in <a href='https://grand.networkmedicine.org/help/#wiki'>GRAND help page</a>">
                           targeting</a></small>
-                        </div>
-                        <div style="float: left;">
-                          {{ netform.dt.2 }} <small>Scale by <a href="#"
-                            data-bs-toggle="popover"
-                            data-bs-animation="false"
-                            data-bs-placement="top"
-                            data-bs-html="true"
-                            data-bs-content="Scale node size by average expression across samples for aggregate networks and by sample for single-sample networks.">
-                          expression</a></small>
                         </div>
                         <div style="float: left;">
                           {{ netform.dt.3 }} <small>Scale by <a href="#"
@@ -196,7 +171,6 @@
                             </span>
                             Submit</button>
                             </div>
-
                         </div>
                         </form>
                         <br>
@@ -225,17 +199,52 @@
                   </div>
                 </div>
                     <div class="card-body">
-                    <h5 class="card-title">{{ cancerType }} cancer gene regulatory network</h5>
-                    <p class="card-text">Aggregate network model of TCGA gene expression data set.</p>
+                    <h5 class="card-title">User input gene regulatory network</h5>
+                    <p class="card-text">Network parameters</p>
                     </div>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Network parameters</li>
                         <li class="list-group-item">TFs</li>
                         <li class="list-group-item">Genes</li>
                     </ul>
             </div>
-            <div class="tab-pane fade" id="ppi" role="tabpanel" aria-labelledby="profile-tab">...</div>
-            <div class="tab-pane fade" id="motif" role="tabpanel" aria-labelledby="contact-tab">...</div>
+
+
+        <!-- UPLOAD NETWORK -->
+        {% if activetab == 'uptab' %}
+          <div class="tab-pane fade show active" id="up" role="tabpanel" aria-labelledby="up-tab">
+        {% else %}
+          <div class="tab-pane fade" id="up" role="tabpanel" aria-labelledby="up-tab">
+        {% endif %}
+        <div class="container">
+              {% if documents %}
+              <ul>
+                {% for document in documents %}
+                    {% if document.idd == slug %}
+                      Loaded model: <a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a>
+                    {% endif %}
+                {% endfor %}
+              </ul>
+                {% else %}
+                    <p>No documents.</p>
+                {% endif %}
+            <!-- Upload form. Note enctype attribute! -->
+            <form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <p>{{ docform.non_field_errors }}</p>
+                <p>
+                    {{ docform.docfile.errors }}
+                    {{ docform.docfile }}
+                </p>
+                <p><input type="submit" value="Upload" /></p>
+                <br><br>
+                <p>The network format should be an adjacency matrix representing a set of regulators (TFs/miRNA) in the rows and a set of target genes in the columns, with regulator names as row names and gene names as columns names.
+                Here is an <a style="text-decoration:none" href="https://granddb.s3.us-east-2.amazonaws.com/Colon_cancer_TCGA_example.csv">example file</a> for reference.</p>
+                After uploading the network in the first tab (1. Upload network), you can visualize the network in the second tab (2. Visualize network) by clicking submit after selecting the parameters of interest. Or you can switch to the third tab (3. Compute targeting) to perform an exploratory analysis of the network including enrichment and drug repurposing analysis.
+                <br><br><br><br><br><br><br><br><br>
+            </form>
+          </div>
+        </div>
+
 
         <!-- Targeting -->
         {% if activetab == 'tar' %}
@@ -248,7 +257,7 @@
               <div class="col-2 border border-secondary">
                 <h5><span class="badge bg-secondary">Genes</span></h5>
                 <div>
-                  <form action="{% url 'taragg' slug %}" role="form" method="post">
+                  <form action="{% url 'owntaragg' slug %}" role="form" method="post">
                     {% csrf_token %}
                     {{ tarform.nedgestar }}
                     <p>Value: <span id="demo2Tar"></span></p>
@@ -465,8 +474,8 @@
 
 {% include "footer.html" %}
 
+
 <script>
-  var slug="{{ slug }}";
   var slidertartf = document.getElementById("myEdgeTartf");
   var outputtartf = document.getElementById("demo2Tartf");
   outputtartf.innerHTML = slidertartf.value;
@@ -507,17 +516,11 @@
 <script>
 
   if(document.getElementById('absval')==null){
-    if(slug.substr(0,3)=='ACH'){
-      document.getElementById('id_edgetargeting').disabled = true; 
-    }
     document.getElementById('id_absval').onchange = function() {
         document.getElementById('id_brd').checked = this.checked;
 
     };
   }else if(document.getElementById('id_absval')==null){
-    if(slug.substr(0,3)=='ACH'){
-      document.getElementById('edgetargeting').disabled = true; 
-    }
     document.getElementById('absval').onchange = function() {
         document.getElementById('brd').checked = this.checked;
     };
@@ -529,7 +532,5 @@ var tftarscore = JSON.parse("{{tftarscore|escapejs}}");
 var genetarscore = JSON.parse("{{genetarscore|escapejs}}"); 
 </script>
 <script src="{% static 'js/bartar.js' %}"></script>
-
-</script> 
 </body>
 </html>

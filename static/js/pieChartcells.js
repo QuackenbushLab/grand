@@ -2,7 +2,7 @@ $(document).ready(function() {
   
     // Read data file and create a chart
   console.log(slug)
-  if(slug == 'lcl'){
+  if(slug == 'lcl' || slug=='fibroblast_gtex'){
     var rows=data2;
     console.log(rows)
 
@@ -686,33 +686,33 @@ if (activePoints[0]) {
 }
 };
 
-canvasStage.onclick = function(evt) {
-var activePoints = myPieChartStage.getElementsAtEvent(evt);
-if (activePoints[0]) {
-  var chartData = activePoints[0]['_chart'].config.data;
-  var idx = activePoints[0]['_index'];
+    canvasStage.onclick = function(evt) {
+    var activePoints = myPieChartStage.getElementsAtEvent(evt);
+    if (activePoints[0]) {
+      var chartData = activePoints[0]['_chart'].config.data;
+      var idx = activePoints[0]['_index'];
 
-  var label = chartData.labels[idx];
-  table.column(6).search("^"+label+"$", true, false, true).draw();
-  $("#id"+6+offset).val(label);
-}
-};
+      var label = chartData.labels[idx];
+      table.column(6).search("^"+label+"$", true, false, true).draw();
+      $("#id"+6+offset).val(label);
+    }
+    };
 
-canvasVital.onclick = function(evt) {
-var activePoints = myPieChartVital.getElementsAtEvent(evt);
-if (activePoints[0]) {
-  var chartData = activePoints[0]['_chart'].config.data;
-  var idx = activePoints[0]['_index'];
 
-  var label = chartData.labels[idx];
-  table.column(7).search("^"+label+"$", true, false, true).draw();
-  $("#id"+7+offset).val(label);
-}
-};
+    canvasVital.onclick = function(evt) {
+    var activePoints = myPieChartVital.getElementsAtEvent(evt);
+    if (activePoints[0]) {
+      var chartData = activePoints[0]['_chart'].config.data;
+      var idx = activePoints[0]['_index'];
+
+      var label = chartData.labels[idx];
+      table.column(7).search("^"+label+"$", true, false, true).draw();
+      $("#id"+7+offset).val(label);
+    }
+    };
 
   }
 
 
 
-
-  });
+});

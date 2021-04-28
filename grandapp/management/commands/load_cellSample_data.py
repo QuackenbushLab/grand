@@ -52,4 +52,11 @@ class Command(BaseCommand):
             drugsample.tcga          = row['tcga']
             drugsample.race          = row['race']
             drugsample.size          = row['size']
+            drugsample.dummy         = row['dummy']
+            drugsample.presexp       = row['presexp']
+            drugsample.diffexp       = row['diffexp']
+            drugsample.diffexpgenes  = row['diffexpgenes']
+            drugsample.difftar       = row['difftar']
+            drugsample.difftargenes  = row['difftargenes']
+            drugsample.cleanname     = row['cleanname']
             drugsample.save()

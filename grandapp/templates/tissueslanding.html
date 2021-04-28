@@ -2,11 +2,44 @@
 {% include "header.html" %}
 
 <div class="hidden">
+  <div class="row pt-3">
+
+    <h3 class="text-secondary" align="center">{{ slug2 }} networks </h3>
+  
+    <center>
+      <div class="btn-group">
+  
+    <a class="btn btn-outline-primary not-allowed" role="button">Data sets <span class="badge bg-secondary">{{ ndata }}</span></a>
+  
+    <a class="btn btn-outline-primary not-allowed active" role="button">Networks</a>
+    {% if nagg != 0 %}
+    <a class="btn btn-outline-primary not-allowed" role="button">Aggregate <span class="badge bg-secondary">{{ nagg }}</span></a>
+    {% endif %}
+    {% if nsamples != 0 %}
+      <a class="btn btn-outline-primary not-allowed" role="button">Single-sample <span class="badge bg-secondary">{{ nsamples }}</span></a>
+    {% endif %}
+    </div>
+  </center>
+  </div>
+
 <div class="row" id="main">
 <div class="col-1 mt-5"></div>
 
+
+
+
 <div class="col-10 mt-4 pb-4 mb-4">
-  <div class="container row"></div>
+  <div class="container row">
+  <div class="col">
+    <canvas id="scatterChart" width="50" height="30"></canvas>
+  </div>
+  <div class="col">
+    <canvas id="scatterChart2" width="50" height="30"></canvas>
+  </div>
+  <p style="font-family: Helvetica; color: #333; padding: 1em 2em; font-size: 12px">
+    To get the full list of phenotypic variables, please check the menu below.
+  </p>
+</div>
 <div class="accordion" id="accordionExample">
   <div class="accordion-item">
     <h2 class="accordion-header" id="headingOne">
@@ -16,29 +49,29 @@
     </h2>
     <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-        <div class="container">
+        <div class="container-fluid">
           <div class="card">
                   <div class="card-body">
                   <h5 class="card-title">Tool description</h5>
-                  <p class="card-text"><a href="https://pubmed.ncbi.nlm.nih.gov/23741402/">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif as regulation prior, and gene expression samples.
-                                <a href="https://academic.oup.com/bioinformatics/article/doi/10.1093/bioinformatics/btaa571/5858977/">PUMA</a> reconstructs a gene regulatory network with miRNA as regulators using gene expression samples and miRNA predicted targets by <a href="http://cbio.mskcc.org/microrna_data/manual.html">miRanda</a> or <a href="http://www.targetscan.org/vert_72/">TargetScan</a> as regulation priors. The Regulator-regulator interaction matrix is set to the identity matrix in the algorithm.
-              {% if name == 'yes' %} <a href="https://www.sciencedirect.com/science/article/pii/S2589004219300872">LIONESS</a> reconstructs patient-specific <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3669401/">PANDA</a> networks for each gene expression sample. To download sample-specific networks, you can check <a href='#cardtissue'>the phenotypic information</a> and select the networks by
-                                  clinical variables or download all the samples in a single file. {% else %} Check <a href='#cardtissue'>the phenotypic information</a> for the clinical variables of the samples that were used to reconstruct the network. {% endif %}</p>
-                  <table id="tissuestable" class="table table-hover" style="width: 100%">
+                  <p class="card-text"><a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif as regulation prior, and gene expression samples.
+                                <a href="https://netzoo.github.io/zooanimals/puma/" style="text-decoration:none" target="_blank">PUMA</a> reconstructs a gene regulatory network with miRNA as regulators using gene expression samples and miRNA predicted targets by <a href="http://cbio.mskcc.org/microrna_data/manual.html" style="text-decoration:none" target="_blank">miRanda</a> or <a href="http://www.targetscan.org/vert_72/" style="text-decoration:none" target="_blank">TargetScan</a> as regulation priors. The Regulator-regulator interaction matrix is set to the identity matrix in the algorithm.
+              {% if name == 'yes' %} <a href="https://netzoo.github.io/zooanimals/lioness/" style="text-decoration:none" target="_blank">LIONESS</a> reconstructs patient-specific <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> networks for each gene expression sample. To download sample-specific networks, you can check <a href="#cardtissue" style="text-decoration:none">the phenotypic information</a> and select the networks by
+                                  clinical variables or download all the samples in a single file. {% else %} Check <a href="#cardtissue" style="text-decoration:none" >the phenotypic information</a> for the clinical variables of the samples that were used to reconstruct the network. {% endif %}</p>
+                  <table id="tissuestable2" class="table table-hover" style="width: 100%">
                       <thead>
                         <tr>
                           <th scope="col">#</th>
                           <th scope="col">Tissue</th>
                           <th scope="col">Tool</th>
                           <th scope="col">netZoo release</th>
-                          <th scope="col">Network <br><i class="far fa-question-circle"
+                          <th scope="col">Network<br><i class="far fa-question-circle"
                             data-bs-toggle="popover"
+                            data-bs-animation="false"
                             data-bs-trigger="hover"
                             data-bs-placement="top"
-                            data-bs-animation="false"
                             title="Network format"
-                            data-bs-content="Please refer to the Help page Network section for the network download formats.">
-                          </i></th>
+                            data-bs-content="Please refer to the Help page Network section for the network download formats. You can download the script to reproduce the network using the R button.">
+                          </i></th>              
                           <th scope="col">PPI<br><i class="far fa-question-circle"
                             data-bs-toggle="popover"
                             data-bs-trigger="hover"
@@ -80,7 +113,7 @@
                             title="Computation precision"
                             data-bs-content="S=Single, D=Double">
                           </i></th>
-                          <th scope="col">Reference</th>
+                          <th scope="col">Ref.</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -89,25 +122,29 @@
                           <th scope="row">{{ forloop.counter }}</th>
                           <td><a href="{{ tissue.tissueLink }}" class="text-decoration-none">{{ tissue.tissue }}</a></td>
                           <td>{{ tissue.tool }}</td>
-                          <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none">{{ tissue.netzooRel }}</a></td>
+                          <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none" target="_blank">{{ tissue.netzooRel }}</a></td>
                           {% if tissue.tool == 'PANDA-LIONESS' %}
-                              <td><div class="btn-group" role="group" aria-label="Basic example">
-                                  <a class="btn btn-outline-primary" role="button"  href="#cardtissue" role="button">co</a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">R</a></div></td>
+                              <td><div class="btn-group-sm" role="group" aria-label="Basic example">
+                                  <a class="btn btn-outline-primary" role="button"  href="#cardtissue" role="button">Adj</a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="/networks/aggregate/{{ tissue.awsname }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
                           {% else %}
-                              <td><div class="btn-group" role="group" aria-label="Basic example">
-                                  <a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">R</a></div></td>
+                              <td><div class="btn-group-sm" role="group" aria-label="Basic example">
+                                  <a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">Adj</a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="/networks/aggregate/{{ tissue.awsname }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
                           {% endif %}
                           {% if tissue.tool == 'PUMA' %}
                               <td>{{ tissue.ppi }}</td>
                           {% else %} 
-                              <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}"><i class="fas fa-link"></i></a></td>
+                              <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
                           {% endif %}
                           <td><a href="{{ tissue.motif }}" class="text-decoration-none">{{ tissue.motifDesc }}</a></td>
-                          <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}"><i class="fas fa-link"></i></a></td>
+                          <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
                           <td>{{ tissue.reg }}</td>
                           <td>{{ tissue.tfs }}</td>
                           <td>{{ tissue.genes }}</td>
+                          {% if tissue.tool == 'PUMA' %}
+                          <td>{{ tissue.samples }}</td>
+                          {% else %}
                           <td><a href="#cardtissue" class="text-decoration-none">{{ tissue.samples }}</a></td>
+                          {% endif %}
                           <td><span class="badge bg-primary rounded-pill">D</span></td>
                           {% if tissue.tool == 'PANDA-LIONESS' %}
                           <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal"></i></a></td>
@@ -120,7 +157,7 @@
                                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                  Please check the reference {{ tissue.refs3 }} at the following <a href="{{ tissue.refs }}">link</a>.
+                                  Please check the reference {{ tissue.refs3 }} at the following <a href="{{ tissue.refs }}" style="text-decoration:none" target="_blank">link</a>.
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -129,7 +166,7 @@
                             </div>
                           </div>
                           {% elif tissue.tool == 'PUMA' %}
-                          <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal2"></i></a><a href="{{ tissue.refs2 }}"><i class="fas fa-book"></i></a></td>
+                          <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal2"></i></a><a href="{{ tissue.refs2 }}" target="_blank"><i class="fas fa-book"></i></a></td>
                           <!-- Modal -->
                           <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
                             <div class="modal-dialog">
@@ -139,7 +176,7 @@
                                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                  Please check the reference {{ tissue.refs3 }} at the following <a href="{{ tissue.refs }}">link</a>.
+                                  Please check the reference {{ tissue.refs3 }} at the following <a href="{{ tissue.refs }}" style="text-decoration:none" target="_blank">link</a>.
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -148,7 +185,7 @@
                             </div>
                           </div> 
                           {% else %}
-                          <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal3"></i></a><a href="{{ tissue.refs2 }}"><i class="fas fa-book"></i></a></td>
+                          <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal3"></i></a><a href="{{ tissue.refs2 }}" target="_blank"><i class="fas fa-book"></i></a></td>
                           <!-- Modal -->
                           <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
                             <div class="modal-dialog">
@@ -158,7 +195,7 @@
                                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                  Please check the reference {{ tissue.refs3 }} at the following <a href="{{ tissue.refs }}">link</a>.
+                                  Please check the reference {{ tissue.refs3 }} at the following <a href="{{ tissue.refs }}" style="text-decoration:none" target="_blank">link</a>.
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -179,21 +216,39 @@
 </div>
 
 <div class="accordion-item">
-  <h2 class="accordion-header" id="headingOne">
-    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+  <script>var offset=30</script>
+  <h2 class="accordion-header" id="headingTwo">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" id="cardtissue">
       Phenotypic information GTEx
     </button>
   </h2>
   <div id="collapseTwo" class="accordion-collapse collapse " aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
     <div class="accordion-body">
-<div class="container">
+<div class="container-fluid">
     <div class="card" id="cardtissue">
             <div class="card-body">
             <h5 class="card-title">Variable description</h5>
             <p class="card-text">{% if name == 'yes' %}You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges
-			    is 644 * 30243 (number of TFs * number of genes) (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a TF-by-gene
+			    is 644 * 30243 (number of miRNA/TFs * number of genes) (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a miRNA/TF-by-gene
             		    matrix named after  the GTEx sample reference{% else %} This is a description of the primary clinical variables of the gene expression samples that were used to generate the gene regulatory network{% endif %}.</p>
-            <table id="tissuestable2" class="table table-hover" style="width: 100%">
+                    <div class="row pb-4">
+                      <div class="col">
+                        <canvas id="myPieChart" width="50" height="30"></canvas>   
+                      </div>
+                      <div class="col">
+                        <canvas id="myPieChartETH" width="50" height="30"></canvas>   
+                      </div>
+                      <div class="col">
+                        <canvas id="myPieChartAL" width="50" height="30"></canvas>   
+                      </div>
+                      <div class="col">
+                        <canvas id="myPieChartStage" width="50" height="30"></canvas>   
+                      </div>
+                      <div class="col">
+                        <canvas id="myPieChartVital" width="50" height="30"></canvas>   
+                      </div>
+                      </div>
+            <table id="tissuestable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
                     <th scope="col">Sample</th>
@@ -234,34 +289,34 @@
                       data-bs-placement="top"
                       data-bs-content="Tissue Type, area from which the tissue sample was taken">
                     </i></th>
-                    <th scope="col">SMTSD<br><i class="far fa-question-circle"
-                      data-bs-toggle="popover"
-                      data-bs-trigger="hover"
-                      data-bs-animation="false"
-                      data-bs-placement="top"
-                      data-bs-content="Tissue Type, more specific detail of tissue type">
-                    </i></th>
                     <th scope="col">SMUBRID<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
                       data-bs-animation="false"
                       data-bs-placement="top"
-                      data-bs-content="Uberon ID, anatomical location as described by the Uber Anatomy Ontology (UBERON)">
+                      data-bs-content="SMUBRID: Uberon ID, anatomical location as described by the Uber Anatomy Ontology (UBERON)">
                     </i></th>
-                    <th scope="col">SMTSISCH<br><i class="far fa-question-circle"
+                    <th scope="col">Isch. time<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
                       data-bs-animation="false"
                       data-bs-placement="top"
-                      data-bs-content="Total Ischemic time for a sample in 4 hour intervals">
+                      data-bs-content="Total Ischemic time for a sample in 4 hour intervals (SMTSISCH)">
+                    </i></th>
+                    <th scope="col">Time point<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="Time point reference for Start and End times of sample procurement (SMTSTPTREF)">
                     </i></th>
                     {% if name == 'yes' %}
-                    <th scope="col">Network<br><i class="far fa-question-circle"
+                    <th scope="col">Net.<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
                       data-bs-animation="false"
                       data-bs-placement="top"
-                      data-bs-content="Please refer to the Help page Network section for the network download formats">
+                      data-bs-content="Please refer to the Help page Network section for the network download formats. Adj: Adjacency matrix, Edg: Edges.">
                     </i></th>
                     {% endif %}
                   </tr>
@@ -277,18 +332,36 @@
                     <td>{{ tissue.smatsscr }}</td>
                     <td>{{ tissue.smrin }}</td>
                     <td>{{ tissue.smts }}</td>
-                    <td>{{ tissue.smtsd }}</td>
                     <td>{{ tissue.smubrid }}</td>
                     <td>{{ tissue.smtsisch }}</td>
+                    <td>{{ tissue.smtstptref }}</td>
                     {% if name == 'yes' %}
                     {% if tissue.sampleid == 'All' %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">po</a><br><span class="badge bg-secondary rounded-pill"><small>{{ tissue.size }}</small></span></td>
+                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">Edg</a><br><span class="badge bg-secondary rounded-pill"><small>{{ tissue.size }}</small></span></td>
                     {% else %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a><br><span class="badge bg-light text-dark rounded-pill"><small>{{ tissue.size }}</small></span></td>
+                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">Adj</a><br><span class="badge bg-light text-dark rounded-pill"><small>{{ tissue.size }}</small></span></td>
                     {% endif %}
                     {% endif %}
                  {% endfor %}
                 </tbody>
+                <tfoot>
+                  <tr id='tfoot2'>
+                    <th>Sample</th>
+                    <th>Subject</th>
+                    <th>Gender</th>
+                    <th>Age</th>
+                    <th>DTH-HRDY</th>
+                    <th>SMAT-SSCR</th>
+                    <th>SMRIN</th>
+                    <th>SMTS</th>
+                    <th>SMUBRID</th>
+                    <th>SMTSISCH</th>
+                    <th>SMTSTPTREF</th>
+                    {% if name == 'yes' %}
+                    <th>Network</th>
+                    {% endif %}
+                  </tr>
+                </tfoot>
               </table>
           </div>
         </div>
@@ -313,11 +386,6 @@
 // Basic example
 $(document).ready(function() {
     //datatables
-    $('#tissuestable').DataTable({
-            "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
-             "<'row'<'col-sm-12'tr>>" +
-             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-    });
 
     $('#tissuestable2').DataTable({
             "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
@@ -329,10 +397,33 @@ $(document).ready(function() {
 </script>
 
 <script>
+  // Basic example
+  $(document).ready(function() {
+        // Setup - add a text input to each footer cell
+      $('#tfoot2 th').each( function (i) { //tcga
+          var title = $(this).text();
+          $(this).html( '<input size=7 id="id'+i+offset+'" type="text" placeholder="Search '+title+'" />' );
+          i++;
+      } );
+  
+  });
+  </script>
+
+<script>
+  var slug='lcl';
+  var data2=JSON.parse("{{data|escapejs}}");
+</script>
+
+<script src="{% static 'js/pieChartcells.js' %}"></script>
+<script src="{% static 'js/scatterChartcell.js' %}"></script>
+
+<script>
   $(document).ready(function () {
     $('div.hidden').fadeIn(300).removeClass('hidden');
 });
 </script>
+
+
 
 </body>
 </html>

@@ -22,7 +22,7 @@ class Celllanding(models.Model):
     script    = models.CharField(max_length=200)
     dataset   = models.CharField(max_length=200)
     cancerref = models.CharField(max_length=200)
-    reg = models.CharField(max_length=200)
+    reg       = models.CharField(max_length=200)
 
 class Cell(models.Model):
     disease    = models.CharField(max_length=400)
@@ -62,6 +62,13 @@ class Cellsample(models.Model):
     link          = models.CharField(max_length=400)
     race          = models.CharField(max_length=400)
     size          = models.CharField(max_length=400)
+    dummy         = models.CharField(max_length=200)
+    presexp       = models.CharField(max_length=400)
+    diffexp       = models.CharField(max_length=400)
+    diffexpgenes  = models.CharField(max_length=400)
+    difftar       = models.CharField(max_length=400)
+    difftargenes       = models.CharField(max_length=400)
+    cleanname     = models.CharField(max_length=400)
 
 class Druglanding(models.Model):
     number    = models.IntegerField(default=0)
@@ -169,9 +176,18 @@ class Gwas(models.Model):
     logpval      = models.FloatField()
 
 class Tissue(models.Model):
-    #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
     tissue    = models.CharField(max_length=200)
     nnets     = models.IntegerField(default=0)
+    tool1      = models.CharField(max_length=200)
+    tool2      = models.CharField(max_length=200)
+    tool3      = models.CharField(max_length=200)
+    nettype   = models.CharField(max_length=200)
+    reg       = models.CharField(max_length=200)
+    tissuename= models.CharField(max_length=200)
+    reftool1  = models.CharField(max_length=200)
+    reftool2  = models.CharField(max_length=200)
+    reftool3  = models.CharField(max_length=200)
+    nsamples  = models.CharField(max_length=200)
 
 class Cancer(models.Model):
     tissue    = models.CharField(max_length=200)
@@ -189,6 +205,7 @@ class Cancer(models.Model):
 
 class Tissuelanding(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    awsname    = models.CharField(max_length=200)
     tissue    = models.CharField(max_length=200)
     tissueLink= models.URLField(default='#')
     tool      = models.CharField(max_length=200)
@@ -240,6 +257,8 @@ class Tissuesample(models.Model):
     size        = models.CharField(max_length=600)
     link        = models.CharField(max_length=600)
     smtstptref  = models.CharField(max_length=600)
+    smmncpb     = models.CharField(max_length=600)
+    smgnsdtc    = models.CharField(max_length=600)
 
 class Tcgasample(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
@@ -474,6 +493,11 @@ class Dragonac(models.Model):
     cc     = models.FloatField()
     method       = models.CharField(max_length=200)
 
+class Tissueac(models.Model):
+    ko     = models.FloatField()
+    cc     = models.FloatField()
+    method       = models.CharField(max_length=200)
+
 class Gobp(models.Model):
     term      = models.CharField(max_length=400)
     goid      = models.CharField(max_length=400)
@@ -535,6 +559,7 @@ class netmod(models.Model):
     brd       = models.BooleanField()
     nedges    = models.IntegerField()
     absval    = models.BooleanField()
+    edgetargeting= models.BooleanField()
     tfgenesel = models.CharField(choices=CHOICES3, max_length=200)
     geneform  = models.CharField(max_length=200)
     tfform    = models.CharField(max_length=200)
@@ -568,3 +593,17 @@ class tarmod(models.Model):
        return self.my_natural_key
 
 
+class cluemod(models.Model):
+    CHOICES3  = [('by gene','by gene'),('by tf','by tf')]
+    tfgeneselclue = models.CharField(choices=CHOICES3, max_length=200)
+
+    def __str__(self):
+       return self.name
+
+    def natural_key(self):
+       return self.my_natural_key
+
+class Document(models.Model):
+    #docfile = models.FileField(upload_to='documents/%Y/%m/%d')
+    docfile = models.FileField()
+    idd=models.IntegerField()

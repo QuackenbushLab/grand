@@ -50,4 +50,6 @@ class Command(BaseCommand):
             tissuesample.size        = row['size']
             tissuesample.link        = row['link']
             tissuesample.smtstptref  = row['SMTSTPTREF']
+            tissuesample.smmncpb     = row['SMMNCPB']
+            tissuesample.smgnsdtc    = row['SMGNSDTC']
             tissuesample.save()

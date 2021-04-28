@@ -69,6 +69,7 @@ for(i in 1:nTissues){
     networkVec2   = c(networkVec2, paste0("https://granddb.s3.amazonaws.com/tissues/networks/lioness/",tissues[i],'_AllSamples','.csv'))
 }               
 tissueVec     = gsub('_',' ',colnames(net))
+tissueVecsave = tissueVec
 tissueVecWsc  = colnames(net)
 tissueVec2    = setdiff(tissueVec,notInLionessTissues2)
 tissueLinkVec = expLinkVec 
@@ -114,24 +115,56 @@ df['genes']      = c(genesVec,genesVec[-indnotInLionessTissues2])
 df['samples']    = c(nSamples,nSamples[-indnotInLionessTissues2])
 df['refs']       = c(refsVec1,refsVec11[-indnotInLionessTissues2])
 df['refs2']      = c(refsVec2,rep('',nTissues-length(indnotInLionessTissues2)))
-df['refs3']       = c(refsVec3,refsVec33[-indnotInLionessTissues2])
+df['refs3']      = c(refsVec3,refsVec33[-indnotInLionessTissues2])
 df['reg']        = c(regVec,regVec[-indnotInLionessTissues2])
 df['motifDesc']  = c(motifDescVec,motifDescVec[-indnotInLionessTissues2])
+df['awsname']    = c(tissues,tissues[-indnotInLionessTissues2])
 
-nn1=which(tissues=="Lymphoblastoid_cell_line")
-nn2=which(tissues=="Fibroblast_cell_line")
+nn1=which(tissues=="Lymphoblastoid_Cell_Line")
+nn2=which(tissues=="Fibroblast_Cell_Line")
+motifDescVec  = rep("Motif", nTissues)
 # remove cell lines
-tissues=tissues[-c(nn1,nn2)]
-cols = c('tissue','nnets')
-df2 <- data.frame(matrix(ncol = length(cols), nrow = nTissues))
-colnames(df2) = cols
-df2['tissue']     = c(tissueVecWsc)
 nsamples=rep(3,length(tissues))
+#save tissue names
+tissuessave=tissues
+tissues=tissues[-c(nn1,nn2)]
+# continue
+nss=nSamples
+nss=nss[-c(nn1,nn2)]
+cols = c('tissue','nnets')
+df2 <- data.frame(matrix(ncol = length(cols), nrow = length(tissues)))
+colnames(df2) = cols
+df2['tissue']     = c(tissueVecWsc[-c(nn1,nn2)])
 nsamples[indnotInLionessTissues2]=2
+nsamples=nsamples[-c(nn1,nn2)]
 df2['nnets']      = nsamples
+newNames=c()
+for(i in 1:dim(df2)[1]){
+    newNames[i] = gsub("_"," ",df2[i,'tissue'])
+}
+df2['tissuename'] = newNames
+df2['tool1']       = 'PANDA'
+df2['tool2']       = 'PUMA'
+vecagg=rep("LIONESS", nTissues)
+vecagg[indnotInLionessTissues2]=""
+vecagg=vecagg[-c(nn1,nn2)]
+df2['tool3']      = vecagg
+df2['reg']        = rep("TF, miRNA", length(tissues))
+vecagg=rep("Aggregate, Single-sample", nTissues)
+vecagg[indnotInLionessTissues2]='Aggregate'
+vecagg=vecagg[-c(nn1,nn2)]
+df2['nettype']    = vecagg 
+df2['nsamples']   = nss
+df2['reftool1'] = 'https://netzoo.github.io/zooanimals/panda/'
+df2['reftool2'] = 'https://netzoo.github.io/zooanimals/puma/'
+vecagg=rep('https://netzoo.github.io/zooanimals/lioness/', nTissues)
+vecagg[indnotInLionessTissues2]=''
+vecagg=vecagg[-c(nn1,nn2)]
+df2['reftool3'] = vecagg
 setwd('/Users/mab8354/granddb/')
 write.csv(df2,"data/tissues.csv",row.names = FALSE)
 #s3:// could not download so I switched to https://granddb.s3.amazonaws.com
+tissues=tissuessave
 
 # 1.PUMA networks
 #clear variables
@@ -212,15 +245,19 @@ colnames(df3) = cols
 expLinkVec = vector()
 networkVec = vector()
 networkVec2= vector()
+pumaname = vector()
+pumaname2 = vector()
 expressionVec = vector()
 for(i in 1:nTissues){
     expLinkVec = c(expLinkVec, paste0("https://gtexportal.org/home/eqtls/tissue?tissueName=", tissues[i]))
     networkVec = c(networkVec, paste0("https://granddb.s3.amazonaws.com/tissues/networks/puma/",tissues[i], '_miRanda_PUMA.csv'))
     networkVec2= c(networkVec2, paste0("https://granddb.s3.amazonaws.com/tissues/networks/puma/",tissues[i], '_TargetScan_PUMA.csv'))
+    pumaname = c(pumaname, paste0(tissues[i], '_miRanda_PUMA'))
+    pumaname2= c(pumaname2, paste0(tissues[i], '_TargetScan_PUMA'))
     expressionVec = c(expressionVec, paste0("https://granddb.s3.amazonaws.com/tissues/expression/puma/",tissues[i], '_PUMA.csv'))
 }              
 
-tissueVec     = gsub('_',' ',colnames(netM)) #make sure to match tissues of netT (they do)  gsub('_',' ',colnames(netT)) == gsub('_',' ',colnames(netM)) 
+#tissueVec     = gsub('_',' ',tissues) #make sure to match tissues of netT (they do)  gsub('_',' ',colnames(netT)) == gsub('_',' ',colnames(netM)) 
 tissueLinkVec = expLinkVec 
 toolVec1      = rep("PUMA", nTissues)
 netzooVec     = rep("netZooM", nTissues)
@@ -237,9 +274,9 @@ refsVec2      = rep("https://zenodo.org/record/1313768#.XvlUDpNKi_t", nTissues)
 refsVec3      = rep("Kuijjer et al. (2020)", nTissues)
 regVec        = rep("miRNA", nTissues)
 motifDescVec  = rep("miRanda", nTissues)
-
+#here
 # Populate df3
-df3['tissue']     = c(tissueVec[4:41],tissueVec[4:41])
+df3['tissue']     = c(tissueVecsave,tissueVecsave)
 df3['tissueLink'] = c(tissueLinkVec,tissueLinkVec)
 df3['tool']       = c(toolVec1,toolVec1)
 df3['netzoo']     = c(netzooVec,netzooVec)
@@ -259,6 +296,8 @@ df3['refs2']      = c(refsVec2,refsVec2)
 df3['refs3']      = c(refsVec3,refsVec3)
 df3['reg']        = c(regVec,regVec)
 df3['motifDesc']  = c(motifDescVec,rep("TargetScan", nTissues))
+df3['awsname']    = c(pumaname,pumaname2)
+
 
 # Save to csv 
 tt=rbind(df,df3)

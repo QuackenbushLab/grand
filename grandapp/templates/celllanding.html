@@ -4,7 +4,7 @@
 <div class="hidden">
 <div class="row pt-3">
 
-  <h3 class="text-secondary" align="center">{{ slug }} cancer networks </h3>
+  <h3 class="text-secondary" align="center">{{ slugname }} networks </h3>
 
   <center>
     <div class="btn-group">
@@ -27,14 +27,29 @@
 </div>
 
 <div class="col-10 mt-4 pb-4 mb-4">
-  <div class="container row">
-
-    <div class="col">
-      <canvas id="scatterChart" width="50" height="30"></canvas>
-    </div>
-    <div class="col">
-      <canvas id="scatterChart2" width="50" height="30"></canvas>
-    </div>
+  <div class="row">
+    {% if slug == 'mirna' %}
+      <div class="col">
+        <canvas id="scatterChart" width="50" height="30"></canvas>
+      </div>
+      <div class="col">
+        <canvas id="scatterChart2" width="50" height="30"></canvas>
+      </div>
+    {% elif slug == 'lcl' or slug == 'fibroblast_gtex' %}
+      <div class="col">
+        <canvas id="scatterChart" width="50" height="30"></canvas>
+      </div>
+      <div class="col">
+        <canvas id="scatterChart2" width="50" height="30"></canvas>
+      </div>
+    {% else%}
+      <div class="col-md-6">
+        <canvas id="cellbartf" style="width:100%; height:300px;"></canvas>
+      </div>
+      <div class="col-md-6">
+        <canvas id="cellbargenes" style="width:100%; height:300px;"></canvas>
+      </div>
+    {% endif %}
 
   <p style="font-family: Helvetica; color: #333; padding: 1em 2em; font-size: 12px">
     To get the full list of phenotypic variables, please check the menu below.
@@ -47,22 +62,24 @@
           Networks
         </button>
       </h2>
-      <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-          <div class="container ">
+          <div class="container-fluid ">
         <div class="card ">
   <div class="card-body" id="networks">
     <h5 class="card-title">Tool description</h5>
-    <p class="card-text">{% if tool == 'panda' %}<a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. <a href="https://www.sciencedirect.com/science/article/pii/S2589004219300872">LIONESS</a> reconstructs patient-specific <a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> networks for each gene expression sample. 
-			    To download patient-specific networks, you can check <a href='#cardtissuetcga'>the phenotypic information of the TCGA dataset</a>{% if geo == 'yes' %} or <a href='#cardtissuegeo'>the phenotypic information of the {% if slug == 'Glioblastoma' %}GGN{% else %}GEO{% endif %} dataset</a>{% endif %}. You can also select the networks by
-                            clinical variables or download all the samples in a single file. 
-                            {% elif tool == 'otter' %}
-                            Like <a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a>, <a href="https://www.biorxiv.org/content/10.1101/2020.06.23.167999v2">OTTER</a> reconstructs a gene regulatory network from the TF PPI, TF DNA binding motif, and gene expression samples. 
-                            OTTER formulates network inference as a well-defined objective function that optimizes the graph matching of the three network priors. Check <a href='#cardtissuetcga'>the phenotypic information</a> for the clinical variables of the samples that were used to reconstruct the network.
-                            {% endif %}</p>
+    <p class="card-text">
+      {% if tooldrag == 'yes' %} 
+        <a href="https://netzoo.github.io/zooanimals/dragon/" style="text-decoration:none" target="_blank">DRAGON</a> builds multi-omic networks by computing partial corrleations between the variables using covariance shrinkage to accurately estimate conditional dependencies with low sample number. Check <a href="#cardtissuetcga" style="text-decoration:none" >the phenotypic information</a> for the clinical variables of the samples that were used to reconstruct the network. 
+      {% else %}
+        <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif as regulation prior, and gene expression samples.
+        {% if name == 'yes' %} <a href="https://netzoo.github.io/zooanimals/lioness/" style="text-decoration:none" target="_blank">LIONESS</a> reconstructs sample-specific <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> networks for each gene expression sample. To download sample-specific networks, you can check <a href="#cardtissuetcga" style="text-decoration:none">the phenotypic information</a> and select the networks by
+        variables of interest. {% else %}                                 <a href="https://netzoo.github.io/zooanimals/puma/" style="text-decoration:none" target="_blank">PUMA</a> reconstructs a gene regulatory network with miRNA as regulators using gene expression samples and miRNA predicted targets by <a href="http://cbio.mskcc.org/microrna_data/manual.html" style="text-decoration:none" target="_blank">miRanda</a> or <a href="http://www.targetscan.org/vert_72/" style="text-decoration:none" target="_blank">TargetScan</a> as regulation priors. The Regulator-regulator interaction matrix is set to the identity matrix in the algorithm. Check <a href="#cardtissuetcga" style="text-decoration:none" >the phenotypic information</a> for the clinical variables of the samples that were used to reconstruct the network. {% endif %}
+      {% endif %}  
+    </p>
         <table id="tissuestabletcga" class="table table-hover" style="width: 100%">
                 <thead>
-                  {% if slug == 'lcl' %}
+                  {% if slug == 'lcl' or slug == 'fibroblast_gtex' %}
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Tissue</th>
@@ -133,6 +150,7 @@
                       title="Network format"
                       data-bs-content="Please refer to the Help page Network section for the network download formats. You can download the script to reproduce the network using the R button.">
                     </i></th>
+                    {% if slug != 'mirna' %}
                     <th scope="col">PPI<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
@@ -142,9 +160,36 @@
                       data-bs-content="Directly download the PPI prior used for the generation of the network and check the link to the original PPI database and its version.">
                     </i></th>
                     <th scope="col">Motif</th>
-                    <th scope="col">Expression</th>
-                    <th scope="col">Reg</th>
-                    <th scope="col">nReg</th>
+                    {% else %}
+                    <th scope="col">miRNA Expression<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-placement="top"
+                      data-bs-animation="false"
+                      data-bs-content="miRNA expression.">
+                    </i></th>
+                    {% endif %}
+                    <th scope="col">{% if slug == 'mirna' %}Gene {% endif %}Expr.<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-placement="top"
+                      data-bs-animation="false"
+                      data-bs-content="Gene expression.">
+                    </i></th>
+                    <th scope="col">Reg.<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="Type of regulator e.g., TF or miRNA.">
+                    </i></th>
+                    <th scope="col">nReg<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="Number of regulators.">
+                    </i></th>
                     <th scope="col">Genes</th>
                     <th scope="col">Data</th>
                     <th scope="col">Samples</th>
@@ -161,23 +206,22 @@
                   {% endif %}
                 </thead>
                 <tbody>
-                  {% if slug == 'lcl' %}
+                  {% if slug == 'lcl' or slug == 'fibroblast_gtex' %}
                   {% for tissue in celllanding %}
                   <tr>
-                  <th scope="row">{{ forloop.counter }}</th>
-                  <td><a href="{{ tissue.tissueLink }}" class="text-decoration-none">{{ tissue.tissue }}</a></td>
+                  <th scope="row">{{ forloop.counter }}</th>   
+                  <td><a href="/networks/aggregate/{{ tissue.awsname }}/" style="text-decoration:none">{{ tissue.tissue }}</a></td>
                   <td>{{ tissue.tool }}</td>
                   <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none">{{ tissue.netzooRel }}</a></td>
-
-                      <td><div class="btn-group" role="group" aria-label="Basic example">
-                          <a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">R</a></div></td>
+                      <td><div class="btn-group-sm" role="group" aria-label="Basic example">
+                          <a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">Adj</a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="/networks/aggregate/{{ tissue.awsname }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
                   {% if tissue.tool == 'PUMA' %}
                       <td>{{ tissue.ppi }}</td>
                   {% else %} 
-                      <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}"><i class="fas fa-link"></i></a></td>
+                      <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
                   {% endif %}
                   <td><a href="{{ tissue.motif }}" class="text-decoration-none">{{ tissue.motifDesc }}</a></td>
-                  <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}"><i class="fas fa-link"></i></a></td>
+                  <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
                   <td>{{ tissue.reg }}</td>
                   <td>{{ tissue.tfs }}</td>
                   <td>{{ tissue.genes }}</td>
@@ -198,7 +242,7 @@
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                          Please check the reference {{ tissue.refs3 }} at the following <a href="{{ tissue.refs }}" target="_blank">link</a>.
+                          Please check the reference {{ tissue.refs3 }} at the following <a href="{{ tissue.refs }}" target="_blank" style="text-decoration:none">link</a>.
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -217,7 +261,7 @@
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                          Please check the reference {{ tissue.refs3 }} at the following <a href="{{ tissue.refs }}" target="_blank">link</a>.
+                          Please check the reference {{ tissue.refs3 }} at the following <a href="{{ tissue.refs }}" target="_blank" style="text-decoration:none">link</a>.
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -232,14 +276,17 @@
                  {% for tissue in celllanding %}
                     <tr>
                       <th scope="row">{{ forloop.counter }}</th>
-                      <td><a href="{{ tissue.cancerLink }}" class="text-decoration-none">{{ tissue.cancer }}</a></td>
+                      <td>{{ tissue.cancer }}</td>
                       <td>{{ tissue.tool }}</td>
                       <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none" target="_blank">{{ tissue.netzooRel }}</a></td>
-                      <td><div class="btn-group" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">co</a> 
-                        <a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">R</a></div></td>
-                      <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}"><i class="fas fa-link"></i></a></td>
-                      <td><a href="{{ tissue.motif }}"><i class="fas fa-download"></i></a></td>
-                      <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}"><i class="fas fa-link"></i></a></td>
+                      <td><div class="btn-group-sm" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">Adj</a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="{{ tissue.network }}" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                      {% if slug != 'mirna' %}
+                        <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
+                        <td><a href="{{ tissue.motif }}"><i class="fas fa-download"></i></a></td>
+                      {% else %}
+                        <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
+                      {% endif %}
+                      <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
                       <td>{{ tissue.reg }}</td>
                       <td>{{ tissue.tfs }}</td>
                       <td>{{ tissue.genes }}</td>
@@ -283,20 +330,20 @@
 <div class="accordion-item">
   <h2 class="accordion-header" id="headingTwo">
     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" id="cardtissuetcga">
-      Phenotypic information {% if slug == 'lcl' %}GTEx{% else %}CCLE{% endif %} 
+      Phenotypic information {% if slug == 'lcl' or slug == 'fibroblast_gtex' %}GTEx{% else %}CCLE{% endif %} 
     </button>
   </h2>
   <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
     <div class="accordion-body">
 
   <script>var offset=30</script>
-{% if slug == 'lcl' %}
-<div class="container">
+{% if slug == 'lcl' or slug == 'fibroblast_gtex' %}
+<div class="container-fluid">
     <div class="card" id="cardtissuetcga">
             <div class="card-body">
             <h5 class="card-title">Variable description</h5>
             <p class="card-text">{% if name == 'yes' %}You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges
-			    is 644 * 30243 (number of TFs * number of genes) (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a TF-by-gene
+			    is the number of TFs/miRNA * number of genes (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a TF-by-gene
             		    matrix named after  the GTEx sample reference{% else %} This is a description of the primary clinical variables of the gene expression samples that were used to generate the gene regulatory network{% endif %}.</p>
           <div class="row pb-4">
           <div class="col">
@@ -416,13 +463,13 @@
     </div>
 </div>
 {% else %} 
-<div class="container ">
+<div class="container-fluid ">
         <div class="card " id="cardtissuetcga">
           <div class="card-body">
           <h5 class="card-title">Variable description</h5>
-            <p class="card-text">You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges
-			    is 661 * 12817 (number of TFs * number of genes) (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a TF-by-gene
-                    matrix named after  the TCGA sample reference.</p>
+            <p class="card-text">{% if tooldrag == 'yes' %}This is a description of the primary phenotypic variables of the gene expression samples that were used to generate the gene regulatory network.{% else %}You can specify the sample network to download by phenotypic variable and you will get a TF/miRNA-by-gene
+                    matrix named after the CCLE sample reference. The number of edges
+			    is the number of TFs/miRNA * number of genes (~ 10<sup>6</sup>).{% endif%}</p>
           <div class="row pb-4">
           <div class="col">
             <canvas id="myPieChart" width="50" height="30"></canvas>   
@@ -475,6 +522,15 @@
                       data-bs-placement="top"
                       data-bs-content="Primary or metastatic">
                     </i></th>
+                    {% if slug != 'mirna' %}
+                    <th scope="col">Cancer<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="Cancer type">
+                    </i></th>
+                    {% endif %}
                     <th scope="col">TCGA code<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
@@ -482,19 +538,21 @@
                       data-bs-placement="top"
                       data-bs-content="Cancer code from TCGA (https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga)">
                     </i></th>
+                    {% if slug != 'mirna' %}
                     <th scope="col">Network<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
                       data-bs-animation="false"
                       data-bs-placement="top"
-                      data-bs-content="Please refer to the Help page Network section for the network download formats">
+                      data-bs-content="Please refer to the Help page Network section for the network download formats. Adj: Adjacency matrix, Vis: Visualization">
                     </i></th>
+                    {% endif %}
                   </tr>
                 </thead>
                 <tbody>
                  {% for tissue in cellsample %}
                     <tr>
-                      <td>{{ tissue.depmap }}</td>
+                      <td><a href="/networks/aggregate/{{ tissue.cleanname }}/" style="text-decoration:none">{{ tissue.depmap }}</a></td>
                       <td>{{ tissue.stripcellname }}</td>
                       <td>{{ tissue.cosmicid }}</td>
                       <td>{{ tissue.sex }}</td>
@@ -502,8 +560,13 @@
                       <td>{{ tissue.culture }}</td>
                       <td>{{ tissue.collsite }}</td>
                       <td>{{ tissue.prim }}</td>
+                      {% if slug != 'mirna' %}
+                      <td>{{ tissue.disease }}</td>
+                      {% endif %}
                       <td>{{ tissue.tcga }}</td>
-                      <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">co</a><br><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span></td>
+                      {% if slug != 'mirna' %}
+                      <td><div class="btn-group-sm" role="group" aria-label="Basic example"><a href="https://granddb.s3.us-east-2.amazonaws.com/cells/networks/ccle/{{ tissue.depmap }}.csv" class="btn btn-outline-primary" role="button">Adj</a><br><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span><a href="/networks/aggregate/{{ tissue.cleanname }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                      {% endif %}
                     </tr>
                   {% endfor %}
                 </tbody>
@@ -517,8 +580,13 @@
                     <th>Culture</th>
                     <th>Collection site</th>
                     <th>Type</th>
+                    {% if slug != 'mirna' %}
+                    <th>Cancer</th>
+                    {% endif %}
                     <th>TCGA code</th>
+                    {% if slug != 'mirna' %}
                     <th>Network</th>
+                    {% endif %}
                   </tr>
                 </tfoot>
               </table>
@@ -572,7 +640,6 @@ $(document).ready(function() {
 
 
 <script src="{% static 'js/pieChartcells.js' %}"></script>
-<script src="{% static 'js/scatterChartcell.js' %}"></script>
 
 <script>
   $(document).ready(function () {
@@ -580,6 +647,11 @@ $(document).ready(function() {
 });
 
 </script>
+
+
+<script src="{% static 'js/exptfs.js' %}"></script>
+<script src="{% static 'js/scatterChartcell.js' %}"></script>
+
 
 </body>
 </html>

@@ -49,26 +49,39 @@ $(document).ready(function() {
     var x = -container.clientWidth +50 ;
     var y = -container.clientHeight / 2 + 50;
     var step = 170;
+
+    if (slug.substr(-4) == 'PUMA'){
     nodes.push({
-      id: 1000,
+      id: 1003,
       x: x,
       y: y,
-      label: "TF",
-      shape: "triangle",
+      label: "miRNA",
+      group: "mir",
       value: 36,
-      color: "#98c4e1",
       fixed: true,
       physics: false,
       font: { size: 24},
     });
+  }else{
     nodes.push({
-      id: 1001,
+      id: 1003,
+      x: x,
+      y: y,
+      label: "TF",
+      group: "tf",
+      value: 36,
+      fixed: true,
+      physics: false,
+      font: { size: 24},
+    });
+  }
+    nodes.push({
+      id: 1004,
       x: x,
       y: y + step,
       label: "Gene",
-      shape: "circle",
+      group: "exp",
       value: 36,
-      color: "#d7cad1",
       fixed: true,
       physics: false,
       font: { size: 24},
@@ -100,10 +113,26 @@ $(document).ready(function() {
         navigationButtons: true,
         keyboard: true,
       },
+      autoResize: true,
 
       configure: {
         container: document.getElementById("config"),
         showButton: false,
+      },
+      groups: {
+        exp: {
+          shape: "circle",
+          color: "#d7cad1", // blue
+        },
+
+        mir: {
+          shape: "square",
+          color: "#C5000B", // red
+        },
+        tf: {
+          shape: "triangle",
+          color: "#98c4e1", // green
+        },
       },
       //configure: {
       //  filter: function (option, path) {
@@ -138,12 +167,10 @@ $(document).ready(function() {
     network.on("afterDrawing", function (ctx) {
       var dataURL = ctx.canvas.toDataURL();
       document.getElementById('mynetwork').src = dataURL;
+      //network.fit();
     });
 
   }
-
-
-
   var button = document.getElementById('btn-download');
   button.addEventListener('click', function (e) {
       var dataURL = document.getElementById('mynetwork').src;

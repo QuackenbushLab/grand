@@ -1,16 +1,39 @@
 import pandas as pd
 import numpy as np
+import os
 
+os.chdir('/Users/mab8354/netzoopap')
+
+# First read dragon network
+# Parameters
+imputationMissing='zero'
+# 0. Load metadata
+cellNames=pd.read_csv('data/sample_info.csv')
+# II. MiRna-mRNA
+# 1. Read miRNA and mRNA
+mirna=pd.read_csv('data/CCLE_miRNA_20181103.gct',sep='\t',comment='#',skiprows=2,index_col=1)
+expression=pd.read_csv('data/CCLE_expression.csv',index_col=0)
+# 2. remove unnecessary columns
+mirna = mirna.iloc[:,1:]
+# 3. convert cell names to depmap IDs
+mirna=convertToDepMap(mirna,cellNames)
+# 4. align dataframes
+expression,mirna=alignDF(expression,mirna,remove_std=1)
+
+# Next cell line
 os.chdir('/Users/mab8354/')
-
 cellinfo = pd.read_csv('granddb/data/sample_info.csv',index_col=0)
 exprs    = pd.read_csv('netzoopap/data/CCLE_expression.csv',index_col=0)
 ccleanno = pd.read_csv('granddb/data/Cell_lines_annotations_20181226.txt',sep='\t',index_col=1)
+intercells= np.intersect1d(exprs.index, cellinfo.index)
 # replace NA
 ccleanno.index = ccleanno.index.fillna('')
 
 # Add mutation rate and doubling time
 a = np.intersect1d( cellinfo.index, ccleanno.index )
+# present in expression
+cellinfo['presexp'] = 0
+cellinfo['presexp'].loc[intercells] = 1
 # mutrate
 cellinfo['mutRate'] = np.nan
 cellinfo['mutRate'].loc[a] = ccleanno['mutRate'].loc[a]
@@ -27,9 +50,26 @@ cellinfo['race'].replace()
 # size
 cellinfo['size'] = '359 MB'
 # replace empty
+cellinfo['dummy'] = '-'
+cellinfo['dummy'].loc[intercells] = 'dragon'
 cellinfo.replace(np.nan,
            "-",
            inplace=True)
+# differmtillay expressed tfs (bardata from buildDiffReg.py)
+cellinfo['diffexp'] = 0
+cellinfo['diffexp'].loc[intercells] = bardata.loc[intercells]
+cellinfo['difftar'] = 0
+cellinfo['difftar'].loc[intercells] = bardatatar.loc[intercells]
+cellinfo['difftargenes'] = 0
+cellinfo['difftargenes'].loc[intercells] = bardatagenestar.loc[intercells]
+cellinfo['diffexpgenes'] = 0
+cellinfo['diffexpgenes'].loc[intercells] = bardatagenes.loc[intercells]
+# clean names
+newname=[]
+for name in cellinfo.index:
+    newname.append('_'.join(str.split(name,'-')))
+
+cellinfo['cleanname'] = newname
 # save df
 cellinfo.to_csv('granddb/data/sample_info_aug.csv')
 
@@ -144,11 +184,15 @@ resDflanding.loc[len(resDflanding.index)] = ['LCL','lcl','','PANDA','netZooM','h
 resDflanding.loc[len(resDflanding.index)] = ['Fibroblast','fibroblast','','PANDA','netZooM','https://github.com/netZoo/netZooM/releases','0.1'
     ,'','','','','','',0,0,'Lopes-Ramos, Paulsson et al. (2017)',0,'','','GTEX','','TF']
 resDflanding.loc[len(resDflanding.index)] = ['All','mirna','','DRAGON','netZooPy','https://github.com/netZoo/netZooPy/releases','0.8'
-    ,'','','','','','',734,19174,'Ben Guebila et al. (in preparation)',938,'','','CCLE','','miRNA']
+    ,'https://granddb.s3.us-east-2.amazonaws.com/cells/networks/mirna/dragon_mirna_CCLE.csv','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/CCLE_miRNA_20181103.gct','https://portals.broadinstitute.org/ccle','','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/CCLE_expression.csv','https://portals.broadinstitute.org/ccle',734,19174,'',938,'#cardtissuetcga','','CCLE','miRNA','Ben Guebila et al. (in preparation)']
+# add vis link
+resDflanding['cancerLink'] = '/networks/aggregate/colon_cancer1/'
 resDflanding.to_csv('granddb/data/celllanding.csv',index=False)
 
 
-dictlist=[]
-for key, value in cc.items():
-    temp = [key,value]
-    dictlist.append(value)
+df=pd.read_csv('Colon_cancer_TCGA.csv',index_col=0)
+df = df.iloc[0:100,0:1000]
+df.to_csv('~/Downloads/Colon_cancer_TCGA_example.csv')
+
+object_key = 'Colon_cancer_TCGA.csv'
+df = fetchNetwork(object_key)
