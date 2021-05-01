@@ -50,7 +50,7 @@ class CancerlandingSerializer(serializers.ModelSerializer):
 class DruglandingSerializer(serializers.ModelSerializer):
         class Meta:
                 model  = Druglanding
-                fields = ('number','drug','tool','netzoo','netzooRel','network','ppi','motif','expression','tfs','genes','ppiLink','refs','samples','expLink','nnets','druglink')
+                fields = ('number','drug','tool','netzoo','netzooRel','network','ppi','motif','expression','tfs','genes','ppiLink','refs','samples','expLink','nnets','druglink','nsamples','avgtftar','avggenetar')
 
         def to_representation(self, instance):
                 data = super().to_representation(instance)

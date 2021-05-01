@@ -88,6 +88,9 @@ class Druglanding(models.Model):
     expLink   = models.URLField()
     nnets     = models.IntegerField(default=0)
     druglink  = models.CharField(max_length=200)
+    nsamples      = models.CharField(max_length=400)
+    avgtftar      = models.CharField(max_length=400)
+    avggenetar    = models.CharField(max_length=400)
 
 class DrugResultUp(models.Model):
     idd       = models.IntegerField(default=0)
@@ -259,6 +262,7 @@ class Tissuesample(models.Model):
     smtstptref  = models.CharField(max_length=600)
     smmncpb     = models.CharField(max_length=600)
     smgnsdtc    = models.CharField(max_length=600)
+    cleanname   = models.CharField(max_length=600)
 
 class Tcgasample(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
@@ -392,6 +396,12 @@ class Drugsample(models.Model):
     infl            = models.CharField(max_length=200) 
     links           = models.CharField(max_length=200)
     linksTF         = models.CharField(max_length=200)
+    diffexp       = models.CharField(max_length=400)
+    diffexpgenes  = models.CharField(max_length=400)
+    difftar       = models.CharField(max_length=400)
+    difftargenes  = models.CharField(max_length=400)
+    cleannames = models.CharField(max_length=400)
+
 
 class Drugdesc(models.Model):
     expected_mass  = models.CharField(max_length=200)

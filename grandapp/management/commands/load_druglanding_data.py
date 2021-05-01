@@ -51,4 +51,7 @@ class Command(BaseCommand):
             drugslanding.expLink      = row['expLink']
             drugslanding.nnets        = row['nnets']
             drugslanding.druglink     = row['druglink']
+            drugslanding.avgtftar     = row['avgtftar']
+            drugslanding.avggenetar     = row['avggenetar']
+            drugslanding.nsamples     = row['nsamples']
             drugslanding.save()

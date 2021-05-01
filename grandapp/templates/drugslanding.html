@@ -65,7 +65,7 @@
 {% if drugdesc.pubchem_cid == 'NaN' %}
 <div class="col-md-3">-</div>
 {% else %}
-<div class="col-md-3"><a href="https://pubchem.ncbi.nlm.nih.gov/compound/{{ drugdesc.pubchem_cid }}" class="text-decoration-none">{{ drugdesc.pubchem_cid }}</a></div>
+<div class="col-md-3"><a href="https://pubchem.ncbi.nlm.nih.gov/compound/{{ drugdesc.pubchem_cid }}" class="text-decoration-none" target="_blank">{{ drugdesc.pubchem_cid }}</a></div>
 {% endif %}
 </div>
 </li>
@@ -87,12 +87,20 @@
 </div>
 
 <div class="container col-10 mt-4">
+  <div class="row">
+    <div class="col-md-6">
+      <canvas id="cellbartf" style="width:100%; height:300px;"></canvas>
+    </div>
+    <div class="col-md-6">
+      <canvas id="cellbargenes" style="width:100%; height:300px;"></canvas>
+    </div>
+  </div>
   <div class="card">
   <h5 class="card-header">Networks</h5>
   <div class="card-body">
     <h5 class="card-title">Tool description</h5>
-    <p class="card-text"><a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. <a href="https://www.sciencedirect.com/science/article/pii/S2589004219300872">LIONESS</a> reconstructs patient-specific <a href="https://www.ncbi.nlm.nih.gov/pubmed/23741402">PANDA</a> networks for each gene expression sample. 
-			    To download sample-specific TF and gene targeting profiles i.e., the TF weighted outdegree and gene weighted indgree in the regulatory network, you can check <a href='#carddrug'>the phenotypic information</a> section. You can also select the networks by
+    <p class="card-text"><a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. <a href="https://netzoo.github.io/zooanimals/lioness/" style="text-decoration:none" target="_blank">LIONESS</a> reconstructs sample-specific <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> networks for each gene expression sample. 
+			    To download sample-specific TF and gene targeting profiles i.e., the TF weighted outdegree and gene weighted indgree in the regulatory network, you can check <a href='#carddrug' style="text-decoration:none">the phenotypic information</a> section. You can also select the networks by
                             variables such as cell line, drug dose, and sampling time point or download all the samples in a single file.</p>
         <table id="drugstable" class="table table-hover" style="width: 100%">
                 <thead>
@@ -107,7 +115,7 @@
                       data-bs-placement="top"
                       data-bs-animation="false"
                       title="Network format"
-                      data-bs-content="Please refer to the Help page Network section for the network download formats.">
+                      data-bs-content="Please refer to the Help page Network section for the network download formats. gt: gene targeting, tt: transcription factor targeting">
                     </i></th>
                     <th scope="col">PPI<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
@@ -137,11 +145,11 @@
 		 {% for drug in drugslanding %}
 		    <tr>
 		    <th scope="row">{{ drug.number }}</th>
-		    <td><a href = "{{ drug.refs }}" class="text-decoration-none">{{ drug.drug }}</a></td>
+		    <td><a href = "{{ drug.refs }}" class="text-decoration-none" target="_blank">{{ drug.drug }}</a></td>
 		    <td>{{ drug.tool }}</td>
-		    <td>{{ drug.netzoo }} <a href="https://github.com/netZoo/netZooM/releases" class="text-decoration-none">{{ drug.netzooRel }}</a></td>
-                    <td><div class="btn-group" role="group" aria-label="Basic example"><a href="#carddrug" class="btn btn-outline-primary" role="button">gto/tto</a>
-                    <a href="https://granddb.s3.amazonaws.com/drugs/scripts/reproducedrug1Network.m" class="btn btn-outline-danger" role="button">R</a></div></td>
+		    <td>{{ drug.netzoo }} <a href="https://github.com/netZoo/netZooM/releases" class="text-decoration-none" target="_blank">{{ drug.netzooRel }}</a></td>
+                    <td><div class="btn-group" role="group" aria-label="Basic example"><a href="#carddrug" class="btn btn-outline-primary" role="button">gt/tt</a>
+                    <a href="https://granddb.s3.amazonaws.com/drugs/scripts/reproducedrug1Network.m" class="btn btn-outline-danger" role="button">Code</a><a href="#carddrug" class="btn btn-outline-success" role="button">Vis</a></div></td>
 	            <td><a href="{{ drug.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ drug.ppiLink }}"><i class="fas fa-link"></i></a></td>
                     <td><a href="{{ drug.motif }}"><i class="fas fa-download"></i></a></td>
                     <td><a href="{{ drug.expression }}"><i class="fas fa-download"></i></a> <a href="{{ drug.expLink}}"><i class="fas fa-link"></i></a></td>
@@ -149,7 +157,7 @@
                     <td><a href="/genes" class="text-decoration-none">{{ drug.genes }}</a></td>
                     <td><a href="#carddrug" class="text-decoration-none">{{ drug.samples }}</a> </td>
                     <td><span class="badge rounded-pill bg-success">S</span></td>
-		    <td><a href="{{ drug.refs }}"><i class="fas fa-book"></i></a></td>
+		    <td><a href="{{ drug.refs }}" target="_blank"><i class="fas fa-book"></i></a></td>
                     </tr>
 		 {% endfor %}
                 </tbody>
@@ -160,14 +168,31 @@
 
 
 
-
+<script>var offset=30</script>
 <div class="container col-10 pb-4 mb-4 mt-4">
         <div class="card" id="carddrug">
   <h5 class="card-header">Phenotypic information</h5>
   <div class="card-body">
     <h5 class="card-title">Signature description</h5>
+    <div class="row pb-4">
+      <div class="col">
+        <canvas id="myPieChart" width="50" height="30"></canvas>   
+      </div>
+      <div class="col">
+        <canvas id="myPieChartETH" width="50" height="30"></canvas>   
+      </div>
+      <div class="col">
+        <canvas id="myPieChartAL" width="50" height="30"></canvas>   
+      </div>
+      <div class="col">
+        <canvas id="myPieChartStage" width="50" height="30"></canvas>   
+      </div>
+      <div class="col">
+        <canvas id="myPieChartVital" width="50" height="30"></canvas>   
+      </div>
+    </div>
     <p class="card-text">You can either download the gene targeting (sum of weighted in-degree in the network) or TF targeting (sum of weighted out-degree in the network). You can download the targeting profiles of all the samples to get a matrix of size the number of samples by the number of genes/TFs. Otherwise, you can specify the sample targeting profile to download and you will get a TF/gene vector
-            		    named after the <a href="https://clue.io/">CLUE</a> sample reference.</p>
+            		    named after the <a href="https://clue.io/" style="text-decoration:none" target="_blank">CLUE</a> sample reference.</p>
         <table id="drugstable2" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
@@ -192,26 +217,12 @@
                       data-bs-placement="top"
                       data-bs-content="pert itime">
                     </i></th>
-                    <th scope="col">Rep.<br><i class="far fa-question-circle"
-                      data-bs-toggle="popover"
-                      data-bs-trigger="hover"
-                      data-bs-animation="false"
-                      data-bs-placement="top"
-                      data-bs-content="replicates (distil nsample)">
-                    </i></th>
                     <th scope="col">Cell<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
                       data-bs-animation="false"
                       data-bs-placement="top"
                       data-bs-content="cell type">
-                    </i></th>
-                    <th scope="col">Mod.<br><i class="far fa-question-circle"
-                      data-bs-toggle="popover"
-                      data-bs-trigger="hover"
-                      data-bs-animation="false"
-                      data-bs-placement="top"
-                      data-bs-content="Modification">
                     </i></th>
                     <th scope="col">Type<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
@@ -227,7 +238,6 @@
                       data-bs-placement="top"
                       data-bs-content="Primary site">
                     </i></th>
-                    <th scope="col">Subtype</th>
                     <th scope="col">Growth<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
@@ -261,14 +271,7 @@
                       data-bs-trigger="hover"
                       data-bs-animation="false"
                       data-bs-placement="top"
-                      data-bs-content="Please refer to the Help page Network section for the network download formats.">
-                    </i></th>
-                    <th>Infl.<br><i class="far fa-question-circle"
-                      data-bs-toggle="popover"
-                      data-bs-trigger="hover"
-                      data-bs-animation="false"
-                      data-bs-placement="top"
-                      data-bs-content="Influence of observation on network reconstruction. 0=low, 1=high. High values could be due to outliers or strong transcriptional signatures.">
+                      data-bs-content="Please refer to the help page network section for the network download formats. gt: gene targeting, tt: transcription factor targeting">
                     </i></th>
                   </tr>
                 </thead>
@@ -289,21 +292,35 @@
                     {% endif %}
                     <td>{{ drug.pert_idose }}</td>
                     <td>{{ drug.pert_itime }}</td>
-                    <td>{{ drug.distil_nsample }}</td>
                     <td><small>{{ drug.cell_type }}</small></td>
-                    <td><small>{{ drug.modification }}</small></td>
                     <td>{{ drug.sample_type }}</td>
                     <td>{{ drug.primary_site }}</td>
-                    <td><small>{{ drug.subtype }}</small></td>
                     <td>{{ drug.original_growth_pattern }}</td>
                     <td>{{ drug.donor_age }}</td>
                     <td>{{ drug.donor_sex }}</td>
                     <td>{{ drug.donor_ethnicity }}</td>
-                    <td><div class="btn-group-vertical"><a href="{{ drug.links }}" class="btn btn-outline-primary" role="button">gto</a>
-                    <a href="{{ drug.linksTF }}" class="btn btn-outline-primary" role="button">tto</a></div></td>
-                    <td><small>{{ drug.infl }}</small></td>
+                    {% if drug.cell_id == 'All' %}
+                      <td><div class="btn-group-vertical"><a href="{{ drug.links }}" class="btn btn-outline-primary" role="button">gt</a><a href="{{ drug.linksTF }}" class="btn btn-outline-primary" role="button">tt</a></div></td>
+                    {% else %}  
+                      <td><div class="btn-group-vertical"><a href="{{ drug.links }}" class="btn btn-outline-primary" role="button">gt</a><a href="{{ drug.linksTF }}" class="btn btn-outline-primary" role="button">tt</a><a href="/networks/drugtarg/{{ drug.cleannames }}" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                    {% endif %}  
                  {% endfor %}
                 </tbody>
+                <tfoot>
+                  <tr id='tfoot2'>
+                    <th>Cell</th>
+                    <th>Dose</th>
+                    <th>Time</th>
+                    <th>Cell</th>
+                    <th>Type</th>
+                    <th>Site</th>
+                    <th>Growth</th>
+                    <th>Age</th>
+                    <th>Sex</th>
+                    <th>Ethnicity</th>
+                    <th>Network</th>
+                  </tr>
+                </tfoot>
               </table>
 </div>
 </div>
@@ -317,6 +334,12 @@
 
 // Basic example
 $(document).ready(function() {
+  $('#tfoot2 th').each( function (i) { //tcga
+        var title = $(this).text();
+        $(this).html( '<input size=7 id="id'+i+offset+'" type="text" placeholder="Search '+title+'" />' );
+        i++;
+    } );
+
     //datatables
     $('#drugstable').DataTable({
       "scrollX": true,
@@ -325,18 +348,17 @@ $(document).ready(function() {
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
     });
 
-    $('#drugstable2').DataTable({
-      "scrollX": true,
-      "order": [[ 1, "asc" ]],
-      "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
-             "<'row'<'col-sm-12'tr>>" +
-             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-    });
 } );
 </script>
 
 
+<script>
+  var slug="{{ slug }}";
+  var data2=JSON.parse("{{data|escapejs}}");
+</script>
 
+<script src="{% static 'js/exptfsdrug.js' %}"></script>
+<script src="{% static 'js/pieChartdrugs.js' %}"></script>
 </body>
 </html>
 

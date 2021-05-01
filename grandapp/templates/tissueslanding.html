@@ -125,7 +125,7 @@
                           <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none" target="_blank">{{ tissue.netzooRel }}</a></td>
                           {% if tissue.tool == 'PANDA-LIONESS' %}
                               <td><div class="btn-group-sm" role="group" aria-label="Basic example">
-                                  <a class="btn btn-outline-primary" role="button"  href="#cardtissue" role="button">Adj</a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="/networks/aggregate/{{ tissue.awsname }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                                  <a class="btn btn-outline-primary" role="button"  href="#cardtissue" role="button">Adj</a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="#cardtissue" class="btn btn-outline-success" role="button">Vis</a></div></td>
                           {% else %}
                               <td><div class="btn-group-sm" role="group" aria-label="Basic example">
                                   <a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">Adj</a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="/networks/aggregate/{{ tissue.awsname }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
@@ -324,7 +324,11 @@
                 <tbody>
                  {% for tissue in tissuesample %}
                     <tr>
-                    <td>{{ tissue.sampleid }}</td>
+                    {% if tissue.sampleid == 'All' %}
+                        <td>{{ tissue.sampleid }}</td>
+                    {% else %}
+                        <td><a href="/networks/aggregate/{{ tissue.cleanname }}/" style="text-decoration:none">{{ tissue.sampleid }}</a></td>
+                    {% endif %}
                     <td>{{ tissue.subjectid }}</td>
                     <td>{{ tissue.gender }}</td>
                     <td>{{ tissue.age }}</td>
@@ -339,7 +343,7 @@
                     {% if tissue.sampleid == 'All' %}
                         <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">Edg</a><br><span class="badge bg-secondary rounded-pill"><small>{{ tissue.size }}</small></span></td>
                     {% else %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">Adj</a><br><span class="badge bg-light text-dark rounded-pill"><small>{{ tissue.size }}</small></span></td>
+                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">Adj</a><br><span class="badge bg-light text-dark rounded-pill"><small>{{ tissue.size }}</small></span><a href="/networks/aggregate/{{ tissue.cleanname }}/" class="btn btn-outline-success" role="button">Vis</a></td>
                     {% endif %}
                     {% endif %}
                  {% endfor %}
@@ -410,12 +414,13 @@ $(document).ready(function() {
   </script>
 
 <script>
-  var slug='lcl';
+  var slug2='lcl';
+  var slug="{{ slug }}";
   var data2=JSON.parse("{{data|escapejs}}");
 </script>
+<script src="{% static 'js/scatterChartcell.js' %}"></script>
 
 <script src="{% static 'js/pieChartcells.js' %}"></script>
-<script src="{% static 'js/scatterChartcell.js' %}"></script>
 
 <script>
   $(document).ready(function () {

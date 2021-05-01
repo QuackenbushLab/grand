@@ -1,17 +1,54 @@
 {% load static %} 
 {% include "header.html" %}
 
-
 <div class="container col-9 pb-5 mb-5 mt-4">
+<canvas id="cancerbubble" style="width:100%; height:400px;"></canvas>
+<p style="font-family: Helvetica; color: #333; padding: 1em 2em; font-size: 12px">
+  Differentially targeted TFs and genes per drug on a logarithm scale. Bubble size is equal to the logarithm of the number of samples per drug.
+</p>
+<div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        Small molecules
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+
         <table id="drugstable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Drug</th>
-                    <th scope="col">Types of networks</th>
+                    <th scope="col">Number of samples<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-placement="top"
+                      data-bs-animation="false"
+                      data-bs-content="Number of samples that assayed this compund in different cell lines, doses, and sampling times.">
+                    </i></th>
+                    <th scope="col">Average TF targeting<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-placement="top"
+                      data-bs-animation="false"
+                      data-bs-content="Average number of differentially targeted TFs across samples.">
+                    </i></th></th>
+                    <th scope="col">Average gene targeting<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-placement="top"
+                      data-bs-animation="false"
+                      data-bs-content="Average number of differentially targeted genes across samples.">
+                    </i></th></th>
                   </tr>
                 </thead>
               </table>
+</div>
+</div>
+</div>
+</div>
 </div>
 
 </div>
@@ -22,24 +59,15 @@
 // Basic example
 $(document).ready(function() {
     //datatables
-    $('#drugstable').DataTable({
-     "ajax": "http://127.0.0.1:8000/api/v1/drugapi/?format=datatables",
 
-     "serverSide": true,
-     "processing": true,
-
-      "columns": [
-          {"data": "number"},
-          {"data": "druglink"},
-          {"data": "nnets"},
-      ],
-
-      "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
-             "<'row'<'col-sm-12'tr>>" +
-             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-    });
 } );
 </script>
+
+<script> 
+  var data2 = JSON.parse("{{data|escapejs}}");  
+</script>
+
+<script src="{% static 'js/bubbleChartdrugs.js' %}"></script>
 
 
 

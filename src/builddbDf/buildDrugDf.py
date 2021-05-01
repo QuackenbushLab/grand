@@ -75,7 +75,7 @@ for drug in drugs:
         genesVec.append(12328)
         toolVec.append(netTypes[netl])
         drugVecApi.append(drug)
-        druglink.append('<a href="https://grand.networkmedicine.org/drugs/' + drug +'_drug">'+drug+'</a>')
+        druglink.append('<a style="text-decoration:none" href="https://grand.networkmedicine.org/drugs/' + drug +'_drug">'+drug+'</a>')
         networkVecApi.append('https: /granddb.s3.amazonaws.com/drugs/drugNetwork/' + netFolder[netl] + '/' + drug + '.csv')
         samplesVec.append(samples[nDrugs])
         expressionVecApi.append('s3://granddb/drugs/drugExpression/' + drug + '.txt')

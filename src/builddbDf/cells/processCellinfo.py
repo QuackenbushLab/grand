@@ -189,10 +189,3 @@ resDflanding.loc[len(resDflanding.index)] = ['All','mirna','','DRAGON','netZooPy
 resDflanding['cancerLink'] = '/networks/aggregate/colon_cancer1/'
 resDflanding.to_csv('granddb/data/celllanding.csv',index=False)
 
-
-df=pd.read_csv('Colon_cancer_TCGA.csv',index_col=0)
-df = df.iloc[0:100,0:1000]
-df.to_csv('~/Downloads/Colon_cancer_TCGA_example.csv')
-
-object_key = 'Colon_cancer_TCGA.csv'
-df = fetchNetwork(object_key)

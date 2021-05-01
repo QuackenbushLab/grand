@@ -137,13 +137,17 @@ paste `sudo nano /etc/systemd/system/gunicorn.service`
 
 `sudo systemctl restart gunicorn`
 
-Nginx
+**Nginx
 
 `debug=FALSE` in settings
 
 paste in `sudo nano /etc/nginx/sites-available/granddb` (and change IP address here)
 
 `sudo ln -s /etc/nginx/sites-available/granddb /etc/nginx/sites-enabled`
+
+allow file uploads up to 500 mb
+
+sudo nano /etc/nginx/nginx.conf
 
 sudo nginx -t
 

@@ -317,7 +317,7 @@
                       data-bs-animation="false"
                       data-bs-placement="top"
                       data-bs-html="true"
-                      data-bs-content="Enter GWAS catalog term for example AIDS progression. Please check <a href='https://grand.networkmedicine.org/gwas/'>the GWAS catalog page</a> for a full term list.">
+                      data-bs-content="Enter GWAS catalog term for example AIDS progression. Please check <a href='https://grand.networkmedicine.org/gwascatalog/'>the GWAS catalog page</a> for a full term list.">
                     GWAS</a></small>
                   </div>
                   <br>
@@ -476,6 +476,7 @@
 
 
 <script>
+  var slug="{{ slug }}";
   var slidertartf = document.getElementById("myEdgeTartf");
   var outputtartf = document.getElementById("demo2Tartf");
   outputtartf.innerHTML = slidertartf.value;

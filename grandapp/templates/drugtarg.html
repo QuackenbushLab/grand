@@ -7,12 +7,6 @@
         <div class="card-header">
             <ul class="nav nav-pills card-header-pills" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                  {% if activetab == 'tar' %}
-                  <a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">Network</a>
-                  {% else %}
-                  <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">Network</a>
-                  {% endif %}
-                  <img src="{% static 'images/network.svg' %}" style="width: 115px; height:25px">
                 </li>
                 <li class="nav-item" role="presentation">
                   {% if activetab == 'tar' %}
@@ -248,7 +242,7 @@
               <div class="col-2 border border-secondary">
                 <h5><span class="badge bg-secondary">Genes</span></h5>
                 <div>
-                  <form action="{% url 'taragg' slug %}" role="form" method="post">
+                  <form action="{% url 'drugtarg' slug %}" role="form" method="post">
                     {% csrf_token %}
                     {{ tarform.nedgestar }}
                     <p>Value: <span id="demo2Tar"></span></p>

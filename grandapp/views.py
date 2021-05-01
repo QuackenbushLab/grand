@@ -45,7 +45,7 @@ import mygene
 import networkx as nx #for network analysis
 mg = mygene.MyGeneInfo()
 
-def convertGenelist(geneform,how='sym'):
+def convertGenelist(geneform,how='sym',mod='notfound'):
     #geneform=str.split(geneform,'\r\n')
     # convert to gene symbols
     if how=='ens':
@@ -53,8 +53,9 @@ def convertGenelist(geneform,how='sym'):
     else:
         geneSyms = mg.querymany(geneform , scopes=["ensemblgene", "symbol"], fields='symbol', species='human',as_dataframe=True)
     #remove nonconverted genes
-    if 'notfound' in geneSyms.columns:
-        geneSyms=geneSyms[geneSyms.notfound != True]
+    if mod=='notfound':
+        if 'notfound' in geneSyms.columns:
+            geneSyms=geneSyms[geneSyms.notfound != True]
     if how=='ens':
         geneform = geneSyms['ensembl.gene'].values
     else:
@@ -90,14 +91,17 @@ def pathways(request):
     gobp = Gobp.objects.all()
     return render(request, 'pathways.html',{'gobp':gobp})
 
-def gwas(request):
+def gwascatalog(request):
     return render(request, 'gwas.html')
 
 def networksagg(request,slug):
     if request.method == 'GET':
         # network form
         form = NetForm({'dt':'no','topbottom':'Largest','nedges':100,'tfgenesel':'nosel'})
-        nodes = pd.DataFrame(data=['TF','Gene'])
+        if slug.split('_')[-1] == 'PUMA':
+            nodes = pd.DataFrame(data=['miRNA','Gene'])
+        else:
+            nodes = pd.DataFrame(data=['TF','Gene'])
         nodes['id']   = [0,1]
         nodes.columns = ['label','id']
         if slug.split('_')[-1] == 'PUMA':
@@ -121,7 +125,7 @@ def networksagg(request,slug):
         formtar = TarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100,'tfgeneseltar':'nosel'})
         clueform = ClueForm({'tfgeneselclue':'by gene'})
         if form.is_valid():
-            nedges    = int(request.POST['nedges'])
+            nedges     = int(request.POST['nedges'])
             topbottom  = request.POST['topbottom']
             dt         = request.POST.get('dt', False)
             brd        = request.POST.get('brd', False)
@@ -142,6 +146,7 @@ def networksagg(request,slug):
                 genetar= df.sum(axis=0)
             if dt=='dee':
                 object_key=mapObjectkey(slug,modality='expression')
+                print(object_key)
                 deDf=fetchNetwork(object_key)
                 deDfmean = deDf.values.mean()
                 deDf = deDf.mean(axis=1)
@@ -168,39 +173,16 @@ def networksagg(request,slug):
             nodes = pd.DataFrame(data=np.concatenate((b1,b2)))
             nodes['id']=list(range(0,len(b1)+len(b2)))
             nodes.columns  = ['label','id']
+            # miRNA networks
             if slug.split('_')[-1] == 'PUMA':
                 nodes['group'] = ['mir']*len(b1) + ['exp']*len(b2)
             else:
                 nodes['group'] = ['tf']*len(b1) + ['exp']*len(b2)
-            titlearray = np.append(b1,b2)
-            for i in range(len(titlearray)):
-                origtitle=titlearray[i]
-                if i < len(b1):
-                    titlearray[i] = 'Regulator name: ' + titlearray[i] 
-                else:
-                    titlearray[i] = 'Gene name: ' + titlearray[i]
-                try:
-                    gobpbygene     = Gobpbygene.objects.get(gene=origtitle)
-                    if i < len(b1):
-                        titlearray[i] += '\nGO terms:' + gobpbygene.termlist
-                    else:
-                        titlearray[i] += '\nGO terms:' + gobpbygene.termlist
-                except:
-                    print('gene not found')
-                try:
-                    gwascatabygene     = Gwascatabygene.objects.get(gene=origtitle)
-                    if i < len(b1):
-                        titlearray[i] += '\nGWAS traits:' + gwascatabygene.termlist
-                    else:
-                        titlearray[i] += '\nGWAS traits:' + gwascatabygene.termlist
-                except:
-                    print('gene not found')
-            nodes['title'] = titlearray
             if dt=='dee':
                 nodes['value'] = deDfmean
                 bb1  = np.intersect1d(b1,deDf.index)
                 bb2  = np.intersect1d(b2,deDf.index)
-                indInter = np.in1d(nodes.label, np.concatenate((bb1,bb2)))
+                indInter = np.in1d(nodes['label'], np.concatenate((bb1,bb2)))
                 nodes['value'][indInter] = np.concatenate((deDf[bb1],deDf[bb2]))
                 bb1,bb2,deDf=[],[],[]
             if dt=='dtt':
@@ -227,6 +209,37 @@ def networksagg(request,slug):
             del edges['source'] 
             del edges['target']
             df=''
+            # convert genes
+            if nodes['label'].iloc[-1][0:4] == 'ENSG':    
+                convertedgenes=convertGenelist(nodes['label'],how='sym',mod='found')
+                indnan=np.argwhere(pd.isnull(convertedgenes)).ravel()
+                convertedgenes[indnan] = nodes['label'].iloc[indnan]
+                nodes['label'] = convertedgenes
+            # build hover content
+            titlearray = nodes['label'].values.copy() 
+            for i in range(len(titlearray)):
+                origtitle=titlearray[i]
+                if i < len(b1):
+                    titlearray[i] = 'Regulator name: ' + titlearray[i] 
+                else:
+                    titlearray[i] = 'Gene name: ' + titlearray[i]
+                try:
+                    gobpbygene     = Gobpbygene.objects.get(gene=origtitle)
+                    if i < len(b1):
+                        titlearray[i] += '\nGO terms:' + gobpbygene.termlist
+                    else:
+                        titlearray[i] += '\nGO terms:' + gobpbygene.termlist
+                except:
+                    print('gene not found')
+                try:
+                    gwascatabygene     = Gwascatabygene.objects.get(gene=origtitle)
+                    if i < len(b1):
+                        titlearray[i] += '\nGWAS traits:' + gwascatabygene.termlist
+                    else:
+                        titlearray[i] += '\nGWAS traits:' + gwascatabygene.termlist
+                except:
+                    print('gene not found')
+            nodes['title'] = titlearray
             nodes=nodes.to_json(orient='records')
             edges=edges.to_json(orient='records')
             form.save()
@@ -341,14 +354,9 @@ def ownnet(request,slug):
             gwasform   = request.POST.get('gwasform', False)
             print('The number of edges is',nedges)
             print(brd)
-            #df = pd.read_csv('/Users/mab8354/Colon_cancer_TCGA.csv',index_col=0,sep=',')
             if dt=='dtt':
                 tftar  = df.sum(axis=1) 
                 genetar= df.sum(axis=0)
-            if dt=='dee':
-                deDf = pd.read_csv('/Users/mab8354/cancer_colon_expression_tcga.txt',index_col=0,sep='\t')
-                deDfmean = deDf.values.mean()
-                deDf = deDf.mean(axis=1)
             df=selectgenes(df,tfgenesel,geneform,tfform,goform,gwasform)
             # Rename then name of the index column
             df.index.name='TF'
@@ -392,13 +400,6 @@ def ownnet(request,slug):
                 except:
                     print('gene not found')
             nodes['title'] = titlearray
-            if dt=='dee':
-                nodes['value'] = deDfmean
-                bb1  = np.intersect1d(b1,deDf.index)
-                bb2  = np.intersect1d(b2,deDf.index)
-                indInter = np.in1d(nodes.label, np.concatenate((bb1,bb2)))
-                nodes['value'][indInter] = np.concatenate((deDf[bb1],deDf[bb2]))
-                bb1,bb2,deDf=[],[],[]
             if dt=='dtt':
                 nodes['value'] = np.concatenate((tftar[b1],genetar[b2]))
             edges          = df
@@ -428,6 +429,8 @@ def ownnet(request,slug):
             seconds2 = time.time()
             print(seconds2-seconds)
             form.save()
+        else:
+            print('form not valid')
     outputDict = {'netform':form, 'nodes':nodes, 'edges':edges, 'tarform':formtar, 'clueform':clueform,'docform':docform,'slug':int(slug), 'documents':documents, 'activetab':activetab}
     return render(request, 'ownnet.html', outputDict)
 
@@ -476,6 +479,77 @@ def cluesubmit(request,slug):
     outputDict = {'cancerType': cancerType, 'dataset':dataset, 'netform':netform, 'tarform':form2, 'clueform':clueform, 'geneform':form}
     return render(request,'analysis.html',outputDict)
 
+def drugtarg(request,slug):
+    activetab='tar'
+    if request.method == 'GET':
+        form = TarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100,'tfgeneseltar':'nosel'})
+        clueform = ClueForm({'tfgeneselclue':'by gene'})
+        tftarscore,genetarscore='',''
+    else:
+        form = TarForm(request.POST, auto_id=True)
+        clueform = ClueForm({'tfgeneselclue':'by gene'})
+        tfgeneseltar  = request.POST.get('tfgeneseltar', False)
+        geneformtar   = request.POST.get('geneformtar', False)
+        goformtar     = request.POST.get('goformtar', False)
+        gwasformtar   = request.POST.get('gwasformtar', False)
+        if form.is_valid():
+            absvaltar      = request.POST.get('absvaltar', False)
+            absvaltartf    = request.POST.get('absvaltartf', False)
+            topbottomtar   = request.POST['topbottomtar']
+            topbottomtartf = request.POST['topbottomtartf']
+            nedgestar      = int(request.POST['nedgestar'])
+            nedgestartf    = int(request.POST['nedgestartf'])
+            # fetch network
+            print(slug.split('_')[0])
+            object_keytf=mapObjectkey(slug,how='tf')
+            dftf=fetchNetwork(object_keytf, how='sig')
+            object_keygene=mapObjectkey(slug,how='gene')
+            dfgene=fetchNetwork(object_keygene, how='sig')
+            genetarscore= computetargeting(dfgene,absvaltar,topbottomtar,nedgestar,'gene',tfgeneseltar,geneformtar,goformtar,gwasformtar,modality='precompute')
+            tftarscore  = computetargeting(dftf,absvaltartf,topbottomtartf,nedgestartf,'tf',tfgeneseltar,geneformtar,goformtar,gwasformtar,modality='precompute')
+            tftarscore.columns.values[0]  = 'TF'
+            genetarscore.columns.values[0]= 'index'
+            upgenes     = genetarscore[genetarscore['tar'] > 0]
+            downgenes   = genetarscore[genetarscore['tar'] < 0]
+            upgenestf   = tftarscore[tftarscore['tar'] > 0]
+            downgenestf = tftarscore[tftarscore['tar'] < 0]
+            # populate send to enrichment button
+            sendto = Sendto.objects.get(idd=0)
+            sendto.preload = 1
+            sendto.genelistup='\n'.join(tftarscore.iloc[:,0].values)
+            sendto.save()
+            sendto = Sendto.objects.get(idd=1) # genes
+            sendto.preload = 1 
+            sendto.genelistup='\n'.join(upgenes.iloc[:,0].values)
+            sendto.genelistdown='\n'.join(downgenes.iloc[:,0].values)
+            sendto.save()
+            sendto = Sendto.objects.get(idd=2) # tfs
+            sendto.preload = 1
+            sendto.genelistup='\n'.join(upgenestf.iloc[:,0].values)
+            sendto.genelistdown='\n'.join(downgenestf.iloc[:,0].values)
+            sendto.save()
+            # trasnform df to json
+            tftarscore=tftarscore.to_json(orient='records')
+            genetarscore=genetarscore.to_json(orient='records')
+        else:
+            print('invalid form!')
+    cancerType=slug[:(len(slug)-8)].capitalize()
+    try:
+        if int(slug[len(slug)-1])==1:
+            dataset='TCGA'
+        elif int(slug[len(slug)-1])==2:
+            dataset='GEO'
+        else:
+            dataset=''
+    except:
+        dataset=''
+    print('slug is')
+    #slug=int(slug)
+    print(slug)
+    outputDict = {'cancerType': cancerType, 'dataset':dataset, 'tarform':form,'activetab':activetab, 'tftarscore':tftarscore, 'genetarscore':genetarscore, 'clueform':clueform, 'slug':slug}
+    page='drugtarg.html'
+    return render(request, page, outputDict)
+
 def taragg(request,slug):
     activetab='tar'
     if request.method == 'GET':
@@ -498,11 +572,12 @@ def taragg(request,slug):
             nedgestar      = int(request.POST['nedgestar'])
             nedgestartf    = int(request.POST['nedgestartf'])
             # fetch network
-            object_key = 'cancer/colon_cancer/networks/panda/Colon_cancer_TCGA.csv'#object_key=mapObjectkey(slug)
+            object_key=mapObjectkey(slug)
             df=fetchNetwork(object_key)
-            print(df)
             genetarscore= computetargeting(df,absvaltar,topbottomtar,nedgestar,'gene',tfgeneseltar,geneformtar,goformtar,gwasformtar)
             tftarscore  = computetargeting(df,absvaltartf,topbottomtartf,nedgestartf,'tf',tfgeneseltar,geneformtar,goformtar,gwasformtar)
+            tftarscore.columns.values[0]  = 'TF'
+            genetarscore.columns.values[0]= 'index'
             upgenes     = genetarscore[genetarscore['tar'] > 0]
             downgenes   = genetarscore[genetarscore['tar'] < 0]
             upgenestf   = tftarscore[tftarscore['tar'] > 0]
@@ -510,7 +585,7 @@ def taragg(request,slug):
             # populate send to enrichment button
             sendto = Sendto.objects.get(idd=0)
             sendto.preload = 1
-            sendto.genelistup='\n'.join(tftarscore['TF'].values)
+            sendto.genelistup='\n'.join(tftarscore.iloc[:,0].values)
             sendto.save()
             sendto = Sendto.objects.get(idd=1) # genes
             sendto.preload = 1 
@@ -519,8 +594,8 @@ def taragg(request,slug):
             sendto.save()
             sendto = Sendto.objects.get(idd=2) # tfs
             sendto.preload = 1
-            sendto.genelistup='\n'.join(upgenestf['TF'].values)
-            sendto.genelistdown='\n'.join(downgenestf['TF'].values)
+            sendto.genelistup='\n'.join(upgenestf.iloc[:,0].values)
+            sendto.genelistdown='\n'.join(downgenestf.iloc[:,0].values)
             sendto.save()
             # trasnform df to json
             tftarscore=tftarscore.to_json(orient='records')
@@ -595,7 +670,7 @@ def owntaragg(request,slug):
             # populate send to enrichment button
             sendto = Sendto.objects.get(idd=0)
             sendto.preload = 1
-            sendto.genelistup='\n'.join(tftarscore['TF'].values)
+            sendto.genelistup='\n'.join(tftarscore.iloc[:0].values)
             sendto.save()
             sendto = Sendto.objects.get(idd=1) # genes
             sendto.preload = 1 
@@ -604,8 +679,8 @@ def owntaragg(request,slug):
             sendto.save()
             sendto = Sendto.objects.get(idd=2) # tfs
             sendto.preload = 1
-            sendto.genelistup='\n'.join(upgenestf['TF'].values)
-            sendto.genelistdown='\n'.join(downgenestf['TF'].values)
+            sendto.genelistup='\n'.join(upgenestf.iloc[:,0].values)
+            sendto.genelistdown='\n'.join(downgenestf.iloc[:,0].values)
             sendto.save()
             # trasnform df to json
             tftarscore=tftarscore.to_json(orient='records')
@@ -625,7 +700,9 @@ def owntaragg(request,slug):
     return render(request, page, outputDict)
 
 def drug(request):
-    return render(request, 'drugs.html')
+    drugslanding = Druglanding.objects.all()
+    data = serializers.serialize("json", drugslanding)
+    return render(request, 'drugs.html', {'data':data})
 
 def druglanding(request):
     drugslanding = Druglanding.objects.all()
@@ -639,8 +716,16 @@ def druglanding(request):
         drugdesc.image_name=query
     drugdesc.save()
     drugslanding = drugslanding.filter(drug=query)
+    drugsample2   = drugsample.filter(pert_iname=query)[1:] # remove 'All' from display
     drugsample   = drugsample.filter(pert_iname=query)
-    return render(request, 'drugslanding.html', {'drugslanding': drugslanding,'drugsample':drugsample,'drugdesc':drugdesc})
+    for dd in drugsample:
+        try:
+            dd.infl = str(round(float(dd.infl),4))
+            dd.save()
+        except:
+            print('conversion failed')
+    data = serializers.serialize("json", drugsample2)
+    return render(request, 'drugslanding.html', {'drugslanding': drugslanding,'drugsample':drugsample,'drugdesc':drugdesc,'data':data})
 
 def disease(request):
     if request.method == 'GET':
@@ -1618,16 +1703,24 @@ def buildNxGraph(nodes,edges,brd):
     nodes['value']=dictlist
     return nodes
 
-def computetargeting(df,absvaltartf,topbottomtartf,nedgestartf,how,tfgenesel,geneform,goform,gwasform):
-    if how=='gene':
-        # compute gene targeting descending order
-        tftarscore=df.sum(axis=0).sort_values(axis=0,ascending=False)
-    elif how=='tf':
-        # compute tf targeting descending order
-        tftarscore=df.sum(axis=1).sort_values(axis=0,ascending=False)
+def computetargeting(df,absvaltartf,topbottomtartf,nedgestartf,how,tfgenesel,geneform,goform,gwasform,modality='compute'):
+    if modality == 'compute':
+        if how=='gene':
+            # compute gene targeting descending order
+            tftarscore=df.sum(axis=0).sort_values(axis=0,ascending=False)
+        elif how=='tf':
+            # compute tf targeting descending order
+            tftarscore=df.sum(axis=1).sort_values(axis=0,ascending=False)
+    elif modality=='precompute':
+        print(df)
+        tftarscore = df.sort_values(axis=0,ascending=False,by=df.columns[1])
+        tftarscore.drop(labels='Unnamed: 0',axis=1,inplace=True)
     # zscore
     tftarscore = (tftarscore - tftarscore.mean())/tftarscore.std(ddof=0)
-    tftarscore=pd.DataFrame(data=tftarscore,columns=['tar'])
+    if modality == 'compute':
+        tftarscore=pd.DataFrame(data=tftarscore,columns=['tar'])
+    elif modality=='precompute':
+        tftarscore.columns=['tar']
     tftarscore.reset_index(inplace=True)
     if how=='gene':
         tftarscore=selectgenestar(tftarscore,tfgenesel,geneform,goform,gwasform)
@@ -1702,6 +1795,8 @@ def fetchNetwork(object_key,how='net'):
     elif how=='motif':
         df = pd.read_csv(StringIO(csv_string), sep='\t', header=None)
         df.columns=['source','target','value']
+    elif how=='sig':
+        df = pd.read_csv(StringIO(csv_string),index_col=1,sep=',')
     return df
 
 def selectgenestar(genetarscore,tfgenesel,geneform,goform,gwasform):
@@ -1710,23 +1805,20 @@ def selectgenestar(genetarscore,tfgenesel,geneform,goform,gwasform):
         try:
             geneform = convertGenelist(geneform)
             print(geneform)
-            print( np.intersect1d(geneform,genetarscore['index']).size )
+            print( np.intersect1d(geneform,genetarscore.iloc[:,0]).size )
         except:
             print('no intersection')
-        print(geneform)
-        intergenes=np.intersect1d(geneform,genetarscore['index'])
-        print(genetarscore['index'])
-        print(intergenes)
+        intergenes=np.intersect1d(geneform,genetarscore.iloc[:,0])
         if intergenes.size > 0:
-            genetarscore = genetarscore.loc[genetarscore['index'].isin(intergenes)]
+            genetarscore = genetarscore.loc[genetarscore.iloc[:,0].isin(intergenes)]
     elif tfgenesel=='by GO':
         goform=str.split(goform,'\r\n')
         try:
             gobp  = Gobp.objects.get(goid=goform[0])
             genelist=str.split(gobp.genelist,',')
-            intergo=np.intersect1d(genelist,genetarscore['index'])
+            intergo=np.intersect1d(genelist,genetarscore.iloc[:,0])
             if intergo.size > 0:
-                genetarscore = genetarscore.loc[genetarscore['index'].isin(intergo)]
+                genetarscore = genetarscore.loc[genetarscore.iloc[:,0].isin(intergo)]
         except:
             print('no intersection')
     elif tfgenesel=='by GWAS':
@@ -1735,19 +1827,31 @@ def selectgenestar(genetarscore,tfgenesel,geneform,goform,gwasform):
             print(gwasform[0])
             gwascata  = Gwascata.objects.get(term=gwasform[0])
             genelist=str.split(gwascata.genelist,',')
-            intergo=np.intersect1d(genelist,genetarscore['index'])
+            intergo=np.intersect1d(genelist,genetarscore.iloc[:,0])
             if intergo.size > 0:
-                genetarscore = genetarscore.loc[genetarscore['index'].isin(intergo)]
+                genetarscore = genetarscore.loc[genetarscore.iloc[:,0].isin(intergo)]
         except:
             print('no intersection')
     return genetarscore
 
-def mapObjectkey(slug,modality='network'):
+def mapObjectkey(slug,modality='network',how=''):
     if slug[0:3]=='ACH': #cell lines
         slug = str.replace(slug,'_','-')
         object_key = 'cells/networks/ccle/' + slug + '.csv'
         if modality=='expression':
             object_key='cells/expression/CCLE_expression_withinSample.csv'
+    elif slug[0:4]=='GTEX': # single sample tissues
+        newslug=slug.replace('_','-')
+        tissuesample   = Tissuesample.objects.get(sampleid=newslug) 
+        if modality=='network':
+            object_key = 'tissues/networks/lioness/singleSample/' + tissuesample.grdid + '_sample_' + newslug + '.csv'
+        elif modality=='expression':
+            a=tissuesample.grdid.split('_')
+            a=a[:-1]
+            c='_'.join([d.capitalize() for d in a])
+            object_key = 'tissues/expression/' + c + '.csv'
+        elif modality=='motif':
+            object_key = 'tissues/motif/tissues_motif.txt'
     elif slug + '.csv' in ['Adipose_Subcutaneous.csv','Adipose_Visceral.csv','Adrenal_Gland.csv','Artery_Aorta.csv','Artery_Coronary.csv','Artery_Tibial.csv','Brain_Basal_Ganglia.csv','Brain_Cerebellum.csv','Brain_Other.csv','Breast.csv','Colon_Sigmoid.csv','Colon_Transverse.csv','Esophagus_Mucosa.csv','Esophagus_Muscularis.csv','Fibroblast_Cell_Line.csv','Gastroesophageal_Junction.csv','Heart_Atrial_Appendage.csv','Heart_Left_Ventricle.csv','Intestine_Terminal_Ileum.csv','Kidney_Cortex.csv','Liver.csv','Lung.csv','Lymphoblastoid_Cell_Line.csv','Minor_Salivary_Gland.csv','Ovary.csv','Pancreas.csv','Pituitary.csv','Prostate.csv','Skeletal_Muscle.csv','Skin.csv','Spleen.csv','Stomach.csv','Testis.csv','Thyroid.csv','Tibial_Nerve.csv','Uterus.csv','Vagina.csv','Whole_Blood.csv']: # tissues
         if modality == 'network':
             object_key = 'tissues/networks/' + slug + '.csv'
@@ -1755,7 +1859,7 @@ def mapObjectkey(slug,modality='network'):
             object_key = 'tissues/expression/' + slug + '.csv'
         elif modality=='motif':
             object_key = 'tissues/motif/tissues_motif.txt'
-    elif slug.split('_')[4] == 'PUMA': # puma 
+    elif slug.split('_')[4] == 'PUMA': #puma 
         if modality == 'network':
             object_key = 'tissues/networks/puma/' + slug + '.csv'
         elif modality=='expression':
@@ -1770,4 +1874,11 @@ def mapObjectkey(slug,modality='network'):
                 object_key =  'tissues/motif/tissue_MiRanda_prior.txt'
             elif pumaslug[-2] == 'TargetScan':
                 object_key =  'tissues/motif/tissue_TargetScan_prior.txt'
+    elif slug.split('_')[0]=='drug':
+        drugsample   = Drugsample.objects.get(cleannames=slug) 
+        print(drugsample.sig_id )
+        if how=='tf':
+            object_key =  'drugs/drugNetwork/PANDA/TFsig/TFtargeting_' + drugsample.sig_id + '.csv'
+        elif how=='gene':
+            object_key =  'drugs/drugNetwork/PANDA/genesig/Genetargeting_' + drugsample.sig_id + '.csv'
     return object_key
