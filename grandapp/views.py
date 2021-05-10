@@ -100,8 +100,8 @@ def networksagg(request,slug):
     tftarscore = pd.DataFrame(data=d)
     d = {'index': ['Gene'], 'tar': [1]}
     genetarscore = pd.DataFrame(data=d)
-    genetarscore=genetarscore.to_json(orient='records')
-    tftarscore=tftarscore.to_json(orient='records')
+    genetarscore = genetarscore.to_json(orient='records')
+    tftarscore   = tftarscore.to_json(orient='records')
     if request.method == 'GET':
         # network form
         form = NetForm({'dt':'no','topbottom':'Largest','nedges':100,'tfgenesel':'nosel'})
@@ -627,6 +627,22 @@ def drugtarg(request,slug):
 
 def taragg(request,slug):
     activetab='tar'
+    nodes = pd.DataFrame(data=['TF','Gene'])
+    nodes['id']   = [0,1]
+    nodes.columns = ['label','id']
+    nodes['shape']= ['triangle'] + ['circle']
+    nodes['color']= ['#98c4e1']   + ['#d7cad1']
+    edges = pd.DataFrame(data=[0.5])
+    edges.columns= ['value']
+    nodes['group']= ['tf','exp'] 
+    edges['sourcelabel']='TF'
+    edges['targetlabel']='gene'
+    edges['from']= 0
+    edges['to']  = 1
+    edges['arrows']='to'
+    edges['dispval'] =1
+    nodes=nodes.to_json(orient='records')
+    edges=edges.to_json(orient='records')
     if request.method == 'GET':
         form = TarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100})
         netform = NetForm({'dt':'no','topbottom':'Largest','nedges':100,'tfgenesel':'nosel'})
@@ -684,12 +700,28 @@ def taragg(request,slug):
             genetarscore=genetarscore.to_json(orient='records')
         else:
             print('invalid form!')
-    outputDict = {'tarform':form,'activetab':activetab, 'netform':netform, 'tftarscore':tftarscore, 'genetarscore':genetarscore, 'clueform':clueform, 'slug':slug, 'tfgeneseltar':tfgeneseltar, 'found':found, 'ngenesfound':ngenesfound, 'ngwas':ngwas, 'ssagg':ssagg, 'categorynet':categorynet,'regnetdisp':regnetdisp, 'backpage':backpage}
+    outputDict = {'nodes':nodes,'edges':edges,'tarform':form,'activetab':activetab, 'netform':netform, 'tftarscore':tftarscore, 'genetarscore':genetarscore, 'clueform':clueform, 'slug':slug, 'tfgeneseltar':tfgeneseltar, 'found':found, 'ngenesfound':ngenesfound, 'ngwas':ngwas, 'ssagg':ssagg, 'categorynet':categorynet,'regnetdisp':regnetdisp, 'backpage':backpage}
     page='networksagg.html'
     return render(request, page, outputDict)
 
 def owntaragg(request,slug):
     activetab='tar'
+    nodes = pd.DataFrame(data=['TF','Gene'])
+    nodes['id']   = [0,1]
+    nodes.columns = ['label','id']
+    nodes['shape']= ['triangle'] + ['circle']
+    nodes['color']= ['#98c4e1']   + ['#d7cad1']
+    edges = pd.DataFrame(data=[0.5])
+    edges.columns= ['value']
+    nodes['group']= ['tf','exp'] 
+    edges['sourcelabel']='TF'
+    edges['targetlabel']='gene'
+    edges['from']= 0
+    edges['to']  = 1
+    edges['arrows']='to'
+    edges['dispval'] =1
+    nodes=nodes.to_json(orient='records')
+    edges=edges.to_json(orient='records')
     if request.method == 'GET':
         form = TarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100})
         netform = NetForm({'dt':'no','topbottom':'Largest','nedges':100,'tfgenesel':'nosel'})
@@ -702,20 +734,6 @@ def owntaragg(request,slug):
         tftarscore=tftarscore.to_json(orient='records')
         genetarscore=genetarscore.to_json(orient='records')
     else:
-        nodes = pd.DataFrame(data=['TF','Gene'])
-        nodes['id']   = [0,1]
-        nodes.columns = ['label','id']
-        nodes['shape']= ['triangle'] + ['circle']
-        nodes['color']= ['#98c4e1']   + ['#d7cad1']
-        nodes['x'] = [100,110]
-        nodes['y'] = [200,200]
-        edges= pd.DataFrame(data=[0.5])
-        edges.columns= ['value']
-        edges['from']= 0
-        edges['to']  = 1
-        edges['arrows']='to'
-        nodes=nodes.to_json(orient='records')
-        edges=edges.to_json(orient='records')
         form = TarForm(request.POST, auto_id=True)
         docform   = DocumentForm()
         netform = NetForm({'dt':'no','topbottom':'Largest','nedges':100,'tfgenesel':'nosel'})

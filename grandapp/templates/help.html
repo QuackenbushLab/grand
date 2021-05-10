@@ -6,6 +6,7 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#networks" class="text-decoration-none">Networks</a></li>
+        <li class="breadcrumb-item"><a href="#navigation" class="text-decoration-none">Navigation</a></li>
         <li class="breadcrumb-item"><a href="#analysis" class="text-decoration-none">Analysis</a></li>
         <li class="breadcrumb-item"><a href="#wiki" class="text-decoration-none">Wiki</a></li>
         <li class="breadcrumb-item"><a href="#api" class="text-decoration-none">API</a></li>
@@ -49,6 +50,27 @@
     </button>
     </div>
     </div>
+    <p><h3 id="navigation" class="text-primary">Navigation</h3>
+      <div class="row">
+        <div class="col">
+          <h4 id="navigation" class="text-primary">Small molecule drugs</h4>
+          <img src="https://granddb.s3.us-east-2.amazonaws.com/gifs/drugs.gif" width="500" height="200">
+        </div>
+        <div class="col">
+          <h4 id="navigation" class="text-primary">Cancer types</h4>
+          <img src="https://granddb.s3.us-east-2.amazonaws.com/gifs/cancer.gif" width="500" height="200">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+        <h4 id="navigation" class="text-primary">Tissues</h4>
+        <img src="https://granddb.s3.us-east-2.amazonaws.com/gifs/tissues.gif" width="500" height="200">
+      </div>
+      <div class="col">
+      <h4 id="navigation" class="text-primary">Cell lines</h4>
+      <img src="https://granddb.s3.us-east-2.amazonaws.com/gifs/cell.gif" width="500" height="200">
+      </div>
+    </div>
     <p><h3 id="analysis" class="text-primary">Analysis</h3>
     <div class="ml-3"><p align="justify"> The analysis section allows to analyse a set of TFs or genes in disease or small molecule category. It exploits the duality between TFs and genes
     in bipartite gene regulatory networks.</p>
@@ -91,8 +113,8 @@
     The connectivity map measured the activity of more than 20,000 approved and experimental small molecule compounds in normal and cancerous cell lines. The expression of 987 genes was measured using the L1000 assay and the expression of close to 11,000 genes were inferred from the 1000 genes set. More details can be found <a href="https://clue.io" class="text-decoration-none" target="_blank">here</a>.
     <p><h3 id="api" class="text-primary">API</h3>
     <h4>Documentation</h4>
-    <div class="ml-3">GRAND has an API that allows accessing and filtering the data programmatically to perform large-scale downloads. The full API documentation is available at <a href="https://grand.networkmedicine.org/redoc/">https://grand.networkmedicine.org/redoc/</a>.
-    A web view of the API is also available for <a href="https://grand.networkmedicine.org/api/v1/cancerapi/">cancer type</a>, <a href="https://grand.networkmedicine.org/api/v1/geneapi/">genes</a>, <a href="https://grand.networkmedicine.org/api/v1/tissueapi/">tissues</a>, and <a href="https://grand.networkmedicine.org/api/v1/drugapi/">drug networks</a>.
+    <div class="ml-3">GRAND has an API that allows accessing and filtering the data programmatically to perform large-scale downloads. The full API documentation is available at <a class="text-decoration-none" target="_blank" href="https://grand.networkmedicine.org/redoc/">https://grand.networkmedicine.org/redoc/</a>.
+    A web view of the API is also available for <a class="text-decoration-none" target="_blank" href="https://grand.networkmedicine.org/api/v1/cancerapi/">cancer type</a>, <a class="text-decoration-none" target="_blank" href="https://grand.networkmedicine.org/api/v1/geneapi/">genes</a>, <a class="text-decoration-none" target="_blank" href="https://grand.networkmedicine.org/api/v1/tissueapi/">tissues</a>, and <a class="text-decoration-none" target="_blank" href="https://grand.networkmedicine.org/api/v1/drugapi/">drug networks</a>.
     </div>
     <h4>Tutorial 1</h4>
     <div class="ml-3">You can access the database programmatically through the API, here we provide an example using the <a target="_blank" style="text-decoration:none" href="https://requests.kennethreitz.org/en/master/">requests</a> library of Python3. Additionally, you need to install the library <a target="_blank" style="text-decoration:none" href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html">awscli</a> to download networks through the command line.
@@ -105,12 +127,13 @@
     response=requests.get('https://grand.networkmedicine.org/api/v1/drugapi/')
     </code>
     </pre>
-    Filtering can be made server-side through querying the attributes of the network of interest. The full list of attributes is available at the <a href='https://grand.networkmedicine.org/redoc/'>documentation page</a>. For example, to query by drug name, we can use the following command:
+    Filtering can be made server-side through querying the attributes of the network of interest. The full list of attributes is available at the <a target="_blank" style="text-decoration:none" href='https://grand.networkmedicine.org/redoc/'>documentation page</a>. For example, to query by drug name, we can use the following command:
     <pre>
     <code>
     responseFiltered=requests.get('https://grand.networkmedicine.org/api/v1/drugapi/?drug=1-phenylbiguanide')
     </code>
     </pre>
+    To check that the data was collected correclty, we can do the following test.
     <pre>
     <code>
     if response.status_code == 200:
@@ -134,7 +157,7 @@
     </code></pre>
     We can also serially download the drug-induced gene regulatory network through awscli library. You can wrap this command into a for loop:
     <pre><code>
-    os.system('aws s3 cp ' + drug['network'] + ' .')
+    os.system('curl -O ' + drug['network'] + ' .')
     </code></pre>
     </p>
     </div>

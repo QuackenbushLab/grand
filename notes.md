@@ -176,3 +176,8 @@ EMAIL:
 - enable less secure apps
 
 https://stackoverflow.com/questions/20337040/getting-error-while-sending-email-through-gmail-smtp-please-log-in-via-your-w
+
+
+- Renew HTTPS certificates automatically using crontab
+
+https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
