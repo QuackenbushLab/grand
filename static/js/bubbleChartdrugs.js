@@ -1,6 +1,6 @@
 $(document).ready(function() {
   var rows=data2
-  var TITLE_C = 'Small molecule  gene regulatory networks';
+  var TITLE_C = 'Small molecule gene regulatory networks';
 
   var POINT_X = 'avggenetar'; // column name for x values in data.csv
   var POINT_X_PREFIX = ''; // prefix for x values, eg '$'

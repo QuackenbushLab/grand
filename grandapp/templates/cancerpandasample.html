@@ -1,0 +1,88 @@
+{% load static %} 
+  <div class="card " id="cardtissuetcga">
+    <div class="card-body">
+      <h5 class="card-title">Variable description</h5>
+        <p class="card-text">This is a description of the primary clinical variables of the gene expression samples that were used to generate the gene regulatory network.</p>
+        <div class="row pb-4">
+          <div class="col">
+            <canvas id="myPieChart" width="50" height="30"></canvas>   
+          </div>
+          <div class="col">
+            <canvas id="myPieChartETH" width="50" height="30"></canvas>   
+          </div>
+          <div class="col">
+            <canvas id="myPieChartAL" width="50" height="30"></canvas>   
+          </div>
+          <div class="col">
+            <canvas id="myPieChartStage" width="50" height="30"></canvas>   
+          </div>
+          <div class="col">
+            <canvas id="myPieChartVital" width="50" height="30"></canvas>   
+          </div>
+        </div>
+          <table id="tissuestabletcga" class="table table-hover" style="width: 100%">
+                  <thead>
+                    <tr>
+                      <th scope="col">Sample<br><i class="far fa-question-circle"
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="Sample ID">
+                      </i></th>
+                      <th scope="col">Gender</th>
+                      <th scope="col">Race</th>
+                      <th scope="col">Stage<br><i class="far fa-question-circle"
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="AJCC tumor stage">
+                      </i></th>
+                      <th scope="col">Vital status</th>
+                       <th scope="col">Age<br><i class="far fa-question-circle"
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="Age at diagnosis">
+                      </i></th>
+                      <th scope="col">Days to last follow up</th>
+                      <th scope="col">Tumor ID<br><i class="far fa-question-circle"
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="TCGA tumor code">
+                      </i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                   {% for tissue in tcgasample %}
+                      <tr>
+                        <td>{{ tissue.sample }}</td>
+                        <td>{{ tissue.gender }}</td>
+                        <td>{{ tissue.race }}</td>
+                        <td>{{ tissue.ajcc }}</td>
+                        <td>{{ tissue.vital_status }}</td>
+                        <td>{{ tissue.age }}</td>
+                        <td>{{ tissue.days_to_last_followup }}</td>
+                        <td>{{ tissue.tumorID }}</td>
+                      </tr>
+                   {% endfor %}
+                  </tbody>
+                  <tfoot>
+                    <tr id='tfoot320'>
+                      <th>Sample</th>
+                      <th>Gender</th>
+                      <th>Race</th>
+                      <th>Stage</th>
+                      <th>Status</th>
+                      <th>Age</th>
+                      <th>Days to follow up</th>
+                      <th>Tumor ID</th>
+                    </tr>
+                  </tfoot>
+                </table>
+  </div>
+  </div>

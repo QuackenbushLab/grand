@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading cell sample data!")
-        for row in DictReader(open('./data/sample_info_aug.csv')):
+        for row in DictReader(open('./data/sample_info_aug2.csv')):
             drugsample = Cellsample()
             drugsample.depmap        = row['DepMap_ID']
             drugsample.stripcellname = row['stripped_cell_line_name']
@@ -59,4 +59,6 @@ class Command(BaseCommand):
             drugsample.difftar       = row['difftar']
             drugsample.difftargenes  = row['difftargenes']
             drugsample.cleanname     = row['cleanname']
+            drugsample.cleannamedis  = row['cleannamedis']
+            drugsample.isdragon      = row['isdragon']
             drugsample.save()

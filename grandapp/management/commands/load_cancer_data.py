@@ -32,18 +32,25 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading cancer data!")
-        for row in DictReader(open('./data/cancer.csv')):
+        for row in DictReader(open('./data/cancer_aug.csv')):
             cancer = Cancer()
-            cancer.tissue    = row['cancer']
-            cancer.cancerref = row['cancerref']
+            cancer.tissue    = row['tissue']
+            cancer.tcgacode  = row['tcgacode']
+            cancer.cancer    = row['cancer']
             cancer.nnets     = row['nnets']
+            cancer.datasets  = row['datasets']
             cancer.nnets2    = row['nnets2']
             cancer.nnetsref  = row['nnetsref']
             cancer.nnets2ref = row['nnets2ref']
-            cancer.datasets  = row['datasets']
+            cancer.cancerref = row['cancerref']
             cancer.datasets2     = row['datasets2']
             cancer.datasetsref   = row['datasetsref']
             cancer.datasets2ref  = row['datasets2ref']
             cancer.types     = row['types']
-            cancer.subtype   = row['subtype']
+            cancer.match     = row['tissuematch']
+            cancer.ntfs      = row['ntfs'] 
+            cancer.ngenes    = row['ngenes']
+            cancer.nsamples  = row['nsamples']
+            cancer.disp      = row['disp']
+            cancer.dispname  = row['dispname']
             cancer.save()

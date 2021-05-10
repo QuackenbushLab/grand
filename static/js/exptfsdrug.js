@@ -18,7 +18,7 @@ $(document).ready(function() {
       var SHOW_GRID = true; 
     
       // `true` to show the legend, `false` to hide
-      var SHOW_LEGEND = false; 
+      var SHOW_LEGEND = true; 
 
         var rowsdrag=data2
         console.log(rowsdrag)
@@ -94,7 +94,7 @@ $(document).ready(function() {
         var canvasbardragon = document.getElementById('cellbartf');
         var ctxdragon    = canvasbardragon.getContext('2d');
 
-        var X_AXIS = 'Cell type';
+        var X_AXIS = 'L1000 signature ID';
         var Y_AXIS = 'Number of TFs';
         var TITLE = 'Differentially expressed and targeted TFs per drug';
 
@@ -160,9 +160,9 @@ $(document).ready(function() {
 
         canvasbardragon.onclick = function(evt) {
           var activePoints = barchartdragon.getElementsAtEvent(evt);
+          var idx = activePoints[0]['_index'];
           if (activePoints[0]) {
-            var label = activePoints[0]._view['label'];
-            location.href = '/networks/aggregate/' + label.substring(0, 3) + '_' + label.substring(4)
+            location.href = '/networks/drugtarg/' + rowsdrag[idx].fields['cleannames']
           }
         };
 
@@ -194,7 +194,7 @@ $(document).ready(function() {
       var SHOW_GRID = true; 
     
       // `true` to show the legend, `false` to hide
-      var SHOW_LEGEND = false; 
+      var SHOW_LEGEND = true; 
 
         var rowsdrag=data2
         console.log(rowsdrag)
@@ -270,7 +270,7 @@ $(document).ready(function() {
         var canvasbardragon = document.getElementById('cellbargenes');
         var ctxdragon    = canvasbardragon.getContext('2d');
 
-        var X_AXIS = 'Cell type';
+        var X_AXIS = 'L1000 signature ID';
         var Y_AXIS = 'Number of genes';
         var TITLE = 'Differentially expressed and targeted genes per drug';
 
@@ -336,9 +336,9 @@ $(document).ready(function() {
 
         canvasbardragon.onclick = function(evt) {
           var activePoints = barchartdragon.getElementsAtEvent(evt);
+          var idx = activePoints[0]['_index'];
           if (activePoints[0]) {
-            var label = activePoints[0]._view['label'];
-            location.href = '/networks/aggregate/' + label.substring(0, 3) + '_' + label.substring(4)
+            location.href = '/networks/drugtarg/' + rowsdrag[idx].fields['cleannames']
           }
         };
 

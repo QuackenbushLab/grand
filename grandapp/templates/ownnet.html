@@ -2,6 +2,44 @@
 {% include "header.html" %}
 {% load widget_tweaks %}
 
+{% if tfgeneseltar != 'nosel' %}
+<div class="container alert alert-warning alert-dismissible fade show" role="alert">
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+  </button>
+
+<h4 class="alert-heading">Submission stats</h4>
+<p class="mb-1">
+  {% if tfgeneseltar == 'by gene' %}
+    {% if found == 'found' %}
+    {{ ngenesfound }} genes found in network among {{ ngwas }} genes entered
+    {% else %}
+    Gene list not found, plotting network without gene filtering
+    {% endif %}
+  {% elif tfgeneseltar == 'by GO' %}
+    {% if found == 'found' %}
+    GO term found!
+    {{ ngenesfound }} genes found among {{ ngwas }} genes in GO term
+    {% else %}
+    GO term not found, plotting network without GO filtering
+    {% endif %}
+  {% elif tfgeneseltar == 'by GWAS' %}
+    {% if found == 'found' %}
+    GWAS trait found!
+    {{ ngenesfound }} genes found among {{ ngwas }} genes in GWAS trait
+    {% else %}
+    GWAS trait not found, plotting network without GWAS filtering
+    {% endif %}
+  {% elif tfgeneseltar == 'by tf' %}
+    {% if found == 'found' %}
+    {{ ngenesfound }} TFs found in network among {{ ngwas }} TFs entered
+    {% else %}
+    TF list not found, plotting network without TF filtering
+    {% endif %}
+  {% endif %}
+        </p>
+</div>
+{% endif %}
+
 <div class='container pt-3 pb-4'>
     <div class="card text-center">
         <div class="card-header">
@@ -138,7 +176,7 @@
                           data-bs-animation="false"
                           data-bs-placement="top"
                           data-bs-html="true"
-                          data-bs-content="Enter GO term ID for example GO:0060148. Please check <a href='https://grand.networkmedicine.org/pathways/'>the pathway page</a> for a full term list.">
+                          data-bs-content="Enter GO term ID for example GO:0060148. Please check <a href='https://grand.networkmedicine.org/pathways/' target='_blank'>the pathway page</a> for a full term list.">
                         GO</a></small>
                       </div>
                       <br>
@@ -150,7 +188,7 @@
                           data-bs-animation="false"
                           data-bs-placement="top"
                           data-bs-html="true"
-                          data-bs-content="Enter GWAS catalog term for example AIDS progression. Please check <a href='https://grand.networkmedicine.org/gwas/'>the GWAS catalog page</a> for a full term list.">
+                          data-bs-content="Enter GWAS catalog term for example AIDS progression. Please check <a href='https://grand.networkmedicine.org/gwascatalog/' target='_blank'>the GWAS catalog page</a> for a full term list.">
                         GWAS</a></small>
                       </div>
                       <br>
@@ -198,14 +236,26 @@
                     </div>
                   </div>
                 </div>
-                    <div class="card-body">
-                    <h5 class="card-title">User input gene regulatory network</h5>
-                    <p class="card-text">Network parameters</p>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">TFs</li>
-                        <li class="list-group-item">Genes</li>
-                    </ul>
+
+                <div class="card">
+                  <ul class="list-group list-group-flush">
+                </div>
+                <div class="card">
+                <div class="card-header">Edge weights table</div>
+                <div class="container col-10 mt-3 pb-3">
+                  <table id="drugstable2" class="table table-hover" style="width: 100%">
+                    <thead>
+                      <tr>
+                        <th scope="col">Source</th>
+                        <th scope="col">Target</th>
+                        <th scope="col">Edge weight</th>
+                      </tr>
+                    </thead>
+                  </table>
+                  </div>
+                </ul>
+              </div>
+
             </div>
 
 
@@ -235,6 +285,7 @@
                     {{ docform.docfile.errors }}
                     {{ docform.docfile }}
                 </p>
+                max. 500 megabytes
                 <p><input type="submit" value="Upload" /></p>
                 <br><br>
                 <p>The network format should be an adjacency matrix representing a set of regulators (TFs/miRNA) in the rows and a set of target genes in the columns, with regulator names as row names and gene names as columns names.
@@ -409,6 +460,38 @@
               </div>
             </div>
           </div>
+
+          <div class="card">
+            <ul class="list-group list-group-flush">
+          </div>
+          <div class="card">
+          <div class="card-header">Gene Targeting score</div>
+          <div class="container col-10 mt-3 pb-3">
+            <table id="drugstable3" class="table table-hover" style="width: 100%">
+              <thead>
+                <tr>
+                  <th scope="col">Gene</th>
+                  <th scope="col">Targeting score</th>
+                </tr>
+              </thead>
+            </table>
+            </div>
+            <div class="card">
+              <div class="card-header">TF Targeting score</div>
+              <div class="container col-10 mt-3 pb-3">
+            <table id="drugstable4" class="table table-hover" style="width: 100%">
+              <thead>
+                <tr>
+                  <th scope="col">Regulator</th>
+                  <th scope="col">Targeting score</th>
+                </tr>
+              </thead>
+            </table>
+            </div>
+            </div>
+          </ul>
+        </div>
+
           </div>
           </div>
       </div>
@@ -474,6 +557,37 @@
 
 {% include "footer.html" %}
 
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    var edges = JSON.parse("{{edges|escapejs}}"); 
+      //datatables
+      $('#drugstable2').DataTable({
+        "data": edges,
+        "order": [[ 2, "desc" ]],
+        "columns": [
+           {"data": "sourcelabel"},
+           {"data": "targetlabel"},
+           {"data": "dispval"},
+       ],
+       buttons: [
+                'copy', 'csv', 'pdf', 'print'
+            ],
+        "dom": "B" + "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
+               "<'row'<'col-sm-12'tr>>" +
+               "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+      });
+      
+  
+  } );
+</script>
 
 <script>
   var slug="{{ slug }}";
@@ -533,5 +647,51 @@ var tftarscore = JSON.parse("{{tftarscore|escapejs}}");
 var genetarscore = JSON.parse("{{genetarscore|escapejs}}"); 
 </script>
 <script src="{% static 'js/bartar.js' %}"></script>
+
+<script>
+  $(document).ready(function() {
+    var genetarscore = JSON.parse("{{genetarscore|escapejs}}"); 
+      //datatables
+      $('#drugstable3').DataTable({
+        "data": genetarscore,
+        "order": [[ 1, "desc" ]],
+        "columns": [
+           {"data": "index"},
+           {"data": "tar"},
+       ],
+       buttons: [
+                'copy', 'csv', 'pdf', 'print'
+            ],
+        "dom": "B" + "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
+               "<'row'<'col-sm-12'tr>>" +
+               "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+      });
+      
+  
+  } );
+</script>
+
+<script>
+  $(document).ready(function() {
+    var tftarscore = JSON.parse("{{tftarscore|escapejs}}");  
+      //datatables
+      $('#drugstable4').DataTable({
+        "data": tftarscore,
+        "order": [[ 1, "desc" ]],
+        "columns": [
+           {"data": "TF"},
+           {"data": "tar"},
+       ],
+       buttons: [
+                'copy', 'csv', 'pdf', 'print'
+            ],
+        "dom": "B" + "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
+               "<'row'<'col-sm-12'tr>>" +
+               "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+      });
+      
+  
+  } );
+</script>
 </body>
 </html>

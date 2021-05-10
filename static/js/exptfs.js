@@ -18,7 +18,7 @@ $(document).ready(function() {
       var SHOW_GRID = true; 
     
       // `true` to show the legend, `false` to hide
-      var SHOW_LEGEND = false; 
+      var SHOW_LEGEND = true; 
 
         var rowsdrag=data2
         console.log(rowsdrag)
@@ -194,7 +194,7 @@ $(document).ready(function() {
       var SHOW_GRID = true; 
     
       // `true` to show the legend, `false` to hide
-      var SHOW_LEGEND = false; 
+      var SHOW_LEGEND = true; 
 
         var rowsdrag=data2
         console.log(rowsdrag)

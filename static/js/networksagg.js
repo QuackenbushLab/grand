@@ -50,7 +50,7 @@ $(document).ready(function() {
     var y = -container.clientHeight / 2 + 50;
     var step = 170;
 
-    if (slug.substr(-4) == 'PUMA'){
+    if (slug.substr(-4) == 'PUMA' || slug == 'mirnadragon'){
     nodes.push({
       id: 1003,
       x: x,

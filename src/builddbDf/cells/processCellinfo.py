@@ -70,8 +70,41 @@ for name in cellinfo.index:
     newname.append('_'.join(str.split(name,'-')))
 
 cellinfo['cleanname'] = newname
+
+# clean disease names
+cellinfo=pd.read_csv('granddb/data/sample_info_aug.csv',index_col=0)
+cellinfo['cleannamedis'] =''
+validURLs=[]
+uniquedisease = cellinfo['primary_disease']
+for di in uniquedisease:
+    if len(str.split(di, ' '))>1:
+        validURLs.append('_'.join(str.split(di, ' ')))
+    elif len(str.split(di, '/'))>1:
+        validURLs.append('_'.join(str.split(di, '/')))
+    elif len(str.split(di, '-'))>1:
+        validURLs.append('_'.join(str.split(di, '-')))
+    else:
+        validURLs.append(di)
+# second pass
+newValid = []
+for di in validURLs:
+    if len(str.split(di, ' '))>1:
+        newValid.append('_'.join(str.split(di, ' ')))
+    elif len(str.split(di, '/'))>1:
+        newValid.append('_'.join(str.split(di, '/')))
+    elif len(str.split(di, '-'))>1:
+        newValid.append('_'.join(str.split(di, '-')))
+    else:
+        newValid.append(di)
+cellinfo['cleannamedis'] = newValid
+
+# filter dragon samples
+cellinfo['isdragon'] = '-'
+intercellsdragon = np.intersect1d(cellinfo.index, expression.index)
+cellinfo['isdragon'].loc[intercellsdragon] = 'dragon'
+
 # save df
-cellinfo.to_csv('granddb/data/sample_info_aug.csv')
+cellinfo.to_csv('granddb/data/sample_info_aug2.csv')
 
 # intersect with expression data
 intercells= np.intersect1d(exprs.index, cellinfo.index)
@@ -184,8 +217,11 @@ resDflanding.loc[len(resDflanding.index)] = ['LCL','lcl','','PANDA','netZooM','h
 resDflanding.loc[len(resDflanding.index)] = ['Fibroblast','fibroblast','','PANDA','netZooM','https://github.com/netZoo/netZooM/releases','0.1'
     ,'','','','','','',0,0,'Lopes-Ramos, Paulsson et al. (2017)',0,'','','GTEX','','TF']
 resDflanding.loc[len(resDflanding.index)] = ['All','mirna','','DRAGON','netZooPy','https://github.com/netZoo/netZooPy/releases','0.8'
-    ,'https://granddb.s3.us-east-2.amazonaws.com/cells/networks/mirna/dragon_mirna_CCLE.csv','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/CCLE_miRNA_20181103.gct','https://portals.broadinstitute.org/ccle','','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/CCLE_expression.csv','https://portals.broadinstitute.org/ccle',734,19174,'',938,'#cardtissuetcga','','CCLE','miRNA','Ben Guebila et al. (in preparation)']
+    ,'https://granddb.s3.us-east-2.amazonaws.com/cells/networks/mirna/dragon_mirna_CCLE.csv','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/CCLE_miRNA_20181103.gct','https://portals.broadinstitute.org/ccle','','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/CCLE_expression.csv','https://portals.broadinstitute.org/ccle',734,19174,'',938,'#cardtissuetcga','https://github.com/netZoo/netbooks/blob/main/netbooks/netZooPy/dragon_mirna.ipynb','CCLE','miRNA','Ben Guebila et al. (in preparation)']
 # add vis link
 resDflanding['cancerLink'] = '/networks/aggregate/colon_cancer1/'
 resDflanding.to_csv('granddb/data/celllanding.csv',index=False)
+
+d = {'TF': ['TF'], 'tar': [1]}
+tftarscore = pd.DataFrame(data=d)
 

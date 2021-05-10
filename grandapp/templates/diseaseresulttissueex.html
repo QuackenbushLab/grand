@@ -13,7 +13,7 @@
 <div class="container col-9 pb-5 mb-5">
   <canvas id="container" style="width:100%; height:400px;"></canvas>
   <p style="font-family: Helvetica; color: #333; padding: 1em 2em; font-size: 12px">
-    Terms with p-value of 0 were set to -log(p-value) of 10.
+    Terms with p-value of 0 were set to -log(p-value) of 10. Click on the bar plot to filter the table below.
   </p>
 <div class="card text-left">
   <div class="card-header">
@@ -48,7 +48,7 @@
       </div>
       <div class="col-10 padding-0"></div>
       </div>
-        <table id="drugstblc" class="table table-hover" style="width: 100%">
+        <table id="drugstbl1" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
                     <th scope="col">Tissue</th>
@@ -73,7 +73,7 @@
           <tbody>
                  {% for tex in tissueex %}
                     <tr>
-                    <td><a href=" {{ tex.tissueLink }} ">{{ tex.tissue }}</a></td>
+                    <td><a href=" {{ tex.tissueLink }} " target="_blank" style="text-decoration:none">{{ tex.tissue }}</a></td>
                     <td>{{ tex.count }}</td>
                     <td>{{ tex.intersect }}</td>
                     <td>{{ tex.pval }}</td>
@@ -111,7 +111,7 @@
   var sense = "{{ sense }}";
 </script>
 
-<script src="{% static 'js/barChart.js' %}"></script>
+<script src="{% static 'js/barChartEnrich.js' %}"></script>
 </body>
 </html>
 

@@ -1,20 +1,20 @@
 $(document).ready(function() {
 
-  if (slug == 'Breast'){
+  if (slug == 'BRCA'){
     var TITLE = 'Sample quality control';
-  }else if (slug == 'Glioblastoma'){
+  }else if (slug == 'GBM'){
     var TITLE = 'Relationship between survival and performance score';
   }else{
     var TITLE = 'Height and weight at diagnosis';  
   }
 
-  if (slug == 'Colon'){
+  if (slug == 'COAD'){
     var POINT_X = 'height_cm_at_diagnosis'; // column name for x values in data.csv
-  }else if (slug == 'Breast'){
+  }else if (slug == 'BRCA'){
     var POINT_X = 'cgc_slide_percent_tumor_nuclei'; 
-  }else if (slug == 'Glioblastoma'){
+  }else if (slug == 'GBM'){
     var POINT_X = 'karnofskyperformancescore';
-  }else if (slug == 'Pancreas'){
+  }else if (slug == 'PAAD'){
     var POINT_X = 'subtype';
   }else{
     var POINT_X = 'gdc_cases.exposures.height'; 
@@ -22,13 +22,13 @@ $(document).ready(function() {
   var POINT_X_PREFIX = ''; // prefix for x values, eg '$'
   var POINT_X_POSTFIX = ''; // postfix for x values, eg '%'
 
-  if (slug == 'Colon'){
+  if (slug == 'COAD'){
     var POINT_Y = 'weight_kg_at_diagnosis'; // column name for y values in data.csv
-  }else if (slug == 'Breast'){
+  }else if (slug == 'BRCA'){
     var POINT_Y = 'cgc_slide_percent_necrosis';   
-  }else if (slug == 'Glioblastoma'){
+  }else if (slug == 'GBM'){
     var POINT_Y = 'daystodeath';   
-  }else if (slug == 'Pancreas'){
+  }else if (slug == 'PAAD'){
     var POINT_Y = 'gdc_cases.diagnoses.days_to_death';
   }else{
     var POINT_Y = 'gdc_cases.exposures.weight'; 
@@ -38,18 +38,18 @@ $(document).ready(function() {
   var POINT_Y_POSTFIX = ''; // postfix for x values, eg ' kg'
 
   var POINT_NAME = 'sample'; // point names that appear in tooltip
-  if (slug == 'Cervix' || slug == 'Breast' || slug == 'Liver' || slug == 'Pancreas'){
+  if (slug == 'CESC' || slug == 'BRCA' || slug == 'LIHC' || slug == 'PAAD'){
     var POINT_NAME = 'gdc_cases.samples.portions.analytes.aliquots.submitter_id'; // point names that appear in tooltip
-  }else if (slug == 'Glioblastoma'){
+  }else if (slug == 'GBM'){
     var POINT_NAME = 'submitter_id';
   }
   var POINT_COLOR = 'rgba(54, 162, 235,0.7)'; // eg `black` or `rgba(10,100,44,0.8)`
   var POINT_RADIUS = 5; // radius of each data point
 
-  if (slug == 'Breast'){
+  if (slug == 'BRCA'){
     var X_AXIS = 'Tumor nuclei in sample (%)'; // x-axis label, label in tooltip
     var Y_AXIS = 'Necrosis in sample (%) '; // y-axis label, label in tooltip
-  }else if (slug == 'Glioblastoma'){
+  }else if (slug == 'GBM'){
     var X_AXIS = 'Karnofsky performance score'; // x-axis label, label in tooltip
     var Y_AXIS = 'Days to death'; // y-axis label, label in tooltip
   }else{
@@ -71,9 +71,8 @@ $(document).ready(function() {
         name: row[POINT_NAME]
       }
     })
-    console.log(data)
 
-    if( slug == 'Pancreas' ){
+    if( slug == 'PAAD' ){
       var data2 = rows.map(function(row) {
         return {
           x: row[POINT_X],
@@ -117,10 +116,12 @@ $(document).ready(function() {
       };
   }
 
-    var ctx = document.getElementById('scatterChart').getContext('2d');
+    var canvas = document.getElementById('scatterChart')
+    var ctx = canvas.getContext('2d');
 
-    if( slug == 'Pancreas'){
-      var ctx2 = document.getElementById('scatterChartPancreas2').getContext('2d');
+    if( slug == 'PAAD'){
+      var canvas = document.getElementById('scatterChartPancreas2');
+      var ctx2 = canvas.getContext('2d');
       var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -225,6 +226,8 @@ $(document).ready(function() {
         }
       }
     });
+
+
     }else{
     var myScatterChart = new Chart.Scatter(ctx, {
       data: scatterChartData,
@@ -285,6 +288,22 @@ $(document).ready(function() {
         }
       }
     });
+
+
+    // PAAD
+    if (slug == 'PAAD' || slug == 'GBM' || slug == 'COAD'){
+      canvas.onclick = function(evt) {
+        var activePoints = myScatterChart.getElementsAtEvent(evt);
+        console.log(activePoints)
+        if (activePoints[0]) {
+          var idx = activePoints[0]['_index'];
+          var label = activePoints[0]._chart.tooltip._data.datasets[0].data[idx]['name'];
+          //console.log(label.replaceAll('-','_'))
+          location.href = '/networks/aggregate/'+ slug +'_1_' + label.replaceAll('-','_')
+        }
+      };
+  }
+
   }
 
   });
@@ -297,14 +316,14 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 
-    if (slug == 'Glioblastoma'){
+    if (slug == 'GBM'){
         var TITLE = 'Days to death and age at diagnosis';
     }else{
         var TITLE = 'Relationship between survival and age';
     }
-    if (slug == 'Colon'){
+    if (slug == 'COAD'){
       var POINT_X = 'time_to_event'; // column name for x values in data.csv
-    }else if (slug == 'Glioblastoma'){
+    }else if (slug == 'GBM'){
       var POINT_X = 'yearstobirth'; 
     }else{
       var POINT_X = 'gdc_cases.diagnoses.days_to_death'; // column name for x values in data.csv
@@ -312,9 +331,9 @@ $(document).ready(function() {
     var POINT_X_PREFIX = ''; // prefix for x values, eg '$'
     var POINT_X_POSTFIX = ''; // postfix for x values, eg '%'
   
-    if (slug == 'Colon'){
+    if (slug == 'COAD'){
       var POINT_Y = 'age_at_initial_pathologic_diagnosis'; // column name for y values in data.csv
-    }else if (slug == 'Glioblastoma'){
+    }else if (slug == 'GBM'){
       var POINT_Y = 'daystodeath'; 
     }else{
       var POINT_Y = 'cgc_case_age_at_diagnosis'; // column name for y values in data.csv
@@ -323,15 +342,15 @@ $(document).ready(function() {
     var POINT_Y_POSTFIX = ''; // postfix for x values, eg ' kg'
   
     var POINT_NAME = 'sample'; // point names that appear in tooltip
-    if (slug == 'Cervix' || slug == 'Breast' || slug == 'Liver' || slug == 'Pancreas'){
+    if (slug == 'CESC' || slug == 'BRCA' || slug == 'LIHC' || slug == 'PAAD'){
       var POINT_NAME = 'gdc_cases.samples.portions.analytes.aliquots.submitter_id'; // point names that appear in tooltip
-    }else if (slug == 'Glioblastoma'){
+    }else if (slug == 'GBM'){
       var POINT_NAME = 'submitter_id';
     }
     var POINT_COLOR = 'rgba(0,0,255,0.7)'; // eg `black` or `rgba(10,100,44,0.8)`
     var POINT_RADIUS = 5; // radius of each data point
   
-    if (slug == 'Glioblastoma'){
+    if (slug == 'GBM'){
       var X_AXIS = 'Days to death'; // x-axis label, label in tooltip
       var Y_AXIS = 'Age at diagnosis (years)'; // y-axis label, label in tooltip
     }else{
@@ -346,7 +365,7 @@ $(document).ready(function() {
   
       var rows = Papa.parse(csvString, {header: true}).data;
   
-      if (slug=='Colon'){
+      if (slug=='COAD'){
         var data = rows.map(function(row) {
           return {
             x: row[POINT_X]*360,
@@ -373,7 +392,8 @@ $(document).ready(function() {
               }]
       };
   
-      var ctx = document.getElementById('scatterChart2').getContext('2d');
+      var canvas = document.getElementById('scatterChart2')
+      var ctx = canvas.getContext('2d');
   
       var myScatterChart2 = new Chart.Scatter(ctx, {
         data: scatterChartData,
@@ -434,6 +454,20 @@ $(document).ready(function() {
           }
         }
       });
+
+
+      if (slug == 'PAAD' || slug == 'GBM' || slug == 'COAD'){
+        canvas.onclick = function(evt) {
+          var activePoints = myScatterChart2.getElementsAtEvent(evt);
+          console.log(activePoints)
+          if (activePoints[0]) {
+            var idx = activePoints[0]['_index'];
+            var label = activePoints[0]._chart.tooltip._data.datasets[0].data[idx]['name'];
+            //console.log(label.replaceAll('-','_'))
+            location.href = '/networks/aggregate/'+ slug +'_1_' + label.replaceAll('-','_')
+          }
+        };
+  }
   
     });
   });

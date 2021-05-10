@@ -69,6 +69,8 @@ class Cellsample(models.Model):
     difftar       = models.CharField(max_length=400)
     difftargenes       = models.CharField(max_length=400)
     cleanname     = models.CharField(max_length=400)
+    cleannamedis     = models.CharField(max_length=400)
+    isdragon     = models.CharField(max_length=400)
 
 class Druglanding(models.Model):
     number    = models.IntegerField(default=0)
@@ -200,11 +202,19 @@ class Cancer(models.Model):
     nnetsref  = models.CharField(max_length=200)
     nnets2ref = models.CharField(max_length=200)
     datasets  = models.CharField(max_length=200)
-    datasets2  = models.CharField(max_length=200)
-    datasetsref  = models.CharField(max_length=200)
+    datasets2     = models.CharField(max_length=200)
+    datasetsref   = models.CharField(max_length=200)
     datasets2ref  = models.CharField(max_length=200)
     types     = models.CharField(max_length=200)
-    subtype   = models.CharField(max_length=200)
+    cancer    = models.CharField(max_length=200)
+    tcgacode  = models.CharField(max_length=200)
+    match     = models.CharField(max_length=200)
+    ntfs      = models.CharField(max_length=200)
+    ngenes    = models.CharField(max_length=200)
+    nsamples  = models.CharField(max_length=200)
+    disp      = models.CharField(max_length=200)
+    dispname  = models.CharField(max_length=200)
+
 
 class Tissuelanding(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
@@ -242,6 +252,18 @@ class TissueTar(models.Model):
     query        = models.IntegerField(default=0)
     nuser        = models.IntegerField(default=0)
     logpval      = models.FloatField()
+
+class Enrichtfs(models.Model):
+    cell      = models.CharField(max_length=600)
+    term      = models.CharField(max_length=600)
+    go        = models.CharField(max_length=600)
+    logpval   = models.CharField(max_length=600)
+
+class Enrichgenes(models.Model):
+    cell      = models.CharField(max_length=600)
+    term      = models.CharField(max_length=600)
+    go        = models.CharField(max_length=600)
+    logpval   = models.CharField(max_length=600)
 
 class Tissuesample(models.Model):
     sampleid    = models.CharField(max_length=600)
@@ -366,6 +388,18 @@ class Cancerlanding(models.Model):
     cardref   = models.CharField(max_length=200)
     script    = models.CharField(max_length=200)
     dataset   = models.CharField(max_length=200)
+    tcgacode  = models.CharField(max_length=200)
+
+class Cancerpheno(models.Model):
+    sample               = models.CharField(max_length=200)
+    gender               = models.CharField(max_length=200)
+    race                 = models.CharField(max_length=200)
+    ajcc                 = models.CharField(max_length=200)
+    vital_status         = models.CharField(max_length=200)
+    age                  = models.CharField(max_length=200)
+    days_to_last_followup= models.CharField(max_length=200)
+    tumorID              = models.CharField(max_length=200)
+
 
 class Genelanding(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]

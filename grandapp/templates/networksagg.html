@@ -2,6 +2,44 @@
 {% include "header.html" %}
 {% load widget_tweaks %}
 
+{% if tfgeneseltar != 'nosel' %}
+<div class="container alert alert-warning alert-dismissible fade show" role="alert">
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+  </button>
+
+<h4 class="alert-heading">Submission stats</h4>
+<p class="mb-1">
+  {% if tfgeneseltar == 'by gene' %}
+    {% if found == 'found' %}
+    {{ ngenesfound }} genes found in network among {{ ngwas }} genes entered
+    {% else %}
+    Gene list not found, plotting network without gene filtering
+    {% endif %}
+  {% elif tfgeneseltar == 'by GO' %}
+    {% if found == 'found' %}
+    GO term found!
+    {{ ngenesfound }} genes found among {{ ngwas }} genes in GO term
+    {% else %}
+    GO term not found, plotting network without GO filtering
+    {% endif %}
+  {% elif tfgeneseltar == 'by GWAS' %}
+    {% if found == 'found' %}
+    GWAS trait found!
+    {{ ngenesfound }} genes found among {{ ngwas }} genes in GWAS trait
+    {% else %}
+    GWAS trait not found, plotting network without GWAS filtering
+    {% endif %}
+  {% elif tfgeneseltar == 'by tf' %}
+    {% if found == 'found' %}
+    {{ ngenesfound }} TFs/miRNA found in network among {{ ngwas }} TFs/miRNA entered
+    {% else %}
+    TF list not found, plotting network without TF filtering
+    {% endif %}
+  {% endif %}
+        </p>
+</div>
+{% endif %}
+
 <div class='container pt-3 pb-4'>
     <div class="card text-center">
         <div class="card-header">
@@ -20,21 +58,6 @@
                   {% else %}
                   <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">Targeting</a>
                   {% endif %}
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link disabled" id="profile-tab" data-bs-toggle="tab" role="tab" aria-selected="false">Input data:</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#ppi" role="tab" aria-controls="ppi" aria-selected="false">PPI</a>
-                  <img src="{% static 'images/ppi.svg' %}" style="width: 65px; height:31px">
-                </li>
-                <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#motif" role="tab" aria-controls="motif" aria-selected="false">Motif</a>
-                  <img src="{% static 'images/motif.svg' %}" style="width: 75px; height:30px">
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#coexpression" role="tab" aria-controls="coexpression" aria-selected="false" >Expression</a>
-                    <img src="{% static 'images/coexpression.svg' %}" style="width: 115px; height:28px">
                 </li>
               </ul>
         </div>
@@ -152,7 +175,7 @@
                           data-bs-placement="top"
                           data-bs-html="true"
                           data-bs-content="Enter TF names by ENSG ID, gene symbols, or mixed lists, with TF in a new line">
-                        TF</a></small>
+                        TF/miRNA</a></small>
                       </div>
                       <br>
                       {{ netform.tfform }}
@@ -163,7 +186,7 @@
                           data-bs-animation="false"
                           data-bs-placement="top"
                           data-bs-html="true"
-                          data-bs-content="Enter GO term ID for example GO:0060148. Please check <a href='https://grand.networkmedicine.org/pathways/'>the pathway page</a> for a full term list.">
+                          data-bs-content="Enter GO term ID for example GO:0060148. Please check <a href='https://grand.networkmedicine.org/pathways/' target='_blank'>the pathway page</a> for a full term list.">
                         GO</a></small>
                       </div>
                       <br>
@@ -175,7 +198,7 @@
                           data-bs-animation="false"
                           data-bs-placement="top"
                           data-bs-html="true"
-                          data-bs-content="Enter GWAS catalog term for example AIDS progression. Please check <a href='https://grand.networkmedicine.org/gwascatalog/'>the GWAS catalog page</a> for a full term list.">
+                          data-bs-content="Enter GWAS catalog term for example AIDS progression. Please check <a href='https://grand.networkmedicine.org/gwascatalog/' target='_blank'>the GWAS catalog page</a> for a full term list.">
                         GWAS</a></small>
                       </div>
                       <br>
@@ -224,18 +247,35 @@
                     </div>
                   </div>
                 </div>
-                    <div class="card-body">
-                    <h5 class="card-title">{{ cancerType }} cancer gene regulatory network</h5>
-                    <p class="card-text">Aggregate network model of TCGA gene expression data set.</p>
+                    <div class="card">
+                      <ul class="list-group list-group-flush">
+                        <div class="card-header">Network information</div>
+                      <div class="card-body">
+                        <p class="card-text">Network reference: {{ slug }}</p>
+                        {% if ssagg != '' %}
+                        <p class="card-text">Network type: {{ ssagg }}</p>
+                        <p class="card-text">Category: {{ categorynet }}</p>
+                        <p class="card-text">Regulator: {{ regnetdisp }}</p>
+                        {% endif %}
+                        <a href="/{{ backpage }}/" class="btn btn-primary">Full network information page</a>
+                      </div>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Network parameters</li>
-                        <li class="list-group-item">TFs</li>
-                        <li class="list-group-item">Genes</li>
+                    <div class="card">
+                    <div class="card-header">Edge weights table</div>
+                    <div class="container col-10 mt-3 pb-3">
+                      <table id="drugstable2" class="table table-hover" style="width: 100%">
+                        <thead>
+                          <tr>
+                            <th scope="col">Source</th>
+                            <th scope="col">Target</th>
+                            <th scope="col">Edge weight</th>
+                          </tr>
+                        </thead>
+                      </table>
+                      </div>
                     </ul>
+                  </div>
             </div>
-            <div class="tab-pane fade" id="ppi" role="tabpanel" aria-labelledby="profile-tab">...</div>
-            <div class="tab-pane fade" id="motif" role="tabpanel" aria-labelledby="contact-tab">...</div>
 
         <!-- Targeting -->
         {% if activetab == 'tar' %}
@@ -308,7 +348,7 @@
                       data-bs-animation="false"
                       data-bs-placement="top"
                       data-bs-html="true"
-                      data-bs-content="Enter GWAS catalog term for example AIDS progression. Please check <a href='https://grand.networkmedicine.org/gwas/'>the GWAS catalog page</a> for a full term list.">
+                      data-bs-content="Enter GWAS catalog term for example AIDS progression. Please check <a href='https://grand.networkmedicine.org/gwascatalog/'>the GWAS catalog page</a> for a full term list.">
                     GWAS</a></small>
                   </div>
                   <br>
@@ -317,7 +357,7 @@
                   </div>
                   <br>
 
-                    <h5><span class="badge bg-secondary">TFs</span></h5>
+                    <h5><span class="badge bg-secondary">TFs/miRNA</span></h5>
                         {{ tarform.nedgestartf }}
                         <p>Value: <span id="demo2Tartf"></span></p>
                         <div class="form-group">
@@ -364,7 +404,7 @@
                       Info
                     </button>
                     <a class="btn btn-outline-primary disabled" role="button">Enrich</a>
-                    <a class="btn btn-outline-primary" href="{% url 'disease' %}" role="button">TFs</a>
+                    <a id="btnenrich" class="btn btn-outline-primary" href="{% url 'disease' %}" role="button">TFs</a>
                   </div>
                   <br><br>
                   <small>2. Drug repurposing</small>
@@ -391,15 +431,55 @@
                 </div>
               </div>
               <div class='col border border-secondary padding-0'> 
-              <div class="row-4 ">
+              <div class="row-4">
                 <canvas id="tftardiv" style="width:100%; height:400px;"></canvas>
               </div>
-              <div class="row-4 ">
+              <div class="row-4">
                 <canvas id="genetardiv" style="width:100%; height:400px;"></canvas>
               </div>
               </div>
             </div>
           </div>
+          <div class="card">
+            <ul class="list-group list-group-flush">
+              <div class="card-header">Network information</div>
+            <div class="card-body">
+              <p class="card-text">Network reference: {{ slug }}</p>
+              {% if ssagg != '' %}
+              <p class="card-text">Network type: {{ ssagg }}</p>
+              <p class="card-text">Category: {{ categorynet }}</p>
+              <p class="card-text">Regulator: {{ regnetdisp }}</p>
+              {% endif %}
+              <a href="/{{ backpage }}/" class="btn btn-primary">Full network information page</a>
+            </div>
+          </div>
+          <div class="card">
+          <div class="card-header">Gene Targeting score</div>
+          <div class="container col-10 mt-3 pb-3">
+            <table id="drugstable3" class="table table-hover" style="width: 100%">
+              <thead>
+                <tr>
+                  <th scope="col">Gene</th>
+                  <th scope="col">Targeting score</th>
+                </tr>
+              </thead>
+            </table>
+            </div>
+            <div class="card">
+              <div class="card-header">TF Targeting score</div>
+              <div class="container col-10 mt-3 pb-3">
+            <table id="drugstable4" class="table table-hover" style="width: 100%">
+              <thead>
+                <tr>
+                  <th scope="col">Regulator</th>
+                  <th scope="col">Targeting score</th>
+                </tr>
+              </thead>
+            </table>
+            </div>
+            </div>
+          </ul>
+        </div>
           </div>
           </div>
       </div>
@@ -414,7 +494,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p style="text-align:left">Targeting refers to a bipartite network metric. For genes, targeting is the weighted indegree. For TFs, it represents the weighted outdegree.</p>
+        <p style="text-align:left">Targeting refers to a bipartite network metric. For genes, targeting is the weighted indegree. For TFs, it represents the weighted outdegree. This feature is available only for TFs but not miRNA nor genes.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -465,6 +545,40 @@
 
 {% include "footer.html" %}
 
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    var edges = JSON.parse("{{edges|escapejs}}"); 
+      //datatables
+      $('#drugstable2').DataTable({
+        "data": edges,
+        "order": [[ 2, "desc" ]],
+        "columns": [
+           {"data": "sourcelabel"},
+           {"data": "targetlabel"},
+           {"data": "dispval"},
+       ],
+       buttons: [
+                'copy', 'csv', 'pdf', 'print'
+            ],
+        "dom": "B" + "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
+               "<'row'<'col-sm-12'tr>>" +
+               "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+      });
+      
+  
+  } );
+</script>
+
+
+
 <script>
   var slug="{{ slug }}";
   var slidertartf = document.getElementById("myEdgeTartf");
@@ -491,6 +605,9 @@
   var nodes = JSON.parse("{{nodes|escapejs}}");  
   var edges = JSON.parse("{{edges|escapejs}}"); 
 </script> 
+
+
+
 <script>
 
   $(document).ready(function() {
@@ -507,16 +624,27 @@
 <script>
 
   if(document.getElementById('absval')==null){
-    if(slug.substr(0,3)=='ACH'){
+    if(slug.substr(0,3)=='ACH' || slug == 'mirnadragon' ){
       document.getElementById('id_edgetargeting').disabled = true; 
+    }
+    if(slug == 'mirnadragon' ){
+      document.getElementById('id_tfgeneselclue_1').disabled = true; 
+      var element = document.getElementById("btnenrich");
+      element.classList.add("disabled");
     }
     document.getElementById('id_absval').onchange = function() {
         document.getElementById('id_brd').checked = this.checked;
 
     };
   }else if(document.getElementById('id_absval')==null){
-    if(slug.substr(0,3)=='ACH'){
+    if(slug.substr(0,3)=='ACH' || slug == 'mirnadragon' ){
       document.getElementById('edgetargeting').disabled = true; 
+      document.getElementById('tfgeneselclue_1').disabled = true; 
+    }
+    if(slug == 'mirnadragon' ){
+      document.getElementById('tfgeneselclue_1').disabled = true; 
+      var element = document.getElementById("btnenrich");
+      element.classList.add("disabled");
     }
     document.getElementById('absval').onchange = function() {
         document.getElementById('brd').checked = this.checked;
@@ -528,7 +656,58 @@
 var tftarscore = JSON.parse("{{tftarscore|escapejs}}");  
 var genetarscore = JSON.parse("{{genetarscore|escapejs}}"); 
 </script>
+
+
+<script>
+  $(document).ready(function() {
+    var genetarscore = JSON.parse("{{genetarscore|escapejs}}"); 
+      //datatables
+      $('#drugstable3').DataTable({
+        "data": genetarscore,
+        "order": [[ 1, "desc" ]],
+        "columns": [
+           {"data": "index"},
+           {"data": "tar"},
+       ],
+       buttons: [
+                'copy', 'csv', 'pdf', 'print'
+            ],
+        "dom": "B" + "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
+               "<'row'<'col-sm-12'tr>>" +
+               "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+      });
+      
+  
+  } );
+</script>
+
+<script>
+  $(document).ready(function() {
+    var tftarscore = JSON.parse("{{tftarscore|escapejs}}");  
+      //datatables
+      $('#drugstable4').DataTable({
+        "data": tftarscore,
+        "order": [[ 1, "desc" ]],
+        "columns": [
+           {"data": "TF"},
+           {"data": "tar"},
+       ],
+       buttons: [
+                'copy', 'csv', 'pdf', 'print'
+            ],
+        "dom": "B" + "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
+               "<'row'<'col-sm-12'tr>>" +
+               "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+      });
+      
+  
+  } );
+</script>
+
+
 <script src="{% static 'js/bartar.js' %}"></script>
+
+
 
 </script> 
 </body>

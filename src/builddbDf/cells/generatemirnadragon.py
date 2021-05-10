@@ -35,7 +35,7 @@ mirna=pd.read_csv('data/CCLE_miRNA_20181103.gct',sep='\t',comment='#',skiprows=2
 expression=pd.read_csv('data/CCLE_expression.csv',index_col=0)
 # 2. remove unnecessary columns
 mirna = mirna.iloc[:,1:]
-# 3. convert cell names to depmap IDs
+# 3. convert cell names to depmap IDs # fetch these functions from dragonNet.py
 mirna=convertToDepMap(mirna,cellNames)
 # 4. align dataframes
 expression,mirna=alignDF(expression,mirna,remove_std=1)
@@ -49,3 +49,35 @@ expressionMat= Scale(expressionMat)
 r_mir_exp, adj_p_vals_mir_exp=estimateDragonValues(mirnaMat, expressionMat)
 # 8. take mirna to mRNA network
 mir_exp_edges=createVisNet(mirna,expression,r_mir_exp,mirnaMat,'mir','exp')
+
+# clean up genes names
+mirnanet = pd.read_csv('~/Downloads/dragon_mirna_CCLE.csv', index_col=0)
+
+mirVec=[]
+for mir in mirnanet.columns:
+    mirVec.append(str.split(mir,' ')[0])
+
+mirnanet.columns = mirVec
+
+mirnanet.to_csv('~/Downloads/dragon_mirna_CCLE.csv')
+
+
+
+
+
+# build merged gene and mirna expression
+mirna = pd.read_csv('data/CCLE_miRNA_20181103.gct', sep='\t', comment='#', skiprows=2, index_col=1)
+mirna = mirna.iloc[:, 1:]
+expression = pd.read_csv('data/CCLE_expression.csv', index_col=0)
+
+newvec=[]
+for exp in expression.columns:
+    newvec.append(str.split(exp,' ')[0])
+expression.columns = newvec
+
+mirna=convertToDepMap(mirna,cellNames)
+# 4. align dataframes
+expression,mirna=alignDF(expression,mirna,remove_std=1)
+mirna=mirna.transpose()
+a=pd.concat((expression, mirna) ,axis=1)
+a.to_csv('~/Downloads/merged_gene_mirna.csv')

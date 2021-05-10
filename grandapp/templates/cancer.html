@@ -1,18 +1,26 @@
 {% load static %} 
 {% include "header.html" %}
 
-<div class="container col-9 pb-5 mb-5 mt-4">
-  <div class="container col-8 mb-3 pb-3">
-    <canvas id="cancerbubble" style="width:100%; height:400px;"></canvas>
-    <p style="font-family: Helvetica; color: #333; padding: 1em 2em; font-size: 12px">
-      Bubble size reflects the number of transcription factors in the network.
-    </p>
-  </div>
+<div class="container pb-5 mb-5 mt-4">
+    <div class='row'>
+      <div class='col'>
+      <canvas id="cancerbubble" style="width:100%; height:300px;"></canvas>
+      <p style="font-family: Helvetica; color: #333; padding: 1em 2em; font-size: 12px">
+        Click on the bar plot to filter the table below.
+      </p>
+      </div>
+      <div class='col'>
+      <canvas id="cancerbubble2" style="width:100%; height:300px;"></canvas>
+      </div>
+      <div class='col'>
+      <canvas id="cancerbubble3" style="width:100%; height:300px;"></canvas>
+      </div>
+    </div>
   <div class="accordion" id="accordionExample">
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingOne">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          Cell lines network types
+          Cancer tissue networks
         </button>
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
@@ -20,15 +28,9 @@
         <table id="tissuestable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
-                    <th scope="col">Number</th>
-                    <th scope="col">Cancer type</th>
-                    <th scope="col">Subtype <i class="far fa-question-circle"
-                      data-bs-toggle="popover"
-                      data-bs-trigger="hover"
-                      data-bs-animation="false"
-                      data-bs-placement="top"
-                      data-bs-content="Merged means that several subtypes were included in the aggregate network.">
-                    </i></th>
+                    <th scope="col">Cancer</th>
+                    <th scope="col">Tissue</th>
+                    <th scope="col">TCGA code</th>
                     <th scope="col">Methods</th>
                     <th scope="col">Network Types</th>
                     <th scope="col">Datasets</th>
@@ -36,22 +38,24 @@
                 </thead>
                 <tbody>
 		 {% for cc in cancer %}
-		    <tr>
-		    <th scope="row">{{ forloop.counter }}</th>
-		    <td><a href="{{ cc.cancerref }}" class="text-decoration-none">{{ cc.tissue }} cancer</a></td>
-        <td>{{ cc.subtype }}</td>
-        {% if cc.nnets2 == "" %}
-          <td><a href="{{ cc.nnetsref }}" class="text-decoration-none">{{ cc.nnets }}</a></td>
-        {% else %}
-          <td><a href="{{ cc.nnetsref }}" class="text-decoration-none">{{ cc.nnets }}</a>, <a href="{{ cc.nnets2ref }}" class="text-decoration-none">{{ cc.nnets2 }}</a></td>
-        {% endif %}
-        <td>{{ cc.types }}</td>
-        {% if cc.datasets2 == "" %}
-          <td><a href="{{ cc.datasetsref }}" class="text-decoration-none">{{ cc.datasets }}</a></td>
-        {% else %}
-          <td><a href="{{ cc.datasetsref }}" class="text-decoration-none">{{ cc.datasets }}</a>, <a href="{{ cc.datasets2ref }}" class="text-decoration-none">{{ cc.datasets2 }}</a></td>
-        {% endif %}
+        {% if cc.disp == 'y' %}
+        <tr>
+          <td><a href="{{ cc.tcgacode }}_cancer" class="text-decoration-none">{{ cc.cancer }}</a></td>
+          <td>{{ cc.tissue }}</td>
+          <td>{{ cc.tcgacode }}</td>
+          {% if cc.nnets2 == "" %}
+            <td><a href="{{ cc.nnetsref }}" class="text-decoration-none" target="_blank">{{ cc.nnets }}</a></td>
+          {% else %}
+            <td><a href="{{ cc.nnetsref }}" class="text-decoration-none" target="_blank">{{ cc.nnets }}</a>, <a href="{{ cc.nnets2ref }}" class="text-decoration-none" target="_blank">{{ cc.nnets2 }}</a></td>
+          {% endif %}
+          <td>{{ cc.types }}</td>
+          {% if cc.datasets2 == "" %}
+            <td><a href="{{ cc.datasetsref }}" class="text-decoration-none" target="_blank">{{ cc.datasets }}</a></td>
+          {% else %}
+            <td><a href="{{ cc.datasetsref }}" class="text-decoration-none" target="_blank">{{ cc.datasets }}</a>, <a href="{{ cc.datasets2ref }}" class="text-decoration-none" target="_blank">{{ cc.datasets2 }}</a></td>
+          {% endif %}
         </tr>
+        {% endif %}
 		 {% endfor %}
                 </tbody>
           </table>
@@ -64,8 +68,9 @@
 
 
 {% include "footer.html" %}
-<script> var dataurl = "{% static 'js/data.csv' %}";</script>
-
+<script> 
+  var data2 = JSON.parse("{{data|escapejs}}");  
+</script>
 <script src="{% static 'js/bubbleChart.js' %}"></script>
 
 

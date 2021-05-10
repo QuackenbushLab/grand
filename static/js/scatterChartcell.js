@@ -156,10 +156,19 @@ $(document).ready(function() {
   // Scatter chart 2
 
   if(slug2=='lcl' || slug2=='fibroblast_gtex'){
-    var POINT_X = 'smrin'; 
-    var POINT_Y = 'smtsisch'; 
+    if (slug == 'Brain_basal_ganglia_tissue'){
+      var POINT_Y = 'smgnsdtc'; 
+      var Y_AXIS = 'Mean coverage per base'; // y-axis label, label in tooltip
+      var TITLE = 'Sample expression quality control 2: Mean coverage as a function of RNA integrity';  
+    }else{
+      var POINT_Y = 'smtsisch'; 
+      var Y_AXIS = 'Total ischemic time'; // y-axis label, label in tooltip
+      var TITLE = 'Sample expression quality control 2: Ischemic time as a function of RNA integrity';  
+    }
+
+    var POINT_X = 'smrin';  
   
-    var TITLE = 'Sample expression quality control 2: Ischemic time as a function of RNA integrity';  
+
 
     var POINT_X_PREFIX = ''; // prefix for x values, eg '$'
     var POINT_X_POSTFIX = ''; // postfix for x values, eg '%'
@@ -173,7 +182,6 @@ $(document).ready(function() {
     var POINT_RADIUS = 5; // radius of each data point
 
     var X_AXIS = 'RNA integrity number'; // x-axis label, label in tooltip
-    var Y_AXIS = 'Total ischemic time'; // y-axis label, label in tooltip
 
     var SHOW_GRID = true; // `true` to show the grid, `false` to hide
   }else{

@@ -20,11 +20,12 @@
         </div>
       </div>
     </div>
+    GRAND works best on Google Chrome to take adavantage of the full network visualization features.
     <p><h3 id="networks" class="text-primary">Networks</h3>
     <h4>Reconstruction</h4>
     <div class="ml-3">
     The networks can be reconstructed using the tool specified in the tool field in the data table. For example, the LCL cell line network can be built using the PANDA tool as implemented in the package netZooM version 0.1. The other fields in the datatables refer to the arguments or data sources needed for the tool. For example, PANDA requires a TF-TF PPI network, gene expression samples, and TF motif binding site. 
-    These data files along with their sources are provided to reconstruct the network. Since PANDA is a deterministic algorithm, reconstructing the network using the data priors and the same software release should yield the exact same network as the one available for direct download.
+    These data files along with their sources are provided to reconstruct the network. Since PANDA is a deterministic algorithm, reconstructing the network using the data priors and the same software release should yield the exact same network as the one available for visualization and download.
     </div>
     <h4>Download</h4>
     <div class="ml-3">The networks can be downloaded with two different properties.
@@ -39,7 +40,7 @@
     <br><code>gt:</code> stands for gene targeting. Gene targeting is the sum of weighted in-degrees in the network.
     <br><code>tt:</code> stands for TF targeting. TF targeting is the sum of weighted out-degrees in the network.
     <h5>Edge weights:</h5>
-    The edges weights computed by PANDA, PUMA, OTTER, and LIONESS algorithms. They usually vary between -20 and 20.
+    The edges weights are computed by PANDA, PUMA, OTTER, and LIONESS algorithms. They usually vary between -20 and 20.
     A large value means a high likelihood of the existence of an edge between two nodes, a low negative value means a small probability of interaction between two given nodes. For DRAGON, edges weights are partial correlations between the nodes.
     <br>Download options are available in different formats. For example <button type="button" class="btn btn-outline-primary">Edg</button> allows to download a network in <code>edges</code> format with original edge weights.</p>
     <div class="container alert alert-warning alert-dismissible fade show" role="alert">
@@ -52,7 +53,7 @@
     <div class="ml-3"><p align="justify"> The analysis section allows to analyse a set of TFs or genes in disease or small molecule category. It exploits the duality between TFs and genes
     in bipartite gene regulatory networks.</p>
     <p align="justify">The small molecule analysis section allows to find compounds that optimally reverse the gene targeting or the transcription factor activity patterns in the query set.</p>
-    <p align="justify">Gene targeting refers the to the weighted in-degree of a given gene. Since PANDA is usually validated against Chip-Seq data, targeting can be interpreted as the binding profile of TFs for a given gene in a particular experiment. Transcription targeting activity refers to the weighted out-degree of a given transcription factor. This tool serves for hypothesis generation wheras compounds that reverse/aggravate the gene/TF targeting patterns of a given experiment are hypothetical candidates for experimental validation. </p>
+    <p align="justify">Gene targeting refers the to the weighted in-degree of a given gene. Since PANDA is usually validated against ChIP-seq data, targeting can be interpreted as the binding profile of TFs for a given gene in a particular experiment. Transcription targeting activity refers to the weighted out-degree of a given transcription factor. This tool serves for hypothesis generation wheras compounds that reverse/aggravate the gene/TF targeting patterns of a given experiment are hypothetical candidates for experimental validation. </p>
     <p align="justify">The overlap score is equal to card(intersect(Input_Genes_Up,Drug_Genes_down)) + card(intersect(Input_Genes_Down,Drug_Genes_Up))
      - card(intersect(Input_Genes_Up,Drugs_Genes_Up)) - card(intersect(Input_Genes_Down,Drugs_Genes_Down)). The cosine similarity compares the input vector to all the drugs. It is a signed measure that computes the direction of the vectors rather than their amplitude. In our case, we are interested in measuring the vectors of opposite directions, thus having negative cosine similarity.</p>
     </div>
@@ -91,10 +92,10 @@
     <p><h3 id="api" class="text-primary">API</h3>
     <h4>Documentation</h4>
     <div class="ml-3">GRAND has an API that allows accessing and filtering the data programmatically to perform large-scale downloads. The full API documentation is available at <a href="https://grand.networkmedicine.org/redoc/">https://grand.networkmedicine.org/redoc/</a>.
-    A web view of the API is also available for <a href="https://grand.networkmedicine.org/api/v1/cellapi/">cells</a>, <a href="https://grand.networkmedicine.org/api/v1/cancerapi/">cancer type</a>, <a href="https://grand.networkmedicine.org/api/v1/geneapi/">genes</a>, <a href="https://grand.networkmedicine.org/api/v1/tissueapi/">tissues</a>, and <a href="https://grand.networkmedicine.org/api/v1/drugapi/">drug networks</a>.
+    A web view of the API is also available for <a href="https://grand.networkmedicine.org/api/v1/cancerapi/">cancer type</a>, <a href="https://grand.networkmedicine.org/api/v1/geneapi/">genes</a>, <a href="https://grand.networkmedicine.org/api/v1/tissueapi/">tissues</a>, and <a href="https://grand.networkmedicine.org/api/v1/drugapi/">drug networks</a>.
     </div>
     <h4>Tutorial 1</h4>
-    <div class="ml-3">You can access the database programmatically through the API, here we provide an example using the <a href="https://requests.kennethreitz.org/en/master/">requests</a> library of Python3. Additionally, you need to install the library <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html">awscli</a> to download networks through the command line.
+    <div class="ml-3">You can access the database programmatically through the API, here we provide an example using the <a target="_blank" style="text-decoration:none" href="https://requests.kennethreitz.org/en/master/">requests</a> library of Python3. Additionally, you need to install the library <a target="_blank" style="text-decoration:none" href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html">awscli</a> to download networks through the command line.
     <pre><code>
     import requests
     import os      
@@ -138,12 +139,13 @@
     </p>
     </div>
     <h4>Tutorial 2</h4>
-    <div class="ml-3">It is possible to rebuild the networks hosted in grand database using the metadata provided with each network. For example, we can rebuild the <a href='/cell'>LCL cell line network</a> using the provided prior data.
-    A closer look at the LCL cell line entry shows that the network has been reconstructed using the tool PANDA, as implemented in <a href='http://netzoo.github.io'>netZooM</a> version 0.1. PANDA takes as input, a PPI network,
+    <div class="ml-3">It is possible to rebuild the networks hosted in grand database using the metadata provided with each network. For example, we can rebuild the <a target="_blank" style="text-decoration:none" href='/cell'>LCL cell line network</a> using the provided prior data.
+    A closer look at the LCL cell line entry shows that the network has been reconstructed using the tool PANDA, as implemented in <a target="_blank" style="text-decoration:none" href='http://netzoo.github.io'>netZooM</a> version 0.1. PANDA takes as input, a PPI network,
     gene expression data, and TF DNA binding motif data. These priors are provided along with the network. Since the network has been reconstructed in MATLAB, the following MATLAB tutorial goes through all the steps of downloading
-    the priors through programmatic access and the reconstruction of the network: <a href='https://github.com/netZoo/netZooM/tree/devel/tutorials/grand_db'>Using GRAND database's API for reproducible network reconstruction</a>.</div>
+    the priors through programmatic access and the reconstruction of the network: <a target="_blank" style="text-decoration:none"  href='https://github.com/netZoo/netZooM/tree/devel/tutorials/grand_db'>Using GRAND database's API for reproducible network reconstruction</a>.</div>
+    The code is provided using <button type="button" class="btn btn-outline-danger">Code</button> button. For networks generated using MATLAB, the .m script can be downloaded, however, for open-source languages (R and Python), the code is provided as Jupyter notebooks hosted on a cloud server called <a target="_blank" style="text-decoration:none" href="http://netbooks.networkmedicine.org">netbooks</a>.
     <p><h3 id="credit" class="text-primary">Image credit</h3>
-    <div class="ml-3">Small molecule infographic: <a href="https://www.freepik.com/free-photos-vectors/background">Background vector created by freepik - www.freepik.com</a>
+    <div class="ml-3">Small molecule infographic: <a target="_blank" style="text-decoration:none" href="https://www.freepik.com/free-photos-vectors/background">Background vector created by freepik - www.freepik.com</a>
     <br>
     <br>
     <br></div>

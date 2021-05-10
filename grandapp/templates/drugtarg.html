@@ -2,6 +2,39 @@
 {% include "header.html" %}
 {% load widget_tweaks %}
 
+
+{% if tfgeneseltar != 'nosel' %}
+<div class="container alert alert-warning alert-dismissible fade show" role="alert">
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+  </button>
+
+<h4 class="alert-heading">Submission stats</h4>
+<p class="mb-1">
+  {% if tfgeneseltar == 'by gene' %}
+    {% if found == 'found' %}
+    {{ ngenesfound }} genes found in network among {{ ngwas }} genes entered
+    {% else %}
+    Gene list not found, plotting network without gene filtering
+    {% endif %}
+  {% elif tfgeneseltar == 'by GO' %}
+    {% if found == 'found' %}
+    GO term found!
+    {{ ngenesfound }} genes found among {{ ngwas }} genes in GO term
+    {% else %}
+    GO term not found, plotting network without GO filtering
+    {% endif %}
+  {% elif tfgeneseltar == 'by GWAS' %}
+    {% if found == 'found' %}
+    GWAS trait found!
+    {{ ngenesfound }} genes found among {{ ngwas }} genes in GWAS trait
+    {% else %}
+    GWAS trait not found, plotting network without GWAS filtering
+    {% endif %}
+  {% endif %}
+        </p>
+</div>
+{% endif %}
+
 <div class='container pt-3 pb-4'>
     <div class="card text-center">
         <div class="card-header">
@@ -15,21 +48,6 @@
                   <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">Targeting</a>
                   {% endif %}
                 </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link disabled" id="profile-tab" data-bs-toggle="tab" role="tab" aria-selected="false">Input data:</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#ppi" role="tab" aria-controls="ppi" aria-selected="false">PPI</a>
-                  <img src="{% static 'images/ppi.svg' %}" style="width: 65px; height:31px">
-                </li>
-                <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#motif" role="tab" aria-controls="motif" aria-selected="false">Motif</a>
-                  <img src="{% static 'images/motif.svg' %}" style="width: 75px; height:30px">
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#coexpression" role="tab" aria-controls="coexpression" aria-selected="false" >Expression</a>
-                    <img src="{% static 'images/coexpression.svg' %}" style="width: 115px; height:28px">
-                </li>
               </ul>
         </div>
     
@@ -38,11 +56,7 @@
 
         <!-- NETWORK -->
         <div class="tab-content" id="myTabContent">
-          {% if activetab == 'tar' %}
             <div class="tab-pane fade" id="network" role="tabpanel" aria-labelledby="home-tab">
-          {% else %}
-            <div class="tab-pane fade show active" id="network" role="tabpanel" aria-labelledby="home-tab">
-          {% endif %}
                 <div class='container'>
                   <div class="row">
                     <div class="col-2 border border-secondary">
@@ -157,7 +171,7 @@
                           data-bs-animation="false"
                           data-bs-placement="top"
                           data-bs-html="true"
-                          data-bs-content="Enter GO term ID for example GO:0060148. Please check <a href='https://grand.networkmedicine.org/pathways/'>the pathway page</a> for a full term list.">
+                          data-bs-content="Enter GO term ID for example GO:0060148. Please check <a href='https://grand.networkmedicine.org/pathways/' target='_blank'>the pathway page</a> for a full term list.">
                         GO</a></small>
                       </div>
                       <br>
@@ -169,7 +183,7 @@
                           data-bs-animation="false"
                           data-bs-placement="top"
                           data-bs-html="true"
-                          data-bs-content="Enter GWAS catalog term for example AIDS progression. Please check <a href='https://grand.networkmedicine.org/gwascatalog/'>the GWAS catalog page</a> for a full term list.">
+                          data-bs-content="Enter GWAS catalog term for example AIDS progression. Please check <a href='https://grand.networkmedicine.org/gwascatalog/' target='_blank'>the GWAS catalog page</a> for a full term list.">
                         GWAS</a></small>
                       </div>
                       <br>
@@ -218,18 +232,7 @@
                     </div>
                   </div>
                 </div>
-                    <div class="card-body">
-                    <h5 class="card-title">{{ cancerType }} cancer gene regulatory network</h5>
-                    <p class="card-text">Aggregate network model of TCGA gene expression data set.</p>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Network parameters</li>
-                        <li class="list-group-item">TFs</li>
-                        <li class="list-group-item">Genes</li>
-                    </ul>
             </div>
-            <div class="tab-pane fade" id="ppi" role="tabpanel" aria-labelledby="profile-tab">...</div>
-            <div class="tab-pane fade" id="motif" role="tabpanel" aria-labelledby="contact-tab">...</div>
 
         <!-- Targeting -->
         {% if activetab == 'tar' %}
@@ -240,7 +243,7 @@
           <div class='container'>
             <div class="row">
               <div class="col-2 border border-secondary">
-                <h5><span class="badge bg-secondary">Genes</span></h5>
+                <h5><span class="badge bg-secondary">1. Genes</span></h5>
                 <div>
                   <form action="{% url 'drugtarg' slug %}" role="form" method="post">
                     {% csrf_token %}
@@ -265,7 +268,7 @@
                       </div>
                     </div>
                     <br>
-                    <h5><span class="badge bg-secondary">Selection</span></h5>
+                    <h5><span class="badge bg-secondary">1.1. Selection</span></h5>
                     <div class='row'>
                       <div class='col-md-10 offset-md-2'>
                     <div style="float: left;">
@@ -302,7 +305,7 @@
                       data-bs-animation="false"
                       data-bs-placement="top"
                       data-bs-html="true"
-                      data-bs-content="Enter GWAS catalog term for example AIDS progression. Please check <a href='https://grand.networkmedicine.org/gwas/'>the GWAS catalog page</a> for a full term list.">
+                      data-bs-content="Enter GWAS catalog term for example AIDS progression. Please check <a href='https://grand.networkmedicine.org/gwascatalog/'>the GWAS catalog page</a> for a full term list.">
                     GWAS</a></small>
                   </div>
                   <br>
@@ -311,7 +314,7 @@
                   </div>
                   <br>
 
-                    <h5><span class="badge bg-secondary">TFs</span></h5>
+                    <h5><span class="badge bg-secondary">2. TFs</span></h5>
                         {{ tarform.nedgestartf }}
                         <p>Value: <span id="demo2Tartf"></span></p>
                         <div class="form-group">
@@ -394,6 +397,46 @@
               </div>
             </div>
           </div>
+          <div class="card">
+            <ul class="list-group list-group-flush">
+              <div class="card-header">Network information</div>
+            <div class="card-body">
+              <p class="card-text">Network reference: {{ slug2 }}</p>
+              {% if ssagg != '' %}
+              <p class="card-text">Network type: {{ ssagg }}</p>
+              <p class="card-text">Category: {{ categorynet }}</p>
+              <p class="card-text">Regulator: {{ regnetdisp }}</p>
+              {% endif %}
+              <a href="/{{ backpage }}/" class="btn btn-primary">Full network information page</a>
+            </div>
+          </div>
+          <div class="card">
+          <div class="card-header">Gene Targeting score</div>
+          <div class="container col-10 mt-3 pb-3">
+            <table id="drugstable3" class="table table-hover" style="width: 100%">
+              <thead>
+                <tr>
+                  <th scope="col">Gene</th>
+                  <th scope="col">Targeting score</th>
+                </tr>
+              </thead>
+            </table>
+            </div>
+            <div class="card">
+              <div class="card-header">TF Targeting score</div>
+              <div class="container col-10 mt-3 pb-3">
+            <table id="drugstable4" class="table table-hover" style="width: 100%">
+              <thead>
+                <tr>
+                  <th scope="col">Regulator</th>
+                  <th scope="col">Targeting score</th>
+                </tr>
+              </thead>
+            </table>
+            </div>
+            </div>
+          </ul>
+        </div>
           </div>
           </div>
       </div>
@@ -518,6 +561,7 @@
   }
 </script>
 
+
 <script>
 var tftarscore = JSON.parse("{{tftarscore|escapejs}}");  
 var genetarscore = JSON.parse("{{genetarscore|escapejs}}"); 
@@ -525,5 +569,52 @@ var genetarscore = JSON.parse("{{genetarscore|escapejs}}");
 <script src="{% static 'js/bartar.js' %}"></script>
 
 </script> 
+
+
+<script>
+  $(document).ready(function() {
+    var genetarscore = JSON.parse("{{genetarscore|escapejs}}"); 
+      //datatables
+      $('#drugstable3').DataTable({
+        "data": genetarscore,
+        "order": [[ 1, "desc" ]],
+        "columns": [
+           {"data": "index"},
+           {"data": "tar"},
+       ],
+       buttons: [
+                'copy', 'csv', 'pdf', 'print'
+            ],
+        "dom": "B" + "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
+               "<'row'<'col-sm-12'tr>>" +
+               "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+      });
+      
+  
+  } );
+</script>
+
+<script>
+  $(document).ready(function() {
+    var tftarscore = JSON.parse("{{tftarscore|escapejs}}");  
+      //datatables
+      $('#drugstable4').DataTable({
+        "data": tftarscore,
+        "order": [[ 1, "desc" ]],
+        "columns": [
+           {"data": "TF"},
+           {"data": "tar"},
+       ],
+       buttons: [
+                'copy', 'csv', 'pdf', 'print'
+            ],
+        "dom": "B" + "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
+               "<'row'<'col-sm-12'tr>>" +
+               "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+      });
+      
+  
+  } );
+</script>
 </body>
 </html>

@@ -5,7 +5,7 @@ $(document).ready(function() {
   
       var rows = Papa.parse(csvString, {header: true}).data;
 
-      if (slug == 'Colon'){
+      if (slug == 'COAD'){
         var data2 = rows.map(function(row) {
             return row['gender'];
         })
@@ -28,7 +28,7 @@ $(document).ready(function() {
 
         var gbmtext3='Anatomic location'
         var gbmtext4='Stage'
-    }else if (slug == 'Glioblastoma'){
+    }else if (slug == 'GBM'){
       var data2 = rows.map(function(row) {
         return row['gender'];
       })
@@ -346,7 +346,7 @@ $(document).ready(function() {
 
     $('#tissuestabletcga tfoot tr').appendTo('#tissuestabletcga thead');
        
-    if (slug == 'Glioblastoma') {
+    if (slug == 'GBM') {
       canvas.onclick = function(evt) {
         var activePoints = myPieChart.getElementsAtEvent(evt);
         if (activePoints[0]) {

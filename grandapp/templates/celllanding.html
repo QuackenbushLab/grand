@@ -42,7 +42,7 @@
       <div class="col">
         <canvas id="scatterChart2" width="50" height="30"></canvas>
       </div>
-    {% else%}
+    {% else %}
       <div class="col-md-6">
         <canvas id="cellbartf" style="width:100%; height:300px;"></canvas>
       </div>
@@ -52,7 +52,7 @@
     {% endif %}
 
   <p style="font-family: Helvetica; color: #333; padding: 1em 2em; font-size: 12px">
-    To get the full list of phenotypic variables, please check the menu below.
+    To get the full list of phenotypic variables, please check the menu below. {% if slug != 'lcl' and slug != 'fibroblast_gtex' and slug != 'mirna' %}Click on the bar plot to access the network view page.{% endif %}
   </p>
 </div>
   <div class="accordion" id="accordionExample">
@@ -279,11 +279,12 @@
                       <td>{{ tissue.cancer }}</td>
                       <td>{{ tissue.tool }}</td>
                       <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none" target="_blank">{{ tissue.netzooRel }}</a></td>
-                      <td><div class="btn-group-sm" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">Adj</a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="{{ tissue.network }}" class="btn btn-outline-success" role="button">Vis</a></div></td>
                       {% if slug != 'mirna' %}
+                        <td><div class="btn-group-sm" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">Adj</a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="{{ tissue.network }}" class="btn btn-outline-success" role="button">Vis</a></div></td>
                         <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
                         <td><a href="{{ tissue.motif }}"><i class="fas fa-download"></i></a></td>
                       {% else %}
+                        <td><div class="btn-group-sm" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">Adj</a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="/networks/aggregate/mirnadragon" class="btn btn-outline-success" role="button">Vis</a></div></td>
                         <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
                       {% endif %}
                       <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
@@ -552,7 +553,11 @@
                 <tbody>
                  {% for tissue in cellsample %}
                     <tr>
-                      <td><a href="/networks/aggregate/{{ tissue.cleanname }}/" style="text-decoration:none">{{ tissue.depmap }}</a></td>
+                      {% if slug == 'mirna' %}
+                        <td>{{ tissue.depmap }}</td>
+                      {% else %}
+                        <td><a href="/networks/aggregate/{{ tissue.cleanname }}/" style="text-decoration:none">{{ tissue.depmap }}</a></td>
+                      {% endif %}
                       <td>{{ tissue.stripcellname }}</td>
                       <td>{{ tissue.cosmicid }}</td>
                       <td>{{ tissue.sex }}</td>
@@ -634,7 +639,7 @@ $(document).ready(function() {
 </script>
 
 <script>
-  var slug2='lcl';
+  var slug2="{{ slug2 }}";
   var slug="{{ slug }}";
   var data2=JSON.parse("{{data|escapejs}}");
 </script>

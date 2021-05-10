@@ -32,7 +32,7 @@ $(document).ready(function() {
 
        $('#tissuestablegeo tfoot tr').appendTo('#tissuestablegeo thead');
 
-      if (slug == 'Colon'){
+      if (slug == 'COAD'){
         var data = rows.map(function(row) {
             return row['gender'];
         })
@@ -54,7 +54,7 @@ $(document).ready(function() {
         })
 
         var text5='Anatomic location'
-      }else if (slug == 'Glioblastoma'){
+      }else if (slug == 'GBM'){
         var dataAL = rows.map(function(row) {
           return row['survival'];
         })
@@ -79,7 +79,7 @@ $(document).ready(function() {
     }
 
     var resultAL = foo(dataAL);
-    if (slug == 'Colon'){
+    if (slug == 'COAD'){
       var resultETH = foo(dataETH);
       var result = foo(data);
       var resultStage = foo(dataStage);//#dd979f
@@ -105,7 +105,7 @@ $(document).ready(function() {
               }]
       };
 
-    if (slug == 'Colon'){
+    if (slug == 'COAD'){
     var pieChartDataETH = {
         labels: resultETH[0],
         datasets: [{
@@ -146,14 +146,14 @@ $(document).ready(function() {
 
 
       var canvasAL2     = document.getElementById('myPieChartAL2');
-      if (slug == 'Colon'){
+      if (slug == 'COAD'){
         var canvasETH2  = document.getElementById('myPieChartETH2');
         var canvas2     = document.getElementById('myPieChart2');
         var canvasStage2= document.getElementById('myPieChartStage2');
         var canvasVital2= document.getElementById('myPieChartVital2');
       }
       var ctxAL2        = canvasAL2.getContext('2d');
-      if (slug == 'Colon'){
+      if (slug == 'COAD'){
         var ctxETH2      = canvasETH2.getContext('2d');
         var ctx2         = canvas2.getContext('2d');
         var ctxStage2    = canvasStage2.getContext('2d');
@@ -192,7 +192,7 @@ $(document).ready(function() {
         }
     });
 
-      if (slug == 'Colon'){
+      if (slug == 'COAD'){
       var myPieChart2 = new Chart(ctx2, {
         type: 'pie',
         data: pieChartData,
@@ -306,7 +306,7 @@ $(document).ready(function() {
     });
   }
 
-  if (slug == 'Colon'){
+  if (slug == 'COAD'){
     canvas2.onclick = function(evt) {
       var activePoints = myPieChart2.getElementsAtEvent(evt);
       if (activePoints[0]) {
@@ -366,7 +366,7 @@ $(document).ready(function() {
           $("#id"+8+101+offset).val(label);
         }
       };
-    }else if(slug == 'Glioblastoma'){
+    }else if(slug == 'GBM'){
 
       canvasAL2.onclick = function(evt) {
         var activePoints = myPieChartAL2.getElementsAtEvent(evt);
