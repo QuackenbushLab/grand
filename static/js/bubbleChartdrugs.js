@@ -165,7 +165,7 @@ $(document).ready(function() {
     });
 
     var table = $('#drugstable').DataTable({
-      "ajax": "http://127.0.0.1:8000/api/v1/drugapi/?format=datatables",
+      "ajax": "https://grand.networkmedicine.org/api/v1/drugapi/?format=datatables",
  
       "serverSide": true,
       "processing": true,
