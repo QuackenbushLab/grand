@@ -17,7 +17,7 @@
   </div>
 </div>
   <div class="accordion" id="accordionExample">
-    <div class="accordion-item">
+    <div class="accordion-item hidden">
       <h2 class="accordion-header" id="headingOne">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
           Tissue types
@@ -57,7 +57,10 @@
       </div>
     </div>
   </div>
-{% include "footer.html" %}
+
+  <div class="hidden">
+    {% include "footer.html" %}
+  </div>
 
 
 <script> 
@@ -66,7 +69,11 @@
 </script>
 
 <script src="{% static 'js/bubbleCharttissues.js' %}"></script>
-
+<script>
+  $(document).ready(function () {
+    $('div.hidden').fadeIn(300).removeClass('hidden');
+});
+</script>
 
 </body>
 </html>

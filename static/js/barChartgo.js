@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-  var TITLE = 'Enriched GO terms in differentially targeted TFs';
+  var TITLE = 'Cancer-specific GO terms by differentially targeted TFs';
 
   // `false` for vertical column chart, `true` for horizontal bar chart
   var HORIZONTAL = false;
@@ -129,7 +129,7 @@ $(document).ready(function() {
 
     // GENES
 
-    var TITLE = 'Enriched GO terms in differentially targeted genes';
+    var TITLE = 'Cancer-specific GO terms by differentially targeted genes';
 
     // `false` for vertical column chart, `true` for horizontal bar chart
     var HORIZONTAL = false;

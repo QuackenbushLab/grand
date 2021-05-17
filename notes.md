@@ -181,3 +181,10 @@ https://stackoverflow.com/questions/20337040/getting-error-while-sending-email-t
 - Renew HTTPS certificates automatically using crontab
 
 https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
+
+how to renew certbot certficiate 
+https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
+
+check rneal of certifacte
+
+https://community.letsencrypt.org/t/how-to-find-certifications-expiry-date/48661

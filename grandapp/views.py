@@ -127,7 +127,7 @@ def networksagg(request,slug):
         edges['dispval'] =1
         nodes=nodes.to_json(orient='records')
         edges=edges.to_json(orient='records')
-        object_key,ssagg,categorynet,regnetdisp,backpage=mapObjectkey(slug)
+        object_key,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug)
         # Targeting form 
         formtar = TarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100,'tfgeneseltar':'nosel'})
         clueform = ClueForm({'tfgeneselclue':'by gene'})
@@ -152,13 +152,13 @@ def networksagg(request,slug):
             if (slug[0:3]=='ACH') | (slug=='mirnadragon'):
                 form.fields['edgetargeting'].widget.attrs['disabled']    = 'disabled'
             print('The number of edges is',nedges)
-            object_key,ssagg,categorynet,regnetdisp,backpage=mapObjectkey(slug)
+            object_key,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug)
             df=fetchNetwork(object_key)
             if dt=='dtt':
                 tftar  = df.sum(axis=1) 
                 genetar= df.sum(axis=0)
             if dt=='dee':
-                object_key,ew1,ew2,ew3,ew4=mapObjectkey(slug,modality='expression')
+                object_key,ew1,ew2,ew3,ew4,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug,modality='expression')
                 print(object_key)
                 deDf=fetchNetwork(object_key)
                 deDfmean = deDf.values.mean()
@@ -167,7 +167,7 @@ def networksagg(request,slug):
             df,found,ngwas,ngenesfound=selectgenes(df,tfgenesel,geneform,tfform,goform,gwasform)
             df=df.stack().reset_index().rename(columns={'TF':'source','level_1':'target', 0:'value'})
             if edgetargeting == 'on':
-                object_key,ew1,ew2,ew3,ew4=mapObjectkey(slug,modality='motif')
+                object_key,ew1,ew2,ew3,ew4,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug,modality='motif')
                 motif=fetchNetwork(object_key,how='motif')
                 motif=motif[motif['value'] >0]
                 df = pd.merge(df, motif, how ='left', on =['source', 'target'])
@@ -265,7 +265,7 @@ def networksagg(request,slug):
             nodes=nodes.to_json(orient='records')
             edges=edges.to_json(orient='records')
             form.save()
-    outputDict = {'netform':form, 'nodes':nodes, 'edges':edges, 'tarform':formtar, 'clueform':clueform, 'slug':slug, 'tfgeneseltar':tfgenesel, 'found':found, 'ngenesfound':ngenesfound, 'ngwas':ngwas, 'ssagg':ssagg, 'categorynet':categorynet,'regnetdisp':regnetdisp, 'backpage':backpage, 'genetarscore':genetarscore, 'tftarscore':tftarscore}
+    outputDict = {'netform':form, 'nodes':nodes, 'edges':edges, 'tarform':formtar, 'clueform':clueform, 'slug':slug, 'tfgeneseltar':tfgenesel, 'found':found, 'ngenesfound':ngenesfound, 'ngwas':ngwas, 'ssagg':ssagg, 'categorynet':categorynet,'regnetdisp':regnetdisp, 'backpage':backpage, 'genetarscore':genetarscore, 'tftarscore':tftarscore, 'attr1':attr1, 'attr2':attr2, 'attr3':attr3, 'attr4':attr4, 'attr11':attr11, 'attr12':attr12, 'attr13':attr13, 'attr14':attr14}
     return render(request, 'networksagg.html', outputDict)
 
 def upload(request):
@@ -548,7 +548,7 @@ def drugtarg(request,slug):
         form = TarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100,'tfgeneseltar':'nosel'})
         clueform = ClueForm({'tfgeneselclue':'by gene'})
         tfgeneseltar,found, ngwas, ngenesfound='nosel','',0,0
-        object_keytf,ssagg,categorynet,regnetdisp,backpage=mapObjectkey(slug,how='tf')
+        object_keytf,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug,how='tf')
         slug2=backpage[1]
         backpage=backpage[0]
         d = {'TF': ['TF'], 'tar': [1]}
@@ -572,14 +572,11 @@ def drugtarg(request,slug):
             nedgestar      = int(request.POST['nedgestar'])
             nedgestartf    = int(request.POST['nedgestartf'])
             # fetch network
-            object_keytf,ssagg,categorynet,regnetdisp,backpage=mapObjectkey(slug,how='tf')
+            object_keytf,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug,how='tf')
             slug2=backpage[1]
             backpage=backpage[0]
-            print('hi')
-            print(slug)
-            print(backpage)
             dftf=fetchNetwork(object_keytf, how='sig')
-            object_keygene,ssaggss,categorynetss,regnetdispss,backpagess=mapObjectkey(slug,how='gene')
+            object_keygene,ssaggss,categorynetss,regnetdispss,backpagess,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug,how='gene')
             dfgene=fetchNetwork(object_keygene, how='sig')
             genetarscore, found, ngwas, ngenesfound        = computetargeting(dfgene,absvaltar,topbottomtar,nedgestar,'gene',tfgeneseltar,geneformtar,goformtar,gwasformtar,modality='precompute')
             tftarscore, foundslug, ngwasslug, ngenesfoundslug  = computetargeting(dftf,absvaltartf,topbottomtartf,nedgestartf,'tf',tfgeneseltar,geneformtar,goformtar,gwasformtar,modality='precompute')
@@ -621,7 +618,7 @@ def drugtarg(request,slug):
         dataset=''
     print('slug is')
     #slug=int(slug)
-    outputDict = {'cancerType': cancerType, 'dataset':dataset, 'tarform':form,'activetab':activetab, 'tftarscore':tftarscore, 'genetarscore':genetarscore, 'clueform':clueform, 'slug':slug, 'tfgeneseltar':tfgeneseltar, 'found':found, 'ngenesfound':ngenesfound, 'ngwas':ngwas, 'ssagg':ssagg, 'categorynet':categorynet,'regnetdisp':regnetdisp, 'backpage':backpage, 'slug2':slug2}
+    outputDict = {'cancerType': cancerType, 'dataset':dataset, 'tarform':form,'activetab':activetab, 'tftarscore':tftarscore, 'genetarscore':genetarscore, 'clueform':clueform, 'slug':slug, 'tfgeneseltar':tfgeneseltar, 'found':found, 'ngenesfound':ngenesfound, 'ngwas':ngwas, 'ssagg':ssagg, 'categorynet':categorynet,'regnetdisp':regnetdisp, 'backpage':backpage, 'slug2':slug2, 'attr1':attr1,'attr2':attr2,'attr3':attr3,'attr4':attr4,'attr11':attr11,'attr12':attr12,'attr13':attr13,'attr14':attr14}
     page='drugtarg.html'
     return render(request, page, outputDict)
 
@@ -670,7 +667,7 @@ def taragg(request,slug):
             nedgestar      = int(request.POST['nedgestar'])
             nedgestartf    = int(request.POST['nedgestartf'])
             # fetch network
-            object_key,ssagg,categorynet,regnetdisp,backpage=mapObjectkey(slug)
+            object_key,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug)
             df=fetchNetwork(object_key)
             genetarscore, found, ngwas, ngenesfound = computetargeting(df,absvaltar,topbottomtar,nedgestar,'gene',tfgeneseltar,geneformtar,goformtar,gwasformtar)
             tftarscore, foundslug, ngwasslug, negensfoundslug    = computetargeting(df,absvaltartf,topbottomtartf,nedgestartf,'tf',tfgeneseltar,geneformtar,goformtar,gwasformtar)
@@ -700,7 +697,7 @@ def taragg(request,slug):
             genetarscore=genetarscore.to_json(orient='records')
         else:
             print('invalid form!')
-    outputDict = {'nodes':nodes,'edges':edges,'tarform':form,'activetab':activetab, 'netform':netform, 'tftarscore':tftarscore, 'genetarscore':genetarscore, 'clueform':clueform, 'slug':slug, 'tfgeneseltar':tfgeneseltar, 'found':found, 'ngenesfound':ngenesfound, 'ngwas':ngwas, 'ssagg':ssagg, 'categorynet':categorynet,'regnetdisp':regnetdisp, 'backpage':backpage}
+    outputDict = {'nodes':nodes,'edges':edges,'tarform':form,'activetab':activetab, 'netform':netform, 'tftarscore':tftarscore, 'genetarscore':genetarscore, 'clueform':clueform, 'slug':slug, 'tfgeneseltar':tfgeneseltar, 'found':found, 'ngenesfound':ngenesfound, 'ngwas':ngwas, 'ssagg':ssagg, 'categorynet':categorynet,'regnetdisp':regnetdisp, 'backpage':backpage,'attr1':attr1,'attr2':attr2,'attr3':attr3,'attr4':attr4,'attr11':attr11,'attr12':attr12,'attr13':attr13,'attr14':attr14}
     page='networksagg.html'
     return render(request, page, outputDict)
 
@@ -764,7 +761,7 @@ def owntaragg(request,slug):
             # populate send to enrichment button
             sendto = Sendto.objects.get(idd=0)
             sendto.preload = 1
-            sendto.genelistup='\n'.join(tftarscore.iloc[:0].values)
+            sendto.genelistup='\n'.join(tftarscore.iloc[:,0].values)
             sendto.save()
             sendto = Sendto.objects.get(idd=1) # genes
             sendto.preload = 1 
@@ -776,7 +773,6 @@ def owntaragg(request,slug):
             sendto.genelistup='\n'.join(upgenestf.iloc[:,0].values)
             sendto.genelistdown='\n'.join(downgenestf.iloc[:,0].values)
             sendto.save()
-            print(genetarscore)
             # trasnform df to json
             tftarscore=tftarscore.to_json(orient='records')
             genetarscore=genetarscore.to_json(orient='records')
@@ -840,7 +836,7 @@ def disease(request):
                  #u.write(content)
                  #u.close()
                  qval, pvalVec, tfdb, nCondVec, qval1, pvalVec1, tfdb1, nCondVec1,stat1,stat2,qvalTE,pvalVecTE,nCondVecTE,qvalTT,pvalVecTT,nCondVecTT,tfdbTE,tfdbTT=enrichDisease(contentdf)
-                 randid = random.randint(1,1000000)
+                 randid    = random.randint(1,1000000)
                  indSortP  = np.argsort(pvalVec)
                  pvalVec   = pvalVec[indSortP]
                  qval      = qval[indSortP]
@@ -870,28 +866,28 @@ def disease(request):
                      gwas.save()
                  for i in range(len(qvalTE)):
                      tissueex   = TissueEx.objects.get(idd=i+1, nuser=newID)
-                     tissueex.tissue      =tfdbTE['Tissues'].iloc[i]
-                     tissueex.count       =tfdbTE['Cond'].iloc[i]
-                     tissueex.intersect   =nCondVecTE[i]
-                     tissueex.pval        =round(pvalVecTE[i],5)
-                     tissueex.qval        =round(qvalTE[i],5)
+                     tissueex.tissue      = tfdbTE['Tissues'].iloc[i].replace('_',' ')
+                     tissueex.count       = tfdbTE['Cond'].iloc[i]
+                     tissueex.intersect   = nCondVecTE[i]
+                     tissueex.pval        = round(pvalVecTE[i],5)
+                     tissueex.qval        = round(qvalTE[i],5)
                      if (tissueex.tissue == 'Lymphoblastoid_cell_line'):
                         tissueex.tissueLink  = 'https://grand.networkmedicine.org/cell/lcl/'
                      elif tissueex.tissue == 'Fibroblast_cell_line':
                         tissueex.tissueLink  = 'https://grand.networkmedicine.org/cell/fibroblast_gtex/'
                      else:
-                        tissueex.tissueLink  ='https://grand.networkmedicine.org/tissues/' + tissueex.tissue + '_tissue/'
+                        tissueex.tissueLink  ='https://grand.networkmedicine.org/tissues/' + tissueex.tissue.replace(' ','_') + '_tissue/'
                      tissueex.query       =randid
                      tissueex.save()
                  for i in range(len(qvalTT)):
                      tissuett   = TissueTar.objects.get(idd=i+1, nuser=newID)
-                     tissuett.tissue      =tfdbTT['Tissue'].iloc[i]
-                     tissuett.count       =tfdbTT['#TFsDifferentiallyTargetingSelectedCategories'].iloc[i]
-                     tissuett.intersect   =nCondVecTT[i]
-                     tissuett.pval        =round(pvalVecTT[i],5)
-                     tissuett.qval        =round(qvalTT[i],5)
-                     tissuett.tissueLink  ='https://grand.networkmedicine.org/tissues/' + tissuett.tissue + '_tissue/'
-                     tissuett.query       =randid
+                     tissuett.tissue      = tfdbTT['Tissue'].iloc[i].replace('_',' ')
+                     tissuett.count       = tfdbTT['#TFsDifferentiallyTargetingSelectedCategories'].iloc[i]
+                     tissuett.intersect   = nCondVecTT[i]
+                     tissuett.pval        = round(pvalVecTT[i],5)
+                     tissuett.qval        = round(qvalTT[i],5)
+                     tissuett.tissueLink  = 'https://grand.networkmedicine.org/tissues/' + tissuett.tissue.replace(' ','_') + '_tissue/'
+                     tissuett.query       = randid
                      tissuett.save()
                  accessKey = randid
                  param=Params.objects.get(id=newID)
@@ -1932,7 +1928,7 @@ def fetchNetwork(object_key,how='net'):
         else:
             df = pd.read_csv(StringIO(csv_string),index_col=0,sep=',')
     elif how=='motif':
-        if str.split(object_key,'_')[-2] == 'otter':
+        if (str.split(object_key,'_')[-2] == 'otter') | (str.split(object_key,'/')[-1][0:3]=='GSM'):
             df = pd.read_csv(StringIO(csv_string), sep=',',index_col=0)
             df=df.stack().reset_index().rename(columns={'TF':'source','level_1':'target', 0:'value'})
         else:
@@ -1940,7 +1936,6 @@ def fetchNetwork(object_key,how='net'):
         df.columns=['source','target','value']
     elif how=='sig':
         df = pd.read_csv(StringIO(csv_string),index_col=1,sep=',')
-    print(df)
     return df
 
 def selectgenestar(genetarscore,tfgenesel,geneform,goform,gwasform):
@@ -1992,9 +1987,15 @@ def selectgenestar(genetarscore,tfgenesel,geneform,goform,gwasform):
 
 def mapObjectkey(slug,modality='network',how=''):
     regnetdisp='Transcription factor'
+    attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14='','','','','','','',''
     if slug[0:3]=='ACH': #cell lines
         slug = str.replace(slug,'_','-')
         cellsample   = Cellsample.objects.get(depmap=slug) 
+        attr1=cellsample.cclename
+        attr2=cellsample.sex
+        attr3=cellsample.disease
+        attr4=cellsample.subtype
+        attr11,attr12,attr13,attr14='Cell name','Donor sex','Disease','Subtype'
         backpage = 'cell/' +  cellsample.cleannamedis
         object_key = 'cells/networks/ccle/' + slug + '.csv'
         ssagg='Single sample'
@@ -2006,6 +2007,14 @@ def mapObjectkey(slug,modality='network',how=''):
         ssagg='Single sample'
         categorynet='Tissues'
         tissuesample   = Tissuesample.objects.get(sampleid=newslug) 
+        attr1  = tissuesample.tissueid
+        attr2  = tissuesample.gender
+        attr3  = tissuesample.age
+        attr4  = tissuesample.subjectid
+        attr11 = 'Tissue'
+        attr12 = 'Donor Gender'
+        attr13 = 'Donor age'
+        attr14 = 'Subject'
         backpage= 'tissues/' + tissuesample.grdid
         if modality=='network':
             object_key = 'tissues/networks/lioness/singleSample/' + tissuesample.grdid + '_sample_' + newslug + '.csv'
@@ -2066,9 +2075,17 @@ def mapObjectkey(slug,modality='network',how=''):
             elif pumaslug[-2] == 'TargetScan':
                 object_key =  'tissues/motif/tissue_TargetScan_prior.txt'
     elif slug.split('_')[0]=='drug':
+        drugsample   = Drugsample.objects.get(cleannames=slug) 
+        attr1  = drugsample.pert_iname
+        attr2  = drugsample.pert_idose
+        attr3  = drugsample.pert_itime
+        attr4  = drugsample.cell_id
+        attr11 = 'Drug name'
+        attr12 = 'Drug dose'
+        attr13 = 'Sampling time'
+        attr14 = 'Cell type'
         ssagg='Single sample'
         categorynet='Drugs'
-        drugsample   = Drugsample.objects.get(cleannames=slug) 
         backpage=['','']
         backpage[0] = 'drugs/' + drugsample.pert_iname + '_drug'
         backpage[1] = drugsample.sig_id
@@ -2160,13 +2177,56 @@ def mapObjectkey(slug,modality='network',how=''):
         tcganame   = '-'.join(str.split(slug,'_')[2:])
         if cancername=='COAD':
             object_key = 'cancer/colon_cancer/networks/lioness/Colon_cancer_sample_' + tcganame + '.csv'
+            if (str.split(slug,'_')[2][0:3] == 'GSM'):
+                pancreassample   = Geosample.objects.get(sample=tcganame)
+                attr4  = pancreassample.tumor_location
+                attr14 = 'Tumor location'
+            else:
+                pancreassample   = Tcgasample.objects.get(sample=tcganame)
+                attr4  = pancreassample.anatomic_neoplasm_subdivision
+                attr14 = 'Anatomic location'
+            attr1  = pancreassample.age_at_initial_pathologic_diagnosis
+            attr2  = pancreassample.race
+            attr3  = pancreassample.gender
+            attr11 = 'Donor Age'
+            attr12 = 'Donor Race'
+            attr13 = 'Donor Gender'
         elif cancername=='GBM':
             object_key = 'cancer/glioblastoma_cancer/networks/lioness/' + tcganame + '.csv'
+            if (str.split(slug,'_')[2][0:3] == 'GSM'):
+                pancreassample   = Ggnsample.objects.get(sample=tcganame)
+                attr1  = pancreassample.sample
+                attr2  = pancreassample.survival
+                attr11 = 'Sample ID'
+                attr12 = 'Survival'
+                attr3,attr4,attr13,attr14='','','',''
+            else:
+                try:
+                    pancreassample   = Ggbmd1sample.objects.get(submitter_id=tcganame)
+                except:
+                    pancreassample   = Ggbmd2sample.objects.get(submitter_id=tcganame)
+                attr1  = pancreassample.vitalstatus
+                attr2  = pancreassample.gender
+                attr3  = pancreassample.race
+                attr4  = pancreassample.histologicaltype
+                attr11 = 'Donor vital status'
+                attr12 = 'Donor gender'
+                attr13 = 'Donor race'
+                attr14 = 'Donor histological type'
         elif cancername=='PAAD':
             object_key = 'cancer/pancreas_cancer/networks/lioness/' + tcganame + '.csv'
             if modality == 'motif':
                 object_key='cancer/colon_cancer/cancer_colon_motif.txt'
             elif modality == 'expression':
                 object_key='cancer/pancreas_cancer/pdac_expression_sd_log_04.txt'
+            pancreassample   = Pancreassample.objects.get(sample=tcganame)
+            attr1  = pancreassample.ethnicity
+            attr2  = pancreassample.race
+            attr3  = pancreassample.gender
+            attr4  = pancreassample.primary_site
+            attr11 = 'Donor Ethnicity'
+            attr12 = 'Donor Race'
+            attr13 = 'Donor Gender'
+            attr14 = 'Primary Site'
         backpage   = 'cancers/' + cancername + '_cancer'
-    return object_key, ssagg, categorynet, regnetdisp, backpage
+    return object_key, ssagg, categorynet, regnetdisp, backpage, attr1, attr2, attr3, attr4, attr11, attr12, attr13, attr14

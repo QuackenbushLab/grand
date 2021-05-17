@@ -407,6 +407,12 @@
               <p class="card-text">Category: {{ categorynet }}</p>
               <p class="card-text">Regulator: {{ regnetdisp }}</p>
               {% endif %}
+              {% if ssagg == 'Single sample' %}
+              <p class="card-text">{{ attr11 }}: {{ attr1 }}</p>
+              <p class="card-text">{{ attr12 }}: {{ attr2 }}</p>
+              <p class="card-text">{{ attr13 }}: {{ attr3 }}</p>
+              <p class="card-text">{{ attr14 }}: {{ attr4 }}</p>
+              {% endif %}
               <a href="/{{ backpage }}/" class="btn btn-primary">Full network information page</a>
             </div>
           </div>

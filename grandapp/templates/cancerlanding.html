@@ -24,6 +24,7 @@
 </center>
 </div>
 
+
 <div class="row" id="main">
 <div class="col-1 mt-5">
 </div>
@@ -60,7 +61,7 @@
     {% endif %}
     {% if slug != 'COAD' and slug != 'BRCA' and slug != 'LIHC' and slug != 'CESC' and slug != 'GBM' and slug != 'PAAD' %}
     <p style="font-family: Helvetica; color: #333; padding: 1em 2em; font-size: 12px">
-      Hover over the bar plot to get the GO term.
+      Hover over the bar plot to get the GO term. Differentially targeted genes and TFs were computed by comparing a cancer network to all other cancers.
     </p>
     {% else %}
       <p style="font-family: Helvetica; color: #333; padding: 1em 2em; font-size: 12px">
@@ -198,8 +199,8 @@
 {% if tool == 'lioness' %}
   {% if slug == 'GBM' %}
   <script>var offset=30</script>
-  <div class="container ">
-    <div class="card " id="cardtissuetcga">
+  <div class="container">
+    <div class="card" id="cardtissuetcga">
       <div class="card-body">
       <h5 class="card-title">Variable description</h5>
         <p class="card-text">You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges

@@ -1,6 +1,7 @@
 {% load static %} 
 {% include "header.html" %}
 
+
 <div class="container pb-5 mb-5 mt-4">
     <div class='row'>
       <div class='col'>
@@ -17,7 +18,7 @@
       </div>
     </div>
   <div class="accordion" id="accordionExample">
-    <div class="accordion-item">
+    <div class="accordion-item hidden">
       <h2 class="accordion-header" id="headingOne">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
           Cancer tissue networks
@@ -67,12 +68,19 @@
 </div>
 
 
-{% include "footer.html" %}
+<div class="hidden">
+  {% include "footer.html" %}
+</div>
+
 <script> 
   var data2 = JSON.parse("{{data|escapejs}}");  
 </script>
 <script src="{% static 'js/bubbleChart.js' %}"></script>
-
+<script>
+  $(document).ready(function () {
+    $('div.hidden').fadeIn(300).removeClass('hidden');
+});
+</script>
 
 </body>
 </html>

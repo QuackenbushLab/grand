@@ -40,7 +40,14 @@
 </div>
 {% endif %}
 
+
 <div class='container pt-3 pb-4'>
+  <div class="overlay"></div>
+  <div class="spanner">
+    <div class="loader"></div>
+    <br><br><br>
+    <p>Loading network, please wait.</p>
+  </div>
     <div class="card text-center">
         <div class="card-header">
             <ul class="nav nav-pills card-header-pills" id="myTab" role="tablist">
@@ -62,7 +69,6 @@
               </ul>
         </div>
     
-
 
 
         <!-- NETWORK -->
@@ -257,6 +263,14 @@
                         <p class="card-text">Category: {{ categorynet }}</p>
                         <p class="card-text">Regulator: {{ regnetdisp }}</p>
                         {% endif %}
+                        {% if ssagg == 'Single sample' %}
+                        <p class="card-text">{{ attr11 }}: {{ attr1 }}</p>
+                        <p class="card-text">{{ attr12 }}: {{ attr2 }}</p>
+                        {% if attr13 != '' %}
+                        <p class="card-text">{{ attr13 }}: {{ attr3 }}</p>
+                        <p class="card-text">{{ attr14 }}: {{ attr4 }}</p>
+                      {% endif %}
+                        {% endif %}
                         <a href="/{{ backpage }}/" class="btn btn-primary">Full network information page</a>
                       </div>
                     </div>
@@ -450,6 +464,14 @@
               <p class="card-text">Category: {{ categorynet }}</p>
               <p class="card-text">Regulator: {{ regnetdisp }}</p>
               {% endif %}
+              {% if ssagg == 'Single sample' %}
+              <p class="card-text">{{ attr11 }}: {{ attr1 }}</p>
+              <p class="card-text">{{ attr12 }}: {{ attr2 }}</p>
+              {% if attr13 != '' %}
+                <p class="card-text">{{ attr13 }}: {{ attr3 }}</p>
+                <p class="card-text">{{ attr14 }}: {{ attr4 }}</p>
+              {% endif %}
+              {% endif %}
               <a href="/{{ backpage }}/" class="btn btn-primary">Full network information page</a>
             </div>
           </div>
@@ -575,6 +597,14 @@
       
   
   } );
+  $("#btnFetch").click(function() {
+    $("div.spanner").addClass("show");
+    $("div.overlay").addClass("show");
+});
+$("#btnFetchTar").click(function() {
+    $("div.spanner").addClass("show");
+    $("div.overlay").addClass("show");
+});
 </script>
 
 
