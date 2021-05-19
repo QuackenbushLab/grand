@@ -10,7 +10,7 @@ from .models import Pancreassample, Drugcombsup, Drugcombsdown, Gobp, Cellpage, 
 from .models import Gobpbygene, Gwascata, Gwascatabygene, Pandaac, Dragonac, Sendto, Document, Tissueac, Cancerpheno
 from .models import Enrichtfs, Enrichgenes, Otterac
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
-from .forms import ContactForm, GeneForm, DiseaseForm, NetForm, BabelForm, TarForm, ClueForm, DocumentForm
+from .forms import ContactForm, GeneForm, DiseaseForm, NetForm, BabelForm, TarForm, ClueForm, DocumentForm, CompForm, DiffTarForm
 from django.conf import settings
 import os
 import random
@@ -58,7 +58,7 @@ def convertGenelist(geneform,how='sym',mod='notfound'):
         if 'notfound' in geneSyms.columns:
             geneSyms=geneSyms[geneSyms.notfound != True]
     if how=='ens':
-        geneform = geneSyms['ensembl.gene'].values
+        geneform = geneSyms['ensembl.gene'].dropna().values
     else:
         geneform = geneSyms.symbol.values
     return geneform
@@ -129,13 +129,13 @@ def networksagg(request,slug):
         edges=edges.to_json(orient='records')
         object_key,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug)
         # Targeting form 
-        formtar = TarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100,'tfgeneseltar':'nosel'})
+        formtar  = TarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100,'tfgeneseltar':'nosel'})
         clueform = ClueForm({'tfgeneselclue':'by gene'})
         dataset,tfgenesel,found, ngwas, ngenesfound='','nosel','',0,0
     else:
         form = NetForm(request.POST, auto_id=True)
         # define form tar
-        formtar = TarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100,'tfgeneseltar':'nosel'})
+        formtar  = TarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100,'tfgeneseltar':'nosel'})
         clueform = ClueForm({'tfgeneselclue':'by gene'})
         if form.is_valid():
             nedges     = int(request.POST['nedges'])
@@ -199,7 +199,9 @@ def networksagg(request,slug):
                 nodes['value'][indInter] = np.concatenate((deDf[bb1],deDf[bb2]))
                 bb1,bb2,deDf=[],[],[]
             if dt=='dtt':
-                nodes['value'] = np.concatenate((tftar[b1],genetar[b2]))
+                tff=(tftar[b1] - np.min(tftar[b1]))/(np.max(tftar[b1]) - np.min(tftar[b1]))
+                gff=(genetar[b2] - np.min(genetar[b2]))/(np.max(genetar[b2]) - np.min(genetar[b2]))
+                nodes['value'] = np.concatenate(( tff*100 ,gff*100 ))
             edges          = df
             edges['from']  = c1
             edges['to']    = np.max(c1)+1+c2
@@ -212,9 +214,178 @@ def networksagg(request,slug):
                 edges['dispval'] = edges['value']
             if brd==False:
                 edges['dispval'] = 1
+                edges['title']=1
                 del edges['value']
             elif brd=='on': # brd is weighted edges
                 edges.value   = np.abs(edges.value)
+                edges['title']=edges['dispval']
+            if dt=='bc':
+                # scale nodes by centrality
+                nodes = buildNxGraph(nodes,edges,brd)
+            # continue upping the df
+            edges['arrows']= 'to'
+            del edges['source'] 
+            del edges['target']
+            df=''
+            # convert genes
+            if nodes['label'].iloc[-1][0:4] == 'ENSG':    
+                convertedgenes=convertGenelist(nodes['label'],how='sym',mod='found')
+                indnan=np.argwhere(pd.isnull(convertedgenes)).ravel()
+                convertedgenes[indnan] = nodes['label'].iloc[indnan]
+                nodes['label'] = convertedgenes
+            # build hover content
+            titlearray = nodes['label'].values.copy() 
+            for i in range(len(titlearray)):
+                origtitle=titlearray[i]
+                if i < len(b1):
+                    titlearray[i] = 'Regulator name: ' + titlearray[i] 
+                else:
+                    titlearray[i] = 'Gene name: ' + titlearray[i]
+                try:
+                    gobpbygene     = Gobpbygene.objects.get(gene=origtitle)
+                    if i < len(b1):
+                        titlearray[i] += '\nGO terms:' + gobpbygene.termlist
+                    else:
+                        titlearray[i] += '\nGO terms:' + gobpbygene.termlist
+                except:
+                    print('gene not found')
+                try:
+                    gwascatabygene     = Gwascatabygene.objects.get(gene=origtitle)
+                    if i < len(b1):
+                        titlearray[i] += '\nGWAS traits:' + gwascatabygene.termlist
+                    else:
+                        titlearray[i] += '\nGWAS traits:' + gwascatabygene.termlist
+                except:
+                    print('gene not found')
+            nodes['title'] = titlearray
+            edges['sourcelabel']=''
+            edges['targetlabel']=''
+            for i in range(edges.shape[0]):
+                a,b,c = np.intersect1d(nodes['id'], edges['from'].iloc[i], return_indices=True)
+                edges['sourcelabel'].iloc[i]=nodes['label'].iloc[b].values
+                a,b,c = np.intersect1d(nodes['id'], edges['to'].iloc[i], return_indices=True)
+                edges['targetlabel'].iloc[i]=nodes['label'].iloc[b].values
+            nodes=nodes.to_json(orient='records')
+            edges=edges.to_json(orient='records')
+            form.save()
+    outputDict = {'netform':form, 'nodes':nodes, 'edges':edges, 'tarform':formtar, 'clueform':clueform, 'slug':slug, 'tfgeneseltar':tfgenesel, 'found':found, 'ngenesfound':ngenesfound, 'ngwas':ngwas, 'ssagg':ssagg, 'categorynet':categorynet,'regnetdisp':regnetdisp, 'backpage':backpage, 'genetarscore':genetarscore, 'tftarscore':tftarscore, 'attr1':attr1, 'attr2':attr2, 'attr3':attr3, 'attr4':attr4, 'attr11':attr11, 'attr12':attr12, 'attr13':attr13, 'attr14':attr14}
+    return render(request, 'networksagg.html', outputDict)
+
+def netcomp(request,slug):
+    d = {'TF': ['TF'], 'tar': [1]}
+    tftarscore = pd.DataFrame(data=d)
+    d = {'index': ['Gene'], 'tar': [1]}
+    genetarscore = pd.DataFrame(data=d)
+    genetarscore = genetarscore.to_json(orient='records')
+    tftarscore   = tftarscore.to_json(orient='records')
+    nodes = pd.DataFrame(data=['TF','Gene'])
+    nodes['id']   = [0,1]
+    nodes.columns = ['label','id']
+    edges= pd.DataFrame(data=[0.5])
+    edges.columns= ['value']
+    nodes['group']= ['tf','exp'] 
+    edges['sourcelabel']='TF'
+    edges['targetlabel']='gene'
+    edges['from']= 0
+    edges['to']  = 1
+    edges['arrows']='to'
+    edges['dispval'] =1
+    nodes=nodes.to_json(orient='records')
+    edges=edges.to_json(orient='records')
+    dataset,tfgenesel,found, ngwas, ngenesfound='','nosel','',0,0
+    if request.method == 'GET':
+        # network form
+        formtar = DiffTarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100,'tfgeneseltar':'nosel'})
+        form = CompForm({'dt':'no','topbottom':'Largest','nedges':100,'tfgenesel':'nosel'})
+        # Targeting form 
+        clueform = ClueForm({'tfgeneselclue':'by gene'})
+    else:
+        form = CompForm(request.POST, auto_id=True)
+        # define form tar
+        formtar = DiffTarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100,'tfgeneseltar':'nosel'})
+        clueform = ClueForm({'tfgeneselclue':'by gene'})
+        if form.is_valid():
+            nedges     = int(request.POST['nedges'])
+            topbottom  = request.POST['topbottom']
+            dt         = request.POST.get('dt', False)
+            brd        = request.POST.get('brd', False)
+            absval     = request.POST.get('absval', False)
+            tfgenesel  = request.POST.get('tfgenesel', False)
+            geneform   = request.POST.get('geneform', False)
+            tfform     = request.POST.get('tfform', False)
+            goform     = request.POST.get('goform', False)
+            gwasform   = request.POST.get('gwasform', False)
+            comp1      = request.POST.get('comp1', False)
+            comp2      = request.POST.get('comp2', False)
+            edgetargeting = request.POST.get('edgetargeting', False)
+            print('The number of edges is',nedges)
+            # compute differential network
+            object_key1='tissues/networks/' + comp1 + '.csv'
+            df1=fetchNetwork(object_key1)
+            object_key2='cancer/aggnets/networks/panda_' + comp2 + '.csv'
+            df2=fetchNetwork(object_key2)
+            df=df2-df1
+            intergenes = np.intersect1d(df1.columns,df2.columns)
+            df=df[intergenes]
+            if dt=='dtt':
+                tftar  = df.sum(axis=1) 
+                genetar= df.sum(axis=0)
+            df.index.name='TF'
+            df,found,ngwas,ngenesfound=selectgenes(df,tfgenesel,geneform,tfform,goform,gwasform)
+            df=df.stack().reset_index().rename(columns={'TF':'source','level_1':'target', 0:'value'})
+            if edgetargeting == 'on':
+                object_key='tissues/motif/tissues_motif.txt'
+                motif=fetchNetwork(object_key,how='motif')
+                motif=motif[motif['value'] >0]
+                df = pd.merge(df, motif, how ='left', on =['source', 'target'])
+                df.columns=['source','target','value','dashes']
+                df['dashes'] = df['dashes'].fillna(0)
+            if absval == 'on':
+                df['sigval']=df['value']
+                df['value'] =np.abs(df['value'])
+            df=df.sort_values(by=['value'])
+            if topbottom=='Smallest':
+                df=df.iloc[0:nedges,]
+            elif topbottom=='Largest':
+                df=df.iloc[(len(df)-nedges):len(df),]
+            b1, c1 = np.unique(df.source, return_inverse=True)    
+            b2, c2 = np.unique(df.target, return_inverse=True)  
+            nodes = pd.DataFrame(data=np.concatenate((b1,b2)))
+            nodes['id']=list(range(0,len(b1)+len(b2)))
+            nodes.columns  = ['label','id']
+            # miRNA networks
+            if (slug.split('_')[-1] == 'PUMA') | (slug == 'mirnadragon'):
+                nodes['group'] = ['mir']*len(b1) + ['exp']*len(b2)
+            else:
+                nodes['group'] = ['tf']*len(b1) + ['exp']*len(b2)
+            if dt=='dee':
+                nodes['value'] = deDfmean
+                bb1  = np.intersect1d(b1,deDf.index)
+                bb2  = np.intersect1d(b2,deDf.index)
+                indInter = np.in1d(nodes['label'], np.concatenate((bb1,bb2)))
+                nodes['value'][indInter] = np.concatenate((deDf[bb1],deDf[bb2]))
+                bb1,bb2,deDf=[],[],[]
+            if dt=='dtt':
+                tff=(tftar[b1] - np.min(tftar[b1]))/(np.max(tftar[b1]) - np.min(tftar[b1]))
+                gff=(genetar[b2] - np.min(genetar[b2]))/(np.max(genetar[b2]) - np.min(genetar[b2]))
+                nodes['value'] = np.concatenate(( tff*100 ,gff*100 ))
+            edges          = df
+            edges['from']  = c1
+            edges['to']    = np.max(c1)+1+c2
+            edges['color'] = 'green'
+            if absval == 'on':
+                edges['color'][df.sigval < 0] = 'red'
+                edges['dispval'] = edges['sigval']
+            elif absval == False:
+                edges['color'][df.value < 0] = 'red'
+                edges['dispval'] = edges['value']
+            if brd==False:
+                edges['dispval'] = 1
+                edges['title']=1
+                del edges['value']
+            elif brd=='on': # brd is weighted edges
+                edges.value   = np.abs(edges.value)
+                edges['title']=edges['dispval']
             if dt=='bc':
                 # scale nodes by centrality
                 nodes = buildNxGraph(nodes,edges,brd)
@@ -265,8 +436,8 @@ def networksagg(request,slug):
             nodes=nodes.to_json(orient='records')
             edges=edges.to_json(orient='records')
             form.save()
-    outputDict = {'netform':form, 'nodes':nodes, 'edges':edges, 'tarform':formtar, 'clueform':clueform, 'slug':slug, 'tfgeneseltar':tfgenesel, 'found':found, 'ngenesfound':ngenesfound, 'ngwas':ngwas, 'ssagg':ssagg, 'categorynet':categorynet,'regnetdisp':regnetdisp, 'backpage':backpage, 'genetarscore':genetarscore, 'tftarscore':tftarscore, 'attr1':attr1, 'attr2':attr2, 'attr3':attr3, 'attr4':attr4, 'attr11':attr11, 'attr12':attr12, 'attr13':attr13, 'attr14':attr14}
-    return render(request, 'networksagg.html', outputDict)
+    outputDict = {'netform':form, 'nodes':nodes, 'edges':edges, 'tarform':formtar, 'clueform':clueform, 'slug':slug, 'tfgeneseltar':tfgenesel, 'found':found, 'ngenesfound':ngenesfound, 'ngwas':ngwas, 'genetarscore':genetarscore, 'tftarscore':tftarscore}
+    return render(request, 'netcomp.html', outputDict)
 
 def upload(request):
     if request.method == 'GET':
@@ -423,7 +594,9 @@ def ownnet(request,slug):
                     print('gene not found')
             nodes['title'] = titlearray
             if dt=='dtt':
-                nodes['value'] = np.concatenate((tftar[b1],genetar[b2]))
+                tff=(tftar[b1] - np.min(tftar[b1]))/(np.max(tftar[b1]) - np.min(tftar[b1]))
+                gff=(genetar[b2] - np.min(genetar[b2]))/(np.max(genetar[b2]) - np.min(genetar[b2]))
+                nodes['value'] = np.concatenate(( tff*100 ,gff*100 ))
             edges          = df
             edges['from']  = c1
             edges['to']    = np.max(c1)+1+c2
@@ -437,9 +610,11 @@ def ownnet(request,slug):
             print(brd)
             if brd==False:
                 edges['dispval'] = 1
+                edges['title']=1
                 del edges['value']
             elif brd=='on':
                 edges.value   = np.abs(edges.value)
+                edges['title']=edges['dispval']
             if dt=='bc':
                 # scale nodes by centrality
                 nodes = buildNxGraph(nodes,edges,brd)
@@ -692,6 +867,12 @@ def taragg(request,slug):
             sendto.genelistup='\n'.join(upgenestf.iloc[:,0].values)
             sendto.genelistdown='\n'.join(downgenestf.iloc[:,0].values)
             sendto.save()
+            # convert genes
+            if genetarscore['index'].iloc[0][0:4] == 'ENSG':    
+                convertedgenes=convertGenelist(genetarscore['index'],how='sym',mod='found')
+                indnan=np.argwhere(pd.isnull(convertedgenes)).ravel()
+                convertedgenes[indnan] = genetarscore['index'].iloc[indnan]
+                genetarscore['index'] = convertedgenes
             # trasnform df to json
             tftarscore=tftarscore.to_json(orient='records')
             genetarscore=genetarscore.to_json(orient='records')
@@ -699,6 +880,99 @@ def taragg(request,slug):
             print('invalid form!')
     outputDict = {'nodes':nodes,'edges':edges,'tarform':form,'activetab':activetab, 'netform':netform, 'tftarscore':tftarscore, 'genetarscore':genetarscore, 'clueform':clueform, 'slug':slug, 'tfgeneseltar':tfgeneseltar, 'found':found, 'ngenesfound':ngenesfound, 'ngwas':ngwas, 'ssagg':ssagg, 'categorynet':categorynet,'regnetdisp':regnetdisp, 'backpage':backpage,'attr1':attr1,'attr2':attr2,'attr3':attr3,'attr4':attr4,'attr11':attr11,'attr12':attr12,'attr13':attr13,'attr14':attr14}
     page='networksagg.html'
+    return render(request, page, outputDict)
+
+def difftaragg(request,slug):
+    activetab='tar'
+    nodes = pd.DataFrame(data=['TF','Gene'])
+    nodes['id']   = [0,1]
+    nodes.columns = ['label','id']
+    nodes['shape']= ['triangle'] + ['circle']
+    nodes['color']= ['#98c4e1']   + ['#d7cad1']
+    edges = pd.DataFrame(data=[0.5])
+    edges.columns= ['value']
+    nodes['group']= ['tf','exp'] 
+    edges['sourcelabel']='TF'
+    edges['targetlabel']='gene'
+    edges['from']= 0
+    edges['to']  = 1
+    edges['arrows']='to'
+    edges['dispval'] =1
+    nodes=nodes.to_json(orient='records')
+    edges=edges.to_json(orient='records')
+    if request.method == 'GET':
+        form = DiffTarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100})
+        netform = NetForm({'dt':'no','topbottom':'Largest','nedges':100,'tfgenesel':'nosel'})
+        clueform = ClueForm({'tfgeneselclue':'by gene'})
+        tfgeneseltar,found, ngwas='nosel','',0
+        d = {'TF': ['TF'], 'tar': [1]}
+        tftarscore = pd.DataFrame(data=d)
+        d = {'index': ['Gene'], 'tar': [1]}
+        genetarscore = pd.DataFrame(data=d)
+        tftarscore=tftarscore.to_json(orient='records')
+        genetarscore=genetarscore.to_json(orient='records')
+    else:
+        form = DiffTarForm(request.POST, auto_id=True)
+        netform = NetForm({'dt':'no','topbottom':'Largest','nedges':100,'tfgenesel':'nosel'})
+        clueform = ClueForm({'tfgeneselclue':'by gene'})
+        tfgeneseltar  = request.POST.get('tfgeneseltar', False)
+        geneformtar   = request.POST.get('geneformtar', False)
+        goformtar     = request.POST.get('goformtar', False)
+        gwasformtar   = request.POST.get('gwasformtar', False)
+        if form.is_valid():
+            absvaltar      = request.POST.get('absvaltar', False)
+            absvaltartf    = request.POST.get('absvaltartf', False)
+            topbottomtar   = request.POST['topbottomtar']
+            topbottomtartf = request.POST['topbottomtartf']
+            nedgestar      = int(request.POST['nedgestar'])
+            nedgestartf    = int(request.POST['nedgestartf'])
+            comp1      = request.POST.get('comp1', False)
+            comp2      = request.POST.get('comp2', False)
+            # fetch network
+            object_key1='tissues/networks/' + comp1 + '.csv'
+            df1=fetchNetwork(object_key1)
+            object_key2='cancer/aggnets/networks/panda_' + comp2 + '.csv'
+            df2=fetchNetwork(object_key2)
+            df=df2-df1
+            intergenes = np.intersect1d(df1.columns,df2.columns)
+            df=df[intergenes]
+            object_key,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14='','','','','','','','','','','','',''
+            genetarscore, found, ngwas, ngenesfound = computetargeting(df,absvaltar,topbottomtar,nedgestar,'gene',tfgeneseltar,geneformtar,goformtar,gwasformtar)
+            tftarscore, foundslug, ngwasslug, negensfoundslug    = computetargeting(df,absvaltartf,topbottomtartf,nedgestartf,'tf',tfgeneseltar,geneformtar,goformtar,gwasformtar)
+            tftarscore.columns.values[0]  = 'TF'
+            genetarscore.columns.values[0]= 'index'
+            upgenes     = genetarscore[genetarscore['tar'] > 0]
+            downgenes   = genetarscore[genetarscore['tar'] < 0]
+            upgenestf   = tftarscore[tftarscore['tar'] > 0]
+            downgenestf = tftarscore[tftarscore['tar'] < 0]
+            # populate send to enrichment button
+            sendto = Sendto.objects.get(idd=0)
+            sendto.preload = 1
+            sendto.genelistup='\n'.join(tftarscore.iloc[:,0].values)
+            sendto.save()
+            sendto = Sendto.objects.get(idd=1) # genes
+            sendto.preload = 1 
+            sendto.genelistup='\n'.join(upgenes['index'].values)
+            sendto.genelistdown='\n'.join(downgenes['index'].values)
+            sendto.save()
+            sendto = Sendto.objects.get(idd=2) # tfs
+            sendto.preload = 1
+            sendto.genelistup='\n'.join(upgenestf.iloc[:,0].values)
+            sendto.genelistdown='\n'.join(downgenestf.iloc[:,0].values)
+            sendto.save()
+            # convert genes
+            if genetarscore['index'].iloc[0][0:4] == 'ENSG':    
+                convertedgenes=convertGenelist(genetarscore['index'],how='sym',mod='found')
+                indnan=np.argwhere(pd.isnull(convertedgenes)).ravel()
+                convertedgenes[indnan] = genetarscore['index'].iloc[indnan]
+                genetarscore['index'] = convertedgenes
+            # trasnform df to json
+            tftarscore=tftarscore.to_json(orient='records')
+            genetarscore=genetarscore.to_json(orient='records')
+        else:
+            print('invalid form!')
+    outputDict = {'nodes':nodes,'edges':edges,'tarform':form,'activetab':activetab, 'netform':netform, 'tftarscore':tftarscore, 'genetarscore':genetarscore, 'clueform':clueform, 'slug':slug, 'tfgeneseltar':tfgeneseltar, 'found':found, 'ngenesfound':ngenesfound, 'ngwas':ngwas, 'ssagg':ssagg, 'categorynet':categorynet,'regnetdisp':regnetdisp, 'backpage':backpage,'attr1':attr1,'attr2':attr2,'attr3':attr3,'attr4':attr4,'attr11':attr11,'attr12':attr12,'attr13':attr13,'attr14':attr14}
+    page='netcomp.html'
     return render(request, page, outputDict)
 
 def owntaragg(request,slug):
@@ -1861,7 +2135,10 @@ def selectgenes(df,tfgenesel,geneform,tfform,goform,gwasform):
         geneform=str.split(geneform,'\r\n')
         ngwas = len(geneform)
         try:
-            geneform = convertGenelist(geneform)
+            if df.columns[0][0:4]=='ENSG':
+                geneform = convertGenelist(geneform,how='ens')
+            else:
+                geneform = convertGenelist(geneform)
             found='found'
         except:
             print('no intersection')
@@ -1891,6 +2168,8 @@ def selectgenes(df,tfgenesel,geneform,tfform,goform,gwasform):
             gobp  = Gobp.objects.get(goid=goform[0])
             found='found'
             genelist=str.split(gobp.genelist,',')
+            if df.columns[0][0:4]=='ENSG':
+                genelist = convertGenelist(genelist,how='ens')
             ngwas = len(genelist)
             intergo=np.intersect1d(genelist,df.columns)
             ngenesfound = intergo.size
@@ -1906,6 +2185,8 @@ def selectgenes(df,tfgenesel,geneform,tfform,goform,gwasform):
             gwascata  = Gwascata.objects.get(term=gwasform[0])
             found='found'
             genelist=str.split(gwascata.genelist,',')
+            if df.columns[0][0:4]=='ENSG':
+                genelist = convertGenelist(genelist,how='ens')
             ngwas = len(genelist)
             intergo=np.intersect1d(genelist,df.columns)
             ngenesfound = intergo.size
@@ -1944,7 +2225,10 @@ def selectgenestar(genetarscore,tfgenesel,geneform,goform,gwasform):
         geneform=str.split(geneform,'\r\n')
         ngwas = len(geneform)
         try:
-            geneform = convertGenelist(geneform)
+            if genetarscore.iloc[0,0][0:4]=='ENSG':
+                geneform = convertGenelist(geneform,how='ens')
+            else:
+                geneform = convertGenelist(geneform)
             found='found'
         except:
             print('no intersection')
@@ -1958,6 +2242,10 @@ def selectgenestar(genetarscore,tfgenesel,geneform,goform,gwasform):
             gobp  = Gobp.objects.get(goid=goform[0])
             found='found'
             genelist=str.split(gobp.genelist,',')
+            if genetarscore.iloc[0,0][0:4]=='ENSG':
+                genelist = convertGenelist(genelist,how='ens')
+            else:
+                genelist = convertGenelist(genelist)
             ngwas = len(genelist)
             intergo=np.intersect1d(genelist,genetarscore.iloc[:,0])
             ngenesfound = intergo.size
@@ -1974,6 +2262,10 @@ def selectgenestar(genetarscore,tfgenesel,geneform,goform,gwasform):
             gwascata  = Gwascata.objects.get(term=gwasform[0])
             found='found'
             genelist=str.split(gwascata.genelist,',')
+            if genetarscore.iloc[0,0][0:4]=='ENSG':
+                genelist = convertGenelist(genelist,how='ens')
+            else:
+                genelist = convertGenelist(genelist)
             ngwas = len(genelist)
             intergo=np.intersect1d(genelist,genetarscore.iloc[:,0])
             ngenesfound = intergo.size

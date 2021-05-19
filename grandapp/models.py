@@ -636,6 +636,30 @@ class tarmod(models.Model):
     def natural_key(self):
        return self.my_natural_key
 
+class difftarmod(models.Model):
+    CHOICES   = [('Largest','Largest'),('Smallest','Smallest')]
+    CHOICES3  = [('nosel','nosel'),('by gene','by gene'),('by GO','by GO'),('by GWAS','by GWAS')]
+    CHOICES4  = [('Adipose_Subcutaneous','Adipose_Subcutaneous'),('Adipose_Visceral','Adipose_Visceral'),('Adrenal_Gland','Adrenal_Gland'),('Artery_Aorta','Artery_Aorta'),('Artery_Coronary','Artery_Coronary'),('Artery_Tibial','Artery_Tibial'),('Brain_Basal_Ganglia','Brain_Basal_Ganglia'),('Brain_Cerebellum','Brain_Cerebellum'),('Brain_Other','Brain_Other'),('Breast','Breast'),('Colon_Sigmoid','Colon_Sigmoid'),('Colon_Transverse','Colon_Transverse'),('Esophagus_Mucosa','Esophagus_Mucosa'),('Esophagus_Muscularis','Esophagus_Muscularis'),('Fibroblast_Cell_Line','Fibroblast_Cell_Line'),('Gastroesophageal_Junction','Gastroesophageal_Junction'),('Heart_Atrial_Appendage','Heart_Atrial_Appendage'),('Heart_Left_Ventricle','Heart_Left_Ventricle'),('Intestine_Terminal_Ileum','Intestine_Terminal_Ileum'),('Kidney_Cortex','Kidney_Cortex'),('Lymphoblastoid_Cell_Line','Lymphoblastoid_Cell_Line'),('Minor_Salivary_Gland','Minor_Salivary_Gland'),('Liver','Liver'),('Lung','Lung'),('Ovary','Ovary'),('Pancreas','Pancreas'),('Pituitary','Pituitary'),('Prostate','Prostate'),('Skeletal_Muscle','Skeletal_Muscle'),('Skin','Skin'),('Spleen','Spleen'),('Stomach','Stomach'),('Testis','Testis'),('Thyroid','Thyroid'),('Tibial_Nerve','Tibial_Nerve'),('Uterus','Uterus'),('Vagina','Vagina'),('Whole_Blood','Whole_Blood')]
+    CHOICES5  = [('ACC','ACC'),('BLCA','BLCA'),('CHOL','CHOL'),('COAD','COAD'),('DLBC','DLBC'),('ESCA','ESCA'),('GBM','GBM'),('HNSC','HNSC'),('KICH','KICH'),('KIRC','KIRC'),('KIRP','KIRP'),('LAML','LAML'),('LGG','LGG'),('LIHC','LIHC'),('LUAD','LUAD'),('LUSC','LUSC'),('MESO','MESO'),('PAAD','PAAD'),('PCPG','PCPG'),('READ','READ'),('SARC','SARC'),('SKCM','SKCM'),('STAD','STAD'),('THCA','THCA'),('THYM','THYM'),('UVM','UVM')]
+    comp1      = models.CharField(choices=CHOICES4, max_length=200)
+    comp2      = models.CharField(choices=CHOICES5, max_length=200)
+    tfgeneseltar = models.CharField(choices=CHOICES3, max_length=200)
+    topbottomtar = models.CharField(choices=CHOICES, max_length=200)
+    nedgestar    = models.IntegerField()
+    absvaltar    = models.BooleanField()
+    topbottomtartf= models.CharField(choices=CHOICES, max_length=200)
+    nedgestartf   = models.IntegerField()
+    absvaltartf   = models.BooleanField()
+    geneformtar   = models.CharField(max_length=200)
+    goformtar     = models.CharField(max_length=200)
+    gwasformtar   = models.CharField(max_length=200)
+
+    def __str__(self):
+       return self.name
+
+    def natural_key(self):
+       return self.my_natural_key
+
 
 class cluemod(models.Model):
     CHOICES3  = [('by gene','by gene'),('by tf','by tf')]
@@ -651,3 +675,30 @@ class Document(models.Model):
     #docfile = models.FileField(upload_to='documents/%Y/%m/%d')
     docfile = models.FileField()
     idd=models.IntegerField()
+
+
+class compmod(models.Model):
+    CHOICES   = [('Largest','Largest'),('Smallest','Smallest')]
+    CHOICES2  = [('no',''),('dtt',''),('bc','')]
+    CHOICES3  = [('nosel','nosel'),('by gene','by gene'),('by tf','by tf'),('by GO','by GO'),('by GWAS','by GWAS')]
+    CHOICES4  = [('Adipose_Subcutaneous','Adipose_Subcutaneous'),('Adipose_Visceral','Adipose_Visceral'),('Adrenal_Gland','Adrenal_Gland'),('Artery_Aorta','Artery_Aorta'),('Artery_Coronary','Artery_Coronary'),('Artery_Tibial','Artery_Tibial'),('Brain_Basal_Ganglia','Brain_Basal_Ganglia'),('Brain_Cerebellum','Brain_Cerebellum'),('Brain_Other','Brain_Other'),('Breast','Breast'),('Colon_Sigmoid','Colon_Sigmoid'),('Colon_Transverse','Colon_Transverse'),('Esophagus_Mucosa','Esophagus_Mucosa'),('Esophagus_Muscularis','Esophagus_Muscularis'),('Fibroblast_Cell_Line','Fibroblast_Cell_Line'),('Gastroesophageal_Junction','Gastroesophageal_Junction'),('Heart_Atrial_Appendage','Heart_Atrial_Appendage'),('Heart_Left_Ventricle','Heart_Left_Ventricle'),('Intestine_Terminal_Ileum','Intestine_Terminal_Ileum'),('Kidney_Cortex','Kidney_Cortex'),('Lymphoblastoid_Cell_Line','Lymphoblastoid_Cell_Line'),('Minor_Salivary_Gland','Minor_Salivary_Gland'),('Liver','Liver'),('Lung','Lung'),('Ovary','Ovary'),('Pancreas','Pancreas'),('Pituitary','Pituitary'),('Prostate','Prostate'),('Skeletal_Muscle','Skeletal_Muscle'),('Skin','Skin'),('Spleen','Spleen'),('Stomach','Stomach'),('Testis','Testis'),('Thyroid','Thyroid'),('Tibial_Nerve','Tibial_Nerve'),('Uterus','Uterus'),('Vagina','Vagina'),('Whole_Blood','Whole_Blood')]
+    CHOICES5  = [('ACC','ACC'),('BLCA','BLCA'),('CHOL','CHOL'),('COAD','COAD'),('DLBC','DLBC'),('ESCA','ESCA'),('GBM','GBM'),('HNSC','HNSC'),('KICH','KICH'),('KIRC','KIRC'),('KIRP','KIRP'),('LAML','LAML'),('LGG','LGG'),('LIHC','LIHC'),('LUAD','LUAD'),('LUSC','LUSC'),('MESO','MESO'),('PAAD','PAAD'),('PCPG','PCPG'),('READ','READ'),('SARC','SARC'),('SKCM','SKCM'),('STAD','STAD'),('THCA','THCA'),('THYM','THYM'),('UVM','UVM')]
+    comp1      = models.CharField(choices=CHOICES4, max_length=200)
+    comp2      = models.CharField(choices=CHOICES5, max_length=200)
+    dt        = models.CharField(choices=CHOICES2, max_length=200)
+    topbottom = models.CharField(choices=CHOICES, max_length=200)
+    brd       = models.BooleanField()
+    nedges    = models.IntegerField()
+    absval    = models.BooleanField()
+    edgetargeting= models.BooleanField()
+    tfgenesel = models.CharField(choices=CHOICES3, max_length=200)
+    geneform  = models.CharField(max_length=200)
+    tfform    = models.CharField(max_length=200)
+    goform    = models.CharField(max_length=200)
+    gwasform    = models.CharField(max_length=200)
+
+    def __str__(self):
+       return self.name
+
+    def natural_key(self):
+       return self.my_natural_key

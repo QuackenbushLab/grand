@@ -38,6 +38,15 @@
   {% endif %}
         </p>
 </div>
+{% else %}
+<div class="container alert alert-primary alert-dismissible fade show" role="alert">
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+  </button>
+
+<p class="mb-1">
+Please click on the submit button after selecting the parameters to retrieve the network from the server.
+</p>
+</div>
 {% endif %}
 
 
@@ -131,7 +140,7 @@
                             data-bs-animation="false"
                             data-bs-placement="top"
                             data-bs-html="true"
-                            data-bs-content="Scale node size by targeting score. More about targeting score in <a href='https://grand.networkmedicine.org/help/#wiki'>GRAND help page</a>">
+                            data-bs-content="Scale node size by targeting score in the whole network. More about targeting score in <a href='https://grand.networkmedicine.org/help/#wiki'>GRAND help page</a>">
                           targeting</a></small>
                         </div>
                         <div style="float: left;">
@@ -215,10 +224,10 @@
                         <br>
                         <div class="form-actions button-box">
                           <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">
                             Info
                             </button>
-                            <a href="#" class="btn btn-outline-success" id="btn-download" download="subnetwork.png" >Save</a>
+                            <a href="#" class="btn btn-outline-success" id="btn-download" download="subnetwork.png">Save</a>
                           <button type="submit"  name="submit" class="btn btn-primary" id="btnFetch">
                             <span id="mySpinner" class="d-none">
                             <span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
@@ -508,6 +517,24 @@
     
 
 <!-- Modal -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Legend information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p style="text-align:left">Positive edge weights are colored in green, negative edge weights are colored in red. To export the network, please click on the save button to download a png image.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -516,7 +543,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p style="text-align:left">Targeting refers to a bipartite network metric. For genes, targeting is the weighted indegree. For TFs, it represents the weighted outdegree. This feature is available only for TFs but not miRNA nor genes.</p>
+        <p style="text-align:left">Targeting refers to a bipartite network metric. For genes, targeting is the weighted indegree. For TFs, it represents the weighted outdegree.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -534,7 +561,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p style="text-align:left">The enrich function submits the selected TFs for enrichment analysis.</p> 
+        <p style="text-align:left">The enrich function submits the selected TFs for enrichment analysis. This feature is available only for TFs but not miRNA nor genes.</p> 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

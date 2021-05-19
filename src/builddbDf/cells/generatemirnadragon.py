@@ -81,3 +81,7 @@ expression,mirna=alignDF(expression,mirna,remove_std=1)
 mirna=mirna.transpose()
 a=pd.concat((expression, mirna) ,axis=1)
 a.to_csv('~/Downloads/merged_gene_mirna.csv')
+
+
+
+

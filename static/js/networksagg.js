@@ -121,7 +121,7 @@ $(document).ready(function() {
       },
       groups: {
         exp: {
-          shape: "circle",
+          shape: "dot",
           color: "#d7cad1", // blue
         },
 

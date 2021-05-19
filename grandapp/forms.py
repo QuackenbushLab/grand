@@ -1,5 +1,5 @@
 from django import forms
-from .models import Lala, netmod, tarmod, cluemod
+from .models import Lala, netmod, tarmod, cluemod, compmod, difftarmod
 
 class ContactForm(forms.Form):
     contact_name    = forms.CharField(required=True, label="Name")
@@ -143,3 +143,82 @@ class DocumentForm(forms.Form):
         label='Select a file',
         help_text='max. 500 megabytes'
     )
+
+class CompForm(forms.ModelForm):
+    CHOICES   = [('Largest','Largest'),('Smallest','Smallest')]
+    CHOICES2  = [('no',''),('dtt',''),('bc','')]
+    CHOICES3  = [('nosel',''),('by gene',''),('by tf',''),('by GO',''),('by GWAS','')]
+    CHOICES4  = [('Adipose_Subcutaneous','Adipose_Subcutaneous'),('Adipose_Visceral','Adipose_Visceral'),('Adrenal_Gland','Adrenal_Gland'),('Artery_Aorta','Artery_Aorta'),('Artery_Coronary','Artery_Coronary'),('Artery_Tibial','Artery_Tibial'),('Brain_Basal_Ganglia','Brain_Basal_Ganglia'),('Brain_Cerebellum','Brain_Cerebellum'),('Brain_Other','Brain_Other'),('Breast','Breast'),('Colon_Sigmoid','Colon_Sigmoid'),('Colon_Transverse','Colon_Transverse'),('Esophagus_Mucosa','Esophagus_Mucosa'),('Esophagus_Muscularis','Esophagus_Muscularis'),('Fibroblast_Cell_Line','Fibroblast_Cell_Line'),('Gastroesophageal_Junction','Gastroesophageal_Junction'),('Heart_Atrial_Appendage','Heart_Atrial_Appendage'),('Heart_Left_Ventricle','Heart_Left_Ventricle'),('Intestine_Terminal_Ileum','Intestine_Terminal_Ileum'),('Kidney_Cortex','Kidney_Cortex'),('Lymphoblastoid_Cell_Line','Lymphoblastoid_Cell_Line'),('Minor_Salivary_Gland','Minor_Salivary_Gland'),('Liver','Liver'),('Lung','Lung'),('Ovary','Ovary'),('Pancreas','Pancreas'),('Pituitary','Pituitary'),('Prostate','Prostate'),('Skeletal_Muscle','Skeletal_Muscle'),('Skin','Skin'),('Spleen','Spleen'),('Stomach','Stomach'),('Testis','Testis'),('Thyroid','Thyroid'),('Tibial_Nerve','Tibial_Nerve'),('Uterus','Uterus'),('Vagina','Vagina'),('Whole_Blood','Whole_Blood')]
+    CHOICES5  = [('ACC','ACC'),('BLCA','BLCA'),('CHOL','CHOL'),('COAD','COAD'),('DLBC','DLBC'),('ESCA','ESCA'),('GBM','GBM'),('HNSC','HNSC'),('KICH','KICH'),('KIRC','KIRC'),('KIRP','KIRP'),('LAML','LAML'),('LGG','LGG'),('LIHC','LIHC'),('LUAD','LUAD'),('LUSC','LUSC'),('MESO','MESO'),('PAAD','PAAD'),('PCPG','PCPG'),('READ','READ'),('SARC','SARC'),('SKCM','SKCM'),('STAD','STAD'),('THCA','THCA'),('THYM','THYM'),('UVM','UVM')]
+    comp1     = forms.ChoiceField(choices=CHOICES4, widget=forms.Select)
+    comp2     = forms.ChoiceField(choices=CHOICES5, widget=forms.Select)
+    dt        = forms.ChoiceField(choices=CHOICES2, widget=forms.RadioSelect)
+    topbottom = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
+    brd       = forms.BooleanField(widget=forms.CheckboxInput, required = False )
+    nosel     = forms.BooleanField(widget=forms.CheckboxInput, required = False )
+    absval    = forms.BooleanField(widget=forms.CheckboxInput, required = False )
+    edgetargeting    = forms.BooleanField(widget=forms.CheckboxInput, required = False )
+    tfgenesel = forms.ChoiceField(choices=CHOICES3, widget=forms.RadioSelect)
+    nedges = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'type':'range', 'step': '10', 'min': '50', 'max': '150', 'value':'100','id':'myEdge'}), required=False
+    )
+    geneform = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows':3, 'cols':7}),
+        label="gene"
+    )
+    tfform = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows':3, 'cols':7}),
+        label="tf"
+    )
+    goform = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows':1, 'cols':7}),
+        label="go"
+    )
+    gwasform = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows':1, 'cols':7}),
+        label="gwas"
+    )
+    class Meta:
+        model = compmod
+        fields = '__all__'
+
+class DiffTarForm(forms.ModelForm):
+    CHOICES   = [('Largest','Largest'),('Smallest','Smallest')]
+    CHOICES3  = [('nosel',''),('by gene',''),('by GO',''),('by GWAS','')]
+    CHOICES4  = [('Adipose_Subcutaneous','Adipose_Subcutaneous'),('Adipose_Visceral','Adipose_Visceral'),('Adrenal_Gland','Adrenal_Gland'),('Artery_Aorta','Artery_Aorta'),('Artery_Coronary','Artery_Coronary'),('Artery_Tibial','Artery_Tibial'),('Brain_Basal_Ganglia','Brain_Basal_Ganglia'),('Brain_Cerebellum','Brain_Cerebellum'),('Brain_Other','Brain_Other'),('Breast','Breast'),('Colon_Sigmoid','Colon_Sigmoid'),('Colon_Transverse','Colon_Transverse'),('Esophagus_Mucosa','Esophagus_Mucosa'),('Esophagus_Muscularis','Esophagus_Muscularis'),('Fibroblast_Cell_Line','Fibroblast_Cell_Line'),('Gastroesophageal_Junction','Gastroesophageal_Junction'),('Heart_Atrial_Appendage','Heart_Atrial_Appendage'),('Heart_Left_Ventricle','Heart_Left_Ventricle'),('Intestine_Terminal_Ileum','Intestine_Terminal_Ileum'),('Kidney_Cortex','Kidney_Cortex'),('Lymphoblastoid_Cell_Line','Lymphoblastoid_Cell_Line'),('Minor_Salivary_Gland','Minor_Salivary_Gland'),('Liver','Liver'),('Lung','Lung'),('Ovary','Ovary'),('Pancreas','Pancreas'),('Pituitary','Pituitary'),('Prostate','Prostate'),('Skeletal_Muscle','Skeletal_Muscle'),('Skin','Skin'),('Spleen','Spleen'),('Stomach','Stomach'),('Testis','Testis'),('Thyroid','Thyroid'),('Tibial_Nerve','Tibial_Nerve'),('Uterus','Uterus'),('Vagina','Vagina'),('Whole_Blood','Whole_Blood')]
+    CHOICES5  = [('ACC','ACC'),('BLCA','BLCA'),('CHOL','CHOL'),('COAD','COAD'),('DLBC','DLBC'),('ESCA','ESCA'),('GBM','GBM'),('HNSC','HNSC'),('KICH','KICH'),('KIRC','KIRC'),('KIRP','KIRP'),('LAML','LAML'),('LGG','LGG'),('LIHC','LIHC'),('LUAD','LUAD'),('LUSC','LUSC'),('MESO','MESO'),('PAAD','PAAD'),('PCPG','PCPG'),('READ','READ'),('SARC','SARC'),('SKCM','SKCM'),('STAD','STAD'),('THCA','THCA'),('THYM','THYM'),('UVM','UVM')]
+    comp1     = forms.ChoiceField(choices=CHOICES4, widget=forms.Select)
+    comp2     = forms.ChoiceField(choices=CHOICES5, widget=forms.Select)
+    absvaltar    = forms.BooleanField(widget=forms.CheckboxInput, required = False )
+    tfgeneseltar = forms.ChoiceField(choices=CHOICES3, widget=forms.RadioSelect)
+    topbottomtar = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
+    nedgestar = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'type':'range', 'step': '10', 'min': '50', 'max': '150', 'value':'100','id':'myEdgeTar'}), required=False
+    )
+    absvaltartf    = forms.BooleanField(widget=forms.CheckboxInput, required = False )
+    topbottomtartf = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
+    nedgestartf = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'type':'range', 'step': '10', 'min': '50', 'max': '150', 'value':'100','id':'myEdgeTartf'}), required=False
+    )
+    geneformtar = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows':3, 'cols':7}),
+        label="genetar"
+    )
+    goformtar = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows':1, 'cols':7}),
+        label="gotar"
+    )
+    gwasformtar = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows':1, 'cols':7}),
+        label="gwastar"
+    )
+    class Meta:
+        model = difftarmod
+        fields = '__all__'

@@ -31,7 +31,7 @@
     {% endif %}
   {% elif tfgeneseltar == 'by tf' %}
     {% if found == 'found' %}
-    {{ ngenesfound }} TFs found in network among {{ ngwas }} TFs entered
+    {{ ngenesfound }} TFs/miRNA found in network among {{ ngwas }} TFs/miRNA entered
     {% else %}
     TF list not found, plotting network without TF filtering
     {% endif %}
@@ -44,59 +44,75 @@
   </button>
 
 <p class="mb-1">
-First upload the file in the first tab. Then, in the second tab, please click on the submit button after selecting the parameters to retrieve the network from the server.
+Please click on the submit button after selecting the parameters to retrieve the network from the server.
 </p>
 </div>
 {% endif %}
 
+
 <div class='container pt-3 pb-4'>
+  <div class="overlay"></div>
+  <div class="spanner">
+    <div class="loader"></div>
+    <br><br><br>
+    <p>Loading network, please wait.</p>
+  </div>
     <div class="card text-center">
         <div class="card-header">
             <ul class="nav nav-pills card-header-pills" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                  {% if activetab == 'uptab' %}
-                    <a class="nav-link active" id="up-tab" data-bs-toggle="tab" href="#up" role="tab" aria-controls="ppi" aria-selected="false">1. Upload network</a>
-                  {% else %}
-                    <a class="nav-link" id="up-tab" data-bs-toggle="tab" href="#up" role="tab" aria-controls="ppi" aria-selected="false">1. Upload network</a>
-                  {% endif %}
-                </li>
-                <li class="nav-item" role="presentation">
                   {% if activetab == 'tar' %}
-                    <a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">2. Visualize network</a>
-                  {% elif activetab == 'uptab' %}
-                    <a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">2. Visualize network</a>
+                  <a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">Differential network</a>
                   {% else %}
-                    <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">2. Visualize network</a>
+                  <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">Differential network</a>
                   {% endif %}
                   <img src="{% static 'images/network.svg' %}" style="width: 115px; height:25px">
                 </li>
                 <li class="nav-item" role="presentation">
                   {% if activetab == 'tar' %}
-                    <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">3. Compute targeting</a>
+                  <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">Differential targeting</a>
                   {% else %}
-                    <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">3. Compute targeting</a>
+                  <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">Differential targeting</a>
                   {% endif %}
                 </li>
-          </ul>
+              </ul>
         </div>
+    
 
 
+        <!-- NETWORK -->
         <div class="tab-content" id="myTabContent">
           {% if activetab == 'tar' %}
-            <div class="tab-pane fade" id="network" role="tabpanel" aria-labelledby="home-tab">
-          {% elif activetab == 'uptab' %}
             <div class="tab-pane fade" id="network" role="tabpanel" aria-labelledby="home-tab">
           {% else %}
             <div class="tab-pane fade show active" id="network" role="tabpanel" aria-labelledby="home-tab">
           {% endif %}
-          <div class='container'>
+                <div class='container'>
                   <div class="row">
                     <div class="col-2 border border-secondary">
-                      <h5><span class="badge bg-secondary">Edges</span></h5>
-                      <div>
-                        <label for="myEdge" class="form-label">Number of edges</label>
-                        <form action="{% url 'ownnet' slug %}" role="form" method="post">
+                        <form action="{% url 'netcomp' slug %}" role="form" method="post">
                           {% csrf_token %}
+                          <br>
+                          <h5><span class="badge bg-secondary">1. Comparison</span></h5>
+                          <small><a href="#"
+                            data-bs-toggle="popover"
+                            data-bs-animation="false"
+                            data-bs-placement="top"
+                            data-bs-html="true"
+                            data-bs-content="Normal tissue networks were inferred from GTEx data.">
+                            Normal tissue: </a></small>
+                            <small>{{ netform.comp1 }} </small><br>                           
+                          <small><a href="#"
+                            data-bs-toggle="popover"
+                            data-bs-animation="false"
+                            data-bs-placement="top"
+                            data-bs-html="true"
+                            data-bs-content="Cancer networks were inferred from TCGA. The tissue abbreviations can be found in <a target='_blank' href='https://gdc.cancer.gov/resources-tcga-users/tcga-code-tables/tcga-study-abbreviations'>TCGA web page</a>.">
+                            Cancer tissue: </a></small> <br>
+                          <small>{{ netform.comp2 }} </small><br><br>
+                          <h5><span class="badge bg-secondary">Edges</span></h5>
+                          <label for="myEdge" class="form-label">Number of edges</label>
+                        <div>
                           {{ netform.nedges }}
                           <p>Value: <span id="demo2"></span></p>
                           <div class="form-group">
@@ -118,6 +134,15 @@ First upload the file in the first tab. Then, in the second tab, please click on
                                   data-bs-content="Absolute value of edges">
                                 Absolute value</a></small>
                               </div>
+                              <div style="float: left;">
+                                {{ netform.edgetargeting }} <small><a href="#"
+                                  data-bs-toggle="popover"
+                                  data-bs-animation="false"
+                                  data-bs-placement="top"
+                                  data-bs-html="true"
+                                  data-bs-content="Draws motif prior edges as dashed lines.">
+                                Prior edges</a></small>
+                              </div>
                             </div>
                           </div>
                         <br>
@@ -137,7 +162,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                           targeting</a></small>
                         </div>
                         <div style="float: left;">
-                          {{ netform.dt.3 }} <small>Scale by <a href="#"
+                          {{ netform.dt.2 }} <small>Scale by <a href="#"
                             data-bs-toggle="popover"
                             data-bs-animation="false"
                             data-bs-placement="top"
@@ -174,7 +199,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                           data-bs-placement="top"
                           data-bs-html="true"
                           data-bs-content="Enter TF names by ENSG ID, gene symbols, or mixed lists, with TF in a new line">
-                        TF</a></small>
+                        TF/miRNA</a></small>
                       </div>
                       <br>
                       {{ netform.tfform }}
@@ -218,6 +243,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                             </span>
                             Submit</button>
                             </div>
+
                         </div>
                         </form>
                         <br>
@@ -245,76 +271,29 @@ First upload the file in the first tab. Then, in the second tab, please click on
                     </div>
                   </div>
                 </div>
-
-                <div class="card">
-                  <ul class="list-group list-group-flush">
-                </div>
-                <div class="card">
-                <div class="card-header">Edge weights table</div>
-                <div class="container col-10 mt-3 pb-3">
-                  <table id="drugstable2" class="table table-hover" style="width: 100%">
-                    <thead>
-                      <tr>
-                        <th scope="col">Source</th>
-                        <th scope="col">Target</th>
-                        <th scope="col">Edge weight</th>
-                      </tr>
-                    </thead>
-                  </table>
+                    <div class="card">
+                      <ul class="list-group list-group-flush">
+                        <div class="card-header">Network information</div>
+                      <div class="card-body">
+                          A set of networks in normal and cancer tissues have been generated using the same processing pipeling, To plot a differential network, first the cancer and normal tissue networks can be selected from the dropdown menu and after clicking submit, the differential network is plotted by the specified parameters. Selecting 'weighted edges' option allows to plot edge thickness by the edge weight. Positive edge weights in cancer are plotted in green and negative edge weights in cancer are plotted in red.
+                      </div>
+                    </div>
+                    <div class="card">
+                    <div class="card-header">Edge weights table</div>
+                    <div class="container col-10 mt-3 pb-3">
+                      <table id="drugstable2" class="table table-hover" style="width: 100%">
+                        <thead>
+                          <tr>
+                            <th scope="col">Source</th>
+                            <th scope="col">Target</th>
+                            <th scope="col">Edge weight</th>
+                          </tr>
+                        </thead>
+                      </table>
+                      </div>
+                    </ul>
                   </div>
-                </ul>
-              </div>
-
             </div>
-
-
-        <!-- UPLOAD NETWORK -->
-        {% if activetab == 'uptab' %}
-          <div class="tab-pane fade show active" id="up" role="tabpanel" aria-labelledby="up-tab">
-        {% else %}
-          <div class="tab-pane fade" id="up" role="tabpanel" aria-labelledby="up-tab">
-        {% endif %}
-        <div class="container">
-              {% if documents %}
-              <ul>
-                {% for document in documents %}
-                    {% if document.idd == slug %}
-                      Loaded model: <a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a>
-                    {% endif %}
-                {% endfor %}
-              </ul>
-                {% else %}
-                    <p>No documents.</p>
-                {% endif %}
-            <!-- Upload form. Note enctype attribute! -->
-            <form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <p>{{ docform.non_field_errors }}</p>
-                <p>
-                    {{ docform.docfile.errors }}
-                    {{ docform.docfile }}
-                </p>
-                max. 500 megabytes
-                <p><input type="submit" value="Upload" /></p>
-                <br><br>
-                <p>The network format should be an adjacency matrix representing a set of regulators (TFs/miRNA) in the rows and a set of target genes in the columns, with regulator names as row names and gene names as columns names.
-                Here is an <a style="text-decoration:none" href="https://granddb.s3.us-east-2.amazonaws.com/Colon_cancer_TCGA_example.csv">example file</a> for reference.</p>
-                After uploading the network in the first tab (1. Upload network), you can visualize the network in the second tab (2. Visualize network) by clicking submit after selecting the parameters of interest. Or you can switch to the third tab (3. Compute targeting) to perform an exploratory analysis of the network including enrichment and drug repurposing analysis.
-                <br>
-                <div class="row">
-                  <div class="col">
-                  <h4 id="navigation" class="text-primary">Network view</h4>
-                  <img src="https://granddb.s3.us-east-2.amazonaws.com/gifs/network.gif" width="500" height="250">
-                </div>
-                <div class="col">
-                <h4 id="navigation" class="text-primary">Targeting view</h4>
-                <img src="https://granddb.s3.us-east-2.amazonaws.com/gifs/targeting.gif" width="500" height="250">
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-
 
         <!-- Targeting -->
         {% if activetab == 'tar' %}
@@ -325,10 +304,28 @@ First upload the file in the first tab. Then, in the second tab, please click on
           <div class='container'>
             <div class="row">
               <div class="col-2 border border-secondary">
-                <h5><span class="badge bg-secondary">Genes</span></h5>
                 <div>
-                  <form action="{% url 'owntaragg' slug %}" role="form" method="post">
+                  <form action="{% url 'difftaragg' slug %}" role="form" method="post">
                     {% csrf_token %}
+                    <br>
+                    <h5><span class="badge bg-secondary">Comparison</span></h5>
+                    <small><a href="#"
+                      data-bs-toggle="popover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-html="true"
+                      data-bs-content="Normal tissue networks were inferred from GTEx data.">
+                      Normal tissue: </a></small>
+                      <small>{{ tarform.comp1 }} </small><br>                           
+                    <small><a href="#"
+                      data-bs-toggle="popover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-html="true"
+                      data-bs-content="Cancer networks were inferred from TCGA. The tissue abbreviations can be found in <a target='_blank' href='https://gdc.cancer.gov/resources-tcga-users/tcga-code-tables/tcga-study-abbreviations'>TCGA web page</a>.">
+                      Cancer tissue: </a></small> <br>
+                    <small>{{ tarform.comp2 }} </small><br><br>
+                    <h5><span class="badge bg-secondary">Genes</span></h5>
                     {{ tarform.nedgestar }}
                     <p>Value: <span id="demo2Tar"></span></p>
                     <div class="form-group">
@@ -396,7 +393,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                   </div>
                   <br>
 
-                    <h5><span class="badge bg-secondary">TFs</span></h5>
+                    <h5><span class="badge bg-secondary">TFs/miRNA</span></h5>
                         {{ tarform.nedgestartf }}
                         <p>Value: <span id="demo2Tartf"></span></p>
                         <div class="form-group">
@@ -433,7 +430,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                   </div>
                 </form>
                   <br>
-                  <h5><span class="badge bg-secondary">Analysis</span></h5>
+                  <h5><span class="badge bg-secondary">2. Analysis</span></h5>
                   <small>Analyze the submitted list of targeted genes/TFs for downstream analysis.</small>
                   <br>
                   <br>
@@ -443,11 +440,11 @@ First upload the file in the first tab. Then, in the second tab, please click on
                       Info
                     </button>
                     <a class="btn btn-outline-primary disabled" role="button">Enrich</a>
-                    <a class="btn btn-outline-primary" href="{% url 'disease' %}" role="button">TFs</a>
+                    <a id="btnenrich" class="btn btn-outline-primary" href="{% url 'disease' %}" role="button">TFs</a>
                   </div>
                   <br><br>
                   <small>2. Drug repurposing</small>
-                  <form action="{% url 'cluesubmit' 'colon_cancer1' %}" role="form" method="post">
+                  <form action="{% url 'cluesubmit' 'redirect' %}" role="form" method="post">
                     {% csrf_token %}
                     {{ clueform.tfgeneselclue.0 }}<small>
                      By gene</small>
@@ -470,18 +467,21 @@ First upload the file in the first tab. Then, in the second tab, please click on
                 </div>
               </div>
               <div class='col border border-secondary padding-0'> 
-              <div class="row-4 ">
+              <div class="row-4">
                 <canvas id="tftardiv" style="width:100%; height:400px;"></canvas>
               </div>
-              <div class="row-4 ">
+              <div class="row-4">
                 <canvas id="genetardiv" style="width:100%; height:400px;"></canvas>
               </div>
               </div>
             </div>
           </div>
-
           <div class="card">
             <ul class="list-group list-group-flush">
+              <div class="card-header">Network information</div>
+              <div class="card-body">
+                A set of networks in normal and cancer tissues have been generated using the same processing pipeling, To plot a differential network, first the cancer and normal tissue networks can be selected from the dropdown menu and after clicking submit, the differential network is plotted by the specified parameters. Selecting 'weighted edges' option allows to plot edge thickness by the edge weight. Positive edge weights in cancer are plotted in green and negative edge weights in cancer are plotted in red.
+            </div>
           </div>
           <div class="card">
           <div class="card-header">Gene Targeting score</div>
@@ -510,12 +510,10 @@ First upload the file in the first tab. Then, in the second tab, please click on
             </div>
           </ul>
         </div>
-
           </div>
           </div>
       </div>
     
-
       <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -542,7 +540,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p style="text-align:left">Targeting refers to a bipartite network metric. For genes, targeting is the weighted indegree. For TFs, it represents the weighted outdegree.</p>
+        <p style="text-align:left">Targeting refers to a bipartite network metric. For genes, targeting is the weighted indegree. For TFs, it represents the weighted outdegree. </p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -560,7 +558,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p style="text-align:left">The enrich function submits the selected TFs for enrichment analysis.  This feature is available only for TFs but not miRNA nor genes.</p> 
+        <p style="text-align:left">The enrich function submits the selected TFs for enrichment analysis. This feature is available only for TFs but not miRNA nor genes.</p> 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -623,7 +621,17 @@ First upload the file in the first tab. Then, in the second tab, please click on
       
   
   } );
+  $("#btnFetch").click(function() {
+    $("div.spanner").addClass("show");
+    $("div.overlay").addClass("show");
+});
+$("#btnFetchTar").click(function() {
+    $("div.spanner").addClass("show");
+    $("div.overlay").addClass("show");
+});
 </script>
+
+
 
 <script>
   var slug="{{ slug }}";
@@ -651,6 +659,9 @@ First upload the file in the first tab. Then, in the second tab, please click on
   var nodes = JSON.parse("{{nodes|escapejs}}");  
   var edges = JSON.parse("{{edges|escapejs}}"); 
 </script> 
+
+
+
 <script>
 
   $(document).ready(function() {
@@ -667,11 +678,28 @@ First upload the file in the first tab. Then, in the second tab, please click on
 <script>
 
   if(document.getElementById('absval')==null){
+    if(slug.substr(0,3)=='ACH' || slug == 'mirnadragon' ){
+      document.getElementById('id_edgetargeting').disabled = true; 
+    }
+    if(slug == 'mirnadragon' ){
+      document.getElementById('id_tfgeneselclue_1').disabled = true; 
+      var element = document.getElementById("btnenrich");
+      element.classList.add("disabled");
+    }
     document.getElementById('id_absval').onchange = function() {
         document.getElementById('id_brd').checked = this.checked;
 
     };
   }else if(document.getElementById('id_absval')==null){
+    if(slug.substr(0,3)=='ACH' || slug == 'mirnadragon' ){
+      document.getElementById('edgetargeting').disabled = true; 
+      document.getElementById('tfgeneselclue_1').disabled = true; 
+    }
+    if(slug == 'mirnadragon' ){
+      document.getElementById('tfgeneselclue_1').disabled = true; 
+      var element = document.getElementById("btnenrich");
+      element.classList.add("disabled");
+    }
     document.getElementById('absval').onchange = function() {
         document.getElementById('brd').checked = this.checked;
     };
@@ -682,7 +710,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
 var tftarscore = JSON.parse("{{tftarscore|escapejs}}");  
 var genetarscore = JSON.parse("{{genetarscore|escapejs}}"); 
 </script>
-<script src="{% static 'js/bartar.js' %}"></script>
+
 
 <script>
   $(document).ready(function() {
@@ -729,5 +757,12 @@ var genetarscore = JSON.parse("{{genetarscore|escapejs}}");
   
   } );
 </script>
+
+
+<script src="{% static 'js/bartar.js' %}"></script>
+
+
+
+</script> 
 </body>
 </html>

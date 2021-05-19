@@ -129,11 +129,11 @@ resDf2['data']   = ['CCLE']
 resDf2['type']   = ['aggregate']
 resDf2['condition']  = ['Cancer']
 resDf2['urllinks']   = ['mirna']
-resDf2['reg']   = ['miRNA']
-resDf2['method2']   = ''
+resDf2['reg']        = ['miRNA']
+resDf2['method2']    = ''
 
-resDf2.loc[len(resDf2.index)] = ['Fibroblast', 'PANDA', 'GTEx', 'aggregate','Normal','fibroblast_gtex','TF','PUMA']
-resDf2.loc[len(resDf2.index)] = ['LCL', 'PANDA', 'GTEx', 'aggregate','Normal','lcl','TF','PUMA']
+resDf2.loc[len(resDf2.index)] = ['Fibroblast', 'PANDA', 'GTEx', 'aggregate','Normal (transformed)','fibroblast_gtex','TF','PUMA']
+resDf2.loc[len(resDf2.index)] = ['LCL', 'PANDA', 'GTEx', 'aggregate','Normal (primary)','lcl','TF','PUMA']
 
 validURLs=[]
 for di in uniquedisease:
@@ -225,3 +225,10 @@ resDflanding.to_csv('granddb/data/celllanding.csv',index=False)
 d = {'TF': ['TF'], 'tar': [1]}
 tftarscore = pd.DataFrame(data=d)
 
+
+
+a=pd.read_csv('/Users/mab8354/Downloads/PANDA_ACC.csv',index_col=0)
+b=pd.read_csv('/Users/mab8354/Downloads/Adipose_Subcutaneous.csv',index_col=0)
+c=a-b
+intergenes = np.intersect1d(a.columns,b.columns)
+c=c[intergenes]

@@ -1,11 +1,12 @@
 {% load static %} 
 {% include "header.html" %}
-
 <header class="jumbotron jumbotron-fluid">
   <div class="container">
       <div class="display-2 mb-4"></div>
-      <p class="lead" align="justify">GRAND is a collection of gene regulatory networks of <a href="/tissues" class="text-decoration-none">human tissues</a>, <a href="/cancers" class="text-decoration-none">cancer</a>, <a href="/cell" class="text-decoration-none">cell lines</a>, and <a href="/drugs" class="text-decoration-none">small molecule</a> effects. The networks are bipartite graphs linking Transcription Factors (TFs) and miRNAs to their target genes. 
-      GRAND integrates a webserver to test the <a href='/disease' class="text-decoration-none">enrichment</a> of a list of TFs in a set of libraries or <a href="/analysis" class="text-decoration-none">find compounds</a> that reverse/exacerbate a gene or TF regulatory profile. To date, we analyzed {{ params.0.genesupin }} gene sets.</p>
+      <p class="lead" align="center">GRAND is a collection of gene regulatory networks of <a href="/tissues" class="text-decoration-none">human tissues</a>, <a href="/cancers" class="text-decoration-none">cancer</a>, <a href="/cell" class="text-decoration-none">cell lines</a>, and <a href="/drugs" class="text-decoration-none">small molecule</a> effects. The networks are bipartite graphs linking Transcription Factors (TFs) and miRNAs to their target genes. 
+      GRAND integrates a webserver to test the <a href='/disease' class="text-decoration-none">enrichment</a> of a list of TFs in a set of libraries or <a href="/analysis" class="text-decoration-none">find compounds</a> that reverse/exacerbate a gene or TF regulatory profile. To date, we analyzed {{ params.0.genesupin }} gene sets.<br>
+      <i class="fas fa-exclamation-circle"></i> GRAND works best with <a target="_blank" style="text-decoration:none;" href='https://www.google.com/chrome/?brand=FHFK&geo=US&gclid=CjwKCAjwy42FBhB2EiwAJY0yQtD8TJCBIG2S9qreY7VWzNjM7x9rs2UFqRt2bakS8v3shsXr3mvkNBoCS4gQAvD_BwE&gclsrc=aw.ds'>Google Chrome</a>!
+    </p>      
     </div>
 </header>
 
