@@ -132,8 +132,8 @@ resDf2['urllinks']   = ['mirna']
 resDf2['reg']        = ['miRNA']
 resDf2['method2']    = ''
 
-resDf2.loc[len(resDf2.index)] = ['Fibroblast', 'PANDA', 'GTEx', 'aggregate','Normal (transformed)','fibroblast_gtex','TF','PUMA']
-resDf2.loc[len(resDf2.index)] = ['LCL', 'PANDA', 'GTEx', 'aggregate','Normal (primary)','lcl','TF','PUMA']
+resDf2.loc[len(resDf2.index)] = ['Fibroblast', 'PANDA', 'GTEx', 'aggregate','Normal (primary)','fibroblast_gtex','TF','PUMA']
+resDf2.loc[len(resDf2.index)] = ['LCL', 'PANDA', 'GTEx', 'aggregate','Normal (transformed)','lcl','TF','PUMA']
 
 validURLs=[]
 for di in uniquedisease:

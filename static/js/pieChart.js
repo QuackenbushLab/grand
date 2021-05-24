@@ -174,7 +174,6 @@ $(document).ready(function() {
       var ctxStage   = canvasStage.getContext('2d');
       var ctxVital   = canvasVital.getContext('2d');
 
-      console.log(offset)
 
       var options = {
         backgroundColor: 'rgba(54, 162, 235,0.7)',
@@ -431,7 +430,6 @@ $(document).ready(function() {
     
           var label = chartData.labels[idx];
           table.column(2).search("^"+label+"$", true, false, true).draw();
-          console.log("#id"+2+offset)
           $("#id"+2+offset).val(label);
         }
       };

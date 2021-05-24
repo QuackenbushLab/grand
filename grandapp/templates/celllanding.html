@@ -29,24 +29,24 @@
 <div class="col-10 mt-4 pb-4 mb-4">
   <div class="row">
     {% if slug == 'mirna' %}
-      <div class="col">
+      <div class="col-lg-6">
         <canvas id="scatterChart" width="50" height="30"></canvas>
       </div>
-      <div class="col">
+      <div class="col-lg-6">
         <canvas id="scatterChart2" width="50" height="30"></canvas>
       </div>
     {% elif slug == 'lcl' or slug == 'fibroblast_gtex' %}
-      <div class="col">
+      <div class="col-lg-6">
         <canvas id="scatterChart" width="50" height="30"></canvas>
       </div>
-      <div class="col">
+      <div class="col-lg-6">
         <canvas id="scatterChart2" width="50" height="30"></canvas>
       </div>
     {% else %}
-      <div class="col-md-6">
+      <div class="col-lg-6">
         <canvas id="cellbartf" style="width:100%; height:300px;"></canvas>
       </div>
-      <div class="col-md-6">
+      <div class="col-lg-6">
         <canvas id="cellbargenes" style="width:100%; height:300px;"></canvas>
       </div>
     {% endif %}
@@ -102,15 +102,15 @@
                       data-bs-content="You can directly download the TF-TF PPI prior used for the generation of the network and check the link to the original PPI database and its version.
                       If the entry is missing, it is set to the identity matrix of size nReg in the corresponding tool e.g., PUMA.">
                     </i></th>
-                    <th scope="col">Reg. prior</th>
-                    <th scope="col">Expr.<br><i class="far fa-question-circle"
+                    <th scope="col">Regulation prior</th>
+                    <th scope="col">Expression<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
                       data-bs-placement="top"
                       data-bs-animation="false"
                       data-bs-content="Gene expression.">
                     </i></th>
-                    <th scope="col">Reg.<br><i class="far fa-question-circle"
+                    <th scope="col">Regulator<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
                       data-bs-animation="false"
@@ -169,14 +169,14 @@
                       data-bs-content="miRNA expression.">
                     </i></th>
                     {% endif %}
-                    <th scope="col">{% if slug == 'mirna' %}Gene {% endif %}Expr.<br><i class="far fa-question-circle"
+                    <th scope="col">{% if slug == 'mirna' %}Gene {% endif %}Expression<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
                       data-bs-placement="top"
                       data-bs-animation="false"
                       data-bs-content="Gene expression.">
                     </i></th>
-                    <th scope="col">Reg.<br><i class="far fa-question-circle"
+                    <th scope="col">Regulator<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
                       data-bs-animation="false"
@@ -201,7 +201,7 @@
                       title="Computation precision"
                       data-bs-content="S=Single, D=Double">
                     </i></th>
-                    <th scope="col">Ref.</th>
+                    <th scope="col">Reference</th>
                   </tr>
                   {% endif %}
                 </thead>
@@ -346,23 +346,31 @@
             <p class="card-text">{% if name == 'yes' %}You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges
 			    is the number of TFs/miRNA * number of genes (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a TF-by-gene
             		    matrix named after  the GTEx sample reference{% else %} This is a description of the primary clinical variables of the gene expression samples that were used to generate the gene regulatory network{% endif %}.</p>
-          <div class="row pb-4">
-          <div class="col">
-            <canvas id="myPieChart" width="50" height="30"></canvas>   
+                    <div class="row pb-4">
+        <div class="col-lg-7">
+          <div class="row">
+            <div class="col-lg-4">
+              <canvas id="myPieChart" ></canvas>   
+            </div>
+            <div class="col-lg-4">
+              <canvas id="myPieChartETH" ></canvas>   
+            </div>
+            <div class="col-lg-4">
+              <canvas id="myPieChartAL" ></canvas>   
+            </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="row">
+          <div class="col-lg-6">
+            <canvas id="myPieChartStage" ></canvas>   
           </div>
-          <div class="col">
-            <canvas id="myPieChartETH" width="50" height="30"></canvas>   
+          <div class="col-lg-6">
+            <canvas id="myPieChartVital" ></canvas>   
           </div>
-          <div class="col">
-            <canvas id="myPieChartAL" width="50" height="30"></canvas>   
-          </div>
-          <div class="col">
-            <canvas id="myPieChartStage" width="50" height="30"></canvas>   
-          </div>
-          <div class="col">
-            <canvas id="myPieChartVital" width="50" height="30"></canvas>   
-          </div>
-          </div>
+        </div>
+      </div>
+      </div>
             <table id="tissuestable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
@@ -472,22 +480,30 @@
                     matrix named after the CCLE sample reference. The number of edges
 			    is the number of TFs/miRNA * number of genes (~ 10<sup>6</sup>).{% endif%}</p>
           <div class="row pb-4">
-          <div class="col">
-            <canvas id="myPieChart" width="50" height="30"></canvas>   
+        <div class="col-lg-7">
+          <div class="row">
+            <div class="col-lg-4">
+              <canvas id="myPieChart" ></canvas>   
+            </div>
+            <div class="col-lg-4">
+              <canvas id="myPieChartETH" ></canvas>   
+            </div>
+            <div class="col-lg-4">
+              <canvas id="myPieChartAL" ></canvas>   
+            </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="row">
+          <div class="col-lg-6">
+            <canvas id="myPieChartStage" ></canvas>   
           </div>
-          <div class="col">
-            <canvas id="myPieChartETH" width="50" height="30"></canvas>   
+          <div class="col-lg-6">
+            <canvas id="myPieChartVital" ></canvas>   
           </div>
-          <div class="col">
-            <canvas id="myPieChartAL" width="50" height="30"></canvas>   
-          </div>
-          <div class="col">
-            <canvas id="myPieChartStage" width="50" height="30"></canvas>   
-          </div>
-          <div class="col">
-            <canvas id="myPieChartVital" width="50" height="30"></canvas>   
-          </div>
-          </div>
+        </div>
+      </div>
+      </div>
           <table id="tissuestable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
@@ -625,13 +641,17 @@ $(document).ready(function() {
     } );
 
     //datatables
-    $('#tissuestabletcga').DataTable({
+    table = $('#tissuestabletcga').DataTable({
      "serverSide": false,
+     "initComplete": function (settings, json) {  
+    $("#tissuestabletcga").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+  },
      "processing": true,
             "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
              "<'row'<'col-sm-12'tr>>" +
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
     });
+
 
 
 

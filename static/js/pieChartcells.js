@@ -3,7 +3,6 @@ $(document).ready(function() {
     // Read data file and create a chart
   if(slug2 == 'lcl' || slug2=='fibroblast_gtex'){
     var rows=data2;
-    console.log(rows)
 
 
     var data3 = rows.map(function(row) {
@@ -134,6 +133,7 @@ $(document).ready(function() {
       });
       
       $('#tissuestable tfoot tr').appendTo('#tissuestable thead');
+      $("#tissuestable").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>"); 
 
       var canvas     = document.getElementById('myPieChart');
       var canvasETH  = document.getElementById('myPieChartETH');
@@ -313,7 +313,6 @@ $(document).ready(function() {
             
               var label = chartData.labels[idx];
               table.column(3).search("^"+label+"$", true, false, true).draw();
-              console.log("#id"+4+offset)
               $("#id"+3+offset).val(label);
             }
             };
@@ -356,7 +355,6 @@ $(document).ready(function() {
 
   }else{
   var rows=data2;
-  console.log(rows)
 
 
 
@@ -474,7 +472,6 @@ var ctxAL      = canvasAL.getContext('2d');
 var ctxStage   = canvasStage.getContext('2d');
 var ctxVital   = canvasVital.getContext('2d');
 
-console.log(offset)
 
 var options = {
 backgroundColor: 'rgba(54, 162, 235,0.7)',
@@ -645,6 +642,7 @@ var table = $('#tissuestable').DataTable({
 });
 
 $('#tissuestable tfoot tr').appendTo('#tissuestable thead');
+$("#tissuestable").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>"); 
 
 
 canvas.onclick = function(evt) {
@@ -668,7 +666,6 @@ if (activePoints[0]) {
 
   var label = chartData.labels[idx];
   table.column(4).search("^"+label+"$", true, false, true).draw();
-  console.log("#id"+4+offset)
   $("#id"+4+offset).val(label);
 }
 };

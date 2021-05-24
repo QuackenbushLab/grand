@@ -236,8 +236,8 @@ Please click on the submit button after selecting the parameters to retrieve the
                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">
                             Info
                             </button>
-                            <a href="#" class="btn btn-outline-success" id="btn-download" download="subnetwork.png" >Save</a>
-                          <button type="submit"  name="submit" class="btn btn-primary" id="btnFetch">
+                            <a href="#" class="btn btn-outline-success" id="btn-download" download="subnetwork.png" >Save<br><small>as png</small></a>
+                            <button type="submit"  name="submit" class="btn btn-primary" id="btnFetch">
                             <span id="mySpinner" class="d-none">
                             <span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
                             </span>
@@ -316,7 +316,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                       data-bs-html="true"
                       data-bs-content="Normal tissue networks were inferred from GTEx data.">
                       Normal tissue: </a></small>
-                      <small>{{ tarform.comp1 }} </small><br>                           
+                      <small>{{ tarform.comp11 }} </small><br>                           
                     <small><a href="#"
                       data-bs-toggle="popover"
                       data-bs-animation="false"
@@ -324,7 +324,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                       data-bs-html="true"
                       data-bs-content="Cancer networks were inferred from TCGA. The tissue abbreviations can be found in <a target='_blank' href='https://gdc.cancer.gov/resources-tcga-users/tcga-code-tables/tcga-study-abbreviations'>TCGA web page</a>.">
                       Cancer tissue: </a></small> <br>
-                    <small>{{ tarform.comp2 }} </small><br><br>
+                    <small>{{ tarform.comp22 }} </small><br><br>
                     <h5><span class="badge bg-secondary">Genes</span></h5>
                     {{ tarform.nedgestar }}
                     <p>Value: <span id="demo2Tar"></span></p>

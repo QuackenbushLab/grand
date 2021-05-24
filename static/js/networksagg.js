@@ -171,10 +171,14 @@ $(document).ready(function() {
     });
 
   }
+
+
+  
   var button = document.getElementById('btn-download');
   button.addEventListener('click', function (e) {
       var dataURL = document.getElementById('mynetwork').src;
       button.href = dataURL;
+
   });
 
   window.addEventListener("load", () => {

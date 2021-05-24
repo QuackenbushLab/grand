@@ -172,7 +172,7 @@ def networksagg(request,slug):
                 motif=motif[motif['value'] >0]
                 df = pd.merge(df, motif, how ='left', on =['source', 'target'])
                 df.columns=['source','target','value','dashes']
-                df['dashes'] = df['dashes'].fillna(0)
+                df['dashes'] = df['dashes'].fillna(False)
             if absval == 'on':
                 df['sigval']=df['value']
                 df['value'] =np.abs(df['value'])
@@ -265,6 +265,8 @@ def networksagg(request,slug):
                 edges['sourcelabel'].iloc[i]=nodes['label'].iloc[b].values
                 a,b,c = np.intersect1d(nodes['id'], edges['to'].iloc[i], return_indices=True)
                 edges['targetlabel'].iloc[i]=nodes['label'].iloc[b].values
+            print('hi')
+            print( edges.iloc[np.where(edges['dashes'] != False)] )
             nodes=nodes.to_json(orient='records')
             edges=edges.to_json(orient='records')
             form.save()
@@ -926,8 +928,8 @@ def difftaragg(request,slug):
             topbottomtartf = request.POST['topbottomtartf']
             nedgestar      = int(request.POST['nedgestar'])
             nedgestartf    = int(request.POST['nedgestartf'])
-            comp1      = request.POST.get('comp1', False)
-            comp2      = request.POST.get('comp2', False)
+            comp1      = request.POST.get('comp11', False)
+            comp2      = request.POST.get('comp22', False)
             # fetch network
             object_key1='tissues/networks/' + comp1 + '.csv'
             df1=fetchNetwork(object_key1)
@@ -1407,6 +1409,8 @@ def babelomic(request):
 def tissuelanding(request,slug):
     slug2=slug.replace('_',' ')[:-7]
     tissuelanding  = Tissuelanding.objects.filter(tissue=slug2)
+    if slug=='Skeletal_muscle_tissue':
+        slug='Muscle_skeletal_tissue'
     tissuesample   = Tissuesample.objects.filter(grdid=slug) 
     tissuelanding2 = Tissuelanding.objects.filter(tissue=slug2)
     nsamples = 0
@@ -1820,6 +1824,7 @@ def about(request):
             contact_email   = request.POST['contact_email']
             contact_subject = request.POST['contact_subject']
             content         = request.POST['content']
+            print(settings.EMAIL_HOST_USER)
             try:
                 send_mail(subject=contact_subject, message=content, from_email=settings.EMAIL_HOST_USER, recipient_list=['marouen.b.guebila@gmail.com',], fail_silently=False)
             except BadHeaderError:

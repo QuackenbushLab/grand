@@ -133,6 +133,7 @@ $(document).ready(function() {
 
       
       $('#drugstable2 tfoot tr').appendTo('#drugstable2 thead');
+      $("#drugstable2").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");   
 
       var canvas     = document.getElementById('myPieChart');
       var canvasETH  = document.getElementById('myPieChartETH');

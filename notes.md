@@ -20,22 +20,22 @@ Update to github is:
 1. Transfer .csv files
 
 - mysql database
-` scp -r -i /Users/mab8354/Virginia.pem granddb/db.sqlite3 ubuntu@34.207.177.160:~/granddb/`
+` scp -r -i /Users/mab8354/Virginia.pem granddb/db.sqlite3 ubuntu@3.238.134.118:~/granddb/`
 
 - data folder
-` scp -r -i /Users/mab8354/Virginia.pem granddb/data/*.csv ubuntu@34.207.177.160:~/granddb/data/`
+` scp -r -i /Users/mab8354/Virginia.pem granddb/data/*.csv ubuntu@3.238.134.118:~/granddb/data/`
 
 - molcluereg folder (can be skipped if no major changes)
 
-` scp -r -i /Users/mab8354/Virginia.pem granddb/static/molcluereg/ ubuntu@34.207.177.160:~/granddb/static/`
+` scp -r -i /Users/mab8354/Virginia.pem granddb/static/molcluereg/ ubuntu@3.238.134.118:~/granddb/static/`
 
 - static/data folder
 
-` scp -r -i /Users/mab8354/Virginia.pem granddb/static/data/*.csv ubuntu@34.207.177.160:~/granddb/static/data/`
+` scp -r -i /Users/mab8354/Virginia.pem granddb/static/data/*.csv ubuntu@3.238.134.118:~/granddb/static/data/`
 
 - static/js folder
 
-` scp -r -i /Users/mab8354/Virginia.pem granddb/static/js/ ubuntu@34.207.177.160:~/granddb/static/`
+` scp -r -i /Users/mab8354/Virginia.pem granddb/static/js/ ubuntu@3.238.134.118:~/granddb/static/`
 
 2. set debug to false
 
@@ -89,7 +89,7 @@ Deployment:
 
 SCP transfer
 
-`scp -r -i /Volumes/home$/mab8354/Misc/amazonKey/Virginia.pem granddb/ ubuntu@34.207.177.160:`
+`scp -r -i /Volumes/home$/mab8354/Misc/amazonKey/Virginia.pem granddb/ ubuntu@3.238.134.118:`
 
 `chmod -R 755 granddb`
 
@@ -172,6 +172,8 @@ Then `python3 manage.py collectstatic`
 EMAIL:
 
 - Unlock captcha
+
+- reset password if necessary
 
 - enable less secure apps
 

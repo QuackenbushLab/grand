@@ -1,5 +1,4 @@
 $(document).ready(function() {
-console.log(slug)
 if (slug2=='lcl' || slug2=='fibroblast_gtex'){
   var TITLE = 'Sample expression quality control 1: Mean coverage as a function of genes detected';  
 
@@ -49,7 +48,6 @@ if (slug2=='lcl' || slug2=='fibroblast_gtex'){
 
 
   var rows=data2;
-  console.log(rows)
   colors='#0f6efd'
 
   var data = rows.map(function(row) {
@@ -60,7 +58,6 @@ if (slug2=='lcl' || slug2=='fibroblast_gtex'){
     }
   })
 
-  console.log(data);
 
   var scatterChartData = {
     datasets: [{
@@ -136,14 +133,12 @@ if (slug2=='lcl' || slug2=='fibroblast_gtex'){
     }
   });
 
-  if (slug=='Adipose_subcutaneous_tissue' || slug=='Adipose_visceral_tissue' || slug=='Adrenal_gland_tissue' || slug=='Artery_aorta_tissue' || slug=='Artery_coronary_tissue' || slug=='Artery_tibial_tissue' || slug=='Brain_other_tissue' || slug=='Brain_cerebellum_tissue' || slug=='Brain_basal_ganglia_tissue' || slug=='Breast_tissue' || slug=='Colon_sigmoid_tissue' || slug=='Colon_transverse_tissue' || slug == 'Gastroesophageal_junction_tissue' || slug=='Esophagus_mucosa_tissue' || slug =='Esophagus_muscularis_tissue' || slug=='Heart_atrial_appendage_tissue' || slug=='Heart_left_ventricle_tissue' || slug=='Liver_tissue' || slug=='Lung_tissue' || slug=='Skeletal_muscle_tissue' || slug=='Tibial_nerve_tissue' || slug=='Pancreas_tissue' || slug=='Pituitary_tissue' || slug=='Skin_tissue' || slug=='Intestine_terminal_ileum_tissue' || slug=='Spleen_tissue' || slug=='Stomach_tissue' || slug=='Thyroid_tissue' || slug=='Whole_blood_tissue'){
+  if (slug=='Adipose_subcutaneous_tissue' || slug=='Adipose_visceral_tissue' || slug=='Adrenal_gland_tissue' || slug=='Artery_aorta_tissue' || slug=='Artery_coronary_tissue' || slug=='Artery_tibial_tissue' || slug=='Brain_other_tissue' || slug=='Brain_cerebellum_tissue' || slug=='Brain_basal_ganglia_tissue' || slug=='Breast_tissue' || slug=='Colon_sigmoid_tissue' || slug=='Colon_transverse_tissue' || slug == 'Gastroesophageal_junction_tissue' || slug=='Esophagus_mucosa_tissue' || slug =='Esophagus_muscularis_tissue' || slug=='Heart_atrial_appendage_tissue' || slug=='Heart_left_ventricle_tissue' || slug=='Liver_tissue' || slug=='Lung_tissue' || slug=='Muscle_skeletal_tissue' || slug=='Tibial_nerve_tissue' || slug=='Pancreas_tissue' || slug=='Pituitary_tissue' || slug=='Skin_tissue' || slug=='Intestine_terminal_ileum_tissue' || slug=='Spleen_tissue' || slug=='Stomach_tissue' || slug=='Thyroid_tissue' || slug=='Whole_blood_tissue'){
         canvas.onclick = function(evt) {
           var activePoints = myScatterChart.getElementsAtEvent(evt);
-          console.log(activePoints)
           if (activePoints[0]) {
             var idx = activePoints[0]['_index'];
             var label = activePoints[0]._chart.tooltip._data.datasets[0].data[idx]['name'];
-            console.log(label)
             location.href = '/networks/aggregate/' + label
           }
         };
@@ -211,7 +206,6 @@ $(document).ready(function() {
 
 
   var rows=data2;
-  console.log(rows)
   colors='#475bfd'
 
   var data = rows.map(function(row) {
@@ -222,7 +216,6 @@ $(document).ready(function() {
     }
   })
 
-  console.log(data);
 
   var scatterChartData = {
     datasets: [{
@@ -301,11 +294,9 @@ $(document).ready(function() {
   if (slug=='Adipose_subcutaneous_tissue' || slug=='Adipose_visceral_tissue' || slug=='Adrenal_gland_tissue' || slug=='Artery_aorta_tissue' || slug=='Artery_coronary_tissue' || slug=='Artery_tibial_tissue' || slug=='Brain_other_tissue' || slug=='Brain_cerebellum_tissue' || slug=='Brain_basal_ganglia_tissue' || slug=='Breast_tissue' || slug=='Colon_sigmoid_tissue' || slug=='Colon_transverse_tissue' || slug == 'Gastroesophageal_junction_tissue' || slug=='Esophagus_mucosa_tissue' || slug =='Esophagus_muscularis_tissue' || slug=='Heart_atrial_appendage_tissue' || slug=='Heart_left_ventricle_tissue' || slug=='Liver_tissue' || slug=='Lung_tissue' || slug=='Skeletal_muscle_tissue' || slug=='Tibial_nerve_tissue' || slug=='Pancreas_tissue' || slug=='Pituitary_tissue' || slug=='Skin_tissue' || slug=='Intestine_terminal_ileum_tissue' || slug=='Spleen_tissue' || slug=='Stomach_tissue' || slug=='Thyroid_tissue' || slug=='Whole_blood_tissue'){
       canvas.onclick = function(evt) {
         var activePoints = myScatterChart.getElementsAtEvent(evt);
-        console.log(activePoints)
         if (activePoints[0]) {
           var idx = activePoints[0]['_index'];
           var label = activePoints[0]._chart.tooltip._data.datasets[0].data[idx]['name'];
-          console.log(label)
           location.href = '/networks/aggregate/' + label
         }
       };

@@ -72,7 +72,6 @@ $(document).ready(function() {
     
         //var rows = Papa.parse(csvString, {header: true}).data;
         var rows=data2
-        console.log(rows)
     
         var datasets = SERIES.map(function(el) {
           return {
@@ -166,6 +165,7 @@ $(document).ready(function() {
                      "<'row'<'col-sm-12'tr>>" +
                      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
             });
+        $("#tissuestable").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>"); 
         // Add event listener for opening and closing details
         canvasbar.onclick = function(evt) {
           var activePoints = barchart.getElementsAtEvent(evt);

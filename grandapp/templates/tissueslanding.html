@@ -29,11 +29,11 @@
 
 
 <div class="col-10 mt-4 pb-4 mb-4">
-  <div class="container row">
-  <div class="col">
+  <div class="container-fluid row">
+  <div class="col-lg-6">
     <canvas id="scatterChart" width="50" height="30"></canvas>
   </div>
-  <div class="col">
+  <div class="col-lg-6">
     <canvas id="scatterChart2" width="50" height="30"></canvas>
   </div>
   <p style="font-family: Helvetica; color: #333; padding: 1em 2em; font-size: 12px">
@@ -57,7 +57,7 @@
                                 <a href="https://netzoo.github.io/zooanimals/puma/" style="text-decoration:none" target="_blank">PUMA</a> reconstructs a gene regulatory network with miRNA as regulators using gene expression samples and miRNA predicted targets by <a href="http://cbio.mskcc.org/microrna_data/manual.html" style="text-decoration:none" target="_blank">miRanda</a> or <a href="http://www.targetscan.org/vert_72/" style="text-decoration:none" target="_blank">TargetScan</a> as regulation priors. The Regulator-regulator interaction matrix is set to the identity matrix in the algorithm.
               {% if name == 'yes' %} <a href="https://netzoo.github.io/zooanimals/lioness/" style="text-decoration:none" target="_blank">LIONESS</a> reconstructs patient-specific <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> networks for each gene expression sample. To download sample-specific networks, you can check <a href="#cardtissue" style="text-decoration:none">the phenotypic information</a> and select the networks by
                                   clinical variables or download all the samples in a single file. {% else %} Check <a href="#cardtissue" style="text-decoration:none" >the phenotypic information</a> for the clinical variables of the samples that were used to reconstruct the network. {% endif %}</p>
-                  <table id="tissuestable2" class="table table-hover" style="width: 100%">
+                  <table id="tissuestable2" class="table table-hover" width="100%">
                       <thead>
                         <tr>
                           <th scope="col">#</th>
@@ -81,15 +81,15 @@
                             data-bs-content="You can directly download the TF-TF PPI prior used for the generation of the network and check the link to the original PPI database and its version.
                             If the entry is missing, it is set to the identity matrix of size nReg in the corresponding tool e.g., PUMA.">
                           </i></th>
-                          <th scope="col">Reg. prior</th>
-                          <th scope="col">Expr.<br><i class="far fa-question-circle"
+                          <th scope="col">Regulation prior</th>
+                          <th scope="col">Expression<br><i class="far fa-question-circle"
                             data-bs-toggle="popover"
                             data-bs-trigger="hover"
                             data-bs-placement="top"
                             data-bs-animation="false"
                             data-bs-content="Gene expression.">
                           </i></th>
-                          <th scope="col">Reg.<br><i class="far fa-question-circle"
+                          <th scope="col">Regulator<br><i class="far fa-question-circle"
                             data-bs-toggle="popover"
                             data-bs-trigger="hover"
                             data-bs-animation="false"
@@ -113,7 +113,7 @@
                             title="Computation precision"
                             data-bs-content="S=Single, D=Double">
                           </i></th>
-                          <th scope="col">Ref.</th>
+                          <th scope="col">Reference</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -232,22 +232,30 @@
 			    is 644 * 30243 (number of miRNA/TFs * number of genes) (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a miRNA/TF-by-gene
             		    matrix named after  the GTEx sample reference{% else %} This is a description of the primary clinical variables of the gene expression samples that were used to generate the gene regulatory network{% endif %}.</p>
                     <div class="row pb-4">
-                      <div class="col">
-                        <canvas id="myPieChart" width="50" height="30"></canvas>   
-                      </div>
-                      <div class="col">
-                        <canvas id="myPieChartETH" width="50" height="30"></canvas>   
-                      </div>
-                      <div class="col">
-                        <canvas id="myPieChartAL" width="50" height="30"></canvas>   
-                      </div>
-                      <div class="col">
-                        <canvas id="myPieChartStage" width="50" height="30"></canvas>   
-                      </div>
-                      <div class="col">
-                        <canvas id="myPieChartVital" width="50" height="30"></canvas>   
-                      </div>
-                      </div>
+        <div class="col-lg-7">
+          <div class="row">
+            <div class="col-lg-4">
+              <canvas id="myPieChart" ></canvas>   
+            </div>
+            <div class="col-lg-4">
+              <canvas id="myPieChartETH" ></canvas>   
+            </div>
+            <div class="col-lg-4">
+              <canvas id="myPieChartAL" ></canvas>   
+            </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="row">
+          <div class="col-lg-6">
+            <canvas id="myPieChartStage" ></canvas>   
+          </div>
+          <div class="col-lg-6">
+            <canvas id="myPieChartVital" ></canvas>   
+          </div>
+        </div>
+      </div>
+      </div>
             <table id="tissuestable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
@@ -391,7 +399,10 @@
 $(document).ready(function() {
     //datatables
 
-    $('#tissuestable2').DataTable({
+    table = $('#tissuestable2').DataTable({
+      "initComplete": function (settings, json) {  
+    $("#tissuestable2").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+  },
             "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
              "<'row'<'col-sm-12'tr>>" +
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
@@ -403,6 +414,7 @@ $(document).ready(function() {
 <script>
   // Basic example
   $(document).ready(function() {
+
         // Setup - add a text input to each footer cell
       $('#tfoot2 th').each( function (i) { //tcga
           var title = $(this).text();

@@ -72,7 +72,6 @@ $(document).ready(function() {
     
         //var rows = Papa.parse(csvString, {header: true}).data;
         var rows=data2
-        console.log(rows)
     
         var datasets = SERIES.map(function(el) {
           return {
@@ -189,7 +188,6 @@ $(document).ready(function() {
 
 
         var rowsdrag=data2drag
-        console.log(rowsdrag)
 
         var LABELS = 'method'; 
 

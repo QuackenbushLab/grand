@@ -4,21 +4,29 @@
       <h5 class="card-title">Variable description</h5>
         <p class="card-text">This is a description of the primary clinical variables of the gene expression samples that were used to generate the gene regulatory network.</p>
         <div class="row pb-4">
-          <div class="col">
-            <canvas id="myPieChart" width="50" height="30"></canvas>   
+          <div class="col-lg-7">
+            <div class="row">
+              <div class="col-lg-4">
+                <canvas id="myPieChart" ></canvas>   
+              </div>
+              <div class="col-lg-4">
+                <canvas id="myPieChartETH" ></canvas>   
+              </div>
+              <div class="col-lg-4">
+                <canvas id="myPieChartAL" ></canvas>   
+              </div>
           </div>
-          <div class="col">
-            <canvas id="myPieChartETH" width="50" height="30"></canvas>   
+        </div>
+        <div class="col-lg-5">
+          <div class="row">
+            <div class="col-lg-6">
+              <canvas id="myPieChartStage" ></canvas>   
+            </div>
+            <div class="col-lg-6">
+              <canvas id="myPieChartVital" ></canvas>   
+            </div>
           </div>
-          <div class="col">
-            <canvas id="myPieChartAL" width="50" height="30"></canvas>   
-          </div>
-          <div class="col">
-            <canvas id="myPieChartStage" width="50" height="30"></canvas>   
-          </div>
-          <div class="col">
-            <canvas id="myPieChartVital" width="50" height="30"></canvas>   
-          </div>
+        </div>
         </div>
           <table id="tissuestabletcga" class="table table-hover" style="width: 100%">
                   <thead>

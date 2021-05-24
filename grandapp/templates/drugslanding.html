@@ -178,22 +178,30 @@
   <div class="card-body">
     <h5 class="card-title">Signature description</h5>
     <div class="row pb-4">
-      <div class="col">
-        <canvas id="myPieChart" width="50" height="30"></canvas>   
+        <div class="col-lg-7">
+          <div class="row">
+            <div class="col-lg-4">
+              <canvas id="myPieChart" ></canvas>   
+            </div>
+            <div class="col-lg-4">
+              <canvas id="myPieChartETH" ></canvas>   
+            </div>
+            <div class="col-lg-4">
+              <canvas id="myPieChartAL" ></canvas>   
+            </div>
+        </div>
       </div>
-      <div class="col">
-        <canvas id="myPieChartETH" width="50" height="30"></canvas>   
+      <div class="col-lg-5">
+        <div class="row">
+          <div class="col-lg-6">
+            <canvas id="myPieChartStage" ></canvas>   
+          </div>
+          <div class="col-lg-6">
+            <canvas id="myPieChartVital" ></canvas>   
+          </div>
+        </div>
       </div>
-      <div class="col">
-        <canvas id="myPieChartAL" width="50" height="30"></canvas>   
       </div>
-      <div class="col">
-        <canvas id="myPieChartStage" width="50" height="30"></canvas>   
-      </div>
-      <div class="col">
-        <canvas id="myPieChartVital" width="50" height="30"></canvas>   
-      </div>
-    </div>
     <p class="card-text">You can either download the gene targeting (sum of weighted in-degree in the network) or TF targeting (sum of weighted out-degree in the network). You can download the targeting profiles of all the samples to get a matrix of size the number of samples by the number of genes/TFs. Otherwise, you can specify the sample targeting profile to download and you will get a TF/gene vector
             		    named after the <a href="https://clue.io/" style="text-decoration:none" target="_blank">CLUE</a> sample reference.</p>
         <table id="drugstable2" class="table table-hover" style="width: 100%">

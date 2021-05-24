@@ -107,6 +107,23 @@ for (file in files){
 totalSamples = 254 + 360 + 217 + 283 + 330 + 176 + 203 + 173 + 217 + 267 + 137 + 360 + 334 + 193 + 124 + 104 + 118 + 204 + 355 + 779 + 661 + 444 + 469 + 380 +234 +159 +247 +140 +357
 
 
+# save pancreas networks
+
+load('pancreas.RData')
+tfs  = net[1:644,1]
+genes= unique(net[,2])
+for(i in 3:195){
+  neti = net[,i]
+  d <- matrix(neti, nrow = 644, byrow = TRUE)
+  d <- as.data.frame(d, row.names = tfs)
+  colnames(d) <- genes
+  samplename = colnames(net)[i]
+  filename = paste0('Pancreas_tissue_sample_',samplename,'.csv')
+  write.csv(d, filename, row.names = TRUE, col.names = TRUE)
+  system(paste0('aws s3 cp ',filename,' s3://granddb/tissues/networks/lioness/singleSample/'))
+  system(paste0('rm ',filename))
+}
+
 
 
 
