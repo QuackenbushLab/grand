@@ -265,8 +265,6 @@ def networksagg(request,slug):
                 edges['sourcelabel'].iloc[i]=nodes['label'].iloc[b].values
                 a,b,c = np.intersect1d(nodes['id'], edges['to'].iloc[i], return_indices=True)
                 edges['targetlabel'].iloc[i]=nodes['label'].iloc[b].values
-            print('hi')
-            print( edges.iloc[np.where(edges['dashes'] != False)] )
             nodes=nodes.to_json(orient='records')
             edges=edges.to_json(orient='records')
             form.save()
