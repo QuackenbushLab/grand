@@ -197,6 +197,9 @@ $(document).ready(function() {
           "serverSide": false,
           "processing": true,
           "order": [[ 2, "desc" ]],
+          "initComplete": function (settings, json) {  
+            $("#drugstbl1").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+          },
     
     
           buttons: [

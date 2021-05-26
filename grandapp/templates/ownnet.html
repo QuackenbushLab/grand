@@ -228,6 +228,8 @@ First upload the file in the first tab. Then, in the second tab, please click on
                     
                     <div class="col-10 border border-secondary padding-0">
                       <div id="mynetwork" width=100% height=100%></div> 
+                    </div>
+                    <div class="col border border-secondary padding-0">
                       <div class="accordion" id="accordionExampleNN">
                         <div class="accordion-item">
                           <h2 class="accordion-header" id="headingOneNN">
@@ -602,6 +604,19 @@ First upload the file in the first tab. Then, in the second tab, please click on
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
 
 <script>
+  var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    // Opera 8.0+ (UA detection to detect Blink/v8-powered Opera)
+  var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
+  var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+      // At least Safari 3+: "[object HTMLElementConstructor]"
+  var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
+  var isIE = /*@cc_on!@*/false || !!document.documentMode;
+  // Edge 20+
+  var isEdge = !isIE && !!window.StyleMedia;
+  // Chrome 1+
+  if (!isChrome){
+    alert('Please switch to Google Chrome to use all network visualization features.')
+  }
   $(document).ready(function() {
     var edges = JSON.parse("{{edges|escapejs}}"); 
       //datatables

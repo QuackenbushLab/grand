@@ -97,15 +97,33 @@ Please click on the submit button after selecting the parameters to retrieve the
                           {% csrf_token %}
                           {{ netform.nedges }}
                           <p>Value: <span id="demo2"></span></p>
-                          <div class="form-group">
-                            {% for radio in netform.topbottom %}
-                              <small>{{ radio }}</small>
-                            {% endfor %}
+                          <div class='row'>
+                            <div class='col-md-10 offset-md-1'>
+                              <div class="form-group">
+                                {% for radio in netform.topbottom %}
+                                <div style="float: left;">
+                                  <small>{{ radio }} <a href="#"
+                                    data-bs-toggle="popover"
+                                    data-bs-animation="false"
+                                    data-bs-placement="top"
+                                    data-bs-html="true"
+                                    data-bs-content="Select the largest or the smallest edge weights in the network.">
+                                  weights</a></small>
+                                </div>
+                                {% endfor %}
+                              </div>
+                            </div>
                           </div>
                           <div class='row'>
-                            <div class='col-md-10 offset-md-2'>
+                            <div class='col-md-10 offset-md-1'>
                               <div style="float: left;">
-                                {{ netform.brd }} <small>Weighted edges</small>
+                                {{ netform.brd }} <small><a href="#"
+                                  data-bs-toggle="popover"
+                                  data-bs-animation="false"
+                                  data-bs-placement="top"
+                                  data-bs-html="true"
+                                  data-bs-content="Wether to scale edge thickness and color by edges weight and sign">
+                                Weighted edges</a></small>
                               </div>
                               <div style="float: left;">
                                 {{ netform.absval }} <small><a href="#"
@@ -130,7 +148,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                         <br>
                           <h5><span class="badge bg-secondary">Node scaling</span></h5>
                           <div class='row'>
-                            <div class='col-md-10 offset-md-2'>
+                            <div class='col-md-10 offset-md-1'>
                           <div style="float: left;">
                           {{ netform.dt.0 }} <small>No scaling</small>
                           </div>
@@ -166,7 +184,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                         <br>
                         <h5><span class="badge bg-secondary">Selection</span></h5>
                         <div class='row'>
-                          <div class='col-md-10 offset-md-2'>
+                          <div class='col-md-10 offset-md-1'>
                         <div style="float: left;">
                         {{ netform.tfgenesel.0 }} <small>No selection</small>
                         </div>
@@ -245,6 +263,8 @@ Please click on the submit button after selecting the parameters to retrieve the
                     
                     <div class="col-10 border border-secondary padding-0">
                       <div id="mynetwork" width=100% height=100%></div> 
+                      </div>
+                      <div class="col border border-secondary padding-0">
                       <div class="accordion" id="accordionExampleNN">
                         <div class="accordion-item">
                           <h2 class="accordion-header" id="headingOneNN">
@@ -603,6 +623,20 @@ Please click on the submit button after selecting the parameters to retrieve the
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
 
 <script>
+  var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    // Opera 8.0+ (UA detection to detect Blink/v8-powered Opera)
+  var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
+  var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+      // At least Safari 3+: "[object HTMLElementConstructor]"
+  var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
+  var isIE = /*@cc_on!@*/false || !!document.documentMode;
+  // Edge 20+
+  var isEdge = !isIE && !!window.StyleMedia;
+  // Chrome 1+
+  if (!isChrome){
+    alert('Please switch to Google Chrome to use all network visualization features.')
+  }
+
   $(document).ready(function() {
     var edges = JSON.parse("{{edges|escapejs}}"); 
       //datatables

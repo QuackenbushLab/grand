@@ -33,21 +33,15 @@
     </ul>
   </div>
   <div class="card-body hidden">
-    &nbsp; <div class="row">
-      &nbsp; &nbsp; <div class="col-1 padding-0">
-      <h3><span class="badge bg-primary">Reverse</span></h3>
-      </div>
-      <div class="col-1 padding-0">
-        &nbsp; &nbsp;<i class="far fa-question-circle"
-                     data-bs-toggle="popover"
-                     data-bs-trigger="hover"
-                     data-bs-placement="top"
-                     data-bs-animation="false"
-                     data-bs-content="Top compounds that have a reverse profile with the query set.">
-        </i>
-      </div>
-      <div class="col-10 padding-0"></div>
-      </div>
+    &nbsp; 
+
+      <h3><span class="badge bg-primary">Reverse</span>  &nbsp;<i class="far fa-question-circle"
+        data-bs-toggle="popover"
+        data-bs-trigger="hover"
+        data-bs-placement="top"
+        data-bs-animation="false"
+        data-bs-content="Top compounds that have a reverse profile with the query set.">
+</i></h3>
 
         <table id="drugstbl1" class="table table-hover" style="width: 100%">
                 <thead>
@@ -228,6 +222,9 @@
 // Basic example
 $(document).ready(function() {
   var table2 = $('#drugstblcombin').DataTable({
+    "initComplete": function (settings, json) {  
+      $("#drugstblcombin").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+    },
       "order": [[ 2, "asc" ]],
       buttons: [
             'copy', 'csv', 'pdf', 'print'

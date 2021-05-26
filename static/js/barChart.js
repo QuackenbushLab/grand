@@ -194,6 +194,9 @@ $(document).ready(function() {
         //datatables
         var table = $('#drugstbl1').DataTable({
           select:"single",
+          "initComplete": function (settings, json) {  
+            $("#drugstbl1").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+          },
           columnDefs: [
             { orderable: false, targets: 0 },
                 {
@@ -258,6 +261,9 @@ $(document).ready(function() {
   //datatables
   var tablesim = $('#drugstbl2').DataTable({
     select:"single",
+    "initComplete": function (settings, json) {  
+      $("#drugstbl2").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+    },
     columnDefs: [
       { orderable: false, targets: 0 },
           {

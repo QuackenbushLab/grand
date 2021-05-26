@@ -120,7 +120,7 @@
                       {% for tissue in tissuelanding %}
                           <tr>
                           <th scope="row">{{ forloop.counter }}</th>
-                          <td><a href="{{ tissue.tissueLink }}" class="text-decoration-none">{{ tissue.tissue }}</a></td>
+                          <td><a href="{{ tissue.tissueLink }}" class="text-decoration-none" target="_blank">{{ tissue.tissue }}</a></td>
                           <td>{{ tissue.tool }}</td>
                           <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none" target="_blank">{{ tissue.netzooRel }}</a></td>
                           {% if tissue.tool == 'PANDA-LIONESS' %}
