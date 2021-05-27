@@ -349,9 +349,9 @@
                     <td>{{ tissue.smtstptref }}</td>
                     {% if name == 'yes' %}
                     {% if tissue.sampleid == 'All' %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">Edg</a><br><span class="badge bg-secondary rounded-pill"><small>{{ tissue.size }}</small></span></td>
+                        <td><div class="btn-group-vertical"><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">Edg</a><span class="badge bg-secondary rounded-pill"><small>{{ tissue.size }}</small></span></div></td>
                     {% else %}
-                        <td><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">Adj</a><br><span class="badge bg-light text-dark rounded-pill"><small>{{ tissue.size }}</small></span><a href="/networks/aggregate/{{ tissue.cleanname }}/" class="btn btn-outline-success" role="button">Vis</a></td>
+                        <td><div class="btn-group-vertical"><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">Adj</a><span class="badge bg-light text-dark rounded-pill"><small>{{ tissue.size }}</small></span><a href="/networks/aggregate/{{ tissue.cleanname }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
                     {% endif %}
                     {% endif %}
                  {% endfor %}

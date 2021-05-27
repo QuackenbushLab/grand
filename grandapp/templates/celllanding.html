@@ -586,7 +586,7 @@
                       {% endif %}
                       <td>{{ tissue.tcga }}</td>
                       {% if slug != 'mirna' %}
-                      <td><div class="btn-group-sm" role="group" aria-label="Basic example"><a href="https://granddb.s3.us-east-2.amazonaws.com/cells/networks/ccle/{{ tissue.depmap }}.csv" class="btn btn-outline-primary" role="button">Adj</a><br><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span><a href="/networks/aggregate/{{ tissue.cleanname }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                      <td><div class="btn-group-vertical"><a href="https://granddb.s3.us-east-2.amazonaws.com/cells/networks/ccle/{{ tissue.depmap }}.csv" class="btn btn-outline-primary" role="button">Adj</a><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span><a href="/networks/aggregate/{{ tissue.cleanname }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
                       {% endif %}
                     </tr>
                   {% endfor %}

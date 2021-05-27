@@ -31,6 +31,7 @@ $(document).ready(function() {
        });
 
        $('#tissuestablegeo tfoot tr').appendTo('#tissuestablegeo thead');
+       $("#tissuestablegeo").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");  
 
       if (slug == 'COAD'){
         var data = rows.map(function(row) {

@@ -148,12 +148,12 @@ Please click on the submit button after selecting the parameters to retrieve the
                         <br>
                           <h5><span class="badge bg-secondary">Node scaling</span></h5>
                           <div class='row'>
-                            <div class='col-md-10 offset-md-1'>
+                            <div class='col-11 offset-1'>
                           <div style="float: left;">
                           {{ netform.dt.0 }} <small>No scaling</small>
                           </div>
                           <div style="float: left;">
-                          {{ netform.dt.1 }} <small>Scale by <a href="#"
+                          {{ netform.dt.1 }} <small>by <a href="#"
                             data-bs-toggle="popover"
                             data-bs-animation="false"
                             data-bs-placement="top"
@@ -162,7 +162,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                           targeting</a></small>
                         </div>
                         <div style="float: left;">
-                          {{ netform.dt.2 }} <small>Scale by <a href="#"
+                          {{ netform.dt.2 }} <small>by <a href="#"
                             data-bs-toggle="popover"
                             data-bs-animation="false"
                             data-bs-placement="top"
@@ -171,7 +171,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                           expression</a></small>
                         </div>
                         <div style="float: left;">
-                          {{ netform.dt.3 }} <small>Scale by <a href="#"
+                          {{ netform.dt.3 }} <small>by <a href="#"
                             data-bs-toggle="popover"
                             data-bs-animation="false"
                             data-bs-placement="top"
@@ -330,10 +330,11 @@ Please click on the submit button after selecting the parameters to retrieve the
             <div class="row">
               <div class="col-2 border border-secondary">
                 <h5><span class="badge bg-secondary">Genes</span></h5>
-                <div>
                   <form action="{% url 'taragg' slug %}" role="form" method="post">
                     {% csrf_token %}
-                    {{ tarform.nedgestar }}
+                    <div class="row">
+                        {{ tarform.nedgestar }}
+                    </div>
                     <p>Value: <span id="demo2Tar"></span></p>
                     <div class="form-group">
                       {% for radio in tarform.topbottomtar %}
@@ -356,7 +357,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                     <br>
                     <h5><span class="badge bg-secondary">Selection</span></h5>
                     <div class='row'>
-                      <div class='col-md-10 offset-md-2'>
+                      <div class='col-10 offset-2'>
                     <div style="float: left;">
                     {{ tarform.tfgeneseltar.0 }} <small>No selection</small>
                     </div>
@@ -471,7 +472,6 @@ Please click on the submit button after selecting the parameters to retrieve the
                 </form>
                   <br>
                   <br>
-                </div>
               </div>
               <div class='col border border-secondary padding-0'> 
               <div class="row-4">

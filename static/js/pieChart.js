@@ -344,6 +344,7 @@ $(document).ready(function() {
     });
 
     $('#tissuestabletcga tfoot tr').appendTo('#tissuestabletcga thead');
+    $("#tissuestabletcga").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");  
        
     if (slug == 'GBM') {
       canvas.onclick = function(evt) {
