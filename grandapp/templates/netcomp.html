@@ -93,7 +93,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                         <form action="{% url 'netcomp' slug %}" role="form" method="post">
                           {% csrf_token %}
                           <br>
-                          <h5><span class="badge bg-secondary">1. Comparison</span></h5>
+                          <h5><span class="badge bg-secondary">Comparison</span></h5>
                           <small><a href="#"
                             data-bs-toggle="popover"
                             data-bs-animation="false"
@@ -101,7 +101,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                             data-bs-html="true"
                             data-bs-content="Normal tissue networks were inferred from GTEx data.">
                             Normal tissue: </a></small>
-                            <small>{{ netform.comp1 }} </small><br>                           
+                            <small><div class="offset-2 col-8 offset-2"><div class="row">{{ netform.comp1 }} </div></div></small><br>    
                           <small><a href="#"
                             data-bs-toggle="popover"
                             data-bs-animation="false"
@@ -109,19 +109,34 @@ Please click on the submit button after selecting the parameters to retrieve the
                             data-bs-html="true"
                             data-bs-content="Cancer networks were inferred from TCGA. The tissue abbreviations can be found in <a target='_blank' href='https://gdc.cancer.gov/resources-tcga-users/tcga-code-tables/tcga-study-abbreviations'>TCGA web page</a>.">
                             Cancer tissue: </a></small> <br>
-                          <small>{{ netform.comp2 }} </small><br><br>
+                          <small><div class="offset-2 col-8 offset-2"><div class="row">{{ netform.comp2 }} </div></div></small><br><br>
                           <h5><span class="badge bg-secondary">Edges</span></h5>
                           <label for="myEdge" class="form-label">Number of edges</label>
                         <div>
+                          <div class="offset-2 col-8 offset-2">
+                            <div class='row'>
                           {{ netform.nedges }}
+                            </div>
+                          </div>
                           <p>Value: <span id="demo2"></span></p>
+                          <div class='row'>
+                            <div class='col-md-10 offset-md-1'>
                           <div class="form-group">
                             {% for radio in netform.topbottom %}
-                              <small>{{ radio }}</small>
+                            <div style="float: left;">
+                              <small>{{ radio }} <a href="#"
+                                data-bs-toggle="popover"
+                                data-bs-animation="false"
+                                data-bs-placement="top"
+                                data-bs-html="true"
+                                data-bs-content="Select the largest or the smallest edge weights in the network.">weights</a></small>
+                              </div>
                             {% endfor %}
                           </div>
+                        </div>
+                      </div>
                           <div class='row'>
-                            <div class='col-md-10 offset-md-2'>
+                            <div class='col-md-10 offset-md-1'>
                               <div style="float: left;">
                                 {{ netform.brd }} <small>Weighted edges</small>
                               </div>
@@ -148,7 +163,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                         <br>
                           <h5><span class="badge bg-secondary">Node scaling</span></h5>
                           <div class='row'>
-                            <div class='col-md-10 offset-md-2'>
+                            <div class='col-md-10 offset-md-1'>
                           <div style="float: left;">
                           {{ netform.dt.0 }} <small>No scaling</small>
                           </div>
@@ -175,7 +190,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                         <br>
                         <h5><span class="badge bg-secondary">Selection</span></h5>
                         <div class='row'>
-                          <div class='col-md-10 offset-md-2'>
+                          <div class='col-md-10 offset-md-1'>
                         <div style="float: left;">
                         {{ netform.tfgenesel.0 }} <small>No selection</small>
                         </div>
@@ -310,7 +325,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                   <form action="{% url 'difftaragg' slug %}" role="form" method="post">
                     {% csrf_token %}
                     <br>
-                    <h5><span class="badge bg-secondary">Comparison</span></h5>
+                    <h5><span class="badge bg-secondary">1. Comparison</span></h5>
                     <small><a href="#"
                       data-bs-toggle="popover"
                       data-bs-animation="false"
@@ -318,7 +333,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                       data-bs-html="true"
                       data-bs-content="Normal tissue networks were inferred from GTEx data.">
                       Normal tissue: </a></small>
-                      <small>{{ tarform.comp11 }} </small><br>                           
+                      <small><div class="offset-2 col-8 offset-2"><div class="row">{{ tarform.comp11 }} </div></div></small><br>                           
                     <small><a href="#"
                       data-bs-toggle="popover"
                       data-bs-animation="false"
@@ -326,9 +341,13 @@ Please click on the submit button after selecting the parameters to retrieve the
                       data-bs-html="true"
                       data-bs-content="Cancer networks were inferred from TCGA. The tissue abbreviations can be found in <a target='_blank' href='https://gdc.cancer.gov/resources-tcga-users/tcga-code-tables/tcga-study-abbreviations'>TCGA web page</a>.">
                       Cancer tissue: </a></small> <br>
-                    <small>{{ tarform.comp22 }} </small><br><br>
+                    <small><div class="offset-2 col-8 offset-2"><div class="row">{{ tarform.comp22 }} </div></div></small><br>
                     <h5><span class="badge bg-secondary">Genes</span></h5>
+                    <div class="offset-2 col-8 offset-2">
+                      <div class='row'>
                     {{ tarform.nedgestar }}
+                      </div>
+                    </div>
                     <p>Value: <span id="demo2Tar"></span></p>
                     <div class="form-group">
                       {% for radio in tarform.topbottomtar %}
@@ -396,7 +415,11 @@ Please click on the submit button after selecting the parameters to retrieve the
                   <br>
 
                     <h5><span class="badge bg-secondary">TFs/miRNA</span></h5>
+                        <div class="offset-2 col-8 offset-2">
+                          <div class='row'>
                         {{ tarform.nedgestartf }}
+                          </div>
+                        </div>
                         <p>Value: <span id="demo2Tartf"></span></p>
                         <div class="form-group">
                           {% for radio in tarform.topbottomtartf %}
@@ -468,7 +491,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                   <br>
                 </div>
               </div>
-              <div class='col border border-secondary padding-0'> 
+              <div class='col-10 border border-secondary padding-0'> 
               <div class="row-4">
                 <canvas id="tftardiv" style="width:100%; height:400px;"></canvas>
               </div>
@@ -613,7 +636,7 @@ Please click on the submit button after selecting the parameters to retrieve the
   var isEdge = !isIE && !!window.StyleMedia;
   // Chrome 1+
   if (!isChrome){
-    alert('Please switch to Google Chrome to use all network visualization features.')
+    alert('Please switch to Google Chrome to enable network visualization.')
   }
 
   $(document).ready(function() {

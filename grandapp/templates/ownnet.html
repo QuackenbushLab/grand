@@ -92,20 +92,37 @@ First upload the file in the first tab. Then, in the second tab, please click on
           <div class='container'>
                   <div class="row">
                     <div class="col-2 border border-secondary">
+                      <br>
                       <h5><span class="badge bg-secondary">Edges</span></h5>
                       <div>
                         <label for="myEdge" class="form-label">Number of edges</label>
                         <form action="{% url 'ownnet' slug %}" role="form" method="post">
                           {% csrf_token %}
+                          <div class="offset-2 col-8 offset-2">
+                            <div class='row'>
                           {{ netform.nedges }}
+                          </div>
+                          </div>
                           <p>Value: <span id="demo2"></span></p>
+                          <div class='row'>
+                            <div class='col-md-10 offset-md-1'>
                           <div class="form-group">
                             {% for radio in netform.topbottom %}
-                              <small>{{ radio }}</small>
+                            <div style="float: left;">
+                              <small>{{ radio }} <a href="#"
+                                data-bs-toggle="popover"
+                                data-bs-animation="false"
+                                data-bs-placement="top"
+                                data-bs-html="true"
+                                data-bs-content="Select the largest or the smallest edge weights in the network.">
+                              weights</a></small>
+                            </div>
                             {% endfor %}
+                              </div>
+                            </div>
                           </div>
                           <div class='row'>
-                            <div class='col-md-10 offset-md-2'>
+                            <div class='col-md-10 offset-md-1'>
                               <div style="float: left;">
                                 {{ netform.brd }} <small>Weighted edges</small>
                               </div>
@@ -123,12 +140,12 @@ First upload the file in the first tab. Then, in the second tab, please click on
                         <br>
                           <h5><span class="badge bg-secondary">Node scaling</span></h5>
                           <div class='row'>
-                            <div class='col-md-10 offset-md-2'>
+                            <div class='col-11 offset-1'>
                           <div style="float: left;">
                           {{ netform.dt.0 }} <small>No scaling</small>
                           </div>
                           <div style="float: left;">
-                          {{ netform.dt.1 }} <small>Scale by <a href="#"
+                          {{ netform.dt.1 }} <small>by <a href="#"
                             data-bs-toggle="popover"
                             data-bs-animation="false"
                             data-bs-placement="top"
@@ -137,7 +154,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                           targeting</a></small>
                         </div>
                         <div style="float: left;">
-                          {{ netform.dt.3 }} <small>Scale by <a href="#"
+                          {{ netform.dt.3 }} <small>by <a href="#"
                             data-bs-toggle="popover"
                             data-bs-animation="false"
                             data-bs-placement="top"
@@ -150,7 +167,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                         <br>
                         <h5><span class="badge bg-secondary">Selection</span></h5>
                         <div class='row'>
-                          <div class='col-md-10 offset-md-2'>
+                          <div class='col-md-10 offset-md-1'>
                         <div style="float: left;">
                         {{ netform.tfgenesel.0 }} <small>No selection</small>
                         </div>
@@ -327,11 +344,16 @@ First upload the file in the first tab. Then, in the second tab, please click on
           <div class='container'>
             <div class="row">
               <div class="col-2 border border-secondary">
+                <br>
                 <h5><span class="badge bg-secondary">Genes</span></h5>
                 <div>
                   <form action="{% url 'owntaragg' slug %}" role="form" method="post">
                     {% csrf_token %}
+                    <div class="offset-2 col-8 offset-2">
+                      <div class='row'>
                     {{ tarform.nedgestar }}
+                      </div>
+                    </div>
                     <p>Value: <span id="demo2Tar"></span></p>
                     <div class="form-group">
                       {% for radio in tarform.topbottomtar %}
@@ -399,7 +421,11 @@ First upload the file in the first tab. Then, in the second tab, please click on
                   <br>
 
                     <h5><span class="badge bg-secondary">TFs</span></h5>
+                    <div class="offset-2 col-8 offset-2">
+                      <div class='row'>
                         {{ tarform.nedgestartf }}
+                        </div>
+                        </div>
                         <p>Value: <span id="demo2Tartf"></span></p>
                         <div class="form-group">
                           {% for radio in tarform.topbottomtartf %}
@@ -471,7 +497,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                   <br>
                 </div>
               </div>
-              <div class='col border border-secondary padding-0'> 
+              <div class='col-10 border border-secondary padding-0'> 
               <div class="row-4 ">
                 <canvas id="tftardiv" style="width:100%; height:400px;"></canvas>
               </div>
@@ -615,7 +641,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
   var isEdge = !isIE && !!window.StyleMedia;
   // Chrome 1+
   if (!isChrome){
-    alert('Please switch to Google Chrome to use all network visualization features.')
+    alert('Please switch to Google Chrome to enable network visualization.')
   }
   $(document).ready(function() {
     var edges = JSON.parse("{{edges|escapejs}}"); 

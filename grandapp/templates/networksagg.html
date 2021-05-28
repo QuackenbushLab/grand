@@ -90,12 +90,17 @@ Please click on the submit button after selecting the parameters to retrieve the
                 <div class='container'>
                   <div class="row">
                     <div class="col-2 border border-secondary">
+                      <br>
                       <h5><span class="badge bg-secondary">Edges</span></h5>
                       <div>
                         <label for="myEdge" class="form-label">Number of edges</label>
                         <form action="{% url 'networksagg' slug %}" role="form" method="post">
                           {% csrf_token %}
+                          <div class="offset-2 col-8 offset-2">
+                          <div class='row'>
                           {{ netform.nedges }}
+                          </div>
+                        </div>
                           <p>Value: <span id="demo2"></span></p>
                           <div class='row'>
                             <div class='col-md-10 offset-md-1'>
@@ -329,11 +334,14 @@ Please click on the submit button after selecting the parameters to retrieve the
           <div class='container'>
             <div class="row">
               <div class="col-2 border border-secondary">
+                <br>
                 <h5><span class="badge bg-secondary">Genes</span></h5>
                   <form action="{% url 'taragg' slug %}" role="form" method="post">
                     {% csrf_token %}
-                    <div class="row">
+                    <div class="offset-2 col-8 offset-2">
+                      <div class='row'>
                         {{ tarform.nedgestar }}
+                      </div>
                     </div>
                     <p>Value: <span id="demo2Tar"></span></p>
                     <div class="form-group">
@@ -402,7 +410,11 @@ Please click on the submit button after selecting the parameters to retrieve the
                   <br>
 
                     <h5><span class="badge bg-secondary">TFs/miRNA</span></h5>
+                    <div class="offset-2 col-8 offset-2">
+                      <div class='row'>
                         {{ tarform.nedgestartf }}
+                        </div>
+                      </div>
                         <p>Value: <span id="demo2Tartf"></span></p>
                         <div class="form-group">
                           {% for radio in tarform.topbottomtartf %}
@@ -473,7 +485,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                   <br>
                   <br>
               </div>
-              <div class='col border border-secondary padding-0'> 
+              <div class='col-10 border border-secondary padding-0'> 
               <div class="row-4">
                 <canvas id="tftardiv" style="width:100%; height:400px;"></canvas>
               </div>
@@ -634,7 +646,7 @@ Please click on the submit button after selecting the parameters to retrieve the
   var isEdge = !isIE && !!window.StyleMedia;
   // Chrome 1+
   if (!isChrome){
-    alert('Please switch to Google Chrome to use all network visualization features.')
+    alert('Please switch to Google Chrome to enable network visualization.')
   }
 
   $(document).ready(function() {

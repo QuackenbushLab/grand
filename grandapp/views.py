@@ -49,6 +49,8 @@ mg = mygene.MyGeneInfo()
 def convertGenelist(geneform,how='sym',mod='notfound'):
     #geneform=str.split(geneform,'\r\n')
     # convert to gene symbols
+    if len(geneform) == 0:
+        return geneform
     if how=='ens':
         geneSyms = mg.querymany(geneform , scopes=["ensemblgene", "symbol"], fields='ensembl.gene', species='human',as_dataframe=True)
     else:
@@ -57,10 +59,13 @@ def convertGenelist(geneform,how='sym',mod='notfound'):
     if mod=='notfound':
         if 'notfound' in geneSyms.columns:
             geneSyms=geneSyms[geneSyms.notfound != True]
-    if how=='ens':
-        geneform = geneSyms['ensembl.gene'].dropna().values
+    if geneSyms.empty:
+        geneform = []
     else:
-        geneform = geneSyms.symbol.values
+        if how=='ens':
+            geneform = geneSyms['ensembl.gene'].dropna().values
+        else:
+            geneform = geneSyms.symbol.values
     return geneform
 
 def home(request):
@@ -449,8 +454,7 @@ def upload(request):
         nodes = pd.DataFrame(data=['TF','Gene'])
         nodes['id']   = [0,1]
         nodes.columns = ['label','id']
-        nodes['shape']= ['triangle'] + ['circle']
-        nodes['color']= ['#98c4e1']  + ['#d7cad1']
+        nodes['group']= ['tf','exp'] 
         nodes['x'] = [100,110]
         nodes['y'] = [200,200]
         edges= pd.DataFrame(data=[0.5])
@@ -468,8 +472,7 @@ def upload(request):
         nodes = pd.DataFrame(data=['TF','Gene'])
         nodes['id']   = [0,1]
         nodes.columns = ['label','id']
-        nodes['shape']= ['triangle'] + ['circle']
-        nodes['color']= ['#98c4e1']  + ['#d7cad1']
+        nodes['group']= ['tf','exp'] 
         edges= pd.DataFrame(data=[0.5])
         edges.columns= ['value']
         edges['from']= 0
@@ -505,8 +508,6 @@ def ownnet(request,slug):
         nodes = pd.DataFrame(data=['TF','Gene'])
         nodes['id']   = [0,1]
         nodes.columns = ['label','id']
-        nodes['shape']= ['triangle'] + ['circle']
-        nodes['color']= ['#98c4e1']   + ['#d7cad1']
         #nodes['x'] = [100,110]
         #nodes['y'] = [200,200]
         edges= pd.DataFrame(data=[0.5])
@@ -567,8 +568,7 @@ def ownnet(request,slug):
             nodes = pd.DataFrame(data=np.concatenate((b1,b2)))
             nodes['id']=list(range(0,len(b1)+len(b2)))
             nodes.columns  = ['label','id']
-            nodes['shape'] = ['triangle']*len(b1) + ['circle']*len(b2)
-            nodes['color'] = ['#98c4e1']*len(b1) + ['#d7cad1']*len(b2)
+            nodes['group'] = ['tf']*len(b1) + ['exp']*len(b2)
             titlearray = np.append(b1,b2)
             for i in range(len(titlearray)):
                 origtitle=titlearray[i]
@@ -802,8 +802,6 @@ def taragg(request,slug):
     nodes = pd.DataFrame(data=['TF','Gene'])
     nodes['id']   = [0,1]
     nodes.columns = ['label','id']
-    nodes['shape']= ['triangle'] + ['circle']
-    nodes['color']= ['#98c4e1']   + ['#d7cad1']
     edges = pd.DataFrame(data=[0.5])
     edges.columns= ['value']
     nodes['group']= ['tf','exp'] 
@@ -860,12 +858,18 @@ def taragg(request,slug):
             sendto = Sendto.objects.get(idd=1) # genes
             sendto.preload = 1 
             sendto.genelistup='\n'.join(upgenes['index'].values)
-            sendto.genelistdown='\n'.join(downgenes['index'].values)
+            if downgenes.empty:
+                sendto.genelistdown = ''
+            else:
+                sendto.genelistdown='\n'.join(downgenes['index'].values)
             sendto.save()
             sendto = Sendto.objects.get(idd=2) # tfs
             sendto.preload = 1
             sendto.genelistup='\n'.join(upgenestf.iloc[:,0].values)
-            sendto.genelistdown='\n'.join(downgenestf.iloc[:,0].values)
+            if downgenestf.empty:
+                sendto.genelistdown = ''
+            else:
+                sendto.genelistdown='\n'.join(downgenestf.iloc[:,0].values)
             sendto.save()
             # convert genes
             if genetarscore['index'].iloc[0][0:4] == 'ENSG':    
@@ -887,8 +891,6 @@ def difftaragg(request,slug):
     nodes = pd.DataFrame(data=['TF','Gene'])
     nodes['id']   = [0,1]
     nodes.columns = ['label','id']
-    nodes['shape']= ['triangle'] + ['circle']
-    nodes['color']= ['#98c4e1']   + ['#d7cad1']
     edges = pd.DataFrame(data=[0.5])
     edges.columns= ['value']
     nodes['group']= ['tf','exp'] 
@@ -900,10 +902,11 @@ def difftaragg(request,slug):
     edges['dispval'] =1
     nodes=nodes.to_json(orient='records')
     edges=edges.to_json(orient='records')
+    ngenesfound,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14='','','','','','','','','','','','',''
     if request.method == 'GET':
         form = DiffTarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100})
-        netform = NetForm({'dt':'no','topbottom':'Largest','nedges':100,'tfgenesel':'nosel'})
         clueform = ClueForm({'tfgeneselclue':'by gene'})
+        netform = CompForm({'dt':'no','topbottom':'Largest','nedges':100,'tfgenesel':'nosel'})
         tfgeneseltar,found, ngwas='nosel','',0
         d = {'TF': ['TF'], 'tar': [1]}
         tftarscore = pd.DataFrame(data=d)
@@ -913,8 +916,8 @@ def difftaragg(request,slug):
         genetarscore=genetarscore.to_json(orient='records')
     else:
         form = DiffTarForm(request.POST, auto_id=True)
-        netform = NetForm({'dt':'no','topbottom':'Largest','nedges':100,'tfgenesel':'nosel'})
         clueform = ClueForm({'tfgeneselclue':'by gene'})
+        netform = CompForm({'dt':'no','topbottom':'Largest','nedges':100,'tfgenesel':'nosel'})
         tfgeneseltar  = request.POST.get('tfgeneseltar', False)
         geneformtar   = request.POST.get('geneformtar', False)
         goformtar     = request.POST.get('goformtar', False)
@@ -953,12 +956,18 @@ def difftaragg(request,slug):
             sendto = Sendto.objects.get(idd=1) # genes
             sendto.preload = 1 
             sendto.genelistup='\n'.join(upgenes['index'].values)
-            sendto.genelistdown='\n'.join(downgenes['index'].values)
+            if downgenes.empty:
+                sendto.genelistdown = ''
+            else:
+                sendto.genelistdown='\n'.join(downgenes['index'].values)
             sendto.save()
             sendto = Sendto.objects.get(idd=2) # tfs
             sendto.preload = 1
             sendto.genelistup='\n'.join(upgenestf.iloc[:,0].values)
-            sendto.genelistdown='\n'.join(downgenestf.iloc[:,0].values)
+            if downgenestf.empty:
+                sendto.genelistdown = ''
+            else:
+                sendto.genelistdown='\n'.join(downgenestf.iloc[:,0].values)
             sendto.save()
             # convert genes
             if genetarscore['index'].iloc[0][0:4] == 'ENSG':    
@@ -980,8 +989,6 @@ def owntaragg(request,slug):
     nodes = pd.DataFrame(data=['TF','Gene'])
     nodes['id']   = [0,1]
     nodes.columns = ['label','id']
-    nodes['shape']= ['triangle'] + ['circle']
-    nodes['color']= ['#98c4e1']   + ['#d7cad1']
     edges = pd.DataFrame(data=[0.5])
     edges.columns= ['value']
     nodes['group']= ['tf','exp'] 
@@ -1040,12 +1047,18 @@ def owntaragg(request,slug):
             sendto = Sendto.objects.get(idd=1) # genes
             sendto.preload = 1 
             sendto.genelistup='\n'.join(upgenes['index'].values)
-            sendto.genelistdown='\n'.join(downgenes['index'].values)
+            if downgenes.empty:
+                sendto.genelistdown = ''
+            else:
+                sendto.genelistdown='\n'.join(downgenes['index'].values)
             sendto.save()
             sendto = Sendto.objects.get(idd=2) # tfs
             sendto.preload = 1
             sendto.genelistup='\n'.join(upgenestf.iloc[:,0].values)
-            sendto.genelistdown='\n'.join(downgenestf.iloc[:,0].values)
+            if downgenestf.empty:
+                sendto.genelistdown = ''
+            else:
+                sendto.genelistdown='\n'.join(downgenestf.iloc[:,0].values)
             sendto.save()
             # trasnform df to json
             tftarscore=tftarscore.to_json(orient='records')
