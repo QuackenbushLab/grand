@@ -3,7 +3,6 @@ $(document).ready(function() {
     // Read data file and create a chart
 
     var rows=data2;
-    console.log(rows)
 
 
     var data3 = rows.map(function(row) {

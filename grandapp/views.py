@@ -69,9 +69,7 @@ def convertGenelist(geneform,how='sym',mod='notfound'):
     return geneform
 
 def home(request):
-    params  = Params.objects.filter(id=-1)
-    print(params)
-    return render(request, 'home.html', {'params':params})
+    return render(request, 'home.html')
 
 def help(request):
     pandaac = Pandaac.objects.all()
@@ -1601,7 +1599,10 @@ def celllanding(request,slug):
     return render(request, "celllanding.html", returntupl)
 
 def analysis(request):
+    params = ''
     if request.method == 'GET':
+        params  = Params.objects.filter(id=-1)
+        print(params)
         form = GeneForm({'tfgene':''}, auto_id=True)
         combin = False
     else:
@@ -1751,7 +1752,7 @@ def analysis(request):
              except BadHeaderError: #find a better exception
                  return HttpResponse('Invalid header found.')
              return redirect('/drugresult/' + str(accessKey) + '/reverse/')
-    return render(request, 'analysis.html', {'geneform':form})
+    return render(request, 'analysis.html', {'geneform':form, 'params':params})
 
 def drugresult(request, id):
     params   = Params.objects.filter(query=id)

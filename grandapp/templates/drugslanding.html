@@ -103,8 +103,8 @@
   <div class="card-body">
     <h5 class="card-title">Tool description</h5>
     <p class="card-text"><a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. <a href="https://netzoo.github.io/zooanimals/lioness/" style="text-decoration:none" target="_blank">LIONESS</a> reconstructs sample-specific <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> networks for each gene expression sample. 
-			    To download sample-specific TF and gene targeting profiles i.e., the TF weighted outdegree and gene weighted indgree in the regulatory network, you can check <a href='#carddrug' style="text-decoration:none">the phenotypic information</a> section. You can also select the networks by
-                            variables such as cell line, drug dose, and sampling time point or download all the samples in a single file.</p>
+			    To download sample-specific TF and gene targeting profiles i.e., the TF weighted outdegrees and gene weighted indgrees within the regulatory network, please refer to <a href='#carddrug' style="text-decoration:none">the phenotypic information</a> section. You can also select the networks by
+                            variables such as cell line, drug dose, and sampling time point or download all samples in a single file.</p>
         <table id="drugstable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
@@ -202,7 +202,7 @@
         </div>
       </div>
       </div>
-    <p class="card-text">You can either download the gene targeting (sum of weighted in-degree in the network) or TF targeting (sum of weighted out-degree in the network). You can download the targeting profiles of all the samples to get a matrix of size the number of samples by the number of genes/TFs. Otherwise, you can specify the sample targeting profile to download and you will get a TF/gene vector
+    <p class="card-text">You can either download the gene targeting (gt - sum of weighted in-degree in the network) or TF targeting (tt - sum of weighted out-degree in the network). You can download the targeting profiles of all the samples as a matrix of size (number of samples, by the number of genes/TFs). Otherwise, you can specify the sample targeting profile to download and you will get a TF/gene vector
             		    named after the <a href="https://clue.io/" style="text-decoration:none" target="_blank">CLUE</a> sample reference.</p>
         <table id="drugstable2" class="table table-hover" style="width: 100%">
                 <thead>
@@ -365,6 +365,7 @@ $(document).ready(function() {
 
 <script>
   var slug="{{ slug }}";
+  var drugname="{{ drugsample.0.pert_iname }}"
   var data2=JSON.parse("{{data|escapejs}}");
 </script>
 

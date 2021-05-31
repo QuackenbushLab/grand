@@ -9,8 +9,8 @@
         <div class="card h-100">
         <h5 class="card-header">TF list</h5>
         <div class="card-body">
-        <h5 class="card-title">Enter TF list below.</h5>
-        <p class="card-text">TF genes can be in gene symbols, gene IDs, or mixed lists.
+        <h5 class="card-title">Enter your TF list below</h5>
+        <p class="card-text">TF genes can be listed as gene symbols, gene IDs, or mixed lists.
   
 	        <div class="form-area"> 
 	               <form action="{% url 'disease' %}" role="form" method="post">
@@ -45,12 +45,12 @@
         <p class="card-text">
 
 	        <div> 
-	        <p align="justify">TFs regulate the expression of genes. Whereas several tools allow to test the enrichment of a list of genes in disease pathways, this tool allows testing the enrichment of a 
-	        list of disrupted TF activites in two disease libraries, namely, GWAS traits and Human Phenotype ontology disease as described in <a href="https://www.ncbi.nlm.nih.gov/pubmed/29425488" style="text-decoration: none;">Lambert et al, Cell, 2018</a>.</p>
-	        <p align="justify">The <a href="http://humantfs.ccbr.utoronto.ca/download.php" style="text-decoration: none;">GWAS library</a> connects several traits to transcription factors through assigning hits to TFs if they fall near their coding regions. 
+	        <p align="justify">This tool tests the enrichment of a 
+	        list of TFs in two disease libraries, namely, GWAS traits and Human Phenotype ontology disease as described in <a href="https://www.ncbi.nlm.nih.gov/pubmed/29425488" style="text-decoration: none;">Lambert et al, Cell, 2018</a>.</p>
+	        <p align="justify">The <a href="http://humantfs.ccbr.utoronto.ca/download.php" style="text-decoration: none;">GWAS library</a> connects several traits to transcription factors through assigning significant SNPs to TFs if they fall near their coding regions. 
 	        The second library is a list of TF genes extracted from the list of genes in <a href="http://humantfs.ccbr.utoronto.ca/download.php" style="text-decoration: none;">Human Phenotype Ontology</a>.</p>
 	        <p align="justify">Morevoer, the TF list is tested for significant enrichment in two tissue-specific libraries, namely, tissue-specific TF expression and tissue-specific TF targeting as computed in <a href="https://www.cell.com/cell-reports/comments/S2211-1247(17)31418-3" style="text-decoration: none;">Sonawane et al, Cell reports, 2017</a>. </p>
-	        <p align="justify">The input is a list of TFs in gene symbols, gene IDs, or mixed lists as in the example. 1639 genes define TFs as per the list established in <a href="http://humantfs.ccbr.utoronto.ca/download.php" style="text-decoration: none;">Lambert et al, Cell, 2018</a>.</p>
+	        <p align="justify">Users provide an input list of TFs as gene symbols, gene IDs, or mixed lists as in the example. 1639 genes define TFs as per the list established in <a href="http://humantfs.ccbr.utoronto.ca/download.php" style="text-decoration: none;">Lambert et al, Cell, 2018</a>.</p>
 	        </div>
         </p>
         </div>

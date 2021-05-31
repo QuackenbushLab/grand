@@ -21,8 +21,8 @@ $(document).ready(function() {
   var POINT_COLOR = 'rgba(71,91,253,0.6)'; // eg `black` or `rgba(10,100,44,0.8)`
 
   var REG_NAME = 'nsamples'
-  var X_AXIS_C = 'Average number of differentially targeted genes'; // x-axis label, label in tooltip
-  var Y_AXIS_C = 'Average number of differentially targeted TFs'; // y-axis label, label in tooltip
+  var X_AXIS_C = 'Average number of differentially targeted genes across samples'; // x-axis label, label in tooltip
+  var Y_AXIS_C = 'Average number of differentially targeted TFs across samples'; // y-axis label, label in tooltip
 
   var SHOW_GRID = true; // `true` to show the grid, `false` to hide
 

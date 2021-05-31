@@ -3,8 +3,8 @@
 <header class="jumbotron jumbotron-fluid">
   <div class="container">
       <div class="display-2 mb-4"></div>
-      <p class="lead" align="center">GRAND is a collection of gene regulatory networks of <a href="/tissues" class="text-decoration-none">human tissues</a>, <a href="/cancers" class="text-decoration-none">cancer</a>, <a href="/cell" class="text-decoration-none">cell lines</a>, and <a href="/drugs" class="text-decoration-none">small molecule</a> effects. The networks are bipartite graphs linking Transcription Factors (TFs) and miRNAs to their target genes. 
-      GRAND integrates a webserver to test the <a href='/disease' class="text-decoration-none">enrichment</a> of a list of TFs in a set of libraries or <a href="/analysis" class="text-decoration-none">find compounds</a> that reverse/exacerbate a gene or TF regulatory profile. To date, we analyzed {{ params.0.genesupin }} gene sets.<br>
+      <p class="lead" align="center">GRAND is a collection of gene regulatory networks derived from <a href="/tissues" class="text-decoration-none">human tissues</a>, <a href="/cancers" class="text-decoration-none">cancer</a>, <a href="/cell" class="text-decoration-none">cell lines</a>, and <a href="/drugs" class="text-decoration-none">small molecule</a> drugs. These networks are bipartite graphs linking either transcription factors (TFs) or miRNAs to their target genes. 
+      GRAND includes an integrated webserver to test for <a href='/disease' class="text-decoration-none">enrichment</a> of a list of TFs in a set of libraries as well as a tool (CLUEreg) to <a href="/analysis" class="text-decoration-none">find compounds</a> that reverse/exacerbate a gene or TF regulatory profile. <br>
       <i class="fas fa-exclamation-circle"></i> GRAND works best with <a target="_blank" style="text-decoration:none;" href='https://www.google.com/chrome/?brand=FHFK&geo=US&gclid=CjwKCAjwy42FBhB2EiwAJY0yQtD8TJCBIG2S9qreY7VWzNjM7x9rs2UFqRt2bakS8v3shsXr3mvkNBoCS4gQAvD_BwE&gclsrc=aw.ds'>Google Chrome</a>!
     </p>      
     </div>
@@ -18,7 +18,7 @@
         <img class="card-img-top" src="{% static 'images/drugs.svg' %}" alt="Drugs">
         <a href="drugs/" class="btn btn-secondary" >Small molecules</a>
         <div class="card-body">
-          <p class="card-text">173,013 TF and gene targeting scores accounting for 2858 drugs using data from <a href="https://clue.io" target="_blank" class="text-decoration-none">CLUE</a> and <a target="_blank" href='https://clue.io/repurposing' class="text-decoration-none">DRH</a>.</p>
+          <p class="card-text">173,013 TF and gene targeting scores accounting for 2,858 drugs using data from <a href="https://clue.io" target="_blank" class="text-decoration-none">CLUE</a> and <a target="_blank" href='https://clue.io/repurposing' class="text-decoration-none">DRH</a>.</p>
         </div>
       </div>
 
@@ -27,7 +27,7 @@
         <img class="card-img-top" src="{% static 'images/cancer.svg' %}" alt="Cancer">
         <a href="cancers/" class="btn btn-secondary ">Cancer</a>
         <div class="card-body">
-          <p class="card-text">28 cancer-specific TF regulatory networks and 2811 patient-specific networks using data from <a href="https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga" target="_blank" class="text-decoration-none">TCGA</a> and <a href="https://www.ncbi.nlm.nih.gov/geo/" target="_blank" class="text-decoration-none"> GEO</a>.</p>
+          <p class="card-text">28 cancer-specific TF regulatory networks and 2,811 patient-specific networks using data from <a href="https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga" target="_blank" class="text-decoration-none">TCGA</a> and <a href="https://www.ncbi.nlm.nih.gov/geo/" target="_blank" class="text-decoration-none"> GEO</a>.</p>
         </div>
       </div>
 
@@ -36,7 +36,7 @@
         <img class="card-img-top" src="{% static 'images/tissues.svg' %}" alt="Tissues">
         <a href="tissues/" class="btn btn-secondary">Tissues</a>
         <div class="card-body">
-          <p class="card-text">36 tissue-specific TF and miRNA regulatory networks and 8279 single-sample networks using data from <a target="_blank" href="https://gtexportal.org/" class="text-decoration-none">GTEx</a>.</p>
+          <p class="card-text">36 tissue-specific TF and miRNA regulatory networks and 8,279 single-sample networks using data from <a target="_blank" href="https://gtexportal.org/" class="text-decoration-none">GTEx</a>.</p>
         </div>
       </div>
 
@@ -45,7 +45,7 @@
         <img class="card-img-top" src="{% static 'images/cells.svg' %}" alt="Cell lines">
         <a href="cell/" class="btn btn-secondary">Cell lines</a>
         <div class="card-body">
-          <p class="card-text">TF and miRNA regulatory networks for 1378 normal and cancer cell lines across 37 tissues of origin using data from <a href="https://portals.broadinstitute.org/ccle" target="_blank" class="text-decoration-none">CCLE</a> and <a href="https://gtexportal.org/" target="_blank" class="text-decoration-none">GTEx</a>.</p>
+          <p class="card-text">TF and miRNA regulatory networks for 1,378 normal and cancer cell lines across 37 tissues of origin using data from <a href="https://portals.broadinstitute.org/ccle" target="_blank" class="text-decoration-none">CCLE</a> and <a href="https://gtexportal.org/" target="_blank" class="text-decoration-none">GTEx</a>.</p>
         </div>
       </div>
 

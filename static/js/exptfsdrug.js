@@ -12,7 +12,7 @@ $(document).ready(function() {
   var SHOW_GRID = true; // `true` to show the grid, `false` to hide
   colors='#0f6efd'
   
-        // x-axis label and label in tooltip
+      // x-axis label and label in tooltip
     
       // `true` to show the grid, `false` to hide
       var SHOW_GRID = true; 
@@ -21,7 +21,6 @@ $(document).ready(function() {
       var SHOW_LEGEND = true; 
 
         var rowsdrag=data2
-        console.log(rowsdrag)
 
         var LABELS = 'sig_id'; 
 
@@ -96,7 +95,7 @@ $(document).ready(function() {
 
         var X_AXIS = 'L1000 signature ID';
         var Y_AXIS = 'Number of TFs';
-        var TITLE = 'Differentially expressed and targeted TFs per drug';
+        var TITLE = 'Differentially expressed and targeted TFs for ' + drugname;
 
         var barchartdragon = new Chart(ctxdragon, {
           type: HORIZONTAL ? 'horizontalBar' : 'bar',
@@ -197,7 +196,6 @@ $(document).ready(function() {
       var SHOW_LEGEND = true; 
 
         var rowsdrag=data2
-        console.log(rowsdrag)
 
         var LABELS = 'sig_id'; 
 
@@ -272,7 +270,7 @@ $(document).ready(function() {
 
         var X_AXIS = 'L1000 signature ID';
         var Y_AXIS = 'Number of genes';
-        var TITLE = 'Differentially expressed and targeted genes per drug';
+        var TITLE = 'Differentially expressed and targeted genes for ' + drugname;
 
         var barchartdragon = new Chart(ctxdragon, {
           type: HORIZONTAL ? 'horizontalBar' : 'bar',

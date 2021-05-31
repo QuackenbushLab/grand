@@ -417,7 +417,6 @@ $(document).ready(function() {
     
           var label = chartData.labels[idx];
           table.column(2).search("^"+label+"$", true, false, true).draw();
-          console.log("#id"+2+offset)
           $("#id"+2+offset).val(label);
         }
       };
