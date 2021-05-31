@@ -64,7 +64,6 @@ $(document).ready(function() {
     
     
 
-    console.log(rows)
 
     var data = rows.map(function(row) {
       return {
@@ -77,7 +76,6 @@ $(document).ready(function() {
       }
     })
 
-    console.log(data)
 
 		var scatterChartData = {
 			datasets: [{
@@ -184,6 +182,7 @@ $(document).ready(function() {
               "<'row'<'col-sm-12'tr>>" +
               "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
      });
+     $("#drugstable").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>"); 
 
     canvas.onclick = function(evt) {
       var activePoints = myNewChart.getElementsAtEvent(evt);
@@ -192,7 +191,6 @@ $(document).ready(function() {
         var idx = activePoints[0]['_index'];
   
         var label = chartData.datasets[0].data[idx].name;
-        console.log(label)
         table.search(label).draw();
       }
     };
