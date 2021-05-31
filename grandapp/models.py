@@ -93,6 +93,8 @@ class Druglanding(models.Model):
     nsamples      = models.CharField(max_length=400)
     avgtftar      = models.CharField(max_length=400)
     avggenetar    = models.CharField(max_length=400)
+    moa       = models.CharField(max_length=400)
+    indication    = models.CharField(max_length=400)
 
 class DrugResultUp(models.Model):
     idd       = models.IntegerField(default=0)

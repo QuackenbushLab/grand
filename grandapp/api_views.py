@@ -11,7 +11,7 @@ class DruglandingList(ListAPIView):
         serializer_class = DruglandingSerializer
         #pagination_class = DrugResultPagination
         filter_backends  = (DatatablesFilterBackend,DjangoFilterBackend,)
-        filter_fields    = ('number','drug','tool','netzoo','netzooRel','tfs','genes','samples','nnets','nsamples','avgtftar','avggenetar')
+        filter_fields    = ('number','drug','tool','netzoo','netzooRel','tfs','genes','samples','nnets','nsamples','avgtftar','avggenetar','moa','indication')
 
 class TissuelandingList(ListAPIView):
         queryset         = Tissuelanding.objects.all()

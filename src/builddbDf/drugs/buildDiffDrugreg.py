@@ -3,7 +3,6 @@ import pandas as pd
 from scipy.stats import zscore
 import os
 
-
 exprs    = pd.read_csv('Drugs_Gene_Expression_AllSamples.csv',index_col=0)
 tftar    = pd.read_csv('Drugs_TF_Targeting_AllSamples.csv',index_col=0)
 genetar  = pd.read_csv('Drugs_Gene_Targeting_AllSamples.csv',index_col=0)
@@ -54,6 +53,7 @@ sampledata.to_csv('drug_vars_difftar_genetar_tfexp_geneexp.csv',index=True)
 sampledata = pd.read_csv('/Users/mab8354/granddb/data/drug_vars_difftar_genetar_tfexp_geneexp.csv',index_col=0)
 
 # II. compute nsamples per drug
+os.chdir('/Users/mab8354/granddb/data')
 df=pd.read_csv('drugslanding.csv',index_col=1)
 df2=pd.read_csv('drug_vars_difftar_genetar_tfexp_geneexp.csv',index_col=1)
 df['nsamples']  = 0
@@ -85,5 +85,3 @@ sampledata['cleannames'] = cleannames
 #save df
 sampledata.to_csv('drug_vars_difftar_genetar_tfexp_geneexp_clean.csv',index=True)
 
-
-ss=pd.read_csv('~/Downloads/Genetargeting_CPC018_A375_6H_BRD-K06817181-001-01-5_10.csv',index_col=1)

@@ -85,6 +85,10 @@ for drug in drugs:
 netzooLinkVec = np.repeat('netZooM', nDrugs)
 refsVecApi    = np.repeat('#', nDrugs)
 
+# build moa vector
+moadf = pd.read_csv('data/drug_desc.csv')
+intermoa, ind1, ind2 = np.intersect1d(moadf['pert_iname'], drugVec, assume_unique=False, return_indices=True)
+
 # Populate df
 df['number']    = np.array(numbersVec)+1
 df['drug']      = drugVec
@@ -103,6 +107,8 @@ df['netzooRel'] = ['0.4.3']*nDrugs
 df['expLink']   = ['https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742']*nDrugs
 df['nnets']     = np.ones((nDrugs), dtype = int)
 df['druglink']  = druglink
+df['moa']       = moadf['moa']
+df['indication']= moadf['indication']
 
 # save dataframe
 os.chdir('/Users/mab8354/granddb')

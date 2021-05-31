@@ -176,6 +176,8 @@ $(document).ready(function() {
            {"data": "nsamples"},
            {"data": "avgtftar"},
            {"data": "avggenetar"},
+           {"data": "moa"},
+           {"data": "indication"},
        ],
  
        "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
