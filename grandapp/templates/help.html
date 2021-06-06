@@ -21,14 +21,15 @@
         </div>
       </div>
     </div>
-    GRAND works best on Google Chrome to take adavantage of the full network visualization features.
-    <p><h3 id="networks" class="text-primary">Networks</h3>
-    <h4>Reconstruction</h4>
+    <br>
+    <p><h3 id="networks" class="text-primary">1. Networks</h3>
+    <h4>A. Reconstruction</h4>
     <div class="ml-3">
     The networks can be reconstructed using the tool specified in the tool field in the data table. For example, the LCL cell line network can be built using the PANDA tool as implemented in the package netZooM version 0.1. The other fields in the datatables refer to the arguments or data sources needed for the tool. For example, PANDA requires a TF-TF PPI network, gene expression samples, and TF motif binding site. 
     These data files along with their sources are provided to reconstruct the network. Since PANDA is a deterministic algorithm, reconstructing the network using the data priors and the same software release should yield the exact same network as the one available for visualization and download.
     </div>
-    <h4>Download</h4>
+    <br>
+    <h4>B. Download</h4>
     <div class="ml-3">The networks can be downloaded with two different properties.
     <h5>Format:</h5>
     <code>Edg:</code> stands for <code>edges</code> format. The network is written in a text or csv file with the following format:
@@ -50,28 +51,35 @@
     </button>
     </div>
     </div>
-    <p><h3 id="navigation" class="text-primary">Navigation</h3>
+
+    <br><br>
+
+    <p><h3 id="navigation" class="text-primary">2. Navigation</h3>
+      The following brief guides show to how to access a specific network and browse the phenotypic variables.
       <div class="row">
         <div class="col">
-          <h4 id="navigation" class="text-primary">Small molecule drugs</h4>
+          <h4 class="text-primary">Small molecule drugs</h4>
           <img src="https://granddb.s3.us-east-2.amazonaws.com/gifs/drugs.gif" width="500" height="200">
         </div>
         <div class="col">
-          <h4 id="navigation" class="text-primary">Cancer types</h4>
+          <h4 class="text-primary">Cancer types</h4>
           <img src="https://granddb.s3.us-east-2.amazonaws.com/gifs/cancer.gif" width="500" height="200">
         </div>
       </div>
       <div class="row">
         <div class="col">
-        <h4 id="navigation" class="text-primary">Tissues</h4>
+        <h4 class="text-primary">Tissues</h4>
         <img src="https://granddb.s3.us-east-2.amazonaws.com/gifs/tissues.gif" width="500" height="200">
       </div>
       <div class="col">
-      <h4 id="navigation" class="text-primary">Cell lines</h4>
+      <h4 class="text-primary">Cell lines</h4>
       <img src="https://granddb.s3.us-east-2.amazonaws.com/gifs/cell.gif" width="500" height="200">
       </div>
     </div>
-    <p><h3 id="analysis" class="text-primary">Analysis</h3>
+
+    <br><br>
+
+    <p><h3 id="analysis" class="text-primary">3. Analysis</h3>
     <div class="ml-3"><p align="justify"> The analysis section allows to analyse a set of TFs or genes in disease or small molecule category. It exploits the duality between TFs and genes
     in bipartite gene regulatory networks.</p>
     <p align="justify">The small molecule analysis section allows to find compounds that optimally reverse the gene targeting or the transcription factor activity patterns in the query set.</p>
@@ -79,18 +87,27 @@
     <p align="justify">The overlap score is equal to card(intersect(Input_Genes_Up,Drug_Genes_down)) + card(intersect(Input_Genes_Down,Drug_Genes_Up))
      - card(intersect(Input_Genes_Up,Drugs_Genes_Up)) - card(intersect(Input_Genes_Down,Drugs_Genes_Down)). The cosine similarity compares the input vector to all the drugs. It is a signed measure that computes the direction of the vectors rather than their amplitude. In our case, we are interested in measuring the vectors of opposite directions, thus having negative cosine similarity.</p>
     </div>
+
+    <br><br>
+
+    <p><h3 id="visualization" class="text-primary">4. Visualization</h3>
+    To enable network visualization, please make sure to use Google Chrome while navigating GRAND. The visualization module has 2 components. The first one allows to plot and query subgraphs of gene regulatory networks based on user selection. The second one allows to compute targeting scores from gene regulatory networks.
     <div class="row">
       <div class="col">
-      <h4 id="navigation" class="text-primary">Network view</h4>
+      <h4 class="text-primary">Network view</h4>
       <img src="https://granddb.s3.us-east-2.amazonaws.com/gifs/network.gif" width="500" height="250">
     </div>
     <div class="col">
-    <h4 id="navigation" class="text-primary">Targeting view</h4>
+    <h4 class="text-primary">Targeting view</h4>
     <img src="https://granddb.s3.us-east-2.amazonaws.com/gifs/targeting.gif" width="500" height="250">
     </div>
   </div>
     </p>
-    <p><h3 id="wiki" class="text-primary">Wiki</h3>
+
+
+    <br><br>
+
+    <p><h3 id="wiki" class="text-primary">5. Wiki</h3>
     <h4>PANDA</h4>
     PANDA is a method that allows the inference of a TF to gene bipartite gene regulatory network by integrating three data sources: 1) gene coexpression, 2) TF PPI network, and 3) TF motif network. Details and examples can be found <a href="https://netzoo.github.io/zooanimals/panda/" class="text-decoration-none" target="_blank">here</a>.
     PANDA was compared to <a href='https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0064832' class="text-decoration-none" target="_blank">four other inference methods<a> using ChIP-ChIP data in yeast in three conditions: TF knockout (KO), cell cycle (CC), and stress response (SR).
@@ -121,12 +138,15 @@
     CCLE datasets characterize more than 1500 human cell lines that model several cancer types across a large array of omic layers including copy number variation, mutations, methylation, protein and metabolite levels, alternative splicing, and chromatin marks quantification. More details can be found <a href="https://portals.broadinstitute.org/ccle" class="text-decoration-none" target="_blank">here</a>.
     <h4>Connectivity Map</h4>
     The connectivity map measured the activity of more than 20,000 approved and experimental small molecule compounds in normal and cancerous cell lines. The expression of 987 genes was measured using the L1000 assay and the expression of close to 11,000 genes were inferred from the 1000 genes set. More details can be found <a href="https://clue.io" class="text-decoration-none" target="_blank">here</a>.
-    <p><h3 id="api" class="text-primary">API</h3>
-    <h4>Documentation</h4>
+    
+    <br><br>
+
+    <p><h3 id="api" class="text-primary">6. API</h3>
+    <h4>A. Documentation</h4>
     <div class="ml-3">GRAND has an API that allows accessing and filtering the data programmatically to perform large-scale downloads. The full API documentation is available at <a class="text-decoration-none" target="_blank" href="https://grand.networkmedicine.org/redoc/">https://grand.networkmedicine.org/redoc/</a>.
     A web view of the API is also available for <a class="text-decoration-none" target="_blank" href="https://grand.networkmedicine.org/api/v1/cancerapi/">cancer type</a>, <a class="text-decoration-none" target="_blank" href="https://grand.networkmedicine.org/api/v1/geneapi/">genes</a>, <a class="text-decoration-none" target="_blank" href="https://grand.networkmedicine.org/api/v1/tissueapi/">tissues</a>, and <a class="text-decoration-none" target="_blank" href="https://grand.networkmedicine.org/api/v1/drugapi/">drug networks</a>.
-    </div>
-    <h4>Tutorial 1</h4>
+    </div><br>
+    <h4>B. Tutorial 1</h4>
     <div class="ml-3">You can access the database programmatically through the API, here we provide an example using the <a target="_blank" style="text-decoration:none" href="https://requests.kennethreitz.org/en/master/">requests</a> library of Python3. Additionally, you need to install the library <a target="_blank" style="text-decoration:none" href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html">awscli</a> to download networks through the command line.
     <pre><code>
     import requests
@@ -171,13 +191,16 @@
     </code></pre>
     </p>
     </div>
-    <h4>Tutorial 2</h4>
+    <h4>C. Tutorial 2</h4>
     <div class="ml-3">It is possible to rebuild the networks hosted in grand database using the metadata provided with each network. For example, we can rebuild the <a target="_blank" style="text-decoration:none" href='/cell'>LCL cell line network</a> using the provided prior data.
     A closer look at the LCL cell line entry shows that the network has been reconstructed using the tool PANDA, as implemented in <a target="_blank" style="text-decoration:none" href='http://netzoo.github.io'>netZooM</a> version 0.1. PANDA takes as input, a PPI network,
     gene expression data, and TF DNA binding motif data. These priors are provided along with the network. Since the network has been reconstructed in MATLAB, the following MATLAB tutorial goes through all the steps of downloading
     the priors through programmatic access and the reconstruction of the network: <a target="_blank" style="text-decoration:none"  href='https://github.com/netZoo/netZooM/tree/devel/tutorials/grand_db'>Using GRAND database's API for reproducible network reconstruction</a>.</div>
     The code is provided using <button type="button" class="btn btn-outline-danger">Code</button> button. For networks generated using MATLAB, the .m script can be downloaded, however, for open-source languages (R and Python), the code is provided as Jupyter notebooks hosted on a cloud server called <a target="_blank" style="text-decoration:none" href="http://netbooks.networkmedicine.org">netbooks</a>.
-    <p><h3 id="credit" class="text-primary">Image credit</h3>
+
+    <br><br>
+
+    <p><h3 id="credit" class="text-primary">7. Image credit</h3>
     <div class="ml-3">Small molecule infographic: <a target="_blank" style="text-decoration:none" href="https://www.freepik.com/free-photos-vectors/background">Background vector created by freepik - www.freepik.com</a>
     <br>
     <br>

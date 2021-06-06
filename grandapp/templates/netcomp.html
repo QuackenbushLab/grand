@@ -99,16 +99,16 @@ Please click on the submit button after selecting the parameters to retrieve the
                             data-bs-animation="false"
                             data-bs-placement="top"
                             data-bs-html="true"
-                            data-bs-content="Normal tissue networks were inferred from GTEx data.">
-                            Normal tissue: </a></small>
+                            data-bs-content="First network selection. Normal tissue networks were inferred from GTEx data and Cancer networks were inferred from TCGA. The tissue abbreviations can be found in <a target='_blank' href='https://gdc.cancer.gov/resources-tcga-users/tcga-code-tables/tcga-study-abbreviations'>TCGA web page</a>.">
+                            Network 1: </a></small>
                             <small><div class="offset-2 col-8 offset-2"><div class="row">{{ netform.comp1 }} </div></div></small><br>    
                           <small><a href="#"
                             data-bs-toggle="popover"
                             data-bs-animation="false"
                             data-bs-placement="top"
                             data-bs-html="true"
-                            data-bs-content="Cancer networks were inferred from TCGA. The tissue abbreviations can be found in <a target='_blank' href='https://gdc.cancer.gov/resources-tcga-users/tcga-code-tables/tcga-study-abbreviations'>TCGA web page</a>.">
-                            Cancer tissue: </a></small> <br>
+                            data-bs-content="Second network selection. Normal tissue networks were inferred from GTEx data and Cancer networks were inferred from TCGA. The tissue abbreviations can be found in <a target='_blank' href='https://gdc.cancer.gov/resources-tcga-users/tcga-code-tables/tcga-study-abbreviations'>TCGA web page</a>.">
+                            Network 2: </a></small> <br>
                           <small><div class="offset-2 col-8 offset-2"><div class="row">{{ netform.comp2 }} </div></div></small><br><br>
                           <h5><span class="badge bg-secondary">Edges</span></h5>
                           <label for="myEdge" class="form-label">Number of edges</label>
@@ -292,7 +292,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                       <ul class="list-group list-group-flush">
                         <div class="card-header">Network information</div>
                       <div class="card-body">
-                          A set of networks in normal and cancer tissues have been generated using the same processing pipeling, To plot a differential network, first the cancer and normal tissue networks can be selected from the dropdown menu and after clicking submit, the differential network is plotted by the specified parameters. Selecting 'weighted edges' option allows to plot edge thickness by the edge weight. Positive edge weights in cancer are plotted in green and negative edge weights in cancer are plotted in red.
+                        A set of networks in normal and cancer tissues have been generated using the same processing pipeling, To plot a differential network, first the first network (e.g., cancer) and the second network (e.g., normal tissue) can be selected from the dropdown menu and after clicking submit, the differential network is plotted by the specified parameters. Selecting 'weighted edges' option allows to plot edge thickness by the edge weight. Positive edge weights (network 1 > network 2) are plotted in green and negative edge weights (network 2 > network 1) are plotted in red.
                       </div>
                     </div>
                     <div class="card">
@@ -332,7 +332,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                       data-bs-placement="top"
                       data-bs-html="true"
                       data-bs-content="Normal tissue networks were inferred from GTEx data.">
-                      Normal tissue: </a></small>
+                      Network 1: </a></small>
                       <small><div class="offset-2 col-8 offset-2"><div class="row">{{ tarform.comp11 }} </div></div></small><br>                           
                     <small><a href="#"
                       data-bs-toggle="popover"
@@ -340,7 +340,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                       data-bs-placement="top"
                       data-bs-html="true"
                       data-bs-content="Cancer networks were inferred from TCGA. The tissue abbreviations can be found in <a target='_blank' href='https://gdc.cancer.gov/resources-tcga-users/tcga-code-tables/tcga-study-abbreviations'>TCGA web page</a>.">
-                      Cancer tissue: </a></small> <br>
+                      Network 2: </a></small> <br>
                     <small><div class="offset-2 col-8 offset-2"><div class="row">{{ tarform.comp22 }} </div></div></small><br>
                     <h5><span class="badge bg-secondary">Genes</span></h5>
                     <div class="offset-2 col-8 offset-2">
@@ -505,7 +505,7 @@ Please click on the submit button after selecting the parameters to retrieve the
             <ul class="list-group list-group-flush">
               <div class="card-header">Network information</div>
               <div class="card-body">
-                A set of networks in normal and cancer tissues have been generated using the same processing pipeling, To plot a differential network, first the cancer and normal tissue networks can be selected from the dropdown menu and after clicking submit, the differential network is plotted by the specified parameters. Selecting 'weighted edges' option allows to plot edge thickness by the edge weight. Positive edge weights in cancer are plotted in green and negative edge weights in cancer are plotted in red.
+                A set of networks in normal and cancer tissues have been generated using the same processing pipeling, To plot a differential network, first the first network (e.g., cancer) and the second network (e.g., normal tissue) can be selected from the dropdown menu and after clicking submit, the differential network is plotted by the specified parameters. Selecting 'weighted edges' option allows to plot edge thickness by the edge weight. Positive edge weights (network 1 > network 2) are plotted in green and negative edge weights (network 2 > network 1) are plotted in red.
             </div>
           </div>
           <div class="card">
@@ -610,6 +610,23 @@ Please click on the submit button after selecting the parameters to retrieve the
   </div>
 </div>
 
+<!-- Modal same network-->
+<div class="modal fade" id="exampleModalnet" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p style="text-align:left">Please select 2 different networks.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </div><!-- End div for container-->
 
@@ -715,7 +732,41 @@ $("#btnFetchTar").click(function() {
 <script src="{% static 'js/networksagg.js' %}"></script>
 
 <script>
+      document.getElementById('id_comp1').onchange = function() {
+        if ( document.getElementById('id_comp1').value==document.getElementById('id_comp2').value ){
+          $('#exampleModalnet').modal('show');
+          document.getElementById('btnFetch').disabled = true
+        }else{
+          document.getElementById('btnFetch').disabled = false
+        }
+      }
+      document.getElementById('id_comp2').onchange = function() {
+        if ( document.getElementById('id_comp1').value==document.getElementById('id_comp2').value ){
+          $('#exampleModalnet').modal('show');
+          document.getElementById('btnFetch').disabled = true
+        }else{
+          document.getElementById('btnFetch').disabled = false
+        }
+      }
 
+      document.getElementById('id_comp11').onchange = function() {
+        if ( document.getElementById('id_comp11').value==document.getElementById('id_comp22').value ){
+          $('#exampleModalnet').modal('show');
+          document.getElementById('btnFetchTar').disabled = true
+        }else{
+          document.getElementById('btnFetchTar').disabled = false
+        }
+      }
+      document.getElementById('id_comp22').onchange = function() {
+        if ( document.getElementById('id_comp11').value==document.getElementById('id_comp22').value ){
+          $('#exampleModalnet').modal('show');
+          document.getElementById('btnFetchTar').disabled = true
+        }else{
+          document.getElementById('btnFetchTar').disabled = false
+        }
+      }
+
+      
   if(document.getElementById('absval')==null){
     if(slug.substr(0,3)=='ACH' || slug == 'mirnadragon' ){
       document.getElementById('id_edgetargeting').disabled = true; 

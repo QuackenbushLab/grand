@@ -323,10 +323,18 @@ def netcomp(request,slug):
             edgetargeting = request.POST.get('edgetargeting', False)
             print('The number of edges is',nedges)
             # compute differential network
-            object_key1='tissues/networks/' + comp1 + '.csv'
-            df1=fetchNetwork(object_key1)
-            object_key2='cancer/aggnets/networks/panda_' + comp2 + '.csv'
-            df2=fetchNetwork(object_key2)
+            try:
+                object_key1='tissues/networks/' + comp1 + '.csv'
+                df1=fetchNetwork(object_key1)
+            except:
+                object_key1='cancer/aggnets/networks/panda_' + comp1 + '.csv'
+                df1=fetchNetwork(object_key1)
+            try:
+                object_key2='cancer/aggnets/networks/panda_' + comp2 + '.csv'   
+                df2=fetchNetwork(object_key2)
+            except:
+                object_key2='tissues/networks/' + comp2 + '.csv'
+                df2=fetchNetwork(object_key2)
             df=df2-df1
             intergenes = np.intersect1d(df1.columns,df2.columns)
             df=df[intergenes]
@@ -930,10 +938,18 @@ def difftaragg(request,slug):
             comp1      = request.POST.get('comp11', False)
             comp2      = request.POST.get('comp22', False)
             # fetch network
-            object_key1='tissues/networks/' + comp1 + '.csv'
-            df1=fetchNetwork(object_key1)
-            object_key2='cancer/aggnets/networks/panda_' + comp2 + '.csv'
-            df2=fetchNetwork(object_key2)
+            try:
+                object_key1='tissues/networks/' + comp1 + '.csv'
+                df1=fetchNetwork(object_key1)
+            except:
+                object_key1='cancer/aggnets/networks/panda_' + comp1 + '.csv'
+                df1=fetchNetwork(object_key1)
+            try:
+                object_key2='cancer/aggnets/networks/panda_' + comp2 + '.csv'   
+                df2=fetchNetwork(object_key2)
+            except:
+                object_key2='tissues/networks/' + comp2 + '.csv'
+                df2=fetchNetwork(object_key2)
             df=df2-df1
             intergenes = np.intersect1d(df1.columns,df2.columns)
             df=df[intergenes]

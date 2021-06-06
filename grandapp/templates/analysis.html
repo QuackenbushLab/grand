@@ -13,7 +13,22 @@
                    <h5 class="card-header">Gene/TF list</h5>
 		  <div class="card-body">
 		    <h5 class="card-title">Enter your Gene/TF list below</h5>
-		    <p class="card-text">The gene format for TFs and target genes can be in ENSEMBL gene ID, <a href="https://www.genenames.org/" target="_blank" style="text-decoration: none;">gene symbol</a>, or mixed lists as in the example.
+		    <p class="card-text">The gene format for TFs and target genes can be in <a style="text-decoration: none;" href="#"
+          data-bs-toggle="popover"
+          data-bs-animation="false"
+          data-bs-placement="top"
+          data-bs-html="true"
+          data-bs-content="<a href=https://www.ensembl.org/' target='_blank' style='text-decoration: none;'>Gene IDs</a> as defined in ENSEMBL database, e.g. ENSG00000281221.">ENSEMBL gene ids</a>, <a style="text-decoration: none;" href="#"
+          data-bs-toggle="popover"
+          data-bs-animation="false"
+          data-bs-placement="top"
+          data-bs-html="true"
+          data-bs-content="<a href=https://www.genenames.org/' target='_blank' style='text-decoration: none;'>Gene symbols</a> as defined in HUGO gene nomenclature, e.g. EGFR.">gene symbols</a>, or <a style="text-decoration: none;" href="#"
+          data-bs-toggle="popover"
+          data-bs-animation="false"
+          data-bs-placement="top"
+          data-bs-html="true"
+          data-bs-content="Mixed lists are lists containing both gene symbols and ENSEMBL gene IDs e.g. EGFR and ENSG00000281221.">mixed lists</a> as in the example.
                    <div class="form-group">
                         {% render_field geneform.contentup class="form-control" placeholder="High-targeted genes/TFs" %}                
                    </div>
