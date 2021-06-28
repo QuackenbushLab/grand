@@ -1,0 +1,249 @@
+.btn1 {
+    /*color:black;*/
+    display: block;
+    margin: 30px;
+    padding: 7px 15px;
+    font: 300 150% langdon;
+    /*background: transparent;*/
+    border: 3px solid black;
+    cursor: pointer;
+    margin-top: 30px;
+
+    position: absolute;
+}
+.btn2 {
+    /*color:black;*/
+    display: block;
+    margin: 30px;
+    padding: 7px 15px;
+    font: 300 150% langdon;
+    /*background: transparent;*/
+    border: 3px solid black;
+    cursor: pointer;
+    margin-top: 80px;
+
+    position: absolute;
+}
+.btn3 {
+    /*color:black;*/
+    display: block;
+    margin: 30px;
+    padding: 7px 15px;
+    font: 300 150% langdon;
+    /*background: transparent;*/
+    border: 3px solid black;
+    cursor: pointer;
+    margin-top: 130px;
+
+    position: absolute;
+}
+.btn4 {
+    /*color:black;*/
+    display: block;
+    margin: 30px;
+    padding: 7px 15px;
+    font: 300 150% langdon;
+    /*background: transparent;*/
+    border: 3px solid black;
+    cursor: pointer;
+    margin-top: 280px;
+
+    position: absolute;
+}
+
+
+.btn5 {
+    /*color:black;*/
+    display: block;
+    margin: 30px;
+    padding: 7px 15px;
+    font: 300 150% langdon;
+    /*background: transparent;*/
+    border: 3px solid black;
+    cursor: pointer;
+    margin-top: 330px;
+
+    position: absolute;
+}
+
+.btn6 {
+    /*color:black;*/
+    display: block;
+    margin: 30px;
+    padding: 7px 15px;
+    font: 300 150% langdon;
+    /*background: transparent;*/
+    border: 3px solid black;
+    cursor: pointer;
+    margin-top: 180px;
+
+    position: absolute;
+}
+
+.btn7 {
+    /*color:black;*/
+    display: block;
+    margin: 30px;
+    padding: 7px 15px;
+    font: 300 150% langdon;
+    /*background: transparent;*/
+    border: 3px solid black;
+    cursor: pointer;
+    margin-top: 230px;
+
+    position: absolute;
+}
+
+
+.btn8 {
+    /*color:black;*/
+    display: block;
+    margin: 30px;
+    padding: 7px 15px;
+    font: 300 150% langdon;
+    /*background: transparent;*/
+    border: 3px solid black;
+    cursor: pointer;
+    margin-top: 280px;
+
+    position: absolute;
+}
+
+.btn9 {
+    /*color:black;*/
+    display: block;
+    margin: 30px;
+    padding: 7px 15px;
+    font: 300 150% langdon;
+    /*background: transparent;*/
+    border: 3px solid black;
+    cursor: pointer;
+    margin-top: 330px;
+
+    position: absolute;
+}
+.btn1top:hover {
+    border: 3px solid;
+    box-shadow: inset 0 0 200px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
+    outline-color: rgba(255, 255, 255, 0);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px #427388;
+}
+.btn2top:hover {
+    border: 3px solid;
+    box-shadow: inset 0 0 200px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
+    outline-color: rgba(255, 255, 255, 0);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px #427388;
+}
+
+.btn1:hover {
+    border: 3px solid;
+    box-shadow: inset 0 0 200px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
+    outline-color: rgba(255, 255, 255, 0);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px #427388;
+}
+.btn2:hover {
+    border: 3px solid;
+    box-shadow: inset 0 0 200px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
+    outline-color: rgba(255, 255, 255, 0);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px #427388;
+}
+.btn3:hover {
+    border: 3px solid;
+    box-shadow: inset 0 0 200px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
+    outline-color: rgba(255, 255, 255, 0);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px #427388;
+}
+.btn4:hover {
+    border: 3px solid;
+    box-shadow: inset 0 0 200px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
+    outline-color: rgba(255, 255, 255, 0);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px #427388;
+}
+.btn5:hover {
+    border: 3px solid;
+    box-shadow: inset 0 0 200px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
+    outline-color: rgba(255, 255, 255, 0);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px #427388;
+}
+.btn6:hover {
+    border: 3px solid;
+    box-shadow: inset 0 0 200px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
+    outline-color: rgba(255, 255, 255, 0);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px #427388;
+}
+.btn7:hover {
+    border: 3px solid;
+    box-shadow: inset 0 0 200px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
+    outline-color: rgba(255, 255, 255, 0);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px #427388;
+}
+.btn8:hover {
+    border: 3px solid;
+    box-shadow: inset 0 0 200px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
+    outline-color: rgba(255, 255, 255, 0);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px #427388;
+}
+.btn9:hover {
+    border: 3px solid;
+    box-shadow: inset 0 0 200px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
+    outline-color: rgba(255, 255, 255, 0);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px #427388;
+}
+
+.ul-color {
+    opacity:1.0;
+    /*background: linear-gradient(180deg, transparent 1%, #efefef 50%);*/
+    background: white;
+    /*background: #efefef;*/
+
+}
+
+/*.input-color{*/
+    /*padding: 0px;*/
+    /*margin: 0px;*/
+/*}*/
+/*ul {*/
+    /*margin: 20px;*/
+/*}*/
+/*ul {*/
+    /*margin: 20px;*/
+  /*columns: 5;*/
+  /*-webkit-columns: 2;*/
+  /*-moz-columns: 2;*/
+/*}*/
+
+/*ul li{*/
+    /*float: left;*/
+    /*width: 50%;//helps to determine number of columns, for instance 33.3% displays 3 columns*/
+/*}*/
+/*ul{*/
+    /*list-style-type: disc;*/
+/*}*/
+
+
+.input-color {
+    position: relative;
+}
+.input-color input {
+    padding-left: 20px;
+}
+.input-color .color-box {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    background-color: #ccc;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+}
