@@ -49,7 +49,6 @@ $(document).ready(function() {
     var x = -container.clientWidth +50 ;
     var y = -container.clientHeight / 2 + 50;
     var step = 170;
-
     if (slug.substr(-4) == 'PUMA' || slug == 'mirnadragon'){
     nodes.push({
       id: 1003,
@@ -181,9 +180,12 @@ $(document).ready(function() {
 
   });
 
-  window.addEventListener("load", () => {
+  //window.addEventListener("load", () => {
+  //  draw();
+  //});
+
+
     draw();
-  });
 
 
 

@@ -1,9 +1,17 @@
 {% load static %} 
 {% include "header.html" %}
 
-<div class="container col-10 mt-4">
 <div class="row">
-  <div class="col-4">
+  <div class="col-1 mt-5">
+    <ul class="list-group">
+      <a id="MSL-initialize-tour5" class="btn list-group-item d-flex justify-content-between align-items-center list-group-item-light list-group-item-action active" aria-current="true">
+        Guided tour
+      </a>
+    </ul>
+  </div>
+<div data-step="1" data-intro="The firt section gives essential information about the small molecule drug." class="container col-10 mt-4">
+<div class="row">
+  <div data-step="2" data-intro="This tab shows the chemical structure of the small molecule." class="col-4">
 
       <div class="card-header bg-transparent border-light">
       <h6 style="color:white;">{{ drugdesc.pert_iname }} </h1>
@@ -15,7 +23,7 @@
 
   </div>
 
-  <div class="col-8">
+  <div data-step="3" data-intro="This tab has additional infromation about drug indication, mechanism of action, and targets." class="col-7">
 <div class="card border-secondary">
   <div class="card-header">
   {{ drugdesc.pert_iname }} <i class="fas fa-info-circle"
@@ -85,14 +93,15 @@
     </div>
   </div>
 </div>
+</div> 
 
 <div class="container col-10 mt-4">
   <div class="col">
     <div class="row">
-      <canvas id="cellbartf" style="width:100%; height:300px;"></canvas>
+      <canvas data-step="4" data-intro="The drug-induced gene expression data was collected from the Connectivity Map where each small molecule has been assayed in different cell types, sampling times, and doses. For each experiment, we inferred GRNs and computed targeting scores for TFs which can be accessed by clicking on the barplot." id="cellbartf" style="width:100%; height:300px;"></canvas>
     </div>
     <div class="row">
-      <canvas id="cellbargenes" style="width:100%; height:300px;"></canvas>
+      <canvas data-step="5" data-intro="Gene targeting scores are also available for each experiment and can be accessed by clicking the barplot." id="cellbargenes" style="width:100%; height:300px;"></canvas>
     </div>
     <p style="font-family: Helvetica; color: #333; padding: 1em 2em; font-size: 12px">
       Click on the bar plot to access the targeting signature of the sample.
@@ -105,7 +114,7 @@
     <p class="card-text"><a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. <a href="https://netzoo.github.io/zooanimals/lioness/" style="text-decoration:none" target="_blank">LIONESS</a> reconstructs sample-specific <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> networks for each gene expression sample. 
 			    To download sample-specific TF and gene targeting profiles i.e., the TF weighted outdegrees and gene weighted indgrees within the regulatory network, please refer to <a href='#carddrug' style="text-decoration:none">the phenotypic information</a> section. You can also select the networks by
                             variables such as cell line, drug dose, and sampling time point or download all samples in a single file.</p>
-        <table id="drugstable" class="table table-hover" style="width: 100%">
+        <table data-step="6" data-intro="This table contains additional information about the inference method."  id="drugstable" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -149,17 +158,17 @@
 		    <tr>
 		    <th scope="row">{{ drug.number }}</th>
 		    <td><a href = "{{ drug.refs }}" class="text-decoration-none" target="_blank">{{ drug.drug }}</a></td>
-		    <td>{{ drug.tool }}</td>
-		    <td>{{ drug.netzoo }} <a href="https://github.com/netZoo/netZooM/releases" class="text-decoration-none" target="_blank">{{ drug.netzooRel }}</a></td>
-                    <td><div class="btn-group" role="group" aria-label="Basic example"><a href="#carddrug" class="btn btn-outline-primary" role="button">gt/tt</a>
-                    <a href="https://granddb.s3.amazonaws.com/drugs/scripts/reproducedrug1Network.m" class="btn btn-outline-danger" role="button">Code</a><a href="#carddrug" class="btn btn-outline-success" role="button">Vis</a></div></td>
-	            <td><a href="{{ drug.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ drug.ppiLink }}"><i class="fas fa-link"></i></a></td>
+		    <td data-step="7" data-intro="The inference method is specified in this column." >{{ drug.tool }}</td>
+		    <td data-step="8" data-intro="Here, the code and the specific code release is mentioned to enable reproducible network reconstruction." >{{ drug.netzoo }} <a href="https://github.com/netZoo/netZooM/releases" class="text-decoration-none" target="_blank">{{ drug.netzooRel }}</a></td>
+                    <td><div class="btn-group" role="group" aria-label="Basic example"><a href="#carddrug" class="btn btn-outline-primary position-relative" role="button" data-step="11" data-intro="Additional phenotypic information about gene targeting and TF targeting scores can be accessed here." >gt/tt<span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a>
+                    <a href="https://granddb.s3.amazonaws.com/drugs/scripts/reproducedrug1Network.m" class="btn btn-outline-danger" role="button" data-step="9" data-intro="The code can be downloaded here." >Code</a><a data-step="10" data-intro="The targeting scores can be visualized using this tab."  href="#carddrug" class="btn btn-outline-success" role="button">Vis</a></div></td>
+	            <td data-step="12" data-intro="All the input data to reconstruct the network is available for download as well." ><a href="{{ drug.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ drug.ppiLink }}"><i class="fas fa-link"></i></a></td>
                     <td><a href="{{ drug.motif }}"><i class="fas fa-download"></i></a></td>
                     <td><a href="{{ drug.expression }}"><i class="fas fa-download"></i></a> <a href="{{ drug.expLink}}"><i class="fas fa-link"></i></a></td>
                     <td>{{ drug.tfs }}</td>
-                    <td><a href="/genes" class="text-decoration-none">{{ drug.genes }}</a></td>
-                    <td><a href="#carddrug" class="text-decoration-none">{{ drug.samples }}</a> </td>
-                    <td><span class="badge rounded-pill bg-success">S</span></td>
+                    <td data-step="13" data-intro="The Connectivity Map project sequenced 1000 genes using the L1000 technology, however an additional set of genes were inferred using machine learning. This set can be accessed here." ><a href="/genes" class="text-decoration-none">{{ drug.genes }}</a></td>
+                    <td data-step="15" data-intro="Clicking samples shows the individual experiments done using this small molecule (different doses and cell lines)." ><a href="#carddrug" class="text-decoration-none">{{ drug.samples }}</a> </td>
+                    <td data-step="14" data-intro="Since we had to build gene regulatory networks for large number of experiments (~170k), we used single precision computation to speedup the process." ><span class="badge rounded-pill bg-success">S</span></td>
 		    <td><a href="{{ drug.refs }}" target="_blank"><i class="fas fa-book"></i></a></td>
                     </tr>
 		 {% endfor %}
@@ -181,7 +190,7 @@
         <div class="col-lg-7">
           <div class="row">
             <div class="col-lg-4">
-              <canvas id="myPieChart" ></canvas>   
+              <canvas id="myPieChart" data-step="16" data-intro="The phenotypic information of these samples is represented in pie chart. Clicking the pie chart allows to filter the table below."  ></canvas>   
             </div>
             <div class="col-lg-4">
               <canvas id="myPieChartETH" ></canvas>   
@@ -204,7 +213,7 @@
       </div>
     <p class="card-text">You can either download the gene targeting (gt - sum of weighted in-degree in the network) or TF targeting (tt - sum of weighted out-degree in the network). You can download the targeting profiles of all the samples as a matrix of size (number of samples, by the number of genes/TFs). Otherwise, you can specify the sample targeting profile to download and you will get a TF/gene vector
             		    named after the <a href="https://clue.io/" style="text-decoration:none" target="_blank">CLUE</a> sample reference.</p>
-        <table id="drugstable2" class="table table-hover" style="width: 100%">
+        <table data-step="17" data-intro="The tabel contains all the phenotypic information abou the different drug assays." id="drugstable2" class="table table-hover" style="width: 100%">
                 <thead>
                   <tr>
                     <th scope="col">Cell<br><i class="far fa-question-circle"
@@ -311,9 +320,9 @@
                     <td>{{ drug.donor_sex }}</td>
                     <td>{{ drug.donor_ethnicity }}</td>
                     {% if drug.cell_id == 'All' %}
-                      <td><div class="btn-group-vertical"><a href="{{ drug.links }}" class="btn btn-outline-primary" role="button">gt</a><a href="{{ drug.linksTF }}" class="btn btn-outline-primary" role="button">tt</a></div></td>
+                      <td><div class="btn-group-vertical"><a data-step="19" data-intro="Theese scores can be downloaded in bulk as well."  href="{{ drug.links }}" class="btn btn-outline-primary position-relative" role="button">gt<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="{{ drug.linksTF }}" class="btn btn-outline-primary position-relative" role="button">tt<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a></div></td>
                     {% else %}  
-                      <td><div class="btn-group-vertical"><a href="{{ drug.links }}" class="btn btn-outline-primary" role="button">gt</a><a href="{{ drug.linksTF }}" class="btn btn-outline-primary" role="button">tt</a><a href="/networks/drugtarg/{{ drug.cleannames }}" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                      <td data-step="18" data-intro="Individual gene or TF targeting scores can be downloaded." ><div class="btn-group-vertical"><a href="{{ drug.links }}" class="btn btn-outline-primary position-relative" role="button">gt<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="{{ drug.linksTF }}" class="btn btn-outline-primary position-relative" role="button">tt<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="/networks/drugtarg/{{ drug.cleannames }}" class="btn btn-outline-success" role="button">Vis</a></div></td>
                     {% endif %}  
                  {% endfor %}
                 </tbody>
@@ -340,6 +349,9 @@
 
 </div>
 {% include "footer.html" %}
+
+<!-- Load tour components-->
+<script src="{% static 'js/tourenrich.js' %}"></script> 
 
 <script>
 

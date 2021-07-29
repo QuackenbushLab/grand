@@ -44,11 +44,10 @@
   </button>
 
 <p class="mb-1">
-Please click on the submit button after selecting the parameters to retrieve the network from the server.
+Please click on the submit button after selecting the parameters to retrieve the network from the server. 
 </p>
 </div>
 {% endif %}
-
 
 <div class='container pt-3 pb-4'>
   <div class="overlay"></div>
@@ -62,17 +61,33 @@ Please click on the submit button after selecting the parameters to retrieve the
             <ul class="nav nav-pills card-header-pills" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
                   {% if activetab == 'tar' %}
-                  <a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">Network</a>
+                  <a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">Network &nbsp;
+                    <span class="translate-middle badge rounded-pill bg-light">
+                      <img src="{% static 'images/question-solid.svg' %}" style="width: 10; height:15px" data-bs-toggle="modal" data-bs-target="#myModal">
+                    </span>
+                  </a>
                   {% else %}
-                  <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">Network</a>
+                  <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">Network &nbsp;
+                    <span class="translate-middle badge rounded-pill bg-light">
+                      <img src="{% static 'images/question-solid.svg' %}" style="width: 10; height:15px" data-bs-toggle="modal" data-bs-target="#myModal">
+                    </span>
+                  </a>
                   {% endif %}
                   <img src="{% static 'images/network.svg' %}" style="width: 115px; height:25px">
                 </li>
                 <li class="nav-item" role="presentation">
                   {% if activetab == 'tar' %}
-                  <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">Targeting</a>
+                  <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">Targeting&nbsp;
+                    <span class="translate-middle badge rounded-pill bg-light">
+                      <img src="{% static 'images/question-solid.svg' %}" style="width: 10; height:15px" data-bs-toggle="modal" data-bs-target="#myModalTar">
+                    </span>
+                  </a>
                   {% else %}
-                  <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">Targeting</a>
+                  <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">Targeting&nbsp;
+                    <span class="translate-middle badge rounded-pill bg-light">
+                      <img src="{% static 'images/question-solid.svg' %}" style="width: 10; height:15px" data-bs-toggle="modal" data-bs-target="#myModalTar">
+                    </span>
+                  </a>
                   {% endif %}
                 </li>
               </ul>
@@ -89,9 +104,10 @@ Please click on the submit button after selecting the parameters to retrieve the
           {% endif %}
                 <div class='container'>
                   <div class="row">
-                    <div class="col-2 border border-secondary">
+                    <div data-step="1" data-intro="First, to plot this network, we need to select the parameters of the query." class="col-2 border border-secondary">
                       <br>
-                      <h5><span class="badge bg-secondary">Edges</span></h5>
+                      <button id="MSL-initialize-tour" type="button" class="btn btn-primary btn-sm">Guided tour</button>
+                      <h5><span data-step="2" data-intro="Since these are genome-scale network, we can't plot all the edges on the browser, therefore, we need to select an edge subset." class="badge bg-secondary">Edges</span></h5>
                       <div>
                         <label for="myEdge" class="form-label">Number of edges</label>
                         <form action="{% url 'networksagg' slug %}" role="form" method="post">
@@ -107,7 +123,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                               <div class="form-group">
                                 {% for radio in netform.topbottom %}
                                 <div style="float: left;">
-                                  <small>{{ radio }} <a href="#"
+                                  <small data-step="3" data-intro="After selecting the number of edges to plot, we can select wether these edges are the largest by edge weight or smallest." >{{ radio }} <a href="#"
                                     data-bs-toggle="popover"
                                     data-bs-animation="false"
                                     data-bs-placement="top"
@@ -122,7 +138,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                           <div class='row'>
                             <div class='col-md-10 offset-md-1'>
                               <div style="float: left;">
-                                {{ netform.brd }} <small><a href="#"
+                                {{ netform.brd }} <small data-step="4" data-intro="Selecting this option allows to plot edge thickness by edge weight, with red edges for negative values and green edges for positive values." ><a href="#"
                                   data-bs-toggle="popover"
                                   data-bs-animation="false"
                                   data-bs-placement="top"
@@ -131,7 +147,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                                 Weighted edges</a></small>
                               </div>
                               <div style="float: left;">
-                                {{ netform.absval }} <small><a href="#"
+                                {{ netform.absval }} <small data-step="5" data-intro="The previous selection was done on signed values, however edge weights can be filtered by absolute values to plot the largest edges in both directions." ><a href="#"
                                   data-bs-toggle="popover"
                                   data-bs-animation="false"
                                   data-bs-placement="top"
@@ -140,7 +156,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                                 Absolute value</a></small>
                               </div>
                               <div style="float: left;">
-                                {{ netform.edgetargeting }} <small><a href="#"
+                                {{ netform.edgetargeting }} <small data-step="6" data-intro="This option allows to plot the edges that are supported by the presence of a TF motif in the promoter region of the target gene as dashed edges." ><a href="#"
                                   data-bs-toggle="popover"
                                   data-bs-animation="false"
                                   data-bs-placement="top"
@@ -155,10 +171,10 @@ Please click on the submit button after selecting the parameters to retrieve the
                           <div class='row'>
                             <div class='col-11 offset-1'>
                           <div style="float: left;">
-                          {{ netform.dt.0 }} <small>No scaling</small>
+                          {{ netform.dt.0 }} <small data-step="7" data-intro="Nodes can be scaled as well." >No scaling</small>
                           </div>
                           <div style="float: left;">
-                          {{ netform.dt.1 }} <small>by <a href="#"
+                          {{ netform.dt.1 }} <small data-step="8" data-intro="Their size can be proportional to their targeting scores." >by <a href="#"
                             data-bs-toggle="popover"
                             data-bs-animation="false"
                             data-bs-placement="top"
@@ -167,7 +183,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                           targeting</a></small>
                         </div>
                         <div style="float: left;">
-                          {{ netform.dt.2 }} <small>by <a href="#"
+                          {{ netform.dt.2 }} <small data-step="9" data-intro="the expression of their coding-genes" >by <a href="#"
                             data-bs-toggle="popover"
                             data-bs-animation="false"
                             data-bs-placement="top"
@@ -176,7 +192,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                           expression</a></small>
                         </div>
                         <div style="float: left;">
-                          {{ netform.dt.3 }} <small>by <a href="#"
+                          {{ netform.dt.3 }} <small data-step="10" data-intro="Or by betweeness-centrality, which is a network metric computed on the selected subnetwork." >by <a href="#"
                             data-bs-toggle="popover"
                             data-bs-animation="false"
                             data-bs-placement="top"
@@ -191,11 +207,11 @@ Please click on the submit button after selecting the parameters to retrieve the
                         <div class='row'>
                           <div class='col-md-10 offset-md-1'>
                         <div style="float: left;">
-                        {{ netform.tfgenesel.0 }} <small>No selection</small>
+                        {{ netform.tfgenesel.0 }} <small data-step="11" data-intro="We can also select only specific nodes to plot." >No selection</small>
                         </div>
                         <br>
                         <div style="float: left;">
-                        {{ netform.tfgenesel.1 }} <small>by <a href="#"
+                        {{ netform.tfgenesel.1 }} <small data-step="12" data-intro="The target nodes can be selected by their gene symbols or names." >by <a href="#"
                           data-bs-toggle="popover"
                           data-bs-animation="false"
                           data-bs-placement="top"
@@ -207,7 +223,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                       {{ netform.geneform }}
                       <br>
                       <div style="float: left;">
-                        {{ netform.tfgenesel.2 }} <small>by <a href="#"
+                        {{ netform.tfgenesel.2 }} <small data-step="13" data-intro="The source nodes (TFs or miRNA) can be selected by gene symbols or names." >by <a href="#"
                           data-bs-toggle="popover"
                           data-bs-animation="false"
                           data-bs-placement="top"
@@ -219,7 +235,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                       {{ netform.tfform }}
                       <br>
                       <div style="float: left;">
-                        {{ netform.tfgenesel.3 }} <small>by <a href="#"
+                        {{ netform.tfgenesel.3 }} <small data-step="14" data-intro="Nodes belonging to specific pathways can be selected by entering the GO biological process for a pathway of interest." >by <a href="#"
                           data-bs-toggle="popover"
                           data-bs-animation="false"
                           data-bs-placement="top"
@@ -231,7 +247,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                       {{ netform.goform }}
                       <br>
                       <div style="float: left;">
-                        {{ netform.tfgenesel.4 }} <small>by <a href="#"
+                        {{ netform.tfgenesel.4 }} <small data-step="15" data-intro="They can also be selected by GWAS trait from the GWAS catalog." >by <a href="#"
                           data-bs-toggle="popover"
                           data-bs-animation="false"
                           data-bs-placement="top"
@@ -250,8 +266,8 @@ Please click on the submit button after selecting the parameters to retrieve the
                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">
                             Info
                             </button>
-                            <a href="#" class="btn btn-outline-success" id="btn-download" download="subnetwork.png" >Save<br><small>as png</small></a>
-                          <button type="submit"  name="submit" class="btn btn-primary" id="btnFetch">
+                            <a href="#" data-step="17" data-intro="The subnetwork can be exported as a png file using this button." class="btn btn-outline-success" id="btn-download" download="subnetwork.png" >Save<br><small>as png</small></a>
+                          <button data-step="16" data-intro="Using all these parameters, the network will be first fetched from the server and then a subnetwork will be computed and plotted on the browser."  type="submit"  name="submit" class="btn btn-primary" id="btnFetch">
                             <span id="mySpinner" class="d-none">
                             <span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
                             </span>
@@ -266,14 +282,14 @@ Please click on the submit button after selecting the parameters to retrieve the
                       </div>
                     </div>
                     
-                    <div class="col-10 border border-secondary padding-0">
+                    <div data-step="20" data-intro="Finally, the network will be plotted in this tab, hovering over the nodes gives additional information about the pathways and phenotypic traits." class="col-10 border border-secondary padding-0">
                       <div id="mynetwork" width=100% height=100%></div> 
                       </div>
                       <div class="col border border-secondary padding-0">
                       <div class="accordion" id="accordionExampleNN">
                         <div class="accordion-item">
                           <h2 class="accordion-header" id="headingOneNN">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOneNN" aria-expanded="true" aria-controls="collapseOneNN">
+                            <button data-step="19" data-intro="The subnetwork can be manipulated dynamically without having to reload the parameters, using the following configuration panel."  class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOneNN" aria-expanded="true" aria-controls="collapseOneNN">
                               Configuration panel
                             </button>
                           </h2>
@@ -290,7 +306,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                     <div class="card">
                       <ul class="list-group list-group-flush">
                         <div class="card-header">Network information</div>
-                      <div class="card-body">
+                      <div data-step="18" data-intro="Additional phenotypic information can be found in this section." class="card-body">
                         <p class="card-text">Network reference: {{ slug }}</p>
                         {% if ssagg != '' %}
                         <p class="card-text">Network type: {{ ssagg }}</p>
@@ -311,7 +327,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                     <div class="card">
                     <div class="card-header">Edge weights table</div>
                     <div class="container col-10 mt-3 pb-3">
-                      <table id="drugstable2" class="table table-hover" style="width: 100%">
+                      <table data-step="17" data-intro="and also as a table that can be downloaded and used directly for Cystoscape."  id="drugstable2" class="table table-hover" style="width: 100%">
                         <thead>
                           <tr>
                             <th scope="col">Source</th>
@@ -335,35 +351,39 @@ Please click on the submit button after selecting the parameters to retrieve the
             <div class="row">
               <div class="col-2 border border-secondary">
                 <br>
-                <h5><span class="badge bg-secondary">Genes</span></h5>
+                <button id="MSL-initialize-tour2" type="button" class="btn btn-primary btn-sm">Guided tour</button>
+                <br><br>
+                <h5><span id="step1" class="badge bg-success">Step 1: <br> Targeting scores</span></h5>
+                <h5><span class="badge bg-secondary">1. Genes</span></h5>
                   <form action="{% url 'taragg' slug %}" role="form" method="post">
                     {% csrf_token %}
                     <div class="offset-2 col-8 offset-2">
                       <div class='row'>
+                        <label for="myEdge" id="step2" class="form-label">Number of genes</label>
                         {{ tarform.nedgestar }}
                       </div>
                     </div>
                     <p>Value: <span id="demo2Tar"></span></p>
-                    <div class="form-group">
+                    <div id="step3" class="form-group">
                       {% for radio in tarform.topbottomtar %}
                         <small>{{ radio }}</small>
                       {% endfor %}
                     </div>
                     <div class='row'>
                       <div class='col-md-10 offset-md-2'>
-                        <div style="float: left;">
+                        <div id="step4" style="float: left;">
                           {{ tarform.absvaltar }} <small><a href="#"
                             data-bs-toggle="popover"
                             data-bs-animation="false"
                             data-bs-placement="top"
                             data-bs-html="true"
-                            data-bs-content="Absolute value of targeting score">
+                            data-bs-content="Absolute value of largest/smallest targeting scores">
                           Absolute value</a></small>
                         </div>
                       </div>
                     </div>
                     <br>
-                    <h5><span class="badge bg-secondary">Selection</span></h5>
+                    <h5><span class="badge bg-secondary">Gene selection</span></h5>
                     <div class='row'>
                       <div class='col-10 offset-2'>
                     <div style="float: left;">
@@ -371,7 +391,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                     </div>
                     <br>
                     <div style="float: left;">
-                    {{ tarform.tfgeneseltar.1 }} <small>by <a href="#"
+                    {{ tarform.tfgeneseltar.1 }} <small id="step5" >by <a href="#"
                       data-bs-toggle="popover"
                       data-bs-animation="false"
                       data-bs-placement="top"
@@ -383,7 +403,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                   {{ tarform.geneformtar }}
                   <br>
                   <div style="float: left;">
-                    {{ tarform.tfgeneseltar.2 }} <small>by <a href="#"
+                    {{ tarform.tfgeneseltar.2 }} <small id="step6" >by <a href="#"
                       data-bs-toggle="popover"
                       data-bs-animation="false"
                       data-bs-placement="top"
@@ -395,7 +415,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                   {{ tarform.goformtar }}
                   <br>
                   <div style="float: left;">
-                    {{ tarform.tfgeneseltar.3 }} <small>by <a href="#"
+                    {{ tarform.tfgeneseltar.3 }} <small id="step7" >by <a href="#"
                       data-bs-toggle="popover"
                       data-bs-animation="false"
                       data-bs-placement="top"
@@ -409,9 +429,10 @@ Please click on the submit button after selecting the parameters to retrieve the
                   </div>
                   <br>
 
-                    <h5><span class="badge bg-secondary">TFs/miRNA</span></h5>
+                    <h5><span class="badge bg-secondary">2. TFs/miRNA</span></h5>
                     <div class="offset-2 col-8 offset-2">
                       <div class='row'>
+                        <label id="step8" for="myEdge" class="form-label">Number of TFs/miRNA</label>
                         {{ tarform.nedgestartf }}
                         </div>
                       </div>
@@ -429,7 +450,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                                 data-bs-animation="false"
                                 data-bs-placement="top"
                                 data-bs-html="true"
-                                data-bs-content="Absolute value of targeting score">
+                                data-bs-content="Absolute value of largest/smallest targeting scores">
                               Absolute value</a></small>
                             </div>
                           </div>
@@ -450,7 +471,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                   </div>
                 </form>
                   <br>
-                  <h5><span class="badge bg-secondary">Analysis</span></h5>
+                  <h5><span class="badge bg-success" id="step10" >Step 2: <br> Analysis</span></h5>
                   <small>Analyze the submitted list of targeted genes/TFs for downstream analysis.</small>
                   <br>
                   <br>
@@ -466,9 +487,9 @@ Please click on the submit button after selecting the parameters to retrieve the
                   <small>2. Drug repurposing</small>
                   <form action="{% url 'cluesubmit' 'redirect' %}" role="form" method="post">
                     {% csrf_token %}
-                    {{ clueform.tfgeneselclue.0 }}<small>
+                    {{ clueform.tfgeneselclue.0 }}<small id="step12" >
                      By gene</small>
-                    {{ clueform.tfgeneselclue.1 }}<small>
+                    {{ clueform.tfgeneselclue.1 }}<small id="step13" >
                      By TF</small>
                   <br><br>
                   <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
@@ -485,7 +506,7 @@ Please click on the submit button after selecting the parameters to retrieve the
                   <br>
                   <br>
               </div>
-              <div class='col-10 border border-secondary padding-0'> 
+              <div id="step9" class='col-10 border border-secondary padding-0'> 
               <div class="row-4">
                 <canvas id="tftardiv" style="width:100%; height:400px;"></canvas>
               </div>
@@ -516,9 +537,9 @@ Please click on the submit button after selecting the parameters to retrieve the
               <a href="/{{ backpage }}/" class="btn btn-primary">Full network information page</a>
             </div>
           </div>
-          <div class="card">
-          <div class="card-header">Gene Targeting score</div>
-          <div class="container col-10 mt-3 pb-3">
+          <div class="card" id="step15" >
+          <div class="card-header" >Gene Targeting score</div>
+          <div class="container col-10 mt-3 pb-3" >
             <table id="drugstable3" class="table table-hover" style="width: 100%">
               <thead>
                 <tr>
@@ -620,6 +641,41 @@ Please click on the submit button after selecting the parameters to retrieve the
   </div>
 </div>
 
+<!-- Modal -->
+<div class="modal hide fade" tabindex="-1" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Please click on the submit button in the left panel to load the network from the server. The left panel allows to query and analyze the network using several parameters.</p>
+        <p align="center"><img class="img-responsive" src="{% static 'images/submit-01.png' %}" height=200></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal tar-->
+<div class="modal hide fade" tabindex="-1" id="myModalTar">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Please click on the submit button in the left panel to compute targeting scores. These scores can be further paramterized using the elements of the left panel. Next, it is possible to export the targeting scores to CLUEreg for drug repurposing or for TF enrichment analysis.</p>
+        <p align="center"><img class="img-responsive" src="{% static 'images/submit_tar-01.png' %}" height=200></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </div><!-- End div for container-->
 
@@ -634,20 +690,8 @@ Please click on the submit button after selecting the parameters to retrieve the
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
 
+<script src="{% static 'js/tourenrich.js' %}"></script> 
 <script>
-  var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-    // Opera 8.0+ (UA detection to detect Blink/v8-powered Opera)
-  var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
-  var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
-      // At least Safari 3+: "[object HTMLElementConstructor]"
-  var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
-  var isIE = /*@cc_on!@*/false || !!document.documentMode;
-  // Edge 20+
-  var isEdge = !isIE && !!window.StyleMedia;
-  // Chrome 1+
-  if (!isChrome){
-    alert('Please switch to Google Chrome to enable network visualization.')
-  }
 
   $(document).ready(function() {
     var edges = JSON.parse("{{edges|escapejs}}"); 

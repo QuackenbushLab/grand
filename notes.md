@@ -187,6 +187,7 @@ https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with
 how to renew certbot certficiate 
 https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
 
-check rneal of certifacte
-
+- check renewal of certificates
+sudo certbot certificates
 https://community.letsencrypt.org/t/how-to-find-certifications-expiry-date/48661
+

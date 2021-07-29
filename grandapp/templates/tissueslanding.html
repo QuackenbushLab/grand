@@ -125,10 +125,10 @@
                           <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none" target="_blank">{{ tissue.netzooRel }}</a></td>
                           {% if tissue.tool == 'PANDA-LIONESS' %}
                               <td><div class="btn-group-sm" role="group" aria-label="Basic example">
-                                  <a class="btn btn-outline-primary" role="button"  href="#cardtissue" role="button">Adj</a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="#cardtissue" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                                  <a class="btn btn-outline-primary position-relative" role="button"  href="#cardtissue" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="#cardtissue" class="btn btn-outline-success position-relative" role="button">Vis</a></div></td>
                           {% else %}
                               <td><div class="btn-group-sm" role="group" aria-label="Basic example">
-                                  <a href="{{ tissue.network }}" class="btn btn-outline-primary" role="button">Adj</a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="/networks/aggregate/{{ tissue.awsname }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                                  <a href="{{ tissue.network }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="/networks/aggregate/{{ tissue.awsname }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
                           {% endif %}
                           {% if tissue.tool == 'PUMA' %}
                               <td>{{ tissue.ppi }}</td>
@@ -335,7 +335,11 @@
                     {% if tissue.sampleid == 'All' %}
                         <td>{{ tissue.sampleid }}</td>
                     {% else %}
-                        <td><a href="/networks/aggregate/{{ tissue.cleanname }}/" style="text-decoration:none">{{ tissue.sampleid }}</a></td>
+                        {% if name == 'yes' %}
+                          <td><a href="/networks/aggregate/{{ tissue.cleanname }}/" style="text-decoration:none">{{ tissue.sampleid }}</a></td>
+                        {% else %}
+                          <td>{{ tissue.sampleid }}</td>
+                        {% endif %}
                     {% endif %}
                     <td>{{ tissue.subjectid }}</td>
                     <td>{{ tissue.gender }}</td>
@@ -349,9 +353,9 @@
                     <td>{{ tissue.smtstptref }}</td>
                     {% if name == 'yes' %}
                     {% if tissue.sampleid == 'All' %}
-                        <td><div class="btn-group-vertical"><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">Edg</a><span class="badge bg-secondary rounded-pill"><small>{{ tissue.size }}</small></span></div></td>
+                        <td><div class="btn-group-vertical"><a href="{{ tissue.link }}" class="btn btn-outline-primary position-relative" role="button">Edg<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><span class="badge bg-secondary rounded-pill"><small>{{ tissue.size }}</small></span></div></td>
                     {% else %}
-                        <td><div class="btn-group-vertical"><a href="{{ tissue.link }}" class="btn btn-outline-primary" role="button">Adj</a><span class="badge bg-light text-dark rounded-pill"><small>{{ tissue.size }}</small></span><a href="/networks/aggregate/{{ tissue.cleanname }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                        <td><div class="btn-group-vertical"><a href="{{ tissue.link }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><span class="badge bg-light text-dark rounded-pill"><small>{{ tissue.size }}</small></span><a href="/networks/aggregate/{{ tissue.cleanname }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
                     {% endif %}
                     {% endif %}
                  {% endfor %}

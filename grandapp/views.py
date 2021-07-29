@@ -81,6 +81,9 @@ def help(request):
 def download(request):
     return render(request, 'download.html')
 
+def downloads(request):
+    return render(request, 'downloads.html')
+
 def cell(request):
     cells = Cell.objects.all()
     cellspage = Cellpage.objects.all()

@@ -29,19 +29,19 @@
           data-bs-placement="top"
           data-bs-html="true"
           data-bs-content="Mixed lists are lists containing both gene symbols and ENSEMBL gene IDs e.g. EGFR and ENSG00000281221.">mixed lists</a> as in the example.
-                   <div class="form-group">
+                   <div data-step="1" data-intro="First, CLUEreg requires a list of high-targeted genes or TFs." class="form-group">
                         {% render_field geneform.contentup class="form-control" placeholder="High-targeted genes/TFs" %}                
                    </div>
-                   <div class="form-group">
+                   <div data-step="2" data-intro="Then a list of low-targeted genes or TFs." class="form-group">
                         {% render_field geneform.contentdown class="form-control" placeholder="Low-targeted genes/TFs" %}
                    </div>
                    <br>
                    <div class="form-actions button-box">
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
                     <div class="btn-group" role="group" aria-label="Basic example">
-                      <a class="btn btn-outline-primary" role="button" onclick="setImage2()">Example TFs</a>
-                      <a class="btn btn-outline-primary" role="button" onclick="setImage()">Example genes</a>
-                      <button type="submit"  name="submit" class="btn btn-success" id="btnFetch" >
+                      <a  data-step="3" data-intro="An example can be loaded using this button for TFs." class="btn btn-outline-primary" role="button" onclick="setImage2()">Example TFs</a>
+                      <a data-step="4" data-intro="or this button for genes." class="btn btn-outline-primary" role="button" onclick="setImage()">Example genes</a>
+                      <button data-step="8" data-intro="Finally, clicking the submit button sends the data to the server and displays the results." type="submit"  name="submit" class="btn btn-success" id="btnFetch" >
                         <span id="mySpinner" class="d-none">
                         <span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
                         </span>
@@ -55,28 +55,29 @@
 
                     <div class="col-md-2">
                     <div class="card h-100">
-			   <h5 class="card-header">Parameters</h5>
+			   <h5 id = "elem2" class="card-header">Parameters</h5>
 			  <div class="card-body">
 			    <p class="card-text">Select parameters for the analysis.
                     <div class="col-10 offset-1">
                       <span class="badge rounded-pill bg-primary">{{ params.0.genesupin }}</span> 
                         gene sets analyzed so far!
-                       <br> <br> <br> <br> 
+                       <br> <br>
+                       <center><button id="MSL-initialize-tour" type="button" class="btn btn-primary btn-sm">Guided tour</button></center><br><br> <br>
                        <div class="row">
-                        <label for="myRange" class="form-label">Display results</label>
+                        <label data-step="5" data-intro="Then, we need to select the number of results to compute." for="myRange" class="form-label">Display results</label>
                         {{ geneform.ngenes }} 
 
                         <p>Value: <span id="demo"></span></p>
                       </div>
-                       <div class="form-group">
+                       <div data-step="6" data-intro="Then, we need to select if the analysis is done on TFs or genes. In other words, we're looking for drugs that reverse gene or TF activity."  class="form-group">
                        {% for radio in geneform.tfgene %}
                         <div>
     		                  <small>{{ radio }}</small>
                         </div>
 		                   {% endfor %}
                        </div>
-                       {{ geneform.brd }} <small>Remove investigational drugs</small><br>
-                       {{ geneform.combin }} <small>Drug combinations</small>
+                       {{ geneform.brd }} <small data-step="6" data-intro="The database has more than 20,000 compounds, it could be useful to restrict to the labled drugs only." >Remove investigational drugs</small><br>
+                       {{ geneform.combin }} <small data-step="7" data-intro="This option activates the search for drug combinations." >Drug combinations</small>
                     </div>
                     </div>
                     </p>
@@ -89,7 +90,7 @@
 		  <div class="card-body">
 		    <p class="card-text">
           <h4>Input</h4>                        
-          <p align="justify">CLUEreg is a webserver that finds small molecule candidates to reverse or enhance a given regulatory profile.
+          <p align="justify">CLUEreg is a webserver that finds small molecule candidates to reverse or enhance a given regulatory profile.<br>
             In a bipartite regulatory network, a <a href="https://grand.networkmedicine.org/help/#wiki" style="text-decoration: none;" target="_blank">targeting profile</a> is the set of high-targeted genes and low-targeted genes. These gene lists can be derived from thresholding targeting scores representing the weighted indegree for genes and weighted outdegree for TFs.
           </p>
              <h4>Approach</h4>
@@ -108,6 +109,8 @@
 
 </div>
 {% include "footer.html" %}
+
+<script src="{% static 'js/tourenrich.js' %}"></script> 
 
 <script>
   var slider = document.getElementById("myRange");

@@ -24,8 +24,20 @@
     <br>
     <p><h3 id="citation" class="text-primary">How to cite</h3>
       If you find GRAND useful, please cite the following publication:<br> <a class="text-decoration-none" target="_blank" href="https://www.biorxiv.org/content/10.1101/2021.06.18.448997v1">Ben Guebila, Lopes-Ramos et al. GRAND: A database of gene regulatory network models across human conditions, bioRxiv, 2021. doi:10.1101/2021.06.18.448997</a>.
-      <br>In addition, to cite a particular network model, the reference is available under the Reference section of each model.
-      <br><br>
+      <br>In addition, to cite a particular network model, the reference is available under the Reference section of each model.</p>
+      <p><h3 id="troubleshooting" class="text-primary">Troubleshooting</h3>
+        <ul>
+          <li>Supported browsers</li>
+          GRAND has been tested on <a class="text-decoration-none" target="_blank" href="https://www.google.com/chrome/">Google Chrome</a> (V92.0.4515.107), the <a class="text-decoration-none" target="_blank" href="https://brave.com/">Brave browser</a> (V1.27.108), <a class="text-decoration-none" target="_blank" href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> (V90.0.2), and <a class="text-decoration-none" target="_blank" href="https://www.apple.com/safari/">Safari</a> (V14.1.2). However, we do recommend Google Chrome for optimal user experience.
+          <li>Network graph does not display after clicking submit.</li>
+          GRAND uses thrid party libraries that are accessed remotly. Therefore, please make sure that browser security settings and firewall allow inbound channels. 
+          <li>Network graph does not display in Brave browser</li>
+          Brave browser blocks GRAND by default and the security setting is set to 'shields up' by default. Set security settings to 'shields down' in the top right corner of the browser to allow network visualization.
+          <li>Exporting the network to png downloads a low resolution file</li>
+          The <a class="btn btn-outline-success btn-sm" id="btn-download">Save<br><small>as png</small></a> button in network visualization allows to export the network as a png file. However the resolution depends on the screen resolution, therefore to get higher quality images, please increase your screen resolution.
+
+        </ul>
+      </p>
     <p><h3 id="networks" class="text-primary">1. Networks</h3>
     <h4>A. Reconstruction</h4>
     <div class="ml-3">
@@ -59,7 +71,7 @@
     <br><br>
 
     <p><h3 id="navigation" class="text-primary">2. Navigation</h3>
-      The following brief guides show to how to access a specific network and browse the phenotypic variables.
+      The following brief animated guide show to how to access a specific network and browse the phenotypic variables. Clicking the <button id="MSL-initialize-tour" type="button" class="btn btn-primary btn-sm">Guided tour</button> button in each page, takes you on step-by-step guide of the interface of the specific page or tool.
       <div class="row">
         <div class="col">
           <h4 class="text-primary">Small molecule drugs</h4>
@@ -95,7 +107,7 @@
     <br><br>
 
     <p><h3 id="visualization" class="text-primary">4. Visualization</h3>
-    To enable network visualization, please make sure to use Google Chrome while navigating GRAND. The visualization module has 2 components. The first one allows to plot and query subgraphs of gene regulatory networks based on user selection. The second one allows to compute targeting scores from gene regulatory networks.
+    To enable network visualization, please make sure to use Google Chrome while navigating GRAND. The visualization module has 2 components. The first one allows to plot and query subgraphs of gene regulatory networks based on user selection. The second one allows to compute targeting scores from gene regulatory networks. Clicking the <button id="MSL-initialize-tour" type="button" class="btn btn-primary btn-sm">Guided tour</button> button on each page explains the parameters of the subnetwork selection and visualization.
     <div class="row">
       <div class="col">
       <h4 class="text-primary">Network view</h4>

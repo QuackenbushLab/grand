@@ -10,12 +10,12 @@
         <h5 class="card-header">TF list</h5>
         <div class="card-body">
         <h5 class="card-title">Enter your TF list below</h5>
-        <p class="card-text">TF genes can be listed as gene symbols, gene IDs, or mixed lists.
+        <p class="card-text">TF genes can be listed as gene symbols, gene IDs, or mixed lists. <button id="MSL-initialize-tour" type="button" class="btn btn-primary btn-sm">Guided tour</button>
   
 	        <div class="form-area"> 
 	               <form action="{% url 'disease' %}" role="form" method="post">
 		 	    {% csrf_token %}
-	                    <div class="form-group">
+	                    <div  data-step="1" data-intro="This tool requires a list of TFs. These can be differentially-expressed or differentially-targeted TFs. Both ENSEMBL gene ids and gene symbols are accepted." class="form-group">
 	                        {% render_field diseaseform.content class="form-control" placeholder="TF list" %}                
 	                    </div>
 	                   <div class="form-actions button-box">
@@ -23,7 +23,7 @@
 	                   &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
 					   <div class="btn-group" role="group" aria-label="Basic example">
 							<a class="btn btn-outline-primary" role="button" onclick="setImage()">Example</a>
-							<button type="submit"  name="submit" class="btn btn-success" id="btnFetch">
+							<button data-step="2" data-intro="Then, clicking submit performs an enrichment analysis using a hypergoemtric test against four libraries." type="submit"  name="submit" class="btn btn-success" id="btnFetch">
 							<span id="mySpinner" class="d-none">
 							<span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
 							</span>
@@ -73,6 +73,7 @@ function setImage() {
     document.getElementById("id_content").value='BHLHE23\nMAX\nMYOD1\nARNTL\nBHLHE40\nMYCN\nCLOCK\nHEY2\nASCL1\nTCF12\nHES6\nFERD3L\nMSGN1\nUSF1\nNEUROD1\nHAND2\nHEY1\nMESP1\nPTF1A\nNPAS2\nNEUROD2\nNHLH1\nATOH1\nARNT2\nOLIG3\nNHLH2\nNEUROG2\nMSC\nHES7\nFOXL1\nTCF3\nVAX1\nBATF\nMAF\nMYC\nDLX2\nIRF4\nIRF8\nKLF4\nCEBPE\n';
   }
 </script>
+<script src="{% static 'js/tourenrich.js' %}"></script> 
 </body>
 </html>
 

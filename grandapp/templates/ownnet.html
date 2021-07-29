@@ -49,51 +49,76 @@ First upload the file in the first tab. Then, in the second tab, please click on
 </div>
 {% endif %}
 
+<div class="modal hide fade" tabindex="-1" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Please click on the submit button in the left panel to load the network from the server. The left panel allows to query and analyze the network using several parameters.</p>
+        <p align="center"><img class="img-responsive" src="{% static 'images/submit-01.png' %}" height=250></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal hide fade" tabindex="-1" id="myModalTar">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Please click on the submit button in the left panel to compute targeting scores. These scores can be further paramterized using the elements of the left panel. Next, it is possible to export the targeting scores to CLUEreg for drug repurposing or for TF enrichment analysis.</p>
+        <p align="center"><img class="img-responsive" src="{% static 'images/submit_tar-01.png' %}" height=200></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class='container pt-3 pb-4'>
     <div class="card text-center">
         <div class="card-header">
             <ul class="nav nav-pills card-header-pills" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                  {% if activetab == 'uptab' %}
-                    <a class="nav-link active" id="up-tab" data-bs-toggle="tab" href="#up" role="tab" aria-controls="ppi" aria-selected="false">1. Upload network</a>
-                  {% else %}
-                    <a class="nav-link" id="up-tab" data-bs-toggle="tab" href="#up" role="tab" aria-controls="ppi" aria-selected="false">1. Upload network</a>
-                  {% endif %}
+                    <a class="nav-link active" id="up-tab" data-bs-toggle="tab" data-bs-target="#up" role="tab" aria-controls="ppi" aria-selected="false">1. Upload network</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                  {% if activetab == 'tar' %}
-                    <a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">2. Visualize network</a>
-                  {% elif activetab == 'uptab' %}
-                    <a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">2. Visualize network</a>
-                  {% else %}
-                    <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#network" role="tab" aria-controls="network" aria-selected="true">2. Visualize network</a>
-                  {% endif %}
+                    <a class="nav-link" id="net-tab" data-bs-toggle="tab" data-bs-target="#network" role="tab" aria-controls="network" aria-selected="false">2. Visualize Network&nbsp;
+                      <span class="translate-middle badge rounded-pill bg-light">
+                        <img src="{% static 'images/question-solid.svg' %}" style="width: 10; height:15px" data-bs-toggle="modal" data-bs-target="#myModal">
+                      </span>
+                    </a>
                   <img src="{% static 'images/network.svg' %}" style="width: 115px; height:25px">
                 </li>
                 <li class="nav-item" role="presentation">
-                  {% if activetab == 'tar' %}
-                    <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">3. Compute targeting</a>
-                  {% else %}
-                    <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tar" role="tab" aria-controls="tar" aria-selected="false">3. Compute targeting</a>
-                  {% endif %}
+                    <a class="nav-link" id="tar-tab" data-bs-toggle="tab" data-bs-target="#tar" role="tab" aria-controls="tar" aria-selected="false">3. Compute targeting&nbsp;
+                      <span class="translate-middle badge rounded-pill bg-light">
+                        <img src="{% static 'images/question-solid.svg' %}" style="width: 10; height:15px" data-bs-toggle="modal" data-bs-target="#myModalTar">
+                      </span>
+                    </a>
                 </li>
           </ul>
         </div>
 
 
+        <!-- Network -->
         <div class="tab-content" id="myTabContent">
-          {% if activetab == 'tar' %}
-            <div class="tab-pane fade" id="network" role="tabpanel" aria-labelledby="home-tab">
-          {% elif activetab == 'uptab' %}
-            <div class="tab-pane fade" id="network" role="tabpanel" aria-labelledby="home-tab">
-          {% else %}
-            <div class="tab-pane fade show active" id="network" role="tabpanel" aria-labelledby="home-tab">
-          {% endif %}
+            <div class="tab-pane fade show" id="network" role="tabpanel" aria-labelledby="net-tab" >
           <div class='container'>
                   <div class="row">
-                    <div class="col-2 border border-secondary">
+                    <div data-step="1" data-intro="First, to plot this network, we need to select the parameters of the query." class="col-2 border border-secondary">
                       <br>
-                      <h5><span class="badge bg-secondary">Edges</span></h5>
+                      <button id="MSL-initialize-tour" type="button" class="btn btn-primary btn-sm">Guided tour</button>
+                      <br><br>
+                      <h5><span data-step="2" data-intro="Since these are genome-scale network, we can't plot all the edges on the browser, therefore, we need to select an edge subset."  class="badge bg-secondary">Edges</span></h5>
                       <div>
                         <label for="myEdge" class="form-label">Number of edges</label>
                         <form action="{% url 'ownnet' slug %}" role="form" method="post">
@@ -109,7 +134,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                           <div class="form-group">
                             {% for radio in netform.topbottom %}
                             <div style="float: left;">
-                              <small>{{ radio }} <a href="#"
+                              <small data-step="3" data-intro="After selecting the number of edges to plot, we can select wether these edges are the largest by edge weight or smallest.">{{ radio }} <a href="#"
                                 data-bs-toggle="popover"
                                 data-bs-animation="false"
                                 data-bs-placement="top"
@@ -124,10 +149,10 @@ First upload the file in the first tab. Then, in the second tab, please click on
                           <div class='row'>
                             <div class='col-md-10 offset-md-1'>
                               <div style="float: left;">
-                                {{ netform.brd }} <small>Weighted edges</small>
+                                {{ netform.brd }} <small data-step="4" data-intro="Selecting this option allows to plot edge thickness by edge weight, with red edges for negative values and green edges for positive values." >Weighted edges</small>
                               </div>
                               <div style="float: left;">
-                                {{ netform.absval }} <small><a href="#"
+                                {{ netform.absval }} <small data-step="5" data-intro="The previous selection was done on signed values, however edge weights can be filtered by absolute values to plot the largest edges in both directions."><a href="#"
                                   data-bs-toggle="popover"
                                   data-bs-animation="false"
                                   data-bs-placement="top"
@@ -142,10 +167,10 @@ First upload the file in the first tab. Then, in the second tab, please click on
                           <div class='row'>
                             <div class='col-11 offset-1'>
                           <div style="float: left;">
-                          {{ netform.dt.0 }} <small>No scaling</small>
+                          {{ netform.dt.0 }} <small  data-step="6" data-intro="Nodes can be scaled as well.">No scaling</small>
                           </div>
                           <div style="float: left;">
-                          {{ netform.dt.1 }} <small>by <a href="#"
+                          {{ netform.dt.1 }} <small data-step="7" data-intro="Their size can be proportional to their targeting scores.">by <a href="#"
                             data-bs-toggle="popover"
                             data-bs-animation="false"
                             data-bs-placement="top"
@@ -154,7 +179,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                           targeting</a></small>
                         </div>
                         <div style="float: left;">
-                          {{ netform.dt.3 }} <small>by <a href="#"
+                          {{ netform.dt.3 }} <small data-step="8" data-intro="Or by betweeness-centrality, which is a network metric computed on the selected subnetwork." >by <a href="#"
                             data-bs-toggle="popover"
                             data-bs-animation="false"
                             data-bs-placement="top"
@@ -165,7 +190,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                           </div>
                         </div>
                         <br>
-                        <h5><span class="badge bg-secondary">Selection</span></h5>
+                        <h5><span data-step="9" data-intro="We can also select only specific nodes to plot." class="badge bg-secondary">Node selection</span></h5>
                         <div class='row'>
                           <div class='col-md-10 offset-md-1'>
                         <div style="float: left;">
@@ -173,7 +198,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                         </div>
                         <br>
                         <div style="float: left;">
-                        {{ netform.tfgenesel.1 }} <small>by <a href="#"
+                        {{ netform.tfgenesel.1 }} <small data-step="10" data-intro="The target nodes can be selected by their gene symbols or names.">by <a href="#"
                           data-bs-toggle="popover"
                           data-bs-animation="false"
                           data-bs-placement="top"
@@ -185,7 +210,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                       {{ netform.geneform }}
                       <br>
                       <div style="float: left;">
-                        {{ netform.tfgenesel.2 }} <small>by <a href="#"
+                        {{ netform.tfgenesel.2 }} <small data-step="11" data-intro="The source nodes (TFs or miRNA) can be selected by gene symbols or names.">by <a href="#"
                           data-bs-toggle="popover"
                           data-bs-animation="false"
                           data-bs-placement="top"
@@ -197,7 +222,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                       {{ netform.tfform }}
                       <br>
                       <div style="float: left;">
-                        {{ netform.tfgenesel.3 }} <small>by <a href="#"
+                        {{ netform.tfgenesel.3 }} <small data-step="12" data-intro="Nodes belonging to specific pathways can be selected by entering the GO biological process for a pathway of interest.">by <a href="#"
                           data-bs-toggle="popover"
                           data-bs-animation="false"
                           data-bs-placement="top"
@@ -209,7 +234,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                       {{ netform.goform }}
                       <br>
                       <div style="float: left;">
-                        {{ netform.tfgenesel.4 }} <small>by <a href="#"
+                        {{ netform.tfgenesel.4 }} <small data-step="13" data-intro="They can also be selected by GWAS trait from the GWAS catalog.">by <a href="#"
                           data-bs-toggle="popover"
                           data-bs-animation="false"
                           data-bs-placement="top"
@@ -228,8 +253,8 @@ First upload the file in the first tab. Then, in the second tab, please click on
                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">
                             Info
                             </button>
-                            <a href="#" class="btn btn-outline-success" id="btn-download" download="subnetwork.png" >Save<br><small>as png</small></a>
-                          <button type="submit"  name="submit" class="btn btn-primary" id="btnFetch">
+                            <a href="#" class="btn btn-outline-success" id="btn-download" download="subnetwork.png" data-step="16" data-intro="The subnetwork can be exported as a png file using this button.">Save<br><small>as png</small></a>
+                          <button  data-step="14" data-intro="Using all these parameters, the network will be first fetched from the server and then a subnetwork will be computed and plotted on the browser."  type="submit"  name="submit" class="btn btn-primary" id="btnFetch">
                             <span id="mySpinner" class="d-none">
                             <span class="spinner-border spinner-grow-sm text-light" role="status" aria-hidden="true"></span>
                             </span>
@@ -243,14 +268,14 @@ First upload the file in the first tab. Then, in the second tab, please click on
                       </div>
                     </div>
                     
-                    <div class="col-10 border border-secondary padding-0">
+                    <div data-step="17" data-intro="Finally, the network will be plotted in this tab, hovering over the nodes gives additional information about the pathways and phenotypic traits." class="col-10 border border-secondary padding-0">
                       <div id="mynetwork" width=100% height=100%></div> 
                     </div>
                     <div class="col border border-secondary padding-0">
                       <div class="accordion" id="accordionExampleNN">
                         <div class="accordion-item">
                           <h2 class="accordion-header" id="headingOneNN">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOneNN" aria-expanded="true" aria-controls="collapseOneNN">
+                            <button data-step="15" data-intro="The subnetwork can be manipulated dynamically without having to reload the parameters, using the following configuration panel." class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOneNN" aria-expanded="true" aria-controls="collapseOneNN">
                               Configuration panel
                             </button>
                           </h2>
@@ -288,11 +313,8 @@ First upload the file in the first tab. Then, in the second tab, please click on
 
 
         <!-- UPLOAD NETWORK -->
-        {% if activetab == 'uptab' %}
-          <div class="tab-pane fade show active" id="up" role="tabpanel" aria-labelledby="up-tab">
-        {% else %}
-          <div class="tab-pane fade" id="up" role="tabpanel" aria-labelledby="up-tab">
-        {% endif %}
+          <div class="tab-pane fade active show" id="up" role="tabpanel" aria-labelledby="up-tab">
+
         <div class="container">
               {% if documents %}
               <ul>
@@ -309,16 +331,16 @@ First upload the file in the first tab. Then, in the second tab, please click on
             <form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <p>{{ docform.non_field_errors }}</p>
-                <p>
+                <p id="astep4">
                     {{ docform.docfile.errors }}
                     {{ docform.docfile }}
                 </p>
                 max. 500 megabytes
-                <p><input type="submit" value="Upload" /></p>
+                <p><input id="astep6" type="submit" value="Upload" /></p>
                 <br><br>
                 <p>This tool allows users to upload their own network, visualize the network structure, and compute targeting scores for genes and TFs in the network. The network should be formatted as an adjacency matrix representing a set of regulators (TFs/miRNA) in the rows and a set of target genes in the columns, with regulator names as row names and gene names as columns names.
-                See this <a style="text-decoration:none" href="https://granddb.s3.us-east-2.amazonaws.com/Colon_cancer_TCGA_example.csv">example file</a> for reference.</p>
-                After uploading the network in the first tab (1. Upload network), you can visualize the network in the second tab (2. Visualize network) by clicking submit after selecting the parameters of interest. Or you can switch to the third tab (3. Compute targeting) to perform an exploratory analysis of the network including enrichment and drug repurposing analysis.
+                See this <a id="astep5" style="text-decoration:none" href="https://granddb.s3.us-east-2.amazonaws.com/Colon_cancer_TCGA_example.csv">example file</a> for reference.</p>
+                After uploading the network in the first tab (1. Upload network), you can visualize the network in the second tab (2. Visualize network) by clicking submit after selecting the parameters of interest. Or you can switch to the third tab (3. Compute targeting) to perform an exploratory analysis of the network including enrichment and drug repurposing analysis. Try the <button id="MSL-initialize-tour4" type="button" class="btn btn-primary btn-sm">Guided tour</button> for a step-by-step explanation.
                 <br>
                 <div class="row">
                   <div class="col">
@@ -336,26 +358,26 @@ First upload the file in the first tab. Then, in the second tab, please click on
 
 
         <!-- Targeting -->
-        {% if activetab == 'tar' %}
-          <div class="tab-pane fade show active" id="tar" role="tabpanel" aria-labelledby="home-tab">
-        {% else %}
-        <div class="tab-pane fade " id="tar" role="tabpanel" aria-labelledby="home-tab">
-        {% endif %}
+          <div class="tab-pane fade show" id="tar" role="tabpanel" aria-labelledby="tar-tab">
           <div class='container'>
             <div class="row">
               <div class="col-2 border border-secondary">
                 <br>
-                <h5><span class="badge bg-secondary">Genes</span></h5>
+                <button id="MSL-initialize-tour2" type="button" class="btn btn-primary btn-sm">Guided tour</button>
+                <br><br>
+                <h5><span id="step1" class="badge bg-success">Step 1:<br> Targeting scores</span></h5>
+                <h5><span class="badge bg-secondary">1. Genes</span></h5>
                 <div>
                   <form action="{% url 'owntaragg' slug %}" role="form" method="post">
                     {% csrf_token %}
                     <div class="offset-2 col-8 offset-2">
                       <div class='row'>
+                        <label for="myEdge" id="step2" class="form-label">Number of genes</label>
                     {{ tarform.nedgestar }}
                       </div>
                     </div>
                     <p>Value: <span id="demo2Tar"></span></p>
-                    <div class="form-group">
+                    <div id="step3" class="form-group">
                       {% for radio in tarform.topbottomtar %}
                         <small>{{ radio }}</small>
                       {% endfor %}
@@ -374,7 +396,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                       </div>
                     </div>
                     <br>
-                    <h5><span class="badge bg-secondary">Selection</span></h5>
+                    <h5><span class="badge bg-secondary">Gene selection</span></h5>
                     <div class='row'>
                       <div class='col-md-10 offset-md-2'>
                     <div style="float: left;">
@@ -382,7 +404,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                     </div>
                     <br>
                     <div style="float: left;">
-                    {{ tarform.tfgeneseltar.1 }} <small>by <a href="#"
+                    {{ tarform.tfgeneseltar.1 }} <small id="step4">by <a href="#"
                       data-bs-toggle="popover"
                       data-bs-animation="false"
                       data-bs-placement="top"
@@ -394,7 +416,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                   {{ tarform.geneformtar }}
                   <br>
                   <div style="float: left;">
-                    {{ tarform.tfgeneseltar.2 }} <small>by <a href="#"
+                    {{ tarform.tfgeneseltar.2 }} <small id="step5">by <a href="#"
                       data-bs-toggle="popover"
                       data-bs-animation="false"
                       data-bs-placement="top"
@@ -406,7 +428,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                   {{ tarform.goformtar }}
                   <br>
                   <div style="float: left;">
-                    {{ tarform.tfgeneseltar.3 }} <small>by <a href="#"
+                    {{ tarform.tfgeneseltar.3 }} <small id="step6">by <a href="#"
                       data-bs-toggle="popover"
                       data-bs-animation="false"
                       data-bs-placement="top"
@@ -420,9 +442,10 @@ First upload the file in the first tab. Then, in the second tab, please click on
                   </div>
                   <br>
 
-                    <h5><span class="badge bg-secondary">TFs</span></h5>
+                    <h5><span class="badge bg-secondary">2. TFs</span></h5>
                     <div class="offset-2 col-8 offset-2">
                       <div class='row'>
+                        <label for="myEdge" id="step7" class="form-label">Number of TFs</label>
                         {{ tarform.nedgestartf }}
                         </div>
                         </div>
@@ -461,7 +484,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                   </div>
                 </form>
                   <br>
-                  <h5><span class="badge bg-secondary">Analysis</span></h5>
+                  <h5><span id="step10" class="badge bg-success">Step 2: <br>Analysis</span></h5>
                   <small>Analyze the submitted list of targeted genes/TFs for downstream analysis.</small>
                   <br>
                   <br>
@@ -471,15 +494,15 @@ First upload the file in the first tab. Then, in the second tab, please click on
                       Info
                     </button>
                     <a class="btn btn-outline-primary disabled" role="button">Enrich</a>
-                    <a class="btn btn-outline-primary" href="{% url 'disease' %}" role="button">TFs</a>
+                    <a class="btn btn-outline-primary" href="{% url 'disease' %}" id="btnenrich" role="button">TFs</a>
                   </div>
                   <br><br>
                   <small>2. Drug repurposing</small>
                   <form action="{% url 'cluesubmit' 'colon_cancer1' %}" role="form" method="post">
                     {% csrf_token %}
-                    {{ clueform.tfgeneselclue.0 }}<small>
+                    {{ clueform.tfgeneselclue.0 }}<small id="step12">
                      By gene</small>
-                    {{ clueform.tfgeneselclue.1 }}<small>
+                    {{ clueform.tfgeneselclue.1 }}<small id="step13">
                      By TF</small>
                   <br><br>
                   <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
@@ -497,7 +520,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
                   <br>
                 </div>
               </div>
-              <div class='col-10 border border-secondary padding-0'> 
+              <div id="step9" class='col-10 border border-secondary padding-0'> 
               <div class="row-4 ">
                 <canvas id="tftardiv" style="width:100%; height:400px;"></canvas>
               </div>
@@ -511,7 +534,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
           <div class="card">
             <ul class="list-group list-group-flush">
           </div>
-          <div class="card">
+          <div id="step15" class="card">
           <div class="card-header">Gene Targeting score</div>
           <div class="container col-10 mt-3 pb-3">
             <table id="drugstable3" class="table table-hover" style="width: 100%">
@@ -616,6 +639,7 @@ First upload the file in the first tab. Then, in the second tab, please click on
 </div>
 
 
+
 </div><!-- End div for container-->
 
 
@@ -628,6 +652,9 @@ First upload the file in the first tab. Then, in the second tab, please click on
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+
+<!-- Load tour components-->
+<script src="{% static 'js/tourenrich.js' %}"></script> 
 
 <script>
   var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;

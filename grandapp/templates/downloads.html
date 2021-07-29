@@ -1,0 +1,565 @@
+{% load static %} 
+{% include "header.html" %}
+<br>
+<center><h1><span class="badge bg-secondary">Download</span></h1></center>
+<div class="container mt-5 mb-5">
+
+<div class="col-10 offset-1">
+<p>To download individual network adjacency matrices, please refer the specific network of interest and click the <a class="btn btn-outline-success btn-sm" id="btn-download">Adj</a> button. For batch downloads, the following files can be used instead:</p>
+
+<table id="drugstable" class="table table-hover" style="width: 100%">
+    <thead>
+      <tr>
+        <th scope="col">Description</th>
+        <th scope="col">File name</th>
+        <th scope="col">Format</th>
+        <th scope="col">Dimensions</th>
+        <th scope="col">Size</th>
+        <th scope="col">Link</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+		    <td>Drug gene targeting scores</td>
+            <td>Drugs_Gene_Targeting_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>12,328*173,013</td>
+            <td>34.3 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/drugs/drugNetwork/PANDA/Drugs_Gene_Targeting_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Drug TF targeting scores</td>
+            <td>Drugs_TF_Targeting_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>652*173,013</td>
+            <td>1.7 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/drugs/drugNetwork/PANDA/Drugs_TF_Targeting_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>PDAC single-sample networks TCGA</td>
+            <td>lioness_pdac.RData</td>
+            <td>RData</td>
+            <td>2,124,454*150</td>
+            <td>2.2 GB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/data/lioness_pdac.RData"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>COAD single-sample networks TCGA</td>
+            <td>lioness_annot.tar.gz</td>
+            <td>RData</td>
+            <td>8,472,037*445</td>
+            <td>11.3 GB</td>
+            <td><a href="https://clopesramos.s3.us-east-2.amazonaws.com/colon_sexDiff/paper/lioness/v5_tcga/lioness_annot.tar.gz"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>COAD single-sample networks GEO</td>
+            <td>lioness_annot.tar.gz</td>
+            <td>RData</td>
+            <td>8,472,037*1193</td>
+            <td>30 GB</td>
+            <td><a href="https://clopesramos.s3.us-east-2.amazonaws.com/colon_sexDiff/paper/lioness/v5_geo/lioness_annot.tar.gz"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Tissue miRNA networks GTEx</td>
+            <td>GTEx_PUMA_tissues.RData</td>
+            <td>RData</td>
+            <td>10,391,523*36</td>
+            <td>10.2 GB</td>
+            <td><a href="https://zenodo.org/record/1313768#.YPsYL1NKiL9"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Tissue TF networks GTEx</td>
+            <td>GTEx_PANDA_tissues.RData</td>
+            <td>RData</td>
+            <td>19,476,492*38</td>
+            <td>4.3 GB</td>
+            <td><a href="https://zenodo.org/record/838734#.YPsYy1NKiL8"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Adipose subcutaneous single-sample networks GTEx</td>
+            <td>Adipose_Subcutaneous_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*380</td>
+            <td>126 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Adipose_Subcutaneous_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Adipose visceral single-sample networks GTEx</td>
+            <td>Adipose_Visceral_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*234</td>
+            <td>78 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Adipose_Visceral_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Adrenal gland single-sample networks GTEx</td>
+            <td>Adipose_Gland_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*159</td>
+            <td>53 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Adipose_Gland_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Artery aorta single-sample networks GTEx</td>
+            <td>Artery_Aorta_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*247</td>
+            <td>82 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Artery_Aorta_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Artery coronary single-sample networks GTEx</td>
+            <td>Artery_Coronary_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*140</td>
+            <td>47 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Artery_Coronary_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Artery tibial single-sample networks GTEx</td>
+            <td>Artery_Tibial_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*357</td>
+            <td>118 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Artery_Tibial_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Brain other single-sample networks GTEx</td>
+            <td>Brain_Other_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*779</td>
+            <td>256 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Brain_Other_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Brain cerebellum single-sample networks GTEx</td>
+            <td>Brain_Cerebellum_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*254</td>
+            <td>84 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Brain_Cerebellum_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Brain basal ganglia single-sample networks GTEx</td>
+            <td>Brain_Basal_Ganglia_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*360</td>
+            <td>119 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Brain_Basal_Ganglia_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Breast single-sample networks GTEx</td>
+            <td>Breast_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*217</td>
+            <td>72 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Breast_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Colon sigmoid single-sample networks GTEx</td>
+            <td>Colon_Sigmoid_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*173</td>
+            <td>58 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Colon_Sigmoid_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Colon transverse single-sample networks GTEx</td>
+            <td>Colon_Transverse_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*203</td>
+            <td>67 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Colon_Transverse_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Gastroesophageal junction single-sample networks GTEx</td>
+            <td>Gastroesophageal_Junction_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*176</td>
+            <td>59 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Gastroesophageal_Junction_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Esophagus mucosa single-sample networks GTEx</td>
+            <td>Esophagus_Mucosa_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*330</td>
+            <td>110 GB</td>
+            <td><a href="https://zenodo.org/https://granddb.s3.amazonaws.com/tissues/networks/lioness/Esophagus_Mucosa_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Esophagus muscularis single-sample networks GTEx</td>
+            <td>Esophagus_Muscularis_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*283</td>
+            <td>94 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Esophagus_Muscularis_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Heart atrial appendage single-sample networks GTEx</td>
+            <td>Heart_Atrial_Appendage_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*217</td>
+            <td>72 GB</td>
+            <td><a href="https://zenodo.org/https://granddb.s3.amazonaws.com/tissues/networks/lioness/Heart_Atrial_Appendage_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Heart left ventricle single-sample networks GTEx</td>
+            <td>Heart_Left_Ventricle_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*267</td>
+            <td>88 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Heart_Left_Ventricle_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Liver single-sample networks GTEx</td>
+            <td>Liver_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*137</td>
+            <td>45 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Liver_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Lung single-sample networks GTEx</td>
+            <td>Lung_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*360</td>
+            <td>119 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Lung_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Skeletal muscle single-sample networks GTEx</td>
+            <td>Skeletal_Muscle_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*469</td>
+            <td>154 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Skeletal_Muscle_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Tibial nerve single-sample networks GTEx</td>
+            <td>Tibial_Nerve_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*334</td>
+            <td>110 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Tibial_Nerve_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Pancreas single-sample networks GTEx</td>
+            <td>Pancreas_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*193</td>
+            <td>64 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Pancreas_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Pituitary single-sample networks GTEx</td>
+            <td>Pituitary_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*124</td>
+            <td>41 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Pituitary_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Skin single-sample networks GTEx</td>
+            <td>Skin_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*661</td>
+            <td>219 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Skin_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Intestine terminal ileum single-sample networks GTEx</td>
+            <td>Intestine_Terminal_Ileum_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*104</td>
+            <td>34 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Intestine_Terminal_Ileum_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Spleen single-sample networks GTEx</td>
+            <td>Spleen_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*118</td>
+            <td>39 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Spleen_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Stomach single-sample networks GTEx</td>
+            <td>Stomach_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*204</td>
+            <td>68 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Stomach_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Thyroid single-sample networks GTEx</td>
+            <td>Thyroid_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*355</td>
+            <td>117 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Thyroid_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Whole blood single-sample networks GTEx</td>
+            <td>Whole_Blood_AllSamples.csv</td>
+            <td>CSV</td>
+            <td>1,9476,492*444</td>
+            <td>142 GB</td>
+            <td><a href="https://granddb.s3.amazonaws.com/tissues/networks/lioness/Whole_Blood_AllSamples.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p>In addition, a set of cancer tissues networks that were generated with the same processing pipeline as the <a target="_blank" style="text-decoration:none;" href="/tissues">normal tissues</a> network to enable differential analysis. The analysis can be done in the <a target="_blank" style="text-decoration:none;" href="/netcomp/aggregate/1/">network comparison</a> page. The cancer networks can be downloaded below:</p>
+
+  <table id="drugstable2" class="table table-hover" style="width: 100%">
+    <thead>
+      <tr>
+        <th scope="col">Description</th>
+        <th scope="col">File name</th>
+        <th scope="col">Format</th>
+        <th scope="col">Dimensions</th>
+        <th scope="col">Size</th>
+        <th scope="col">Link</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+		    <td>Adrenocortical Carcinoma</td>
+            <td>panda_ACC.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_ACC.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Bladder Urothelial Carcinoma</td>
+            <td>panda_BLCA.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_BLCA.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Cholangiocarcinoma</td>
+            <td>panda_CHOL.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_CHOL.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Colon adenocarcinoma</td>
+            <td>panda_COAD.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_COAD.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Lymphoid Neoplasm Diffuse Large B-cell Lymphoma</td>
+            <td>panda_DLBC.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_DLBC.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Esophageal carcinoma</td>
+            <td>panda_ESCA.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_ESCA.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Glioblastoma multiforme</td>
+            <td>panda_GBM.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_GBM.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Head and Neck squamous cell carcinoma</td>
+            <td>panda_HNSC.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_HNSC.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Kidney Chromophobe</td>
+            <td>panda_KICH.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_KICH.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Kidney renal clear cell carcinoma</td>
+            <td>panda_KIRC.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_KIRC.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Kidney renal papillary cell carcinoma</td>
+            <td>panda_KIRP.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_KIRP.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Acute Myeloid Leukemia</td>
+            <td>panda_LAML.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_LAML.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Brain Lower Grade Glioma</td>
+            <td>panda_LGG.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_LGG.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Liver hepatocellular carcinoma</td>
+            <td>panda_LIHC.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_LIHC.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Lung adenocarcinoma</td>
+            <td>panda_LUAD.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_LUAD.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Lung squamous cell carcinoma</td>
+            <td>panda_LUSC.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_LUSC.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Mesothelioma</td>
+            <td>panda_MESO.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_MESO.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Pancreatic adenocarcinoma</td>
+            <td>panda_PAAD.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_PAAD.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Pheochromocytoma and Paraganglioma</td>
+            <td>panda_PCPG.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_PCPG.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>	Rectum adenocarcinoma</td>
+            <td>panda_READ.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_READ.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Sarcoma</td>
+            <td>panda_SARC.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_SARC.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Skin Cutaneous Melanoma</td>
+            <td>panda_SKCM.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_SKCM.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Stomach adenocarcinoma</td>
+            <td>panda_STAD.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_STAD.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Thyroid carcinoma</td>
+            <td>panda_THCA.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_THCA.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Thymoma</td>
+            <td>panda_THYM.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_THYM.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+        <tr>
+		    <td>Uveal Melanoma</td>
+            <td>panda_UVM.csv</td>
+            <td>CSV</td>
+            <td>644*29,374</td>
+            <td>335 MB</td>
+            <td><a href="https://granddb.s3.us-east-2.amazonaws.com/cancer/aggnets/networks/panda_UVM.csv"><i class="fas fa-file-download"></i></a></td>
+        </tr>
+    </tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+{% include "footer.html" %}
+<script>
+
+    // Basic example
+    $(document).ready(function() {
+
+        $('#drugstable').DataTable({
+          "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
+                 "<'row'<'col-sm-12'tr>>" +
+                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        });
+
+        $('#drugstable2').DataTable({
+          "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'f>>" +
+                 "<'row'<'col-sm-12'tr>>" +
+                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        });
+    
+    } );
+    </script>
+</body>
+</html>
+
