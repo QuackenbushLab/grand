@@ -92,6 +92,51 @@
       <img src="https://granddb.s3.us-east-2.amazonaws.com/gifs/cell.gif" width="500" height="200">
       </div>
     </div>
+    <h4>Use case: drug repurposing in Melanoma</h4>
+    To illustrate specific use cases of GRAND, we will perform an integrated differential gene regulatory network analysis in Melanoma and predict small molecule drug that reverse this condition.
+    
+    <div class="row">
+      <div class="col-5">
+        <img src="{% static 'images/melanoma/melanoma1_1.png' %}" style="width: 500px;">
+      </div>
+      <div class="col-7">
+        First, to build a differential gene regulatory network, we need to navigate to the network comparison tab from the Analysis dropdown menu.
+    </div>
+    </div>
+    <div class="row">
+      <div class="col-5">
+        <img src="{% static 'images/melanoma/melanoma2_1.png' %}" style="width: 500px;">
+      </div>
+      <div class="col-7">
+        Then, we need to select normal skin as our first control network and skin cutaneous melanoma (SKCM) as our second network. The number of genes is set 250, the options 'largest' and 'absolute value' are checked to compute the 250 largest targeting scores by absolute values. We can do the same for TFs. Finally, we can click on the 'submit' button.
+    </div>
+    </div>
+    <div class="row">
+      <div class="col-5">
+        <img src="{% static 'images/melanoma/melanoma3_1.png' %}" style="width: 150px;">
+      </div>
+      <div class="col-7">
+        Once the targeting scores are computed and displayed on the browser, we can export these results for drug repurposing. The drug repurposing tool (CLUEreg) works on both TFs and genes to reverse the targeting pattern. We can select the 'by gene' option and the click 'CLUEreg' to export the results.
+    </div>
+    </div>
+    <div class="row">
+      <div class="col-5">
+        <img src="{% static 'images/melanoma/melanoma4_1.png' %}" style="width: 500px;">
+      </div>
+      <div class="col-7">
+        This leads up to the CLUEreg page with prefilled forms. We can remove the 'investigational drugs' and then click 'submit'.
+    </div>
+    </div>
+    <div class="row">
+      <div class="col-5">
+        <img src="{% static 'images/melanoma/melanoma5_1.png' %}" style="width: 500px;">
+      </div>
+      <div class="col-7">
+        The top 100 small molecules among nearly 20,000 possible compounds are displayed on the browser. We can see that Melatonin ranks among those 100 compounds. Melatonin is a naturally occuring compound that has been suggested to play an important role in <a class="text-decoration-none" target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/1823632/">Melanoma control</a>.
+    </div>
+    </div>
+      
+
 
     <br><br>
 

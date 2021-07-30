@@ -37,6 +37,10 @@ Update to github is:
 
 ` scp -r -i /Users/mab8354/Virginia.pem granddb/static/js/ ubuntu@3.238.134.118:~/granddb/static/`
 
+- images folder
+
+` scp -r -i /Users/mab8354/Virginia.pem granddb/static/images/ ubuntu@3.238.134.118:~/granddb/static/`
+
 2. set debug to false
 
 3. change API adress in templates
