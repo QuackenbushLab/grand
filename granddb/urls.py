@@ -40,7 +40,7 @@ urlpatterns = [
     url(r'^tissues/(\w+)/', view=views.tissuelanding, name='tissuelanding'),
     url(r'_drug/$', view=views.druglanding, name='druglanding'),
     url(r'^thanks/', views.thanks, name='thanks'),
-    url(r'^babelomic/', views.babelomic, name='babelomic'),
+    url(r'^cclemap/', views.babelomic, name='babelomic'),
     url(r'^upload/', views.upload, name='upload'),
     url(r'^ownnet/(\w+)/', views.ownnet, name='ownnet'),
     url(r'^netcomp/aggregate/(\w+)/', views.netcomp, name='netcomp'),

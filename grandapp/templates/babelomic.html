@@ -5,7 +5,7 @@
 <div class='container pt-3 pb-4'>
     <div class="card text-center">
         <div class="card-header">
-            <h4 class="text-center">Babelomic map: Multi-layer omic network to study regulatory interactions</h4>
+            <h4 class="text-center">CCLE map: Multi-tiered genotype-to-phenotype network</h4>
         </div>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="network" role="tabpanel" aria-labelledby="home-tab">
@@ -134,12 +134,12 @@
                 </div>
                     <div class="card-body">
                     <h5 class="card-title">Building a genotype-to-phenotype map</h5>
-                    <p class="card-text"><a href='https://en.wikipedia.org/wiki/Tower_of_Babel'>Babel</a>omic map is a genotype-to-phenotype network that connects mutli-layer omics.
-                    The network was built using data from the <a href="https://portals.broadinstitute.org/ccle">CCLE</a>, <a href="https://depmap.org/portal/">DepMap</a>, project <a href="https://ocg.cancer.gov/node/1071">ACHILLES</a>,and <a href="https://www.theprismlab.org/">PRISM</a> projects that characterized several omic layers in more than 1700 cell lines.
-                    Connecting the components of the network using Pearson Correlation Coefficient can show spurrious correlations that are not biologically meaningful. Approaches such Gaussian Graphical Models (GGMs) use partial correlations
-                    that allow to find direct regulatory interactions by conditioning the correlation on all other variables of the system. However, such approach requires a large sample size.
-                    Therefore, we built Babelomic map as a hypothesis generation tool using a novel method called DRAGON, that estimates partial correlations using a <a href="https://www.sciencedirect.com/science/article/abs/pii/S187493991930224X">covariance shrinkage approach</a> and requires fewer samples to simulatenously estimates the coefficients 
-                    in multiomic layers. </p>
+                    <p class="card-text">CCLE map is a genotype-to-phenotype network that connects mutliple layers of omic networks.
+                    The network was built using data from the <a href="https://portals.broadinstitute.org/ccle" style="text-decoration: none">CCLE</a>, <a href="https://depmap.org/portal/" style="text-decoration: none">DepMap</a>, project <a href="https://ocg.cancer.gov/node/1071" style="text-decoration: none">ACHILLES</a>,and <a href="https://www.theprismlab.org/" style="text-decoration: none">PRISM</a> projects that characterized several omic layers in more than 1700 cancer cell lines.
+                    Connecting the components of the network using Pearson Correlation Coefficient can result in spurious correlations that are not biologically meaningful. Approaches such Gaussian Graphical Models (GGMs) compute partial correlations
+                    to find direct regulatory interactions by conditioning the associations on all other variables of the system. In particular, computing partial correlations between two omic layers that have different structure can bias the estimation towards one or the other.
+                    Therefore, we built a multi-tiered genotype to phenotype map as a hypothesis generation tool using a novel method called DRAGON, that estimates partial correlations using a <a href="https://www.sciencedirect.com/science/article/abs/pii/S187493991930224X" style="text-decoration: none">covariance shrinkage approach</a> that allows to take into account disparate data structures in multi-omic data. 
+                    CCLE map provides a data-driven resource that connects genotype to cellular pheontypes to mine biological associations in cancer cell lines. </p>
                     </div>
             </div>
 
