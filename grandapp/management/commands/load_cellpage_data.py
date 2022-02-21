@@ -38,6 +38,8 @@ class Command(BaseCommand):
             cell.method   = row['method']
             cell.method2  = row['method2']
             cell.methodrefs2  = row['methodrefs2']
+            cell.method3  = row['method3']
+            cell.methodrefs3  = row['methodrefs3']
             cell.data     = row['data']
             cell.methodrefs   = row['methodrefs']
             cell.datarefs     = row['datarefs']

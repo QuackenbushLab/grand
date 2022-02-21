@@ -8,7 +8,7 @@ from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding, Tissuesamp
 from .models import Drugdesc, Breastsample, Cervixsample, Liversample, Ggbmd1sample, Ggbmd2sample, Ggnsample
 from .models import Pancreassample, Drugcombsup, Drugcombsdown, Gobp, Cellpage, Celllanding, Cellsample
 from .models import Gobpbygene, Gwascata, Gwascatabygene, Pandaac, Dragonac, Sendto, Document, Tissueac, Cancerpheno
-from .models import Enrichtfs, Enrichgenes, Otterac
+from .models import Enrichtfs, Enrichgenes, Otterac, Egret
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
 from .forms import ContactForm, GeneForm, DiseaseForm, NetForm, BabelForm, TarForm, ClueForm, DocumentForm, CompForm, DiffTarForm
 from django.conf import settings
@@ -1583,6 +1583,9 @@ def celllanding(request,slug):
             print(celllanding)
             nsamples,ndata,nagg=0,1,1
             tooldrag,name='yes','no'
+        elif (slug == 'ipsc') or (slug == 'cmc'):
+            print('hi')
+            return render(request, 'help.html')
         else:
             celllanding = Celllanding.objects.get(cancerref=slug)
             #initialize data variables

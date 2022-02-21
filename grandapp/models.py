@@ -1,3 +1,6 @@
+import code
+from posixpath import supports_unicode_filenames
+from unicodedata import name
 from django.db import models
 
 class Celllanding(models.Model):
@@ -23,6 +26,19 @@ class Celllanding(models.Model):
     dataset   = models.CharField(max_length=200)
     cancerref = models.CharField(max_length=200)
     reg       = models.CharField(max_length=200)
+
+class Egret(models.Model):
+    sample    = models.CharField(max_length=200)
+    sex       = models.CharField(max_length=200)
+    idd       = models.CharField(max_length=200)
+    code      = models.CharField(max_length=200)
+    name      = models.CharField(max_length=200)
+    supcode   = models.CharField(max_length=200)
+    supname   = models.CharField(max_length=200)
+    iid       = models.CharField(max_length=200)
+    datac     = models.CharField(max_length=200)
+    size      = models.CharField(max_length=200)
+    type      = models.CharField(max_length=200)
 
 class Cell(models.Model):
     disease    = models.CharField(max_length=400)
