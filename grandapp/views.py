@@ -1585,7 +1585,10 @@ def celllanding(request,slug):
             tooldrag,name='yes','no'
         elif (slug == 'ipsc') or (slug == 'cmc'):
             print('hi')
-            return render(request, 'help.html')
+            slugname='IPSC'
+            celllanding = Celllanding.objects.filter(cancerref=slug)
+            nsamples,ndata,nagg=119,1,1
+            cellsample  = Egret.objects.all()
         else:
             celllanding = Celllanding.objects.get(cancerref=slug)
             #initialize data variables
@@ -2560,4 +2563,12 @@ def mapObjectkey(slug,modality='network',how=''):
             attr13 = 'Donor Gender'
             attr14 = 'Primary Site'
         backpage   = 'cancers/' + cancername + '_cancer'
+    elif (str.split(slug,'_')[0] == 'EGRET'):
+        if (str.split(slug,'_')[1] == 'IPSC'):
+            ssagg='Aggregate'
+            categorynet='Cell lines'
+            backpage='cell/ipsc'
+            object_key = 'cells/networks/networks/iPSC/' + str.split(slug,'_')[2] + '.csv'
+        else: 
+            print('hi2')
     return object_key, ssagg, categorynet, regnetdisp, backpage, attr1, attr2, attr3, attr4, attr11, attr12, attr13, attr14

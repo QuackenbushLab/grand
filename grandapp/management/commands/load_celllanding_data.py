@@ -37,7 +37,6 @@ class Command(BaseCommand):
             tissuelanding.cancer       = row['cancer']
             tissuelanding.tool         = row['tool']
             tissuelanding.cancerref    = row['cancerref']
-            tissuelanding.cancerLink   = row['cancerLink']
             tissuelanding.netzoo       = row['netzoo']
             tissuelanding.netzooLink   = row['netzooLink']
             tissuelanding.netzooRel    = row['netzooRel']

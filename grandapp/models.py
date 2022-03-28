@@ -5,7 +5,6 @@ from django.db import models
 
 class Celllanding(models.Model):
     cancer    = models.CharField(max_length=200)
-    cancerLink= models.URLField(default='#')
     tool      = models.CharField(max_length=200)
     netzoo    = models.CharField(max_length=200)
     netzooLink= models.URLField(max_length=200)
@@ -37,8 +36,9 @@ class Egret(models.Model):
     supname   = models.CharField(max_length=200)
     iid       = models.CharField(max_length=200)
     datac     = models.CharField(max_length=200)
-    size      = models.CharField(max_length=200)
+    size1      = models.CharField(max_length=200)
     type      = models.CharField(max_length=200)
+    cleanname1      = models.CharField(max_length=200)
 
 class Cell(models.Model):
     disease    = models.CharField(max_length=400)

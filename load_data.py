@@ -9,7 +9,7 @@ data=['load_cell_data','load_tissue_data','load_drugResultDown_data','load_drugR
         'load_cancercervix_data','load_cancerliver_data','load_gbmd1_data','load_gbmd2_data','load_cancerggn_data','load_cancerpancreas_data',
         'load_drugResultDownComb_data','load_drugResultUpComb_data','load_gobp_data','load_cellpage_data','load_celllanding_data','load_cellSample_data','load_gobpgene_data',
         'load_gwascata_data','load_gwascatagene_data','load_otteracc_data','load_pandaacc_data','load_dragonacc_data','load_sendto_data','load_tissueacc_data',
-         'load_cancerpheno_data','load_enrichtfs_data','load_enrichgenes_data']
+         'load_cancerpheno_data','load_enrichtfs_data','load_enrichgenes_data','load_egret_data']
 
 for i in range(len(data)):
    os.system('python3.8 manage.py ' + data[i])

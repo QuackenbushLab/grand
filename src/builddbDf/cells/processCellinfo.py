@@ -105,6 +105,7 @@ cellinfo['isdragon'].loc[intercellsdragon] = 'dragon'
 
 # save df
 cellinfo.to_csv('granddb/data/sample_info_aug2.csv')
+#cellinfo=pd.read_csv('~/granddb/data/sample_info_aug2.csv', index_col=0)
 
 # intersect with expression data
 intercells= np.intersect1d(exprs.index, cellinfo.index)
@@ -182,6 +183,11 @@ resDf2['methodrefs2'].iloc[1:3] = ['https://netzoo.github.io/zooanimals/puma/','
 # add mirna in normal cells
 resDf2['reg2'] = ''
 resDf2['reg2'].iloc[1:3] = ['miRNA','miRNA']
+
+# Add EGRET
+resDf2.loc[len(resDf2.index)] = ['IPSC','EGRET','Banovich et al.','aggregate','Normal','ipsc','TF','PANDA','https://netzoo.github.io/zooanimals/egret/','https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89895','https://netzoo.github.io/zooanimals/panda/','']
+resDf2.loc[len(resDf2.index)] = ['IPSC-Cardiomyocyte','EGRET','Banovich et al.','aggregate','Normal','cm','TF','PANDA','https://netzoo.github.io/zooanimals/egret/','https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89895','https://netzoo.github.io/zooanimals/panda/','']
+
 resDf2.to_csv('granddb/data/cellspage.csv',index=False)
 
 
@@ -218,8 +224,14 @@ resDflanding.loc[len(resDflanding.index)] = ['Fibroblast','fibroblast','','PANDA
     ,'','','','','','',0,0,'Lopes-Ramos, Paulsson et al. (2017)',0,'','','GTEX','','TF']
 resDflanding.loc[len(resDflanding.index)] = ['All','mirna','','DRAGON','netZooPy','https://github.com/netZoo/netZooPy/releases','0.8'
     ,'https://granddb.s3.us-east-2.amazonaws.com/cells/networks/mirna/dragon_mirna_CCLE.csv','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/CCLE_miRNA_20181103.gct','https://portals.broadinstitute.org/ccle','','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/CCLE_expression.csv','https://portals.broadinstitute.org/ccle',734,19174,'',938,'#cardtissuetcga','https://github.com/netZoo/netbooks/blob/main/netbooks/netZooPy/dragon_mirna.ipynb','CCLE','miRNA','Ben Guebila et al. (in preparation)']
-# add vis link
-resDflanding['cancerLink'] = '/networks/aggregate/colon_cancer1/'
+
+# Add EGRET
+resDflanding.loc[len(resDflanding.index)] = ['IPSC','ipsc','','EGRET','netZooR','https://github.com/netZoo/netZooR/releases','0.9'
+    ,'#cardtissue','','http://string90.embl.de/','','','https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89895',687,9394,'',119,'#cardtissue','','Banovich et al.','TF','Weighill et al. (2021)']
+resDflanding.loc[len(resDflanding.index)] = ['IPSC','ipsc','','PANDA','netZooR','https://github.com/netZoo/netZooR/releases','0.9'
+    ,'https://granddb.s3.us-east-2.amazonaws.com/cells/networks/iPSC/PANDA_iPSC_Yoruba.csv','','http://string90.embl.de/','','','https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89895',687,9394,'',119,'','','Banovich et al.','TF','Weighill et al. (2021)']
+
+# Save dataframe
 resDflanding.to_csv('granddb/data/celllanding.csv',index=False)
 
 d = {'TF': ['TF'], 'tar': [1]}
