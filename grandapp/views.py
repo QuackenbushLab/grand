@@ -2565,7 +2565,7 @@ def mapObjectkey(slug,modality='network',how=''):
         backpage   = 'cancers/' + cancername + '_cancer'
     elif (str.split(slug,'_')[0] == 'EGRET'):
         print(slug)
-        if (str.split(slug,'_')[1] == 'IPSC'):
+        if (str.split(slug,'_')[1] == 'iPSC'):
             ssagg='Aggregate'
             categorynet='Cell lines'
             backpage='cell/ipsc'
