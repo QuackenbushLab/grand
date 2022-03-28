@@ -2568,7 +2568,7 @@ def mapObjectkey(slug,modality='network',how=''):
             ssagg='Aggregate'
             categorynet='Cell lines'
             backpage='cell/ipsc'
-            object_key = 'cells/networks/iPSC/' + str.split(slug,'_')[2] + '.csv'
+            object_key = 'cells/networks/iPSC/' + slug + '.csv'
         else: 
             print('hi2')
     return object_key, ssagg, categorynet, regnetdisp, backpage, attr1, attr2, attr3, attr4, attr11, attr12, attr13, attr14
