@@ -17,6 +17,9 @@ import random
 import time
 from django.core import serializers
 
+# To expand queryset
+from itertools import chain
+
 # file upload
 from django.urls import reverse
 from django.template import RequestContext
@@ -1548,15 +1551,38 @@ def cancerlanding(request,slug):
 
 def celllanding(request,slug):
     tooldrag=''
-    if slug == 'lcl':
-        slug='Lymphoblastoid_cell_line_tissue'
+    cellsampleegret=''
+    data3=''
+    if slug == 'k562':
+        slug     = 'k562'
+        slugname = 'K562 cell'
+        slug2='k562'
+        celllanding = Celllanding.objects.filter(cancerref=slug)
+        cellsample  = Tissuesample.objects.filter(grdid=slug) 
+        nsamples,ndata,nagg=0,1,1
+        data = serializers.serialize("json", cellsample)
+        name,tool,slug='yes','','k562'
+    elif slug == 'gm12878':
+        slug     = 'gm12878'
+        slugname = 'GM12878 cell'
+        slug2='gm12878'
+        celllanding = Celllanding.objects.filter(cancerref=slug)
+        cellsample  = Tissuesample.objects.filter(grdid=slug) 
+        nsamples,ndata,nagg=0,1,1
+        data = serializers.serialize("json", cellsample)
+        name,tool,slug='yes','','gm12878'
+    elif slug == 'lcl':
+        slug     = 'Lymphoblastoid_cell_line_tissue'
         slugname = 'Lymphoblastoid cell line'
         slug2='lcl'
         celllanding = Tissuelanding.objects.filter(tissue=slug.replace('_',' ')[:-7])
-        cellsample = Tissuesample.objects.filter(grdid=slug) 
-        print(cellsample)
+        cellsample  = Tissuesample.objects.filter(grdid=slug) 
+        celllanding2 = Celllanding.objects.filter(cancerref='lcl')
+        celllanding = chain(celllanding, celllanding2) 
+        cellsampleegret  = Egret.objects.filter(net=slug2)
         nsamples,ndata,nagg=0,1,3
-        data = serializers.serialize("json", cellsample)
+        data  = serializers.serialize("json", cellsample)
+        data3 = serializers.serialize("json", cellsampleegret)
         name,tool,slug='no','puma','lcl'
     elif slug == 'fibroblast_gtex':
         slug='Fibroblast_cell_line_tissue'
@@ -1583,12 +1609,15 @@ def celllanding(request,slug):
             print(celllanding)
             nsamples,ndata,nagg=0,1,1
             tooldrag,name='yes','no'
-        elif (slug == 'ipsc') or (slug == 'cmc'):
-            print('hi')
-            slugname='IPSC'
+        elif (slug == 'ipsc') or (slug == 'cm'):
+            if (slug == 'ipsc'):
+                slugname='IPSC'
+            elif (slug == 'cm'):
+                slugname='IPSC-Cardiomyocyte'
             celllanding = Celllanding.objects.filter(cancerref=slug)
             nsamples,ndata,nagg=119,1,1
-            cellsample  = Egret.objects.all()
+            cellsample  = Egret.objects.filter(net=slug)
+            cellsampleEgret  = Egret.objects.filter(net=slug).filter(presexp=1)
         else:
             celllanding = Celllanding.objects.get(cancerref=slug)
             #initialize data variables
@@ -1618,9 +1647,12 @@ def celllanding(request,slug):
             except:
                 cells.doublt='NA'
             cells.save()
-        data = serializers.serialize("json", cellsample)
+        if (slug == 'ipsc') or (slug == 'cm'):
+            data = serializers.serialize("json", cellsampleEgret)
+        else:
+            data = serializers.serialize("json", cellsample)
     returntupl = {'celllanding': celllanding, 'slug':slug, 'slug2':slug2,
-                  'nsamples':nsamples,'ndata':ndata, 'nagg':nagg, 'data':data, 'cellsample':cellsample, 'name':name, 'tool':tool, 'tooldrag':tooldrag, 'slugname':slugname}
+                  'nsamples':nsamples,'ndata':ndata, 'nagg':nagg, 'data':data, 'cellsample':cellsample, 'name':name, 'tool':tool, 'tooldrag':tooldrag, 'slugname':slugname, 'cellsampleegret':cellsampleegret, 'data3':data3}
     return render(request, "celllanding.html", returntupl)
 
 def analysis(request):

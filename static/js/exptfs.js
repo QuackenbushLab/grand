@@ -12,7 +12,7 @@ $(document).ready(function() {
   var SHOW_GRID = true; // `true` to show the grid, `false` to hide
   colors='#0f6efd'
   
-        // x-axis label and label in tooltip
+      // x-axis label and label in tooltip
     
       // `true` to show the grid, `false` to hide
       var SHOW_GRID = true; 
@@ -21,9 +21,11 @@ $(document).ready(function() {
       var SHOW_LEGEND = true; 
 
         var rowsdrag=data2
-        console.log(rowsdrag)
-
-        var LABELS = 'depmap'; 
+        if (slug == 'ipsc' || slug == 'cm'){
+          var LABELS = 'sample'; 
+        }else{
+          var LABELS = 'depmap'; 
+        }
 
         var SERIES4 = [  
           {
@@ -73,7 +75,6 @@ $(document).ready(function() {
             d.data.push(row.fields[d.labelDirty])
           })
         });
-
 
         var barChartDatadragon = {
           labels: rowsdrag.map(function(el) { return el.fields[LABELS] }),
@@ -199,7 +200,6 @@ $(document).ready(function() {
         var rowsdrag=data2
         console.log(rowsdrag)
 
-        var LABELS = 'depmap'; 
 
         var SERIES4 = [  
           {

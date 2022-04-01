@@ -3,7 +3,7 @@
 
 <div class="hidden">
 <div class="container pb-5 mb-5 mt-4">
-  <center>  <h3><span class="badge bg-secondary">Cell lines</span></h1> The cell line resource includes 1,376 sample-specific gene regulatory networks for TF regulation derived from CCLE data, 6 aggregate networks in normal human cell lines modeling miRNA and TF regulation from <a href="https://gtexportal.org/" target="_blank" class="text-decoration-none">GTEx</a> data, and an aggregate miRNA network across all <a href="https://portals.broadinstitute.org/ccle" target="_blank" class="text-decoration-none">CCLE</a> cell lines.<br><br></center>
+  <center>  <h3><span class="badge bg-secondary">Cell lines</span></h1> The cell line resource includes 1,376 sample-specific gene regulatory networks for TF regulation derived from CCLE data, 6 aggregate networks, and 359 genotype-specific networks in normal human cell lines modeling miRNA and TF regulation from <a href="https://gtexportal.org/" target="_blank" class="text-decoration-none">GTEx</a> data, and an aggregate miRNA network across all <a href="https://portals.broadinstitute.org/ccle" target="_blank" class="text-decoration-none">CCLE</a> cell lines.<br><br></center>
   <div class="row">
   <div class=" col-md-8">
     <canvas id="cellbar" style="width:100%; height:400px;"></canvas>
@@ -46,8 +46,10 @@
                   <td><a href="{{ tissue.urllinks }}" class="text-decoration-none">{{ tissue.tissue }}</a></td>
                   {% if tissue.methodrefs2 == '' %}
                     <td><a href="{{ tissue.methodrefs }}" target="_blank" class="text-decoration-none">{{ tissue.method }}</a></td>
-                  {% else %}
+                  {% elif tissue.methodrefs3 == '' %}
                     <td><a href="{{ tissue.methodrefs }}" target="_blank" class="text-decoration-none">{{ tissue.method }}</a>, <a href="{{ tissue.methodrefs2 }}" target="_blank" class="text-decoration-none">{{ tissue.method2 }}</a></td>
+                  {% else %}
+                    <td><a href="{{ tissue.methodrefs }}" target="_blank" class="text-decoration-none">{{ tissue.method }}</a>, <a href="{{ tissue.methodrefs2 }}" target="_blank" class="text-decoration-none">{{ tissue.method2 }}</a>, <a href="{{ tissue.methodrefs3 }}" target="_blank" class="text-decoration-none">{{ tissue.method3 }}</a></td>
                   {% endif %}
                   {% if tissue.reg2 == '' %}
                     <td>{{ tissue.reg }}</td>

@@ -8,6 +8,7 @@ class Celllanding(models.Model):
     tool      = models.CharField(max_length=200)
     netzoo    = models.CharField(max_length=200)
     netzooLink= models.URLField(max_length=200)
+    cancerLink= models.URLField(max_length=200)
     netzooRel = models.CharField(max_length=200)
     network   = models.URLField()
     ppi       = models.URLField()
@@ -19,12 +20,19 @@ class Celllanding(models.Model):
     genes     = models.IntegerField()
     refs      = models.URLField()
     refs2     = models.URLField(default='#')
+    refs3     = models.URLField(default='#')
     samples   = models.IntegerField(default=0)
     cardref   = models.CharField(max_length=200)
     script    = models.CharField(max_length=200)
     dataset   = models.CharField(max_length=200)
     cancerref = models.CharField(max_length=200)
     reg       = models.CharField(max_length=200)
+    eqtl      = models.CharField(max_length=200)
+    qbic      = models.CharField(max_length=200)
+    genotype  = models.CharField(max_length=200)
+    motifDesc = models.CharField(max_length=200)
+    awsname    = models.CharField(max_length=200)
+    tissue    = models.CharField(max_length=200)
 
 class Egret(models.Model):
     sample    = models.CharField(max_length=200)
@@ -39,6 +47,13 @@ class Egret(models.Model):
     size1      = models.CharField(max_length=200)
     type      = models.CharField(max_length=200)
     cleanname1      = models.CharField(max_length=200)
+    net      = models.CharField(max_length=200)
+    reflink      = models.CharField(max_length=200)
+    diffexp       = models.CharField(max_length=400)
+    diffexpgenes  = models.CharField(max_length=400)
+    difftar       = models.CharField(max_length=400)
+    difftargenes       = models.CharField(max_length=400)
+    presexp       = models.CharField(max_length=400)
 
 class Cell(models.Model):
     disease    = models.CharField(max_length=400)
@@ -57,6 +72,8 @@ class Cellpage(models.Model):
     reg2      = models.CharField(max_length=400)
     method2   = models.CharField(max_length=400)
     methodrefs2  = models.CharField(max_length=400)
+    method3   = models.CharField(max_length=400)
+    methodrefs3  = models.CharField(max_length=400)
 
 class Cellsample(models.Model):
     depmap        = models.CharField(max_length=400)

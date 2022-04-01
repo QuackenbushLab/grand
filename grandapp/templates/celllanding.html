@@ -73,7 +73,7 @@
         <a href="https://netzoo.github.io/zooanimals/dragon/" style="text-decoration:none" target="_blank">DRAGON</a> builds multi-omic networks by computing partial corrleations between the variables using covariance shrinkage to accurately estimate conditional dependencies with low sample number. Check <a href="#cardtissuetcga" style="text-decoration:none" >the phenotypic information</a> for the clinical variables of the samples that were used to reconstruct the network. 
       {% else %}
         <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif as regulation prior, and gene expression samples.
-        {% if name == 'yes' %} {% if slug == 'ipsc' %} <a href="https://netzoo.github.io/zooanimals/egret/" style="text-decoration:none" target="_blank">EGRET</a> reconstructs genotype-specific <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> networks for each gene expression sample {% else %} <a href="https://netzoo.github.io/zooanimals/lioness/" style="text-decoration:none" target="_blank">LIONESS</a> reconstructs sample-specific <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> networks for each gene expression sample{% endif %}. To download sample-specific networks, you can check <a href="#cardtissue" style="text-decoration:none">the phenotypic information</a> and select the networks by
+        {% if name == 'yes' %} {% if slug == 'ipsc' or slug == 'cm' or slug == 'k562' or slug == 'gm12878' %} <a href="https://netzoo.github.io/zooanimals/egret/" style="text-decoration:none" target="_blank">EGRET</a> reconstructs genotype-specific <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> networks for each gene expression sample{% else %} <a href="https://netzoo.github.io/zooanimals/lioness/" style="text-decoration:none" target="_blank">LIONESS</a> reconstructs sample-specific <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> networks for each gene expression sample{% endif %}. To download sample-specific networks, you can check <a href="#cardtissue" style="text-decoration:none">the phenotypic information</a> and select the networks by
         variables of interest. {% else %}                                 <a href="https://netzoo.github.io/zooanimals/puma/" style="text-decoration:none" target="_blank">PUMA</a> reconstructs a gene regulatory network with miRNA as regulators using gene expression samples and miRNA predicted targets by <a href="http://cbio.mskcc.org/microrna_data/manual.html" style="text-decoration:none" target="_blank">miRanda</a> or <a href="http://www.targetscan.org/vert_72/" style="text-decoration:none" target="_blank">TargetScan</a> as regulation priors. The Regulator-regulator interaction matrix is set to the identity matrix in the algorithm. Check <a href="#cardtissuetcga" style="text-decoration:none" >the phenotypic information</a> for the clinical variables of the samples that were used to reconstruct the network. {% endif %}
       {% endif %}  
     </p>
@@ -191,6 +191,29 @@
                       data-bs-content="Number of regulators.">
                     </i></th>
                     <th scope="col">Genes</th>
+                    {% if slug == 'ipsc' or slug == 'cm' or slug == 'k562'  or slug == 'gm12878' %}
+                    <th scope="col">Genotypes<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="Single nucleotide variant information as an EGRET input.">
+                    </i></th>
+                    <th scope="col">QBIC<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="QBIC (http://qbic.genome.duke.edu/) preediction of variant effetcs as an EGRET input.">
+                    </i></th>
+                    <th scope="col">eQTLs<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="Expression quantitative trait locus information as an EGRET input.">
+                    </i></th>
+                    {% endif %}
                     <th scope="col">Data</th>
                     <th scope="col">Samples</th>
                     <th scope="col">Precision<br><i class="far fa-question-circle"
@@ -225,10 +248,12 @@
                   <td>{{ tissue.reg }}</td>
                   <td>{{ tissue.tfs }}</td>
                   <td>{{ tissue.genes }}</td>
-                  {% if tissue.tool == 'PANDA' %}
-                  <td><a href="#cardtissuetcga" class="text-decoration-none">{{ tissue.samples }}</a></td>
+                  {% if tissue.tool == 'PANDA' and tissue.samples != 119 %}
+                    <td><a href="#cardtissue" class="text-decoration-none">{{ tissue.samples }}</a></td>
+                  {% elif tissue.tool == 'EGRET' %}
+                    <td><a href="#cardtissueegret" class="text-decoration-none">{{ tissue.samples }}</a></td>
                   {% else %}
-                  <td>{{ tissue.samples }}</td>
+                    <td>{{ tissue.samples }}</td>
                   {% endif %}
                   <td><span class="badge bg-primary rounded-pill">D</span></td>
                   {% if tissue.tool == 'PUMA' %}
@@ -251,7 +276,7 @@
                     </div>
                   </div> 
                   {% else %}
-                  <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal3"></i></a><a href="{{ tissue.refs2 }}" target="_blank"><i class="fas fa-book"></i></a></td>
+                  <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal3"></i></a>{% if tissue.samples != 119 %}<a href="{{ tissue.refs2 }}" target="_blank"><i class="fas fa-book"></i></a>{% endif %}</td>
                   <!-- Modal -->
                   <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
                     <div class="modal-dialog">
@@ -276,11 +301,15 @@
                  {% for tissue in celllanding %}
                     <tr>
                       <th scope="row">{{ forloop.counter }}</th>
-                      <td>{{ tissue.cancer }}</td>
+                      {% if slug == 'k562' or slug == 'gm12878' %}
+                        <td><a href="{{ tissue.cancerLink }}" target="_blank" style="text-decoration:none">{{ tissue.cancer }}</a></td>
+                      {% else %}
+                        <td>{{ tissue.cancer }}</td>
+                      {% endif %}
                       <td>{{ tissue.tool }}</td>
                       <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none" target="_blank">{{ tissue.netzooRel }}</a></td>
                       {% if slug != 'mirna' %}
-                        <td><div class="btn-group-sm" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="{{ tissue.network }}" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                        <td><div class="btn-group-sm" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="{{ tissue.cardref }}" class="btn btn-outline-success" role="button">Vis</a></div></td>
                         <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
                         <td><a href="{{ tissue.motif }}"><i class="fas fa-download"></i></a></td>
                       {% else %}
@@ -291,6 +320,17 @@
                       <td>{{ tissue.reg }}</td>
                       <td>{{ tissue.tfs }}</td>
                       <td>{{ tissue.genes }}</td>
+                      {% if slug == 'ipsc' or slug == 'cm' or slug == 'k562' or slug == 'gm12878' %}
+                        {% if tissue.tool == 'EGRET' %}
+                          <th scope="col"><a href="{{ tissue.genotype }}"><i class="fas fa-download"></i></a></th>
+                          <th scope="col"><a href="{{ tissue.qbic }}"><i class="fas fa-download"></i></a></th>
+                          <th scope="col"><a href="{{ tissue.eqtl }}"><i class="fas fa-download"></i></a></th>
+                        {% else %}
+                          <th scope="col">{{ tissue.genotype }}</th>
+                          <th scope="col">{{ tissue.qbic }}</th>
+                          <th scope="col">{{ tissue.eqtl }}</th>
+                        {% endif %}
+                      {% endif %}
                       <td><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89895" target="_blank" style="text-decoration:none">{{ tissue.dataset }}</a></td>
                       {% if tissue.tool == 'PANDA' %}
                       <td>{{ tissue.samples }}</td>
@@ -331,7 +371,7 @@
 <div class="accordion-item">
   <h2 class="accordion-header" id="headingTwo">
     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" id="cardtissue">
-      Phenotypic information {% if slug == 'lcl' or slug == 'fibroblast_gtex' %}GTEx{% elif slug == 'ipsc' %}Banovich et al.{% else %}CCLE{% endif %} 
+      Phenotypic information {% if slug == 'lcl' or slug == 'fibroblast_gtex' %}GTEx{% elif slug == 'ipsc' or slug == 'cm' or slug == 'k562'  or slug == 'gm12878' %}Banovich et al.{% else %}CCLE{% endif %} 
     </button>
   </h2>
   <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
@@ -471,7 +511,7 @@
         </div>
     </div>
 </div>
-{% elif slug == 'ipsc' or slug == 'cmc' %}
+{% elif slug == 'ipsc' or slug == 'cm' %}
 <div class="container-fluid ">
         <div class="card " id="cardtissuetcga">
           <div class="card-body">
@@ -530,21 +570,21 @@
                       <td>{{ tissue.supname }}</td>
                       <td>{{ tissue.iid }}</td>
                       <td>{{ tissue.datac }}</td>
-                      <td><div class="btn-group-vertical"><a href="https://granddb.s3.us-east-2.amazonaws.com/cells/networks/iPSC/EGRET_iPSC_{{ tissue.sample }}.csv" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size1 }}</small></span><a href="/networks/aggregate/{{ tissue.cleanname1 }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                      <td><div class="btn-group-vertical"><a href="https://granddb.s3.us-east-2.amazonaws.com/cells/networks/{{ tissue.reflink }}{{ tissue.sample }}.csv" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size1 }}</small></span><a href="/networks/aggregate/{{ tissue.cleanname1 }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
                     </tr>
                   {% endfor %}
                 </tbody>
                 <tfoot>
                   <tr id='tfoot2'>
-                    <th>CCLE Name</th>
-                    <th>COSMIC ID</th>
+                    <th>Sample</th>
+                    <th>Sample ID</th>
                     <th>Sex</th>
-                    <th>Race</th>
-                    <th>Culture</th>
-                    <th>Collection site</th>
-                    <th>Type</th>
-                    <th>Cancer</th>
-                    <th>TCGA code</th>
+                    <th>Pop. code</th>
+                    <th>Pop. name</th>
+                    <th>Superpop. code</th>
+                    <th>Superpop. name</th>
+                    <th>Pop. ID</th>
+                    <th>Data</th>
                     <th>Network</th>
                   </tr>
                 </tfoot>
@@ -700,6 +740,104 @@
 </div>
 </div>
 
+{% if slug == 'lcl' %}
+
+<div class="accordion-item">
+    <h2 class="accordion-header" id="headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" id="cardtissueegret">
+        Phenotypic information Banovich et al. 
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+  
+    <script>var offset2=40</script>
+ 
+  <div class="container-fluid ">
+          <div class="card " id="cardtissueegret">
+            <div class="card-body">
+            <h5 class="card-title">Variable description</h5>
+              <p class="card-text">{% if tooldrag == 'yes' %}This is a description of the primary phenotypic variables of the gene expression samples that were used to generate the gene regulatory network.{% else %}You can specify the sample network to download by phenotypic variable and you will get a TF-by-gene
+                      matrix named after the sample in <a href='https://pubmed.ncbi.nlm.nih.gov/29208628/' style="text-decoration:none" target="_blank" >Banovich et al.</a>{% endif%}</p>
+            <div class="row pb-4">
+          <div class="col-lg-7">
+            <div class="row">
+              <div class="col-lg-4">
+                <canvas id="myPieChartegret" ></canvas>   
+              </div>
+              <div class="col-lg-4">
+                <canvas id="myPieChartETHegret" ></canvas>   
+              </div>
+              <div class="col-lg-4">
+                <canvas id="myPieChartALegret" ></canvas>   
+              </div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="row">
+            <div class="col-lg-6">
+              <canvas id="myPieChartStageegret" ></canvas>   
+            </div>
+            <div class="col-lg-6">
+              <canvas id="myPieChartVitalegret" ></canvas>   
+            </div>
+          </div>
+        </div>
+        </div>
+            <table id="tissuestableegret" class="table table-hover" style="width: 100%">
+                  <thead>
+                    <tr>
+                      <th scope="col">Sample name</th>
+                      <th scope="col">Biosamaple ID</th>
+                      <th scope="col">Sex</th>
+                      <th scope="col">Pop. code</th>
+                      <th scope="col">Pop. name</th>
+                      <th scope="col">Superpop. code</th>
+                      <th scope="col">Superpop. name</th>
+                      <th scope="col">Pop. ID</th>
+                      <th scope="col">Data collections</th>
+                      <th scope="col">Network</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                   {% for tissue in cellsampleegret %}
+                      <tr>
+                        <td>{{ tissue.sample }}</td>
+                        <td>{{ tissue.idd }}</td>
+                        <td>{{ tissue.sex }}</td>
+                        <td>{{ tissue.code }}</td>
+                        <td>{{ tissue.name }}</td>
+                        <td>{{ tissue.supcode }}</td>
+                        <td>{{ tissue.supname }}</td>
+                        <td>{{ tissue.iid }}</td>
+                        <td>{{ tissue.datac }}</td>
+                        <td><div class="btn-group-vertical"><a href="https://granddb.s3.us-east-2.amazonaws.com/cells/networks/{{ tissue.reflink }}{{ tissue.sample }}.csv" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size1 }}</small></span><a href="/networks/aggregate/{{ tissue.cleanname1 }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  <tfoot>
+                    <tr id='tfoot3'>
+                        <th>Sample</th>
+                        <th>Sample ID</th>
+                        <th>Sex</th>
+                        <th>Pop. code</th>
+                        <th>Pop. name</th>
+                        <th>Superpop. code</th>
+                        <th>Superpop. name</th>
+                        <th>Pop. ID</th>
+                        <th>Data</th>
+                        <th>Network</th>
+                    </tr>
+                  </tfoot>
+                </table>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  </div>
+  </div>
+{% endif %}
 
 </div>
 </div>
@@ -720,6 +858,11 @@ $(document).ready(function() {
         $(this).html( '<input size=7 id="id'+i+offset+'" type="text" placeholder="Search '+title+'" />' );
         i++;
     } );
+    $('#tfoot3 th').each( function (i) { //tcga
+        var title = $(this).text();
+        $(this).html( '<input size=7 id="id'+i+offset2+'" type="text" placeholder="Search '+title+'" />' );
+        i++;
+    } );
 
     //datatables
     table = $('#tissuestabletcga').DataTable({
@@ -733,9 +876,6 @@ $(document).ready(function() {
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
     });
 
-
-
-
 });
 </script>
 
@@ -743,6 +883,9 @@ $(document).ready(function() {
   var slug2="{{ slug2 }}";
   var slug="{{ slug }}";
   var data2=JSON.parse("{{data|escapejs}}");
+  if(slug=='lcl'){
+    var data4=JSON.parse("{{data3|escapejs}}");
+  }
 </script>
 
 

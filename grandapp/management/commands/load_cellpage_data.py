@@ -46,4 +46,6 @@ class Command(BaseCommand):
             cell.urllinks  =  row['urllinks']
             cell.reg       =  row['reg']
             cell.reg2      =  row['reg2']
+            cell.method3  = row['method3']
+            cell.methodrefs3  = row['methodrefs3']
             cell.save()

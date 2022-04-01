@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading EGRET data!")
-        for row in DictReader(open('./data/banovich_YRI_genotype_info_for_grand.csv')):
+        for row in DictReader(open('./data/diffexp_banovich_YRI_genotype_info_for_grand.csv')):
             egret = Egret()
             egret.sample    = row['Sample.name']
             egret.sex       = row['Sex']
@@ -44,5 +44,12 @@ class Command(BaseCommand):
             egret.iid       = row['Population.elastic.ID']
             egret.datac     = row['Data.collections']
             egret.size1       = row['size1']
-            egret.cleanname1       = row['cleanname1']
+            egret.cleanname1  = row['cleanname1']
+            egret.net         = row['net']
+            egret.reflink     = row['reflink']
+            egret.diffexp       = row['diffexp']
+            egret.diffexpgenes  = row['diffexpgenes']
+            egret.difftar       = row['difftar']
+            egret.difftargenes  = row['difftargenes']
+            egret.presexp       = row['presexp']
             egret.save()
