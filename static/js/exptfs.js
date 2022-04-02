@@ -159,13 +159,31 @@ $(document).ready(function() {
           }
         });
 
-        canvasbardragon.onclick = function(evt) {
-          var activePoints = barchartdragon.getElementsAtEvent(evt);
-          if (activePoints[0]) {
-            var label = activePoints[0]._view['label'];
-            location.href = '/networks/aggregate/' + label.substring(0, 3) + '_' + label.substring(4)
-          }
-        };
+        if (slug == 'ipsc'){
+          canvasbardragon.onclick = function(evt) {
+            var activePoints = barchartdragon.getElementsAtEvent(evt);
+            if (activePoints[0]) {
+              var label = activePoints[0]._view['label'];
+              location.href = '/networks/aggregate/EGRET_iPSC_' + label
+            }
+          };
+        }else if(slug == 'cm'){
+          canvasbardragon.onclick = function(evt) {
+            var activePoints = barchartdragon.getElementsAtEvent(evt);
+            if (activePoints[0]) {
+              var label = activePoints[0]._view['label'];
+              location.href = '/networks/aggregate/EGRET_CM_' + label
+            }
+          };
+        }else{
+          canvasbardragon.onclick = function(evt) {
+            var activePoints = barchartdragon.getElementsAtEvent(evt);
+            if (activePoints[0]) {
+              var label = activePoints[0]._view['label'];
+              location.href = '/networks/aggregate/' + label.substring(0, 3) + '_' + label.substring(4)
+            }
+          };
+        }
 
 
 
@@ -334,13 +352,31 @@ $(document).ready(function() {
           }
         });
 
-        canvasbardragon.onclick = function(evt) {
-          var activePoints = barchartdragon.getElementsAtEvent(evt);
-          if (activePoints[0]) {
-            var label = activePoints[0]._view['label'];
-            location.href = '/networks/aggregate/' + label.substring(0, 3) + '_' + label.substring(4)
-          }
-        };
+        if (slug == 'ipsc'){
+          canvasbardragon.onclick = function(evt) {
+            var activePoints = barchartdragon.getElementsAtEvent(evt);
+            if (activePoints[0]) {
+              var label = activePoints[0]._view['label'];
+              location.href = '/networks/aggregate/EGRET_iPSC_' + label
+            }
+          };
+        }else if(slug == 'cm'){
+          canvasbardragon.onclick = function(evt) {
+            var activePoints = barchartdragon.getElementsAtEvent(evt);
+            if (activePoints[0]) {
+              var label = activePoints[0]._view['label'];
+              location.href = '/networks/aggregate/EGRET_CM_' + label
+            }
+          };
+        }else{
+          canvasbardragon.onclick = function(evt) {
+            var activePoints = barchartdragon.getElementsAtEvent(evt);
+            if (activePoints[0]) {
+              var label = activePoints[0]._view['label'];
+              location.href = '/networks/aggregate/' + label.substring(0, 3) + '_' + label.substring(4)
+            }
+          };
+        }
 
 
 });
