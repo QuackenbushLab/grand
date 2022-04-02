@@ -34,8 +34,8 @@ for name in samplesnet['Sample.name']:
     print(name)
     object_key = 'cells/networks/iPSC/EGRET_iPSC_'+name+'.csv'
     client = boto3.client('s3',
-             aws_access_key_id="AKIATSKOPZNVUURWA424",
-             aws_secret_access_key="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")
+             aws_access_key_id="",# this is an old key
+             aws_secret_access_key="")
     bucket_name = 'granddb'
     csv_obj = client.get_object(Bucket=bucket_name, Key=object_key)
     body = csv_obj['Body']

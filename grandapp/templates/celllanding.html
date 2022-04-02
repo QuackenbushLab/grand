@@ -237,7 +237,7 @@
                   <td>{{ tissue.tool }}</td>
                   <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none">{{ tissue.netzooRel }}</a></td>
                       <td><div class="btn-group-sm" role="group" aria-label="Basic example">
-                          <a href="{{ tissue.network }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="/networks/aggregate/{{ tissue.awsname }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                          <a href="{{ tissue.network }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a>{% if tissue.netzoo == 'netZooM' %}<a href="/networks/aggregate/{{ tissue.awsname }}/" class="btn btn-outline-success" role="button">Vis</a>{% else %}<a href="{{ tissue.awsname }}" class="btn btn-outline-success" role="button">Vis</a>{% endif %}</div></td>
                   {% if tissue.tool == 'PUMA' %}
                       <td>{{ tissue.ppi }}</td>
                   {% else %} 

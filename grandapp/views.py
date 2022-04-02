@@ -2595,13 +2595,9 @@ def mapObjectkey(slug,modality='network',how=''):
             attr13 = 'Donor Gender'
             attr14 = 'Primary Site'
         backpage   = 'cancers/' + cancername + '_cancer'
-    elif (str.split(slug,'_')[0] == 'EGRET'):
-        print(slug)
-        if (str.split(slug,'_')[1] == 'iPSC'):
-            ssagg='Aggregate'
-            categorynet='Cell lines'
-            backpage='cell/ipsc'
-            object_key = 'cells/networks/iPSC/' + slug + '.csv'
-        else: 
-            print('hi2')
+    elif (str.split(slug,'_')[1] == 'iPSC'):
+        ssagg='Aggregate'
+        categorynet='Cell lines'
+        backpage='cell/ipsc'
+        object_key = 'cells/networks/iPSC/' + slug + '.csv'
     return object_key, ssagg, categorynet, regnetdisp, backpage, attr1, attr2, attr3, attr4, attr11, attr12, attr13, attr14
