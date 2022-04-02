@@ -2609,10 +2609,10 @@ def mapObjectkey(slug,modality='network',how=''):
         ssagg='Aggregate'
         categorynet='Cell lines'
         backpage='cell/k562'
-        object_key = 'data/' + slug + '.csv'
+        object_key = 'data/' + str.split(slug,'_')[0] + '_' + str.split(slug,'_')[1] + '.csv'
     elif (str.split(slug,'_')[1] == 'GM12878'):
         ssagg='Aggregate'
         categorynet='Cell lines'
         backpage='cell/gm12878'
-        object_key = 'data/' + slug + '.csv'
+        object_key = 'data/' + str.split(slug,'_')[0] + '_' + str.split(slug,'_')[1] + '.csv'
     return object_key, ssagg, categorynet, regnetdisp, backpage, attr1, attr2, attr3, attr4, attr11, attr12, attr13, attr14
