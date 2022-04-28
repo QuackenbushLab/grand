@@ -59,6 +59,8 @@ def convertGenelist(geneform,how='sym',mod='notfound'):
     else:
         geneSyms = mg.querymany(geneform , scopes=["ensemblgene", "symbol"], fields='symbol', species='human',as_dataframe=True)
     #remove nonconverted genes
+    geneSyms = geneSyms['out']
+    geneSyms = geneSyms[~geneSyms.index.duplicated(keep='first')]
     if mod=='notfound':
         if 'notfound' in geneSyms.columns:
             geneSyms=geneSyms[geneSyms.notfound != True]
