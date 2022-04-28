@@ -55,9 +55,9 @@ def convertGenelist(geneform,how='sym',mod='notfound'):
     if len(geneform) == 0:
         return geneform
     if how=='ens':
-        geneSyms = mg.querymany(geneform , scopes=["ensemblgene", "symbol"], fields='ensembl.gene', species='human',as_dataframe=True)
+        geneSyms = mg.querymany(geneform , scopes=["ensemblgene", "symbol"], fields='ensembl.gene', species='human',as_dataframe=True, returnall=True)
     else:
-        geneSyms = mg.querymany(geneform , scopes=["ensemblgene", "symbol"], fields='symbol', species='human',as_dataframe=True)
+        geneSyms = mg.querymany(geneform , scopes=["ensemblgene", "symbol"], fields='symbol', species='human',as_dataframe=True, returnall=True)
     #remove nonconverted genes
     geneSyms = geneSyms['out']
     geneSyms = geneSyms[~geneSyms.index.duplicated(keep='first')]
