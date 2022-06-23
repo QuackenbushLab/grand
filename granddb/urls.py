@@ -28,6 +28,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.home, name='home'),
+    url(r'^aviator_api/' ,views.aviator_api, name='aviator_api'),
     url(r'^about/' ,views.about, name='about'),
     url('cell/$' ,views.cell, name='cell'),
     url(r'^cell/(\w+)/', view=views.celllanding, name='celllanding'),
