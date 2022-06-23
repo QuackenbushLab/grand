@@ -123,9 +123,9 @@ class Druglanding(models.Model):
     expLink   = models.URLField()
     nnets     = models.IntegerField(default=0)
     druglink  = models.CharField(max_length=200)
-    nsamples      = models.CharField(max_length=400)
-    avgtftar      = models.CharField(max_length=400)
-    avggenetar    = models.CharField(max_length=400)
+    nsamples      = models.FloatField(default=0)
+    avgtftar      = models.FloatField(default=0)
+    avggenetar    = models.FloatField(default=0)
     moa       = models.CharField(max_length=400)
     indication    = models.CharField(max_length=400)
 
@@ -438,7 +438,7 @@ class Cancerpheno(models.Model):
 
 class Genelanding(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
-    pr_gene_id    = models.CharField(max_length=200)
+    pr_gene_id    = models.FloatField(default=0)
     pr_gene_symbol= models.CharField(max_length=200)
     pr_gene_title = models.CharField(max_length=200)
     pr_is_lm      = models.CharField(max_length=200)
