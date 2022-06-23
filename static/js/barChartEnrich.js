@@ -200,10 +200,9 @@ $(document).ready(function() {
           "initComplete": function (settings, json) {  
             $("#drugstbl1").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
           },
-    
-    
+
           buttons: [
-                'copy', 'csv', 'pdf', 'print'
+            'copy', 'csv', 'pdf', 'print'
             ],
     
           "dom": "B" + "<'row'<'col-sm-12 col-md-6 mt-2'l><'col-sm-12 col-md-5'f>>" +

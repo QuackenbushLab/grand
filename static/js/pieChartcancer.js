@@ -110,7 +110,12 @@ function foo(arr) {
 
     var table = $('#tissuestabletcga').DataTable({
       "order": [[ 1, "asc" ]],
-      "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'>>" +
+
+      buttons: [
+        'copy', 'csv', 'pdf', 'print'
+      ],
+
+      "dom": "B" + "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-5'>>" +
              "<'row'<'col-sm-12'tr>>" +
              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
 
