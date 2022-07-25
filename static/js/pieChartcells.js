@@ -1,7 +1,7 @@
 $(document).ready(function() {
   
     // Read data file and create a chart
-  if(slug2 == 'lcl' || slug2=='fibroblast_gtex'){
+  if(slug2 == 'lcl' || slug2=='fibroblast_gtex' || slug2=='k562' || slug2=='gm12878'){
     var rows=data2;
 
 

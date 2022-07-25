@@ -8,7 +8,7 @@ from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding, Tissuesamp
 from .models import Drugdesc, Breastsample, Cervixsample, Liversample, Ggbmd1sample, Ggbmd2sample, Ggnsample
 from .models import Pancreassample, Drugcombsup, Drugcombsdown, Gobp, Cellpage, Celllanding, Cellsample
 from .models import Gobpbygene, Gwascata, Gwascatabygene, Pandaac, Dragonac, Sendto, Document, Tissueac, Cancerpheno
-from .models import Enrichtfs, Enrichgenes, Otterac, Egret
+from .models import Enrichtfs, Enrichgenes, Otterac, Egret, Tissuesampleegret
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
 from .forms import ContactForm, GeneForm, DiseaseForm, NetForm, BabelForm, TarForm, ClueForm, DocumentForm, CompForm, DiffTarForm
 from django.conf import settings
@@ -1564,9 +1564,9 @@ def celllanding(request,slug):
     if slug == 'k562':
         slug     = 'k562'
         slugname = 'K562 cell'
-        slug2='k562'
+        slug2    = 'k562'
         celllanding = Celllanding.objects.filter(cancerref=slug)
-        cellsample  = Tissuesample.objects.filter(grdid=slug) 
+        cellsample  = Tissuesampleegret.objects.all() 
         nsamples,ndata,nagg=0,1,1
         data = serializers.serialize("json", cellsample)
         name,tool,slug='yes','','k562'
@@ -1575,7 +1575,7 @@ def celllanding(request,slug):
         slugname = 'GM12878 cell'
         slug2='gm12878'
         celllanding = Celllanding.objects.filter(cancerref=slug)
-        cellsample  = Tissuesample.objects.filter(grdid=slug) 
+        cellsample  = Tissuesampleegret.objects.all() 
         nsamples,ndata,nagg=0,1,1
         data = serializers.serialize("json", cellsample)
         name,tool,slug='yes','','gm12878'

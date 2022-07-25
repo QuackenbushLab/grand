@@ -63,4 +63,6 @@ class Command(BaseCommand):
             tissuelanding.motifDesc    = row['motifDesc']
             tissuelanding.tissue       = row['tissue']
             tissuelanding.awsname      = row['awsname']
+            tissuelanding.datalink      = row['datalink']
+            tissuelanding.vis           = row['vis']
             tissuelanding.save()

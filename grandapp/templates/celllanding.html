@@ -35,7 +35,7 @@
       <div class="col-lg-6">
         <canvas id="scatterChart2" width="50" height="30"></canvas>
       </div>
-    {% elif slug == 'lcl' or slug == 'fibroblast_gtex' %}
+    {% elif slug == 'lcl' or slug == 'fibroblast_gtex' or slug == 'k562' or slug == 'gm12878' %}
       <div class="col-lg-6">
         <canvas id="scatterChart" width="50" height="30"></canvas>
       </div>
@@ -309,12 +309,12 @@
                       <td>{{ tissue.tool }}</td>
                       <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none" target="_blank">{{ tissue.netzooRel }}</a></td>
                       {% if slug != 'mirna' %}
-                        <td><div class="btn-group-sm" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="{{ tissue.cardref }}" class="btn btn-outline-success" role="button">Vis</a></div></td>
-                        <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
-                        <td><a href="{{ tissue.motif }}"><i class="fas fa-download"></i></a></td>
+                           <td><div class="btn-group-sm" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="{{ tissue.vis }}" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                           <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
+                           <td><a href="{{ tissue.motif }}"><i class="fas fa-download"></i></a></td>
                       {% else %}
-                        <td><div class="btn-group-sm" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="/networks/aggregate/mirnadragon" class="btn btn-outline-success" role="button">Vis</a></div></td>
-                        <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
+                           <td><div class="btn-group-sm" role="group" aria-label="Basic example"><a href="{{ tissue.network }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="/networks/aggregate/mirnadragon" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                           <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
                       {% endif %}
                       <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
                       <td>{{ tissue.reg }}</td>
@@ -331,11 +331,11 @@
                           <th scope="col">{{ tissue.eqtl }}</th>
                         {% endif %}
                       {% endif %}
-                      <td><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89895" target="_blank" style="text-decoration:none">{{ tissue.dataset }}</a></td>
+                      <td><a href="{{ tissue.datalink }}" target="_blank" style="text-decoration:none">{{ tissue.dataset }}</a></td>
                       {% if tissue.tool == 'PANDA' %}
-                      <td>{{ tissue.samples }}</td>
+                          <td>{{ tissue.samples }}</td>
                       {% else %}
-                      <td><a href="{{ tissue.cardref }}" class="text-decoration-none">{{ tissue.samples }}</a></td>
+                          <td><a href="{{ tissue.cardref }}" class="text-decoration-none">{{ tissue.samples }}</a></td>
                       {% endif %}
                       <td><span class="badge rounded-pill bg-primary">D</span></td>
                       <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal"></i></a></td>
@@ -371,21 +371,21 @@
 <div class="accordion-item">
   <h2 class="accordion-header" id="headingTwo">
     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" id="cardtissue">
-      Phenotypic information {% if slug == 'lcl' or slug == 'fibroblast_gtex' %}GTEx{% elif slug == 'ipsc' or slug == 'cm' or slug == 'k562'  or slug == 'gm12878' %}Banovich et al.{% else %}CCLE{% endif %} 
+      Phenotypic information {% if slug == 'lcl' or slug == 'fibroblast_gtex'  or slug == 'k562'  or slug == 'gm12878' %}GTEx{% elif slug == 'ipsc' or slug == 'cm'%}Banovich et al.{% else %}CCLE{% endif %} 
     </button>
   </h2>
   <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
     <div class="accordion-body">
 
   <script>var offset=30</script>
-{% if slug == 'lcl' or slug == 'fibroblast_gtex' %}
+{% if slug == 'lcl' or slug == 'fibroblast_gtex' or slug == 'k562' or slug == 'gm12878' %}
 <div class="container-fluid">
     <div class="card" id="cardtissuetcga">
             <div class="card-body">
             <h5 class="card-title">Variable description</h5>
             <p class="card-text">{% if name == 'yes' %}You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges
 			    is the number of TFs/miRNA * number of genes (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a TF-by-gene
-            		    matrix named after  the GTEx sample reference{% else %} This is a description of the primary clinical variables of the gene expression samples that were used to generate the gene regulatory network{% endif %}.</p>
+            		    matrix named after the GTEx sample reference{% else %} This is a description of the primary clinical variables of the gene expression samples that were used to generate the gene regulatory network{% endif %}.</p>
                     <div class="row pb-4">
         <div class="col-lg-7">
           <div class="row">
@@ -511,7 +511,7 @@
         </div>
     </div>
 </div>
-{% elif slug == 'ipsc' or slug == 'cm' %}
+{% elif slug == 'ipsc' or slug == 'cm'%}
 <div class="container-fluid ">
         <div class="card " id="cardtissuetcga">
           <div class="card-body">

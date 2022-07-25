@@ -1,5 +1,5 @@
 $(document).ready(function() {
-if (slug2=='lcl' || slug2=='fibroblast_gtex'){
+if (slug2=='lcl' || slug2=='fibroblast_gtex' || slug2=='k562' || slug2=='gm12878'){
   var TITLE = 'Sample expression quality control 1: Mean coverage as a function of genes detected';  
 
   var POINT_X = 'smgnsdtc'; 
@@ -150,7 +150,7 @@ $(document).ready(function() {
 
   // Scatter chart 2
 
-  if(slug2=='lcl' || slug2=='fibroblast_gtex'){
+  if(slug2=='lcl' || slug2=='fibroblast_gtex' || slug2=='k562' || slug2=='gm12878'){
     if (slug == 'Brain_basal_ganglia_tissue'){
       var POINT_Y = 'smgnsdtc'; 
       var Y_AXIS = 'Mean coverage per base'; // y-axis label, label in tooltip

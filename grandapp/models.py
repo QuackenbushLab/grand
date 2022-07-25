@@ -31,8 +31,10 @@ class Celllanding(models.Model):
     qbic      = models.CharField(max_length=200)
     genotype  = models.CharField(max_length=200)
     motifDesc = models.CharField(max_length=200)
-    awsname    = models.CharField(max_length=200)
+    awsname   = models.CharField(max_length=200)
     tissue    = models.CharField(max_length=200)
+    datalink  = models.CharField(max_length=200)
+    vis       = models.CharField(max_length=200)
 
 class Egret(models.Model):
     sample    = models.CharField(max_length=200)
@@ -250,7 +252,6 @@ class Cancer(models.Model):
     disp      = models.CharField(max_length=200)
     dispname  = models.CharField(max_length=200)
 
-
 class Tissuelanding(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
     awsname    = models.CharField(max_length=200)
@@ -316,6 +317,24 @@ class Tissuesample(models.Model):
     grdid       = models.CharField(max_length=600)
     size        = models.CharField(max_length=600)
     link        = models.CharField(max_length=600)
+    smtstptref  = models.CharField(max_length=600)
+    smmncpb     = models.CharField(max_length=600)
+    smgnsdtc    = models.CharField(max_length=600)
+    cleanname   = models.CharField(max_length=600)
+
+class Tissuesampleegret(models.Model):
+    sampleid    = models.CharField(max_length=600)
+    subjectid   = models.CharField(max_length=600)
+    tissueid    = models.CharField(max_length=600)
+    gender      = models.CharField(max_length=600)
+    age         = models.CharField(max_length=600)
+    dthhrdy     = models.CharField(max_length=600)
+    smatsscr    = models.CharField(max_length=600)
+    smrin       = models.CharField(max_length=600)
+    smts        = models.CharField(max_length=600)
+    smtsd       = models.CharField(max_length=600)
+    smubrid     = models.CharField(max_length=600)
+    smtsisch    = models.CharField(max_length=600)
     smtstptref  = models.CharField(max_length=600)
     smmncpb     = models.CharField(max_length=600)
     smgnsdtc    = models.CharField(max_length=600)
