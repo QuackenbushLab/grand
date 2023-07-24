@@ -207,9 +207,9 @@ def saveCellLanding(uniquedisease, newValid):
     resDflanding['cancerref']  = newValid
     resDflanding['cancerLink'] = ''
     resDflanding['tool']   = 'LIONESS'
-    resDflanding['netzoo'] = 'netZooPy'
-    resDflanding['netzooLink'] = 'https://github.com/netZoo/netZooPy/releases'
-    resDflanding['netzooRel']  = '0.8'
+    resDflanding['netzoo'] = 'netZooM'
+    resDflanding['netzooLink'] = 'https://github.com/netZoo/netZooM/releases'
+    resDflanding['netzooRel']  = '0.5.3'
     resDflanding['network']    = '#cardtissue'
     resDflanding['ppi']     = 'https://granddb.s3.amazonaws.com/optPANDA/ppi/ppi_complete.txt'
     resDflanding['ppiLink'] = 'https://string-db.org/'
@@ -218,7 +218,7 @@ def saveCellLanding(uniquedisease, newValid):
     resDflanding['expLink']    = 'https://portals.broadinstitute.org/ccle'
     resDflanding['tfs'] = 1132
     resDflanding['genes'] = 18560
-    resDflanding['refs2'] = 'Ben Guebila et al. (in preparation)'
+    resDflanding['refs2'] = 'Please check the reference Ben Guebila et al. (2023) at the following link.'
     resDflanding['samples'] = ncells
     resDflanding['cardref'] = resDflanding['network']
     resDflanding['script']  = 'https://granddb.s3.us-east-2.amazonaws.com/cells/scripts/reproduceccleNetwork.m'
