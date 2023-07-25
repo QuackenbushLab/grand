@@ -1583,10 +1583,12 @@ def celllanding(request,slug):
         slug     = 'Lymphoblastoid_cell_line_tissue'
         slugname = 'Lymphoblastoid cell line'
         slug2='lcl'
-        celllanding = Tissuelanding.objects.filter(tissue=slug.replace('_',' ')[:-7])
+        celllanding3 = Tissuelanding.objects.filter(tissue=slug.replace('_',' ')[:-7])
         cellsample  = Tissuesample.objects.filter(grdid=slug) 
         celllanding2 = Celllanding.objects.filter(cancerref='lcl')
-        celllanding = chain(celllanding, celllanding2) 
+        celllanding = chain(celllanding3, celllanding2)
+        #print(celllanding3.all().values())
+        #print(list(celllanding))
         cellsampleegret  = Egret.objects.filter(net=slug2)
         nsamples,ndata,nagg=0,1,3
         data  = serializers.serialize("json", cellsample)

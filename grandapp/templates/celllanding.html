@@ -275,6 +275,25 @@
                       </div>
                     </div>
                   </div> 
+                  {% elif tissue.netzoo == 'netZooR' %}
+                  <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal4"></i></a></td>
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel4" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel4">Publication</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          Please check the reference {{ tissue.refs3 }} at the following <a href="{{ tissue.refs }}" target="_blank" style="text-decoration:none">link</a>.
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div> 
                   {% else %}
                   <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal3"></i></a>{% if tissue.samples != 119 %}<a href="{{ tissue.refs2 }}" target="_blank"><i class="fas fa-book"></i></a>{% endif %}</td>
                   <!-- Modal -->
@@ -348,7 +367,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body">
-                                The reference for this network is {{ tissue.refs2 }} at the following <a href="https://genome.cshlp.org/content/32/3/524.short" target="_blank" class="text-decoration-none">link</a></a>.
+                                The reference for this network is {{ tissue.refs2 }} at the following <a href="{{ tissue.refs }}" target="_blank" class="text-decoration-none">link</a></a>.
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

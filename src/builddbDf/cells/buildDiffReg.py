@@ -3,6 +3,8 @@ import pandas as pd
 from scipy.stats import zscore
 import os
 
+os.chdir('/Users/mab8354/Downloads')
+os.system('curl -O https://granddb.s3.us-east-2.amazonaws.com/cells/networks/ccle/ACH-000556.csv')
 os.chdir('/Users/mab8354/')
 
 exprs    = pd.read_csv('netzoopap/data/CCLE_expression.csv',index_col=0)

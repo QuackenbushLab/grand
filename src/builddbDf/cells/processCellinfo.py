@@ -206,19 +206,19 @@ def saveCellLanding(uniquedisease, newValid):
     resDflanding['cancer']     = uniquedisease
     resDflanding['cancerref']  = newValid
     resDflanding['cancerLink'] = ''
-    resDflanding['tool']   = 'LIONESS'
-    resDflanding['netzoo'] = 'netZooM'
+    resDflanding['tool']       = 'LIONESS'
+    resDflanding['netzoo']     = 'netZooM'
     resDflanding['netzooLink'] = 'https://github.com/netZoo/netZooM/releases'
     resDflanding['netzooRel']  = '0.5.3'
     resDflanding['network']    = '#cardtissue'
-    resDflanding['ppi']     = 'https://granddb.s3.amazonaws.com/optPANDA/ppi/ppi_complete.txt'
-    resDflanding['ppiLink'] = 'https://string-db.org/'
-    resDflanding['motif']   = 'https://granddb.s3.us-east-2.amazonaws.com/cells/motif/regMatCont2ProcessedEdges.csv'
+    resDflanding['ppi']        = 'https://granddb.s3.amazonaws.com/optPANDA/ppi/ppi_complete.txt'
+    resDflanding['ppiLink']    = 'https://string-db.org/'
+    resDflanding['motif']      = 'https://granddb.s3.us-east-2.amazonaws.com/cells/motif/regMatCont2ProcessedEdges.csv'
     resDflanding['expression'] = 'https://granddb.s3.us-east-2.amazonaws.com/cells/expression/CCLE_expression_withinSample.csv'
     resDflanding['expLink']    = 'https://portals.broadinstitute.org/ccle'
-    resDflanding['tfs'] = 1132
+    resDflanding['tfs']   = 1132
     resDflanding['genes'] = 18560
-    resDflanding['refs2'] = 'Please check the reference Ben Guebila et al. (2023) at the following link.'
+    resDflanding['refs2'] = 'Ben Guebila et al. (2023)'
     resDflanding['samples'] = ncells
     resDflanding['cardref'] = resDflanding['network']
     resDflanding['script']  = 'https://granddb.s3.us-east-2.amazonaws.com/cells/scripts/reproduceccleNetwork.m'
@@ -227,18 +227,19 @@ def saveCellLanding(uniquedisease, newValid):
     resDflanding['genotype']= '-'
     resDflanding['qbic']    = '-'
     resDflanding['eqtl']    = '-'
+    resDflanding['refs'] = 'https://genomebiology.biomedcentral.com/articles/10.1186/s13059-023-02877-1'
     #add lcl and fibro  and dragon
     #resDflanding.loc[len(resDflanding.index)] = ['LCL','lcl','','PANDA','netZooM','https://github.com/netZoo/netZooM/releases','0.1'
     #    ,'','','','','','',0,0,'Lopes-Ramos, Paulsson et al. (2017)',0,'','','GTEX','','TF','','','']
     #resDflanding.loc[len(resDflanding.index)] = ['Fibroblast','fibroblast','','PANDA','netZooM','https://github.com/netZoo/netZooM/releases','0.1'
     #    ,'','','','','','',0,0,'Lopes-Ramos, Paulsson et al. (2017)',0,'','','GTEX','','TF','','','']
     resDflanding.loc[len(resDflanding.index)] = ['All','mirna','','DRAGON','netZooPy','https://github.com/netZoo/netZooPy/releases','0.8'
-        ,'https://granddb.s3.us-east-2.amazonaws.com/cells/networks/mirna/dragon_mirna_CCLE.csv','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/CCLE_miRNA_20181103.gct','https://portals.broadinstitute.org/ccle','','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/CCLE_expression.csv','https://portals.broadinstitute.org/ccle',734,19174,'',938,'#cardtissuetcga','https://github.com/netZoo/netbooks/blob/main/netbooks/netZooPy/dragon_mirna.ipynb','CCLE','miRNA','Ben Guebila et al. (in preparation)','','','']
+        ,'https://granddb.s3.us-east-2.amazonaws.com/cells/networks/mirna/dragon_mirna_CCLE.csv','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/CCLE_miRNA_20181103.gct','https://portals.broadinstitute.org/ccle','','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/CCLE_expression.csv','https://portals.broadinstitute.org/ccle',734,19174,'https://genome.cshlp.org/content/32/3/524.short',938,'#cardtissuetcga','https://github.com/netZoo/netbooks/blob/main/netbooks/netZooPy/dragon_mirna.ipynb','CCLE','miRNA','Ben Guebila et al. (2023)','','','']
     # Add EGRET IPSC
     resDflanding.loc[len(resDflanding.index)] = ['IPSC','ipsc','','EGRET','netZooR','https://github.com/netZoo/netZooR/releases','0.9'
-        ,'#cardtissue','https://granddb.s3.us-east-2.amazonaws.com/cells/ppi/EGRET_ppi.txt','http://string90.embl.de/','https://granddb.s3.us-east-2.amazonaws.com/cells/motif/EGRET_motif_prior.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/banovich_iPSC_expression.csv','https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89895',687,9394,'',119,'#cardtissue','https://github.com/netZoo/netbooks/blob/main/netbooks/netZooR/egret_banovich_netbook.ipynb','Banovich et al.','TF','Weighill et al. (2022)','https://granddb.s3.us-east-2.amazonaws.com/cells/genotype/genotypesYRI.gen.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/qbic/qbic_banovich_iPSC_allModels_smart1.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/eqtl/iPSC_eQTL_in_motif_promotor_adjacent_egene_banovich_finalEGRET_v1_06172020.txt']
+        ,'#cardtissue','https://granddb.s3.us-east-2.amazonaws.com/cells/ppi/EGRET_ppi.txt','http://string90.embl.de/','https://granddb.s3.us-east-2.amazonaws.com/cells/motif/EGRET_motif_prior.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/banovich_iPSC_expression.csv','https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89895',687,9394,'https://genome.cshlp.org/content/32/3/524.short',119,'#cardtissue','https://github.com/netZoo/netbooks/blob/main/netbooks/netZooR/egret_banovich_netbook.ipynb','Banovich et al.','TF','Weighill et al. (2022)','https://granddb.s3.us-east-2.amazonaws.com/cells/genotype/genotypesYRI.gen.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/qbic/qbic_banovich_iPSC_allModels_smart1.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/eqtl/iPSC_eQTL_in_motif_promotor_adjacent_egene_banovich_finalEGRET_v1_06172020.txt']
     resDflanding.loc[len(resDflanding.index)] = ['IPSC','ipsc','','PANDA','netZooR','https://github.com/netZoo/netZooR/releases','0.9'
-        ,'https://granddb.s3.us-east-2.amazonaws.com/cells/networks/iPSC/PANDA_iPSC_Yoruba.csv','https://granddb.s3.us-east-2.amazonaws.com/cells/ppi/EGRET_ppi.txt','http://string90.embl.de/','https://granddb.s3.us-east-2.amazonaws.com/cells/motif/EGRET_motif_prior.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/banovich_iPSC_expression.csv','https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89895',687,9394,'',119,'/networks/aggregate/PANDA_iPSC_Yoruba/','https://github.com/netZoo/netbooks/blob/main/netbooks/netZooR/egret_banovich_netbook.ipynb','Banovich et al.','TF','Weighill et al. (2022)','-','-','-']
+        ,'https://granddb.s3.us-east-2.amazonaws.com/cells/networks/iPSC/PANDA_iPSC_Yoruba.csv','https://granddb.s3.us-east-2.amazonaws.com/cells/ppi/EGRET_ppi.txt','http://string90.embl.de/','https://granddb.s3.us-east-2.amazonaws.com/cells/motif/EGRET_motif_prior.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/banovich_iPSC_expression.csv','https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89895',687,9394,'https://genome.cshlp.org/content/32/3/524.short',119,'/networks/aggregate/PANDA_iPSC_Yoruba/','https://github.com/netZoo/netbooks/blob/main/netbooks/netZooR/egret_banovich_netbook.ipynb','Banovich et al.','TF','Weighill et al. (2022)','-','-','-']
     # Add EGRET IPSC-cm
     resDflanding.loc[len(resDflanding.index)] = ['IPSC-CM','cm','','EGRET','netZooR','https://github.com/netZoo/netZooR/releases','0.9'
         ,'#cardtissue','https://granddb.s3.us-east-2.amazonaws.com/cells/ppi/EGRET_ppi.txt','http://string90.embl.de/','https://granddb.s3.us-east-2.amazonaws.com/cells/motif/EGRET_motif_prior.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/banovich_LCL_expression.csv','https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89895',687,18855,'https://genome.cshlp.org/content/32/3/524.short',119,'#cardtissue','https://github.com/netZoo/netbooks/blob/main/netbooks/netZooR/egret_banovich_netbook.ipynb','Banovich et al.','TF','Weighill et al. (2022)','https://granddb.s3.us-east-2.amazonaws.com/cells/genotype/genotypesYRI.gen.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/qbic/qbic_banovich_iPSC-CM_allModels_smart1.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/eqtl/iPSCCM_eQTL_in_motif_promotor_adjacent_egene_banovich_finalEGRET_v1_06172020.txt']
@@ -248,7 +249,7 @@ def saveCellLanding(uniquedisease, newValid):
     resDflanding.loc[len(resDflanding.index)] = ['LCL','lcl','','EGRET','netZooR','https://github.com/netZoo/netZooR/releases','0.9'
         ,'#cardtissueegret','https://granddb.s3.us-east-2.amazonaws.com/cells/ppi/EGRET_ppi.txt','http://string90.embl.de/','https://granddb.s3.us-east-2.amazonaws.com/cells/motif/EGRET_motif_prior.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/banovich_LCL_expression.csv','https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89895',687,10198,'https://genome.cshlp.org/content/32/3/524.short',119,'#cardtissueegret','https://github.com/netZoo/netbooks/blob/main/netbooks/netZooR/egret_banovich_netbook.ipynb','Banovich et al.','TF','Weighill et al. (2022)','https://granddb.s3.us-east-2.amazonaws.com/cells/genotype/genotypesYRI.gen.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/qbic/qbic_eQTLS_GM12878_K562_finalEGRET_v1_06302020_allModels_smart1.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/eqtl/LCL_eQTL_in_motif_promotor_adjacent_egene_banovich_finalEGRET_v1_06172020.txt']
     resDflanding.loc[len(resDflanding.index)] = ['LCL','lcl','','PANDA','netZooR','https://github.com/netZoo/netZooR/releases','0.9'
-        ,'hhttps://granddb.s3.us-east-2.amazonaws.com/cells/networks/LCL/PANDA_LCL_Yoruba.csv','https://granddb.s3.us-east-2.amazonaws.com/cells/ppi/EGRET_ppi.txt','http://string90.embl.de/','https://granddb.s3.us-east-2.amazonaws.com/cells/motif/EGRET_motif_prior.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/banovich_LCL_expression.csv','https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89895',687,10198,'',119,'/networks/aggregate/PANDA_LCL_Yoruba/','https://github.com/netZoo/netbooks/blob/main/netbooks/netZooR/egret_banovich_netbook.ipynb','Banovich et al.','TF','Weighill et al. (2022)','-','-','-']
+        ,'hhttps://granddb.s3.us-east-2.amazonaws.com/cells/networks/LCL/PANDA_LCL_Yoruba.csv','https://granddb.s3.us-east-2.amazonaws.com/cells/ppi/EGRET_ppi.txt','http://string90.embl.de/','https://granddb.s3.us-east-2.amazonaws.com/cells/motif/EGRET_motif_prior.txt','https://granddb.s3.us-east-2.amazonaws.com/cells/expression/banovich_LCL_expression.csv','https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89895',687,10198,'https://genome.cshlp.org/content/32/3/524.short',119,'/networks/aggregate/PANDA_LCL_Yoruba/','https://github.com/netZoo/netbooks/blob/main/netbooks/netZooR/egret_banovich_netbook.ipynb','Banovich et al.','TF','Weighill et al. (2022)','-','-','-']
     # add tissue
     resDflanding['tissue']   = 'Lymphoblastoid cell line'
     # add data link
