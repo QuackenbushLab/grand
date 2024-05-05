@@ -251,6 +251,13 @@
                       data-bs-placement="top"
                       data-bs-content="sample type">
                     </i></th>
+                    <th scope="col">Subtype<br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="sample subtype">
+                    </i></th>
                     <th scope="col">Site<br><i class="far fa-question-circle"
                       data-bs-toggle="popover"
                       data-bs-trigger="hover"
@@ -314,6 +321,7 @@
                     <td>{{ drug.pert_itime }}</td>
                     <td><small>{{ drug.cell_type }}</small></td>
                     <td>{{ drug.sample_type }}</td>
+                    <td>{{ drug.subtype }}</td>
                     <td>{{ drug.primary_site }}</td>
                     <td>{{ drug.original_growth_pattern }}</td>
                     <td>{{ drug.donor_age }}</td>
@@ -333,6 +341,7 @@
                     <th>Time</th>
                     <th>Cell</th>
                     <th>Type</th>
+                    <th>Subtype</th>
                     <th>Site</th>
                     <th>Growth</th>
                     <th>Age</th>
