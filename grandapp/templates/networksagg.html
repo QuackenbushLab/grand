@@ -771,10 +771,10 @@ $("#btnFetchTar").click(function() {
 <script>
 
   if(document.getElementById('absval')==null){
-    if(slug.substr(0,3)=='ACH' || slug == 'mirnadragon' ){
+    if(slug.substr(0,3)=='ACH' || slug == 'mirnadragon' || slug.substr(0,10) == 'BRCA_mirna'){
       document.getElementById('id_edgetargeting').disabled = true; 
     }
-    if(slug == 'mirnadragon' ){
+    if(slug == 'mirnadragon' || slug.substr(0,10) == 'BRCA_mirna'){
       document.getElementById('id_tfgeneselclue_1').disabled = true; 
       var element = document.getElementById("btnenrich");
       element.classList.add("disabled");
@@ -784,11 +784,11 @@ $("#btnFetchTar").click(function() {
 
     };
   }else if(document.getElementById('id_absval')==null){
-    if(slug.substr(0,3)=='ACH' || slug == 'mirnadragon' ){
+    if(slug.substr(0,3)=='ACH' || slug == 'mirnadragon' || slug.substr(0,10) == 'BRCA_mirna'){
       document.getElementById('edgetargeting').disabled = true; 
       document.getElementById('tfgeneselclue_1').disabled = true; 
     }
-    if(slug == 'mirnadragon' ){
+    if(slug == 'mirnadragon' || slug.substr(0,10) == 'BRCA_mirna'){
       document.getElementById('tfgeneselclue_1').disabled = true; 
       var element = document.getElementById("btnenrich");
       element.classList.add("disabled");

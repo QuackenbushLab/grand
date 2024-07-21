@@ -55,4 +55,5 @@ class Command(BaseCommand):
             tissuelanding.script       = row['script']
             tissuelanding.dataset      = row['dataset']
             tissuelanding.tcgacode     = row['tcgacode']
+            tissuelanding.regulator    = row['regulator']
             tissuelanding.save()

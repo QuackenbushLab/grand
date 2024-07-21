@@ -3,6 +3,24 @@ from posixpath import supports_unicode_filenames
 from unicodedata import name
 from django.db import models
 
+class Gse197sample(models.Model):
+    sample    = models.CharField(max_length=200)
+    geoid     = models.CharField(max_length=200)
+    source    = models.CharField(max_length=200)
+    subtype   = models.URLField(max_length=200)
+    mutation  = models.URLField(max_length=200)
+    death     = models.CharField(max_length=200)
+    survival  = models.CharField(max_length=200)
+    estrogen  = models.CharField(max_length=200)
+    her2      = models.CharField(max_length=200)
+    gender    = models.CharField(max_length=200)
+    vital_status   = models.CharField(max_length=200)
+    time_to_event  = models.CharField(max_length=200)
+    tumor_location = models.CharField(max_length=200)
+    size = models.CharField(max_length=200)
+    link = models.CharField(max_length=200)
+    sampleclean = models.CharField(max_length=200)
+
 class Celllanding(models.Model):
     cancer    = models.CharField(max_length=200)
     tool      = models.CharField(max_length=200)
@@ -443,6 +461,7 @@ class Cancerlanding(models.Model):
     script    = models.CharField(max_length=200)
     dataset   = models.CharField(max_length=200)
     tcgacode  = models.CharField(max_length=200)
+    regulator = models.CharField(max_length=200)
 
 class Cancerpheno(models.Model):
     sample               = models.CharField(max_length=200)

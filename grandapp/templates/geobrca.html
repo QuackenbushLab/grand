@@ -1,0 +1,99 @@
+{% load static %} 
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree2" aria-expanded="false" aria-controls="collapseThree2"  id="cardtissuegeo">
+      Phenotypic information {% if slug == 'GBM' %}GGN{% else %}GEO{% endif %}
+    </button>
+  </h2>
+  <div id="collapseThree2" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+    <div class="accordion-body">
+<div class="container-fluid">
+  <div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Variable description</h5>
+    <p class="card-text">Networks for each individual sample can be downloaded as a miRNA-by-gene
+                    adjacency matrix named after  the GEO sample reference.</p>
+                    <div class="row pb-4">
+                      <div class="col-lg-7">
+                        <div class="row">
+                          <div class="col-lg-4">
+                            <canvas id="myPieChart2brca" ></canvas>   
+                          </div>
+                          <div class="col-lg-4">
+                            <canvas id="myPieChartETH2brca" ></canvas>   
+                          </div>
+                          <div class="col-lg-4">
+                            <canvas id="myPieChartAL2brca" ></canvas>   
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-5">
+                      <div class="row">
+                        <div class="col-lg-6">
+                          <canvas id="myPieChartStage2brca" ></canvas>   
+                        </div>
+                        <div class="col-lg-6">
+                          <canvas id="myPieChartVital2brca" ></canvas>   
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+        <table id="tissuestablegeobrca" class="table table-hover" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th scope="col">Sample</th>
+
+                      <th scope="col">Gender</th>
+                      <th scope="col">Subtype</th>
+                      <th scope="col">Mutation</th>
+                      <th scope="col">HER2 status</th>
+                      <th scope="col">Estrogen receptor status</th>
+                      <th scope="col">Anatomic location</th>
+                      <th scope="col">Time</th>
+                      <th scope="col">Vital status</th>
+                    <th scope="col">Network <br><i class="far fa-question-circle"
+                      data-bs-toggle="popover"
+                      data-bs-trigger="hover"
+                      data-bs-animation="false"
+                      data-bs-placement="top"
+                      data-bs-content="Please refer to the network section of the help page for the network download formats. Adj: Adjacency matrix, Edg: Edges.">
+                    </i></th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr id='tfoot600'>
+                      <th>Sample</th>
+                      <th>Gender</th>
+                      <th>Subtype</th>
+                      <th>Mutation</th>
+                      <th>Estrogen receptor status</th>
+                      <th>HER2 status</th>
+                      <th>Anatomic location</th>
+                      <th>Time</th>
+                      <th>Vital status</th>
+                      <th>Network</th>
+                  </tr>
+                </tfoot>
+                <tbody>
+                 {% for tissue in geosample %}
+                  <tr>
+                    <td>{{ tissue.sample }}</td>
+                    <td>{{ tissue.gender }}</td>
+                    <td>{{ tissue.subtype }}</td>
+                    <td>{{ tissue.mutation }}</td>
+                    <td>{{ tissue.her2 }}</td>
+                    <td>{{ tissue.estrogen }}</td>
+                    <td>{{ tissue.tumor_location }}</td>
+                    <td>{{ tissue.time_to_event }}</td>
+                    <td>{{ tissue.vital_status }}</td>
+                    <td><div class="btn-group-vertical"><a href="{{ tissue.link }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span><a href="/networks/aggregate/{{ tissue.sampleclean }}" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                  </tr>
+                 {% endfor %}
+                </tbody>
+              </table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>

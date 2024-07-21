@@ -49,7 +49,7 @@ $(document).ready(function() {
     var x = -container.clientWidth +50 ;
     var y = -container.clientHeight / 2 + 50;
     var step = 170;
-    if (slug.substr(-4) == 'PUMA' || slug == 'mirnadragon'){
+    if (slug.substr(-4) == 'PUMA' || slug == 'mirnadragon' || slug.substr(0,10) == 'BRCA_mirna' ){
     nodes.push({
       id: 1003,
       x: x,

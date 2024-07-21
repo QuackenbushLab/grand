@@ -1,11 +1,11 @@
 $(document).ready(function() {
 
     // Read data file and create a chart
-    $.get(dataurl2, function(csvString) {
-  
+    $.get(dataurl4, function(csvString) {
+
       var rows = Papa.parse(csvString, {header: true}).data;
 
-      var tablegeo= $('#tissuestablegeo').DataTable({
+      var tablegeobrca= $('#tissuestablegeobrca').DataTable({
         "serverSide": false,
         "processing": true,
         buttons: [
@@ -33,38 +33,30 @@ $(document).ready(function() {
                   }
        });
 
-       $('#tissuestablegeo tfoot tr').appendTo('#tissuestablegeo thead');
-       $("#tissuestablegeo").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");  
+       $('#tissuestablegeobrca tfoot tr').appendTo('#tissuestablegeobrca thead');
+       $("#tissuestablegeobrca").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");  
 
-      if (slug == 'COAD'){
         var data = rows.map(function(row) {
-            return row['gender'];
+            return row['characteristics_ch1_2'];
         })
 
         var dataETH = rows.map(function(row) {
-            return row['race'];
+            return row['characteristics_ch1_3'];
         })
 
         var dataAL = rows.map(function(row) {
-            return row['tumor_location'];
+            return row['estrogen_receptor_status_ch1'];
         })
 
         var dataStage = rows.map(function(row) {
-            return row['uicc_stage'];
+            return row['disease state:ch1'];
         })
 
         var dataVital = rows.map(function(row) {
-            return row['vital_status'];
+            return row['death status:ch1'];
         })
 
-        var text5='Anatomic location'
-
-      }else if (slug == 'GBM'){
-        var dataAL = rows.map(function(row) {
-          return row['survival'];
-        })
-        var text5='Survival';
-    }
+    
   
       function foo(arr) {
         var a = [], b = [], prev;
@@ -84,12 +76,11 @@ $(document).ready(function() {
     }
 
     var resultAL = foo(dataAL);
-    if (slug == 'COAD' ){
-      var resultETH = foo(dataETH);
-      var result = foo(data);
-      var resultStage = foo(dataStage);//#dd979f
-      var resultVital = foo(dataVital);
-    }
+    var resultETH = foo(dataETH);
+    var result = foo(data);
+    var resultStage = foo(dataStage);//#dd979f
+    var resultVital = foo(dataVital);
+
     var colorArray = ['#c6bebe', '#FFB399', '#78c186', '#e7f1ff', '#ba7fa5', 
 		  '#E6B333', '#7394e0', '#999966', '#99FF99', '#B34D4D',
 		  '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
@@ -110,7 +101,7 @@ $(document).ready(function() {
               }]
       };
 
-    if (slug == 'COAD' ){
+
     var pieChartDataETH = {
         labels: resultETH[0],
         datasets: [{
@@ -147,36 +138,34 @@ $(document).ready(function() {
         }]
     };
 
-  }
+  
 
 
-      var canvasAL2     = document.getElementById('myPieChartAL2');
-      if (slug == 'COAD' ){
-        var canvasETH2  = document.getElementById('myPieChartETH2');
-        var canvas2     = document.getElementById('myPieChart2');
-        var canvasStage2= document.getElementById('myPieChartStage2');
-        var canvasVital2= document.getElementById('myPieChartVital2');
-      }
-      var ctxAL2        = canvasAL2.getContext('2d');
-      if (slug == 'COAD' ){
-        var ctxETH2      = canvasETH2.getContext('2d');
-        var ctx2         = canvas2.getContext('2d');
-        var ctxStage2    = canvasStage2.getContext('2d');
-        var ctxVital2    = canvasVital2.getContext('2d');
-      }
+      var canvasAL2brca   = document.getElementById('myPieChartAL2brca');
+      var canvasETH2brca  = document.getElementById('myPieChartETH2brca');
+      var canvas2brca     = document.getElementById('myPieChart2brca');
+      var canvasStage2brca= document.getElementById('myPieChartStage2brca');
+      var canvasVital2brca= document.getElementById('myPieChartVital2brca');
+
+      var ctxAL2       = canvasAL2brca.getContext('2d');
+      var ctxETH2      = canvasETH2brca.getContext('2d');
+      var ctx2         = canvas2brca.getContext('2d');
+      var ctxStage2    = canvasStage2brca.getContext('2d');
+      var ctxVital2    = canvasVital2brca.getContext('2d');
+
 
 
       var options = {
         backgroundColor: 'rgba(54, 162, 235,0.7)',
       }
   
-      var myPieChartAL2 = new Chart(ctxAL2, {
+      var myPieChartAL2brca = new Chart(ctxAL2, {
         type: 'pie',
         data: pieChartDataAL2,
         options: {
             title: {
               display: true,
-              text: text5,
+              text: 'Estrogen receptor status',
               fontSize: 10,
             },
             tooltips: {
@@ -198,14 +187,14 @@ $(document).ready(function() {
         }
     });
 
-      if (slug == 'COAD' ){
-      var myPieChart2 = new Chart(ctx2, {
+
+      var myPieChart2brca = new Chart(ctx2, {
         type: 'pie',
         data: pieChartData,
         options: {
             title: {
               display: true,
-              text: 'Gender',
+              text: 'Subtype',
               fontSize: 10,
             },
             tooltips: {
@@ -227,13 +216,13 @@ $(document).ready(function() {
         }
     });
 
-    var myPieChartETH2 = new Chart(ctxETH2, {
+    var myPieChartETH2brca = new Chart(ctxETH2, {
         type: 'pie',
         data: pieChartDataETH,
         options: {
             title: {
               display: true,
-              text: 'Race',
+              text: 'Mutation status',
               fontSize: 10,
             },
             tooltips: {
@@ -255,13 +244,13 @@ $(document).ready(function() {
         }
     });
 
-    var myPieChartStage2 = new Chart(ctxStage2, {
+    var myPieChartStage2brca = new Chart(ctxStage2, {
         type: 'pie',
         data: pieChartDataStage2,
         options: {
             title: {
               display: true,
-              text: 'Stage',
+              text: 'Anatomic location',
               fontSize: 10,
             },
             tooltips: {
@@ -283,7 +272,7 @@ $(document).ready(function() {
         }
     });
 
-    var myPieChartVital2= new Chart(ctxVital2, {
+    var myPieChartVital2brca = new Chart(ctxVital2, {
         type: 'pie',
         data: pieChartDataVital2,
         options: {
@@ -310,83 +299,73 @@ $(document).ready(function() {
             } 
         }
     });
-  }
+  
 
-  if (slug == 'COAD'){
-    canvas2.onclick = function(evt) {
-      var activePoints = myPieChart2.getElementsAtEvent(evt);
+
+    canvas2brca.onclick = function(evt) {
+      var activePoints = myPieChart2brca.getElementsAtEvent(evt);
       if (activePoints[0]) {
         var chartData = activePoints[0]['_chart'].config.data;
         var idx = activePoints[0]['_index'];
   
         var label = chartData.labels[idx];
-        tablegeo.column(1).search("^"+label+"$", true, false, true).draw();
-        $("#id"+1+101+offset).val(label);
+        tablegeobrca.column(2).search("^"+label+"$", true, false, true).draw();
+        $("#id"+2+100+offset).val(label);
       }
     };
 
-    canvasETH2.onclick = function(evt) {
-        var activePoints = myPieChartETH2.getElementsAtEvent(evt);
+    canvasETH2brca.onclick = function(evt) {
+        var activePoints = myPieChartETH2brca.getElementsAtEvent(evt);
         if (activePoints[0]) {
           var chartData = activePoints[0]['_chart'].config.data;
           var idx = activePoints[0]['_index'];
     
           var label = chartData.labels[idx];
-          tablegeo.column(2).search("^"+label+"$", true, false, true).draw();
-          $("#id"+2+101+offset).val(label);
+          tablegeobrca.column(3).search("^"+label+"$", true, false, true).draw();
+          $("#id"+3+100+offset).val(label);
         }
       };
 
-      canvasAL2.onclick = function(evt) {
-        var activePoints = myPieChartAL2.getElementsAtEvent(evt);
+      canvasAL2brca.onclick = function(evt) {
+        var activePoints = myPieChartAL2brca.getElementsAtEvent(evt);
         if (activePoints[0]) {
           var chartData = activePoints[0]['_chart'].config.data;
           var idx = activePoints[0]['_index'];
     
           var label = chartData.labels[idx];
-          tablegeo.column(5).search("^"+label+"$", true, false, true).draw();
-          $("#id"+5+101+offset).val(label);
+          tablegeobrca.column(5).search("^"+label+"$", true, false, true).draw();
+          $("#id"+5+100+offset).val(label);
         }
       };
 
-      canvasStage2.onclick = function(evt) {
-        var activePoints = myPieChartStage2.getElementsAtEvent(evt);
+      canvasStage2brca.onclick = function(evt) {
+        var activePoints = myPieChartStage2brca.getElementsAtEvent(evt);
         if (activePoints[0]) {
           var chartData = activePoints[0]['_chart'].config.data;
           var idx = activePoints[0]['_index'];
     
           var label = chartData.labels[idx];
-          tablegeo.column(6).search("^"+label+"$", true, false, true).draw();
-          $("#id"+6+101+offset).val(label);
+          tablegeobrca.column(6).search("^"+label+"$", true, false, true).draw();
+          $("#id"+6+100+offset).val(label);
         }
       };
 
-      canvasVital2.onclick = function(evt) {
-        var activePoints = myPieChartVital2.getElementsAtEvent(evt);
+      canvasVital2brca.onclick = function(evt) {
+        var activePoints = myPieChartVital2brca.getElementsAtEvent(evt);
         if (activePoints[0]) {
           var chartData = activePoints[0]['_chart'].config.data;
           var idx = activePoints[0]['_index'];
     
           var label = chartData.labels[idx];
-          tablegeo.column(8).search("^"+label+"$", true, false, true).draw();
-          $("#id"+8+101+offset).val(label);
-        }
-      };
-    }else if(slug == 'GBM'){
-
-      canvasAL2.onclick = function(evt) {
-        var activePoints = myPieChartAL2.getElementsAtEvent(evt);
-        if (activePoints[0]) {
-          var chartData = activePoints[0]['_chart'].config.data;
-          var idx = activePoints[0]['_index'];
-    
-          var label = chartData.labels[idx];
-          tablegeo.column(1).search("^"+label+"$", true, false, true).draw();
-          $("#id"+1+101+offset).val(label);
+          tablegeobrca.column(8).search("^"+label+"$", true, false, true).draw();
+          $("#id"+8+100+offset).val(label);
         }
       };
 
 
-    }
-    });
+      });
+
+
+ 
+  
   });

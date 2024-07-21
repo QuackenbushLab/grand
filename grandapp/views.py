@@ -6,7 +6,7 @@ from .models import Cell, Disease, Cancer
 from .models import Druglanding, DrugResultUp, DrugResultDown, Params, Tcgasample, Geosample, Genelanding
 from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding, Tissuesample, Cancerlanding, Drugsample
 from .models import Drugdesc, Breastsample, Cervixsample, Liversample, Ggbmd1sample, Ggbmd2sample, Ggnsample
-from .models import Pancreassample, Drugcombsup, Drugcombsdown, Gobp, Cellpage, Celllanding, Cellsample
+from .models import Pancreassample, Drugcombsup, Drugcombsdown, Gobp, Cellpage, Celllanding, Cellsample, Gse197sample
 from .models import Gobpbygene, Gwascata, Gwascatabygene, Pandaac, Dragonac, Sendto, Document, Tissueac, Cancerpheno
 from .models import Enrichtfs, Enrichgenes, Otterac, Egret, Tissuesampleegret
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
@@ -119,10 +119,14 @@ def networksagg(request,slug):
     genetarscore = pd.DataFrame(data=d)
     genetarscore = genetarscore.to_json(orient='records')
     tftarscore   = tftarscore.to_json(orient='records')
+    if len(slug.split('_')) > 2:
+        slugsplit = slug.split('_')[2] 
+    else:
+        slugsplit = ''
     if request.method == 'GET':
         # network form
         form = NetForm({'dt':'no','topbottom':'Largest','nedges':100,'tfgenesel':'nosel'})
-        if (slug.split('_')[-1] == 'PUMA') | (slug == 'mirnadragon'):
+        if (slug.split('_')[-1] == 'PUMA') | (slug == 'mirnadragon') | (slugsplit == 'bonobo') :
             nodes = pd.DataFrame(data=['miRNA','Gene'])
         else:
             nodes = pd.DataFrame(data=['TF','Gene'])
@@ -130,7 +134,7 @@ def networksagg(request,slug):
         nodes.columns = ['label','id']
         edges= pd.DataFrame(data=[0.5])
         edges.columns= ['value']
-        if (slug.split('_')[-1] == 'PUMA') | (slug == 'mirnadragon'):
+        if (slug.split('_')[-1] == 'PUMA') | (slug == 'mirnadragon') | (slugsplit == 'bonobo'):
             nodes['group']= ['mir','exp'] 
             edges['sourcelabel']='miRNA'
             edges['targetlabel']='gene'
@@ -166,7 +170,7 @@ def networksagg(request,slug):
             goform     = request.POST.get('goform', False)
             gwasform   = request.POST.get('gwasform', False)
             edgetargeting = request.POST.get('edgetargeting', False)
-            if (slug[0:3]=='ACH') | (slug=='mirnadragon'):
+            if (slug[0:3]=='ACH') | (slug=='mirnadragon') | (slugsplit=='bonobo'):
                 form.fields['edgetargeting'].widget.attrs['disabled']    = 'disabled'
             print('The number of edges is',nedges)
             object_key,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug)
@@ -204,7 +208,7 @@ def networksagg(request,slug):
             nodes['id']=list(range(0,len(b1)+len(b2)))
             nodes.columns  = ['label','id']
             # miRNA networks
-            if (slug.split('_')[-1] == 'PUMA') | (slug == 'mirnadragon'):
+            if (slug.split('_')[-1] == 'PUMA') | (slug == 'mirnadragon') | (slugsplit == 'bonobo'):
                 nodes['group'] = ['mir']*len(b1) + ['exp']*len(b2)
             else:
                 nodes['group'] = ['tf']*len(b1) + ['exp']*len(b2)
@@ -1493,7 +1497,7 @@ def findTarget(methylEdges,edges,source='target'):
 def cancerlanding(request,slug):
     cancerlanding = Cancerlanding.objects.filter(tcgacode=str.split(slug,'_')[0])
     data=''
-    geo,tool,tcgasample='no','',''
+    geo,tool,tcgasample,geosample='no','','',''
     #initialize data variables
     nsamples,ndata,nagg=0,0,0
     if slug in ['CESC_cancer','LIHC_cancer','BRCA_cancer']:
@@ -1515,12 +1519,13 @@ def cancerlanding(request,slug):
         nsamples,ndata,nagg,tool=0,1,1,'otter'
     elif slug == 'BRCA_cancer':
         tcgasample = Breastsample.objects.all()
-        nsamples,ndata,nagg,tool=0,1,1,'otter'
+        geosample    = Gse197sample.objects.all()
+        nsamples,ndata,nagg,tool,geo=101,1,1,'otter','yes'
     elif slug == 'LIHC_cancer':
         tcgasample = Liversample.objects.all()
         nsamples,ndata,nagg,tool=0,1,1,'otter'
     returntupl = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'geo':geo, 'tool':tool, 
-                  'tcgasample':tcgasample, 'nsamples':nsamples,'ndata':ndata, 'nagg':nagg, 'data':data, 'data4tfs':data4tfs, 'data4genes':data4genes}
+                  'geosample':geosample,'tcgasample':tcgasample, 'nsamples':nsamples,'ndata':ndata, 'nagg':nagg, 'data':data, 'data4tfs':data4tfs, 'data4genes':data4genes}
     if slug == 'COAD_cancer':
         tcgasample   = Tcgasample.objects.all()
         geosample    = Geosample.objects.all()
@@ -2364,6 +2369,10 @@ def selectgenestar(genetarscore,tfgenesel,geneform,goform,gwasform):
 def mapObjectkey(slug,modality='network',how=''):
     regnetdisp='Transcription factor'
     attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14='','','','','','','',''
+    if len(slug.split('_')) > 2:
+        slugsplit = slug.split('_')[2] 
+    else:
+        slugsplit = ''
     if slug[0:3]=='ACH': #cell lines
         slug = str.replace(slug,'_','-')
         cellsample   = Cellsample.objects.get(depmap=slug) 
@@ -2546,6 +2555,23 @@ def mapObjectkey(slug,modality='network',how=''):
         categorynet='Cell lines'
         if modality=='expression':
             object_key = 'cells/expression/merged_gene_mirna.csv'
+    elif (slugsplit == 'bonobo'): # bonobo mirna network
+        object_key = 'cancer/breast_cancer/bonobo/networks/BRCA_mirna_bonobo_'+str.split(slug,'_')[-1]+'.csv'
+        backpage   = 'cancers/BRCA_cancer'
+        ssagg='Single sample'
+        regnetdisp='microRNA'
+        categorynet='Cancer'
+        if modality=='expression':
+            object_key = 'cancer/breast_cancer/bonobo/GSE19783_miRNA_mRNA_expression.csv'
+        tissuesample   = Gse197sample.objects.get(sample=str.split(slug,'_')[-1])
+        attr1  = tissuesample.sample
+        attr2  = tissuesample.subtype
+        attr3  = tissuesample.estrogen
+        attr4  = tissuesample.her2
+        attr11 = 'Donor'
+        attr12 = 'Subtype'
+        attr13 = 'Estrogen receptor status'
+        attr14 = 'HER2 receptor status'
     elif (str.split(slug,'_')[2] == 'TCGA') | (str.split(slug,'_')[2][0:3] == 'GSM'): # single sample networks
         ssagg='Single sample'
         categorynet='Cancer'
