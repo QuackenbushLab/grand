@@ -174,6 +174,8 @@ def networksagg(request,slug):
                 form.fields['edgetargeting'].widget.attrs['disabled']    = 'disabled'
             print('The number of edges is',nedges)
             object_key,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug)
+            print('hey')
+            print(object_key)
             df=fetchNetwork(object_key)
             if dt=='dtt':
                 tftar  = df.sum(axis=1) 
@@ -2580,8 +2582,10 @@ def mapObjectkey(slug,modality='network',how=''):
         attr12 = 'Subtype'
         attr13 = 'Estrogen receptor status'
         attr14 = 'HER2 receptor status'
-    elif (slugsplit == 'BONOBO'): # bonobo pada thca network
-            object_key = 'tissues/networks/panda_bonobo/THCA_PANDA_BONOBO_'+str.split(slug,'_')[-1]+'.csv'
+    elif (slugsplit == 'BONOBO'): # bonobo panda thyroid network
+            print('ho')
+            print(slug[17:])
+            object_key = 'tissues/networks/panda_bonobo/THY_PANDA_BONOBO_'+slug[17:].replace('_','-')+'.csv'
             backpage   = 'tissues/Thyroid_tissue'
             ssagg='Single sample'
             categorynet='Tissues'
