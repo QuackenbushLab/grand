@@ -39,11 +39,13 @@ class Command(BaseCommand):
             tissue.tool1     = row['tool1']   
             tissue.tool2     = row['tool2']   
             tissue.tool3     = row['tool3']   
+            tissue.tool4     = row['tool4']   
             tissue.nettype   = row['nettype']
             tissue.reg       = row['reg']
             tissue.tissuename= row['tissuename']
             tissue.reftool1  = row['reftool1']
             tissue.reftool2  = row['reftool2']
             tissue.reftool3  = row['reftool3']
+            tissue.reftool4  = row['reftool4']
             tissue.nsamples  = row['nsamples']
             tissue.save()

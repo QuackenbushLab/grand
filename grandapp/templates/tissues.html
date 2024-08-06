@@ -45,8 +45,10 @@
         <td>{{ tissue.reg }}</td>
         {% if tissue.reftool3 == '' %}
           <td><a href="{{ tissue.reftool1 }}" class="text-decoration-none" target="_blank">{{ tissue.tool1 }}</a>, <a href="{{ tissue.reftool2 }}" class="text-decoration-none" target="_blank">{{ tissue.tool2 }}</a></td>
-        {% else %}
+        {% elif tissue.reftool4 == '' %}
           <td><a href="{{ tissue.reftool1 }}" class="text-decoration-none" target="_blank">{{ tissue.tool1 }}</a>, <a href="{{ tissue.reftool2 }}" class="text-decoration-none" target="_blank">{{ tissue.tool2 }}</a>, <a href="{{ tissue.reftool3 }}" class="text-decoration-none" target="_blank">{{ tissue.tool3 }}</a></td>
+        {% else %}
+          <td><a href="{{ tissue.reftool1 }}" class="text-decoration-none" target="_blank">{{ tissue.tool1 }}</a>, <a href="{{ tissue.reftool2 }}" class="text-decoration-none" target="_blank">{{ tissue.tool2 }}</a>, <a href="{{ tissue.reftool3 }}" class="text-decoration-none" target="_blank">{{ tissue.tool3 }}</a>, <a href="{{ tissue.reftool4 }}" class="text-decoration-none" target="_blank">{{ tissue.tool4 }}</a></td>
         {% endif %}
         </tr>
 		 {% endfor %}

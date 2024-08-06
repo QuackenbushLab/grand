@@ -56,4 +56,5 @@ class Command(BaseCommand):
             tissuelanding.reg          = row['reg']
             tissuelanding.script       = row['script']
             tissuelanding.awsname      = row['awsname']
+            tissuelanding.cardtissue   = row['cardtissue']
             tissuelanding.save()

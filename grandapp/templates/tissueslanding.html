@@ -55,7 +55,9 @@
                   <h5 class="card-title">Tool description</h5>
                   <p class="card-text"><a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif as regulation prior, and gene expression samples.
                                 <a href="https://netzoo.github.io/zooanimals/puma/" style="text-decoration:none" target="_blank">PUMA</a> reconstructs a gene regulatory network with miRNA as regulators using gene expression samples and miRNA predicted targets by <a href="http://cbio.mskcc.org/microrna_data/manual.html" style="text-decoration:none" target="_blank">miRanda</a> or <a href="http://www.targetscan.org/vert_72/" style="text-decoration:none" target="_blank">TargetScan</a> as regulation priors. The Regulator-regulator interaction matrix is set to the identity matrix in the algorithm.
-              {% if name == 'yes' %} <a href="https://netzoo.github.io/zooanimals/lioness/" style="text-decoration:none" target="_blank">LIONESS</a> reconstructs patient-specific <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> networks for each gene expression sample. To download sample-specific networks, you can check <a href="#cardtissue" style="text-decoration:none">the phenotypic information</a> and select the networks by
+              {% if name == 'yes' %} <a href="https://netzoo.github.io/zooanimals/lioness/" style="text-decoration:none" target="_blank">LIONESS</a> reconstructs patient-specific <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> networks for each gene expression sample. 
+              <a href="https://netzoo.github.io/zooanimals/ss/bonobo/" style="text-decoration:none" target="_blank">BONOBO</a> is a single-sample network inference method, which can be used to estimate patient-specific co-expression matrices.
+              To download sample-specific networks, you can check <a href="#cardtissue" style="text-decoration:none">the phenotypic information</a> and select the networks by
                                   clinical variables or download all the samples in a single file. {% else %} Check <a href="#cardtissue" style="text-decoration:none" >the phenotypic information</a> for the clinical variables of the samples that were used to reconstruct the network. {% endif %}</p>
                   <table id="tissuestable2" class="table table-hover" width="100%">
                       <thead>
@@ -123,9 +125,9 @@
                           <td><a href="{{ tissue.tissueLink }}" class="text-decoration-none" target="_blank">{{ tissue.tissue }}</a></td>
                           <td>{{ tissue.tool }}</td>
                           <td>{{ tissue.netzoo }} <a href="{{ tissue.netzooLink }}" class="text-decoration-none" target="_blank">{{ tissue.netzooRel }}</a></td>
-                          {% if tissue.tool == 'PANDA-LIONESS' %}
+                          {% if tissue.tool == 'PANDA-LIONESS' or tissue.tool == 'BONOBO-PANDA'%}
                               <td><div class="btn-group-sm" role="group" aria-label="Basic example">
-                                  <a class="btn btn-outline-primary position-relative" role="button"  href="#cardtissue" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="#cardtissue" class="btn btn-outline-success position-relative" role="button">Vis</a></div></td>
+                                  <a class="btn btn-outline-primary position-relative" role="button"  href="{{ tissue.cardtissue }}" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="{{ tissue.cardtissue }}" class="btn btn-outline-success position-relative" role="button">Vis</a></div></td>
                           {% else %}
                               <td><div class="btn-group-sm" role="group" aria-label="Basic example">
                                   <a href="{{ tissue.network }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><a href="{{ tissue.script }}" class="btn btn-outline-danger" role="button">Code</a><a href="/networks/aggregate/{{ tissue.awsname }}/" class="btn btn-outline-success" role="button">Vis</a></div></td>
@@ -141,9 +143,11 @@
                           <td>{{ tissue.tfs }}</td>
                           <td>{{ tissue.genes }}</td>
                           {% if tissue.tool == 'PUMA' %}
-                          <td>{{ tissue.samples }}</td>
+                            <td>{{ tissue.samples }}</td>
+                          {% elif tissue.tool == 'PANDA-LIONESS' or tissue.tool == 'BONOBO-PANDA' %}
+                            <td><a href="{{ tissue.cardtissue }}" class="text-decoration-none">{{ tissue.samples }}</a></td>
                           {% else %}
-                          <td><a href="#cardtissue" class="text-decoration-none">{{ tissue.samples }}</a></td>
+                            <td><a href="#cardtissue" class="text-decoration-none">{{ tissue.samples }}</a></td>
                           {% endif %}
                           <td><span class="badge bg-primary rounded-pill">D</span></td>
                           {% if tissue.tool == 'PANDA-LIONESS' %}
@@ -154,6 +158,25 @@
                               <div class="modal-content">
                                 <div class="modal-header">
                                   <h5 class="modal-title" id="exampleModalLabel">Publication</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  Please check the reference {{ tissue.refs3 }} at the following <a href="{{ tissue.refs }}" style="text-decoration:none" target="_blank">link</a>.
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {% elif tissue.tool == 'BONOBO-PANDA' %}
+                          <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModalbom"></i></a></td>
+                          <!-- Modal -->
+                          <div class="modal fade" id="exampleModalbom" tabindex="-1" aria-labelledby="exampleModalLabelbom" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabelbom">Publication</h5>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -219,7 +242,7 @@
   <script>var offset=30</script>
   <h2 class="accordion-header" id="headingTwo">
     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" id="cardtissue">
-      Phenotypic information GTEx
+      Phenotypic information GTEx v6
     </button>
   </h2>
   <div id="collapseTwo" class="accordion-collapse collapse " aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
@@ -228,7 +251,7 @@
     <div class="card" id="cardtissue">
             <div class="card-body">
             <h5 class="card-title">Variable description</h5>
-            <p class="card-text">{% if name == 'yes' %}You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges
+            <p class="card-text"><a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a>-LIONESS networks are single-sample networks generated by first estimating an aggregate PANDA network then deriving patient-specific LIONESS networks. {% if name == 'yes' %}You can either download all the networks to get a matrix of size the number of samples by the number of edges. The number of edges
 			    is 644 * 30243 (number of miRNA/TFs * number of genes) (~ 10<sup>6</sup>). Otherwise, you can specify the sample network to download and you will get a miRNA/TF-by-gene
             		    matrix named after  the GTEx sample reference{% else %} This is a description of the primary clinical variables of the gene expression samples that were used to generate the gene regulatory network{% endif %}.</p>
                     <div class="row pb-4">
@@ -385,6 +408,7 @@
     </div>
   </div>
 </div>
+    {% include "bonobothy.html" %}
 </div>
 </div>
 
@@ -425,6 +449,13 @@ $(document).ready(function() {
           $(this).html( '<input size=7 id="id'+i+offset+'" type="text" placeholder="Search '+title+'" />' );
           i++;
       } );
+
+      // Setup - add a text input to each footer cell
+      $('#tfoot3bono th').each( function (i) { //bonobo
+          var title = $(this).text();
+          $(this).html( '<input size=7 id="id'+i+100+offset+'" type="text" placeholder="Search '+title+'" />' );
+          i++;
+      } );
   
   });
   </script>
@@ -433,10 +464,13 @@ $(document).ready(function() {
   var slug2='lcl';
   var slug="{{ slug }}";
   var data2=JSON.parse("{{data|escapejs}}");
+  var data2thy=JSON.parse("{{datathy|escapejs}}");
 </script>
 <script src="{% static 'js/scatterChartcell.js' %}"></script>
 
 <script src="{% static 'js/pieChartcells.js' %}"></script>
+
+<script src="{% static 'js/pieChartBonobo.js' %}"></script>
 
 <script>
   $(document).ready(function () {

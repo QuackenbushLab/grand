@@ -8,7 +8,7 @@ from .models import Tissue, Gwas, TissueEx, TissueTar, Tissuelanding, Tissuesamp
 from .models import Drugdesc, Breastsample, Cervixsample, Liversample, Ggbmd1sample, Ggbmd2sample, Ggnsample
 from .models import Pancreassample, Drugcombsup, Drugcombsdown, Gobp, Cellpage, Celllanding, Cellsample, Gse197sample
 from .models import Gobpbygene, Gwascata, Gwascatabygene, Pandaac, Dragonac, Sendto, Document, Tissueac, Cancerpheno
-from .models import Enrichtfs, Enrichgenes, Otterac, Egret, Tissuesampleegret
+from .models import Enrichtfs, Enrichgenes, Otterac, Egret, Tissuesampleegret, Tissuesamplethy
 from django.core.mail import BadHeaderError, EmailMessage, send_mail
 from .forms import ContactForm, GeneForm, DiseaseForm, NetForm, BabelForm, TarForm, ClueForm, DocumentForm, CompForm, DiffTarForm
 from django.conf import settings
@@ -1451,22 +1451,30 @@ def babelomic(request):
 
 def tissuelanding(request,slug):
     slug2=slug.replace('_',' ')[:-7]
+    tissuesamplethy=''
     tissuelanding  = Tissuelanding.objects.filter(tissue=slug2)
     if slug=='Skeletal_muscle_tissue':
         slug='Muscle_skeletal_tissue'
     tissuesample   = Tissuesample.objects.filter(grdid=slug) 
     tissuelanding2 = Tissuelanding.objects.filter(tissue=slug2)
+    if slug=='Thyroid_tissue':
+        tissuesamplethy = Tissuesamplethy.objects.all()
     nsamples = 0
-    for model in tissuelanding2:
-        if model.tool=='PANDA-LIONESS':
-            nsamples = model.samples
+    if slug=='Thyroid_tissue':
+        nsamples=653
+    else:
+        for model in tissuelanding2:
+            if model.tool=='PANDA-LIONESS':
+                nsamples = model.samples
     ndata,nagg=1,3
     data = serializers.serialize("json", tissuesample)
+    datathy = serializers.serialize("json", tissuesamplethy)
     name= 'yes'
     if slug in ['Lymphoblastoid_cell_line_tissue','Fibroblast_cell_line_tissue','Kidney_cortex_tissue','Minor_salivary_gland_tissue',
                'Ovary_tissue','Prostate_tissue','Testis_tissue','Uterus_tissue','Vagina_tissue']:
         name='no'
-    return render(request, "tissueslanding.html", {'tissuelanding': tissuelanding, 'slug':slug,'tissuesample':tissuesample, 'name':name, 'data':data, 'ndata':ndata, 'nagg':nagg, 'nsamples':nsamples, 'slug2':slug2})
+    print(tissuesamplethy)
+    return render(request, "tissueslanding.html", {'datathy': datathy, 'tissuesamplethy': tissuesamplethy,'tissuelanding': tissuelanding, 'slug':slug,'tissuesample':tissuesample, 'name':name, 'data':data, 'ndata':ndata, 'nagg':nagg, 'nsamples':nsamples, 'slug2':slug2})
 
 def cancer(request):
     cancer = Cancer.objects.all()
@@ -2572,6 +2580,11 @@ def mapObjectkey(slug,modality='network',how=''):
         attr12 = 'Subtype'
         attr13 = 'Estrogen receptor status'
         attr14 = 'HER2 receptor status'
+    elif (slugsplit == 'BONOBO'): # bonobo pada thca network
+            object_key = 'tissues/networks/panda_bonobo/THCA_PANDA_BONOBO_'+str.split(slug,'_')[-1]+'.csv'
+            backpage   = 'tissues/Thyroid_tissue'
+            ssagg='Single sample'
+            categorynet='Tissues'
     elif (str.split(slug,'_')[2] == 'TCGA') | (str.split(slug,'_')[2][0:3] == 'GSM'): # single sample networks
         ssagg='Single sample'
         categorynet='Cancer'

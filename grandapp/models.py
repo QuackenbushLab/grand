@@ -238,15 +238,17 @@ class Gwas(models.Model):
 class Tissue(models.Model):
     tissue    = models.CharField(max_length=200)
     nnets     = models.IntegerField(default=0)
-    tool1      = models.CharField(max_length=200)
-    tool2      = models.CharField(max_length=200)
-    tool3      = models.CharField(max_length=200)
+    tool1     = models.CharField(max_length=200)
+    tool2     = models.CharField(max_length=200)
+    tool3     = models.CharField(max_length=200)
+    tool4     = models.CharField(max_length=200)
     nettype   = models.CharField(max_length=200)
     reg       = models.CharField(max_length=200)
     tissuename= models.CharField(max_length=200)
     reftool1  = models.CharField(max_length=200)
     reftool2  = models.CharField(max_length=200)
     reftool3  = models.CharField(max_length=200)
+    reftool4  = models.CharField(max_length=200)
     nsamples  = models.CharField(max_length=200)
 
 class Cancer(models.Model):
@@ -294,6 +296,8 @@ class Tissuelanding(models.Model):
     refs3     = models.URLField(default='#')
     samples   = models.IntegerField(default=0)
     script    = models.CharField(max_length=200)
+    cardtissue= models.CharField(max_length=200)
+
 
 class TissueTar(models.Model):
     idd          = models.IntegerField(default=0)
@@ -318,6 +322,28 @@ class Enrichgenes(models.Model):
     term      = models.CharField(max_length=600)
     go        = models.CharField(max_length=600)
     logpval   = models.CharField(max_length=600)
+
+class Tissuesamplethy(models.Model):
+    sampleid    = models.CharField(max_length=600)
+    subjectid   = models.CharField(max_length=600)
+    tissueid    = models.CharField(max_length=600)
+    gender      = models.CharField(max_length=600)
+    age         = models.CharField(max_length=600)
+    dthhrdy     = models.CharField(max_length=600)
+    smatsscr    = models.CharField(max_length=600)
+    smrin       = models.CharField(max_length=600)
+    smts        = models.CharField(max_length=600)
+    smtsd       = models.CharField(max_length=600)
+    smubrid     = models.CharField(max_length=600)
+    smtsisch    = models.CharField(max_length=600)
+    grdid       = models.CharField(max_length=600)
+    size        = models.CharField(max_length=600)
+    link        = models.CharField(max_length=600)
+    smtstptref  = models.CharField(max_length=600)
+    smmncpb     = models.CharField(max_length=600)
+    smgnsdtc    = models.CharField(max_length=600)
+    cleanname   = models.CharField(max_length=600)
+    proxage     = models.CharField(max_length=600)
 
 class Tissuesample(models.Model):
     sampleid    = models.CharField(max_length=600)
