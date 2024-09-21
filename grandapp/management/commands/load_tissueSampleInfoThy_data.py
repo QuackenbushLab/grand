@@ -48,4 +48,5 @@ class Command(BaseCommand):
             tissuesamplethy.link        = row['link']
             tissuesamplethy.size        = row['size']
             tissuesamplethy.cleanname   = row['cleanname']
+            tissuesamplethy.decsex      = row['decoded_sex']
             tissuesamplethy.save()

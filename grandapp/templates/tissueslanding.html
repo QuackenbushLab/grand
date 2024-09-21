@@ -56,7 +56,7 @@
                   <p class="card-text"><a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif as regulation prior, and gene expression samples.
                                 <a href="https://netzoo.github.io/zooanimals/puma/" style="text-decoration:none" target="_blank">PUMA</a> reconstructs a gene regulatory network with miRNA as regulators using gene expression samples and miRNA predicted targets by <a href="http://cbio.mskcc.org/microrna_data/manual.html" style="text-decoration:none" target="_blank">miRanda</a> or <a href="http://www.targetscan.org/vert_72/" style="text-decoration:none" target="_blank">TargetScan</a> as regulation priors. The Regulator-regulator interaction matrix is set to the identity matrix in the algorithm.
               {% if name == 'yes' %} <a href="https://netzoo.github.io/zooanimals/lioness/" style="text-decoration:none" target="_blank">LIONESS</a> reconstructs patient-specific <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> networks for each gene expression sample. 
-              <a href="https://netzoo.github.io/zooanimals/ss/bonobo/" style="text-decoration:none" target="_blank">BONOBO</a> is a single-sample network inference method, which can be used to estimate patient-specific co-expression matrices.
+              <p><a href="https://netzoo.github.io/zooanimals/ss/bonobo/" style="text-decoration:none" target="_blank">BONOBO</a> is a single-sample network inference method, which can be used to estimate patient-specific co-expression matrices, which are then fed as input for PANDA to build patient-specific GRNs. To adapt BONOBO-PANDA networks for patient's sex, and in addition to sample-specific co-expression, PANDA's motif prior networks are constructed for each sex (accounting for <a href="https://genome.cshlp.org/content/early/2024/08/10/gr.279117.124.abstract" style="text-decoration:none" target="_blank">sex chromosomes</a>), while the third input (PPI networks) are generic for all patients.
               To download sample-specific networks, you can check <a href="#cardtissue" style="text-decoration:none">the phenotypic information</a> and select the networks by
                                   clinical variables or download all the samples in a single file. {% else %} Check <a href="#cardtissue" style="text-decoration:none" >the phenotypic information</a> for the clinical variables of the samples that were used to reconstruct the network. {% endif %}</p>
                   <table id="tissuestable2" class="table table-hover" width="100%">
@@ -137,7 +137,7 @@
                           {% else %} 
                               <td><a href="{{ tissue.ppi }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.ppiLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
                           {% endif %}
-                          <td><a href="{{ tissue.motif }}" class="text-decoration-none">{{ tissue.motifDesc }}</a></td>
+                          <td><a href="{{ tissue.motif }}" class="text-decoration-none">{{ tissue.motifDesc }}</a>{% if tissue.tool == 'BONOBO-PANDA' %}, <a href="{{ tissue.motif2 }}" class="text-decoration-none">{{ tissue.motifDesc2 }}</a>{% endif %}</td>
                           <td><a href="{{ tissue.expression }}"><i class="fas fa-download"></i></a> <a href="{{ tissue.expLink }}" target="_blank"><i class="fas fa-link"></i></a></td>
                           <td>{{ tissue.reg }}</td>
                           <td>{{ tissue.tfs }}</td>
@@ -408,7 +408,9 @@
     </div>
   </div>
 </div>
+{% if slug2 == 'Thyroid' %}
     {% include "bonobothy.html" %}
+{% endif %}
 </div>
 </div>
 

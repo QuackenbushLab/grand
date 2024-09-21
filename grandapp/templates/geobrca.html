@@ -77,7 +77,7 @@
                 <tbody>
                  {% for tissue in geosample %}
                   <tr>
-                    <td>{{ tissue.sample }}</td>
+                    <td><a href="/networks/aggregate/{{ tissue.sampleclean }}" style="text-decoration:none">{{ tissue.sample }}</a></td>
                     <td>{{ tissue.gender }}</td>
                     <td>{{ tissue.subtype }}</td>
                     <td>{{ tissue.mutation }}</td>

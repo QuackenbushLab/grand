@@ -148,7 +148,7 @@ def networksagg(request,slug):
         edges['dispval'] =1
         nodes=nodes.to_json(orient='records')
         edges=edges.to_json(orient='records')
-        object_key,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug)
+        object_key,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14,mid,fid=mapObjectkey(slug)
         # Targeting form 
         formtar  = TarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100,'tfgeneseltar':'nosel'})
         clueform = ClueForm({'tfgeneselclue':'by gene'})
@@ -173,24 +173,30 @@ def networksagg(request,slug):
             if (slug[0:3]=='ACH') | (slug=='mirnadragon') | (slugsplit=='bonobo'):
                 form.fields['edgetargeting'].widget.attrs['disabled']    = 'disabled'
             print('The number of edges is',nedges)
-            object_key,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug)
-            print('hey')
+            object_key,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14,mid,fid=mapObjectkey(slug)
             print(object_key)
+            print(dt)
             df=fetchNetwork(object_key)
             if dt=='dtt':
                 tftar  = df.sum(axis=1) 
                 genetar= df.sum(axis=0)
             if dt=='dee':
-                object_key,ew1,ew2,ew3,ew4,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug,modality='expression')
+                object_key,ew1,ew2,ew3,ew4,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14,mid,fid=mapObjectkey(slug,modality='expression')
+                print(attr2)
                 print(object_key)
-                deDf=fetchNetwork(object_key)
+                if attr2=='MALE':
+                    deDf=fetchNetwork(object_key,sexind=mid)
+                elif attr2=='FEMALE':
+                    deDf=fetchNetwork(object_key,sexind=fid)
+                else:
+                    deDf=fetchNetwork(object_key)
                 deDfmean = deDf.values.mean()
                 deDf = deDf.mean(axis=1)
             df.index.name='TF'
             df,found,ngwas,ngenesfound=selectgenes(df,tfgenesel,geneform,tfform,goform,gwasform)
             df=df.stack().reset_index().rename(columns={'TF':'source','level_1':'target', 0:'value'})
             if edgetargeting == 'on':
-                object_key,ew1,ew2,ew3,ew4,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug,modality='motif')
+                object_key,ew1,ew2,ew3,ew4,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14,mid,fid=mapObjectkey(slug,modality='motif',sex=attr2)
                 motif=fetchNetwork(object_key,how='motif')
                 motif=motif[motif['value'] >0]
                 df = pd.merge(df, motif, how ='left', on =['source', 'target'])
@@ -2296,7 +2302,7 @@ def selectgenes(df,tfgenesel,geneform,tfform,goform,gwasform):
             print('no intersection')
     return df, found, ngwas, ngenesfound
 
-def fetchNetwork(object_key,how='net'):
+def fetchNetwork(object_key,how='net',sexind=[]):
     client = boto3.client('s3')
     bucket_name = 'granddb'
     csv_obj = client.get_object(Bucket=bucket_name, Key=object_key)
@@ -2307,6 +2313,8 @@ def fetchNetwork(object_key,how='net'):
             df = pd.read_csv(StringIO(csv_string),index_col=0,sep='\t')    
         else:
             df = pd.read_csv(StringIO(csv_string),index_col=0,sep=',')
+            if len(sexind) != 0:
+                df=df.iloc[:,sexind]
     elif how=='motif':
         if (str.split(object_key,'_')[-2] == 'otter') | (str.split(object_key,'/')[-1][0:3]=='GSM'):
             df = pd.read_csv(StringIO(csv_string), sep=',',index_col=0)
@@ -2376,9 +2384,9 @@ def selectgenestar(genetarscore,tfgenesel,geneform,goform,gwasform):
             found='not found'
     return genetarscore, found, ngwas, ngenesfound
 
-def mapObjectkey(slug,modality='network',how=''):
+def mapObjectkey(slug,modality='network',how='',sex=''):
     regnetdisp='Transcription factor'
-    attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14='','','','','','','',''
+    attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14,fid,mid='','','','','','','','','',''
     if len(slug.split('_')) > 2:
         slugsplit = slug.split('_')[2] 
     else:
@@ -2583,12 +2591,28 @@ def mapObjectkey(slug,modality='network',how=''):
         attr13 = 'Estrogen receptor status'
         attr14 = 'HER2 receptor status'
     elif (slugsplit == 'BONOBO'): # bonobo panda thyroid network
-            print('ho')
-            print(slug[17:])
             object_key = 'tissues/networks/panda_bonobo/THY_PANDA_BONOBO_'+slug[17:].replace('_','-')+'.csv'
             backpage   = 'tissues/Thyroid_tissue'
             ssagg='Single sample'
             categorynet='Tissues'
+            if modality == 'motif':
+                if sex=='MALE':
+                    object_key='tissues/motif/MotifPriorGencode_p5.txt'
+                elif sex=='FEMALE':
+                    object_key='tissues/motif/MotifPriorGencode_p5_female_PARonX.txt'
+            elif modality=='expression':
+                object_key = 'tissues/expression/GTEx_thyroid_allSex.txt'
+            tissuesample   = Tissuesamplethy.objects.get(sampleid=slug[-24:].replace('_','-'))
+            mid=np.array(list(Tissuesamplethy.objects.filter(decsex='MALE').values_list('pk', flat=True)), dtype='int')-1
+            fid=np.array(list(Tissuesamplethy.objects.filter(decsex='FEMALE').values_list('pk', flat=True)), dtype='int')-1
+            attr1  = tissuesample.smts
+            attr2  = tissuesample.decsex
+            attr3  = tissuesample.age
+            attr4  = tissuesample.subjectid
+            attr11 = 'Tissue'
+            attr12 = 'Donor Gender'
+            attr13 = 'Donor age'
+            attr14 = 'Subject'
     elif (str.split(slug,'_')[2] == 'TCGA') | (str.split(slug,'_')[2][0:3] == 'GSM'): # single sample networks
         ssagg='Single sample'
         categorynet='Cancer'
@@ -2668,4 +2692,4 @@ def mapObjectkey(slug,modality='network',how=''):
         categorynet='Cell lines'
         backpage='cell/gm12878'
         object_key = 'data/' + str.split(slug,'_')[0] + '_' + str.split(slug,'_')[1] + '.csv'
-    return object_key, ssagg, categorynet, regnetdisp, backpage, attr1, attr2, attr3, attr4, attr11, attr12, attr13, attr14
+    return object_key, ssagg, categorynet, regnetdisp, backpage, attr1, attr2, attr3, attr4, attr11, attr12, attr13, attr14, mid, fid

@@ -286,7 +286,9 @@ class Tissuelanding(models.Model):
     ppi       = models.URLField()
     ppiLink   = models.URLField()
     motif     = models.URLField()
+    motif2     = models.URLField()
     motifDesc = models.CharField(max_length=200)
+    motifDesc2 = models.CharField(max_length=200)
     expression= models.URLField()
     expLink   = models.URLField()
     tfs       = models.IntegerField()
@@ -344,6 +346,7 @@ class Tissuesamplethy(models.Model):
     smgnsdtc    = models.CharField(max_length=600)
     cleanname   = models.CharField(max_length=600)
     proxage     = models.CharField(max_length=600)
+    decsex      = models.CharField(max_length=600)
 
 class Tissuesample(models.Model):
     sampleid    = models.CharField(max_length=600)
