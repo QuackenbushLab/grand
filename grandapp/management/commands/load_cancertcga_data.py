@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading cancer sample data!")
-        for row in DictReader(open('./static/data/clinical_tcga.csv')):
+        for row in DictReader(open('./static/data/clinical_tcga_bis.csv')):
             tcgasample = Tcgasample()
             tcgasample.sample     = row['sample']
             tcgasample.platform   = row['Platform']
@@ -45,6 +45,10 @@ class Command(BaseCommand):
             tcgasample.uicc_stage      = row['uicc_stage']
             tcgasample.time_to_event   = row['time_to_event']
             tcgasample.vital_status    = row['vital_status'] 
-            tcgasample.size    = row['size']
-            tcgasample.link    = row['link']
+            tcgasample.size     = row['size']
+            tcgasample.link     = row['link']
+            tcgasample.size2    = row['size2']
+            tcgasample.link2    = row['link2']
+            tcgasample.ss       = row['ss']
+            tcgasample.submitter_id_clean= row['submitter_id_clean']
             tcgasample.save()

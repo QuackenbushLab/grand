@@ -3,7 +3,7 @@
 
 
 <div class="container pb-5 mb-5 mt-4">
-  <center>  <h3><span class="badge bg-secondary">Cancer tissues</span></h1> The cancer tissues resource includes 28 aggregate cancer-specific gene regulatory networks and sample-specific networks for 1,023 glioblastoma patients, 1,638 colon cancer patients, and 150 pancreatic cancer patients derived from <a href="https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga" target="_blank" class="text-decoration-none">TCGA</a> and <a href="https://www.ncbi.nlm.nih.gov/geo/" target="_blank" class="text-decoration-none"> GEO</a> data.  <br><br></center>
+  <center>  <h3><span class="badge bg-secondary">Cancer tissues</span></h1> The cancer tissues resource includes 29 aggregate cancer-specific gene regulatory networks and sample-specific networks for 1,023 glioblastoma patients, 1,638 colon cancer patients, and 150 pancreatic cancer patients, in addition to other cancers derived from <a href="https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga" target="_blank" class="text-decoration-none">TCGA</a> and <a href="https://www.ncbi.nlm.nih.gov/geo/" target="_blank" class="text-decoration-none"> GEO</a> data.  <br><br></center>
     <div class='row'>
       <div class='col'>
       <canvas id="cancerbubble" style="width:100%; height:300px;"></canvas>
@@ -48,7 +48,11 @@
           {% if cc.nnets2 == "" %}
             <td><a href="{{ cc.nnetsref }}" class="text-decoration-none" target="_blank">{{ cc.nnets }}</a></td>
           {% else %}
-            <td><a href="{{ cc.nnetsref }}" class="text-decoration-none" target="_blank">{{ cc.nnets }}</a>, <a href="{{ cc.nnets2ref }}" class="text-decoration-none" target="_blank">{{ cc.nnets2 }}</a></td>
+            {% if cc.nnets3 == "" %}
+              <td><a href="{{ cc.nnetsref }}" class="text-decoration-none" target="_blank">{{ cc.nnets }}</a>, <a href="{{ cc.nnets2ref }}" class="text-decoration-none" target="_blank">{{ cc.nnets2 }}</a></td>
+            {% else %}
+              <td><a href="{{ cc.nnetsref }}" class="text-decoration-none" target="_blank">{{ cc.nnets }}</a>, <a href="{{ cc.nnets2ref }}" class="text-decoration-none" target="_blank">{{ cc.nnets2 }}</a>, <a href="{{ cc.nnets3ref }}" class="text-decoration-none" target="_blank">{{ cc.nnets3 }}</a></td>
+            {% endif %}
           {% endif %}
           <td>{{ cc.types }}</td>
           {% if cc.datasets2 == "" %}
@@ -75,6 +79,7 @@
 
 <script> 
   var data2 = JSON.parse("{{data|escapejs}}");  
+  console.log(data2)
 </script>
 <script src="{% static 'js/bubbleChart.js' %}"></script>
 <script>

@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading cancer breast sample data!")
-        for row in DictReader(open('./static/data/metadata_breast_01292021.csv')):
+        for row in DictReader(open('./static/data/metadata_breast_01292021_bis.csv')):
             breastsample = Breastsample()
             breastsample.sample = row['gdc_cases.samples.portions.analytes.aliquots.submitter_id']
             breastsample.gender = row['gdc_cases.demographic.gender']
@@ -46,4 +46,8 @@ class Command(BaseCommand):
             breastsample.uicc_stage = row['gdc_cases.diagnoses.tumor_stage']
             breastsample.time_to_event = row['gdc_cases.diagnoses.days_to_death']
             breastsample.vital_status = row['gdc_cases.diagnoses.vital_status']
+            breastsample.link     = row['link']
+            breastsample.size     = row['size']
+            breastsample.ss       = row['ss']
+            breastsample.submitter_id_clean = row['submitter_id_clean']
             breastsample.save()

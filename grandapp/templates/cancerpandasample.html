@@ -63,6 +63,16 @@
                         data-bs-placement="top"
                         data-bs-content="TCGA tumor code">
                       </i></th>
+                      {% if slug == 'LUAD' or slug == 'LUSC' or slug == 'KIRC' or slug == 'PAAD' or slug == 'PRAD' or slug == 'SKCM' or slug == 'STAD'%} 
+                      <th scope="col">Network<br><i class="far fa-question-circle"
+                        data-bs-toggle="popover"
+                        data-bs-animation="false"
+                        data-bs-trigger="hover"
+                        data-bs-placement="top"
+                        title="Network format"
+                        data-bs-content="Please refer to the Help page Network section for the network download formats. You can download the script to reproduce the network using the R button. Adj: Adjacency matrix, Vis: Visualization">
+                      </i></th>
+                      {% endif %}
                     </tr>
                   </thead>
                   <tbody>
@@ -76,6 +86,13 @@
                         <td>{{ tissue.age }}</td>
                         <td>{{ tissue.days_to_last_followup }}</td>
                         <td>{{ tissue.tumorID }}</td>
+                        {% if slug == 'LUAD' or slug == 'LUSC' or slug == 'KIRC' or slug == 'PAAD' or slug == 'PRAD' or slug == 'SKCM' or slug == 'STAD'%} 
+                          {% if tissue.ss == '1' %}
+                            <td><div class="btn-group-vertical"><a href="{{ tissue.link }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span><a href="/networks/aggregate/{{ tissue.submitter_id_clean }}" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                          {% elif tissue.ss == '0' %}
+                            <td>NA</td>
+                          {% endif %}
+                        {% endif %}
                       </tr>
                    {% endfor %}
                   </tbody>
@@ -89,6 +106,9 @@
                       <th>Age</th>
                       <th>Days to follow up</th>
                       <th>Tumor ID</th>
+                      {% if slug == 'LUAD' or slug == 'LUSC' or slug == 'KIRC' or slug == 'PAAD' or slug == 'PRAD' or slug == 'SKCM' or slug == 'STAD'%} 
+                      <th>Network</th>
+                      {% endif %}
                     </tr>
                   </tfoot>
                 </table>

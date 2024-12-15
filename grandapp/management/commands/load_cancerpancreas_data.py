@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading pancreas tcga sample data!")
-        for row in DictReader(open('./static/data/pancreas_tcga.csv')):
+        for row in DictReader(open('./static/data/pancreas_tcga_bis.csv')):
             pancreassample = Pancreassample()
             pancreassample.sample     = row['gdc_cases.samples.portions.analytes.aliquots.submitter_id']
             pancreassample.gender     = row['gdc_cases.demographic.gender']
@@ -44,7 +44,11 @@ class Command(BaseCommand):
             pancreassample.time_to_event= row['gdc_cases.diagnoses.days_to_death'] 
             pancreassample.size    = row['size']
             pancreassample.link    = row['link']
+            pancreassample.size2    = row['size2']
+            pancreassample.link2    = row['link2']
             pancreassample.ethnicity = row['gdc_cases.demographic.ethnicity']
             pancreassample.vital_status = row['gdc_cases.diagnoses.vital_status']
             pancreassample.subtype = row['subtype']
+            pancreassample.ss      = row['ss']
+            pancreassample.submitter_id_clean = row['submitter_id_clean']
             pancreassample.save()

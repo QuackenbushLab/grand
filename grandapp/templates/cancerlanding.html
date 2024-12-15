@@ -85,7 +85,7 @@
         <div class="card ">
   <div class="card-body" id="networks">
     <h5 class="card-title">Tool description</h5>
-    <p class="card-text">{% if tool == 'lioness' %}<a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. <a href="https://netzoo.github.io/zooanimals/lioness/" style="text-decoration:none" target="_blank">LIONESS</a> reconstructs patient-specific <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> networks for each gene expression sample. 
+    <p class="card-text">{% if tool == 'lioness' or tool == 'lionessh5' %}<a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. <a href="https://netzoo.github.io/zooanimals/lioness/" style="text-decoration:none" target="_blank">LIONESS</a> reconstructs patient-specific <a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> networks for each gene expression sample. 
 			    To download patient-specific networks, you can check <a href='#cardtissuetcga' style="text-decoration:none">the phenotypic information of the TCGA dataset</a>{% if geo == 'yes' %} or <a href='#cardtissuegeo' style="text-decoration:none">the phenotypic information of the {% if slug == 'GBM' %}GGN{% else %}GEO{% endif %} dataset</a>{% endif %}. You can also select the networks by
                             clinical variables or download all the samples in a single file. 
                             {% elif tool == 'otter' %}
@@ -158,12 +158,8 @@
                       <td>{{ tissue.tfs }}</td>
                       <td>{{ tissue.genes }}</td>
                       <td>{{ tissue.dataset }}</td>
-                      {% if tissue.tool == 'PANDA' %}
-                          {% if tool != 'panda' %}
-                            <td>{{ tissue.samples }}</td>
-                          {% else %}
-                            <td><a href="{{ tissue.cardref }}" class="text-decoration-none">{{ tissue.samples }}</a></td>
-                          {% endif %}
+                      {% if tissue.tool == 'PANDA' or tissue.tool == 'OTTER'%}
+                        <td>{{ tissue.samples }}</td>
                       {% else %}
                         <td><a href="{{ tissue.cardref }}" class="text-decoration-none">{{ tissue.samples }}</a></td>
                       {% endif %}
@@ -187,10 +183,29 @@
                             </div>
                           </div>
                         </div>
-                        {% else %}
+                        {% elif tissue.netzoo == 'netZooPy' %}
                         <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal2"></i></a></td>
                         <!-- Modal 1-->
                         <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Publication</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                Please check the reference {{ tissue.refs2 }} at the following <a class="text-decoration-none" href="{{ tissue.refs }}" target="_blank">link</a>.
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {% else %}
+                        <td><a href="#"><i class="fas fa-book" data-bs-toggle="modal" data-bs-target="#exampleModal3"></i></a></td>
+                        <!-- Modal 1-->
+                        <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div class="modal-dialog">
                             <div class="modal-content">
                               <div class="modal-header">
@@ -591,13 +606,37 @@
                       data-bs-placement="top"
                       data-bs-content="0: Alive, 1: Dead">
                     </i></th>
-                    <th scope="col">Network<br><i class="far fa-question-circle"
-                      data-bs-toggle="popover"
-                      data-bs-trigger="hover"
-                      data-bs-animation="false"
-                      data-bs-placement="top"
-                      data-bs-content="Please refer to the network section of the help page for the network download formats. Adj: Adjacency matrix, Edg: Edges.">
-                    </i></th>
+                    {% if slug == 'PAAD' %}
+                      <th scope="col">Network (netZooR 0.9)<br><i class="far fa-question-circle"
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="PAAD LIONESS networks of the gene targeting study (Weighill et al.). Please refer to the network section of the help page for the network download formats. Adj: Adjacency matrix, Edg: Edges.">
+                      </i></th>
+                      <th scope="col">Network (netZooPy 0.9.13)<br><i class="far fa-question-circle"
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="PAAD LIONESS networks of the tcga-data-nf study (Fanfani et al.). Please refer to the network section of the help page for the network download formats. Adj: Adjacency matrix, Edg: Edges.">
+                      </i></th>
+                    {% else %}
+                      <th scope="col">Network (netZooM 0.1)<br><i class="far fa-question-circle"
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="COAD LIONESS networks of the colon cancer sex difference study (Lopes-Ramos et al.). Please refer to the network section of the help page for the network download formats. Adj: Adjacency matrix, Edg: Edges.">
+                      </i></th>
+                      <th scope="col">Network (netZooPy 0.9.13)<br><i class="far fa-question-circle"
+                        data-bs-toggle="popover"
+                        data-bs-trigger="hover"
+                        data-bs-animation="false"
+                        data-bs-placement="top"
+                        data-bs-content="COAD LIONESS networks of the tcga-data-nf study (Fanfani et al.). Please refer to the network section of the help page for the network download formats. Adj: Adjacency matrix, Edg: Edges.">
+                      </i></th>
+                    {% endif %}
                   </tr>
                 </thead>
                 <tbody>
@@ -636,8 +675,10 @@
                       {% if tissue.sample == 'All' %}
                           <td><div class="btn-group-vertical"><a href="{{ tissue.link }}" class="btn btn-outline-primary position-relative" role="button">Edg<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><span class="badge rounded-pill bg-secondary"><small>{{ tissue.size }}</small></span></div></td>
                       {% else %}
-                          <td><div class="btn-group-vertical"><a href="{{ tissue.link }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span><a href="/networks/aggregate/{{ tissue.sampleclean }}" class="btn btn-outline-success" role="button">Vis</a></div></td>
+                            <td><div class="btn-group-vertical"><a href="{{ tissue.link }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span><a href="/networks/aggregate/{{ tissue.sampleclean }}" class="btn btn-outline-success" role="button">Vis</a></div></td>
                       {% endif %}
+                      <td>{% if tissue.ss == '1' %}<div class="btn-group-vertical"><a href="{{ tissue.link2 }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size2 }}</small></span><a href="/networks/aggregate/{{ tissue.submitter_id_clean }}" class="btn btn-outline-success" role="button">Vis</a></div>
+                        {% elif tissue.ss == '0' %}NA{% endif %}</td>
                     </tr>
                  {% endfor %}
                 </tbody>
@@ -653,7 +694,8 @@
                     <th>Stage</th>
                     <th>Time</th>
                     <th>Vital status</th>
-                    <th>Network</th>
+                    <th>Network R</th>
+                    <th>Network Py</th>
                   </tr>
                 </tfoot>
               </table>
@@ -760,6 +802,14 @@
                         data-bs-placement="top"
                         data-bs-content="Age at initial pathologic diagnosis">
                       </i></th>
+                      <th scope="col">Network<br><i class="far fa-question-circle"
+                        data-bs-toggle="popover"
+                        data-bs-animation="false"
+                        data-bs-trigger="hover"
+                        data-bs-placement="top"
+                        title="Network format"
+                        data-bs-content="Please refer to the Help page Network section for the network download formats. You can download the script to reproduce the network using the R button. Adj: Adjacency matrix, Vis: Visualization">
+                      </i></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -777,6 +827,8 @@
                         <td>{{ tissue.vital_status }}</td>
                         <td>{{ tissue.time_to_event }}</td>
                         <td>{{ tissue.age_at_initial_pathologic_diagnosis }}</td>
+                        <td>{% if tissue.ss == '1' %}<div class="btn-group-vertical"><a href="{{ tissue.link }}" class="btn btn-outline-primary position-relative" role="button">Adj<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"><i class="fas fa-download"></i></span></a><span class="badge rounded-pill bg-light text-dark"><small>{{ tissue.size }}</small></span><a href="/networks/aggregate/{{ tissue.submitter_id_clean }}" class="btn btn-outline-success" role="button">Vis</a></div>
+                        {% elif tissue.ss == '0' %}NA{% endif %}</td>
                       </tr>
                    {% endfor %}
                   </tbody>
@@ -794,6 +846,7 @@
                       <th>Vital status</th>
                       <th>Time to event</th>
                       <th>Age</th>
+                      <th>Network</th>
                     </tr>
                   </tfoot>
                 </table>
@@ -802,7 +855,7 @@
 </div>
 </div>
 </div>
-{% elif tool == 'panda' %}
+{% elif tool == 'panda' or tool == 'lionessh5'%}
   <script>var offset=520</script>
   {% include "cancerpandasample.html" %}
 {% endif %}

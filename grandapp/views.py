@@ -32,7 +32,7 @@ import requests
 from statsmodels.stats import multitest # for fdr correction
 
 # to fetch single-sample network
-from io import StringIO # python3; python2: BytesIO 
+from io import StringIO, BytesIO # python3; python2: BytesIO 
 import boto3
 
 # for enrich drug
@@ -872,7 +872,7 @@ def taragg(request,slug):
             nedgestar      = int(request.POST['nedgestar'])
             nedgestartf    = int(request.POST['nedgestartf'])
             # fetch network
-            object_key,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug)
+            object_key,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14,mim,fif=mapObjectkey(slug)
             df=fetchNetwork(object_key)
             genetarscore, found, ngwas, ngenesfound = computetargeting(df,absvaltar,topbottomtar,nedgestar,'gene',tfgeneseltar,geneformtar,goformtar,gwasformtar)
             tftarscore, foundslug, ngwasslug, negensfoundslug    = computetargeting(df,absvaltartf,topbottomtartf,nedgestartf,'tf',tfgeneseltar,geneformtar,goformtar,gwasformtar)
@@ -1526,7 +1526,14 @@ def cancerlanding(request,slug):
         enrichgenes = Enrichgenes.objects.filter(cell=slugbis)
         data4tfs    = serializers.serialize("json", enrichtfs)
         data4genes  = serializers.serialize("json", enrichgenes)
-        nsamples,ndata,nagg,tool=0,1,1,'panda'
+        dictsample = {'LUAD_cancer': 512, 'LUSC_cancer':497, 'KIRC_cancer':512, 'PRAD_cancer':496, 'SKCM_cancer':451, 'STAD_cancer':419}
+        if slug in ['LUAD_cancer','LUSC_cancer','KIRC_cancer', 'PRAD_cancer', 'SKCM_cancer', 'STAD_cancer']:
+            nsamples = dictsample[slug]
+            tool = 'lionessh5'
+        else:
+            nsamples = 0
+            tool = 'panda'
+        ndata,nagg=1,1
         slugclean   = str.split(slug,'_')[0]
         tcgasample  = Cancerpheno.objects.filter(tumorID=slugclean)
         data        = serializers.serialize("json", tcgasample)
@@ -1536,10 +1543,10 @@ def cancerlanding(request,slug):
     elif slug == 'BRCA_cancer':
         tcgasample = Breastsample.objects.all()
         geosample    = Gse197sample.objects.all()
-        nsamples,ndata,nagg,tool,geo=101,1,1,'otter','yes'
+        nsamples,ndata,nagg,tool,geo=1182,1,2,'otter','yes'
     elif slug == 'LIHC_cancer':
         tcgasample = Liversample.objects.all()
-        nsamples,ndata,nagg,tool=0,1,1,'otter'
+        nsamples,ndata,nagg,tool=369,1,2,'otter'
     returntupl = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'geo':geo, 'tool':tool, 
                   'geosample':geosample,'tcgasample':tcgasample, 'nsamples':nsamples,'ndata':ndata, 'nagg':nagg, 'data':data, 'data4tfs':data4tfs, 'data4genes':data4genes}
     if slug == 'COAD_cancer':
@@ -1550,7 +1557,7 @@ def cancerlanding(request,slug):
         for sample in geosample:
             sample.sampleclean = 'COAD_2_' + str.replace(sample.sample,'-','_')
         geo,tool='yes','lioness'
-        nsamples,ndata,nagg=1638,2,2
+        nsamples,ndata,nagg=2082,2,3
         returntupl   = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'tcgasample':tcgasample,
                         'geosample':geosample,'geo':geo,'tool':tool, 'nsamples':nsamples,'ndata':ndata, 'nagg':nagg}
     if slug == 'GBM_cancer':
@@ -1573,7 +1580,7 @@ def cancerlanding(request,slug):
         for sample in pancreassample:
             sample.sampleclean = 'PAAD_1_' + str.replace(sample.sample,'-','_')
         geo,tool='no','lioness'
-        nsamples,ndata,nagg=150,1,0
+        nsamples,ndata,nagg=328,1,1
         returntupl   = {'cancerlanding': cancerlanding, 'slug':slug[0:(len(slug)-7)], 'tcgasample':pancreassample,
                         'geo':geo,'tool':tool, 'nsamples':nsamples,'ndata':ndata, 'nagg':nagg}
     return render(request, "cancerlanding.html", returntupl)
@@ -2303,14 +2310,21 @@ def selectgenes(df,tfgenesel,geneform,tfform,goform,gwasform):
     return df, found, ngwas, ngenesfound
 
 def fetchNetwork(object_key,how='net',sexind=[]):
+    pathsys = '/Users/mab8354/Downloads/' #/home/ubuntu
     client = boto3.client('s3')
     bucket_name = 'granddb'
     csv_obj = client.get_object(Bucket=bucket_name, Key=object_key)
     body = csv_obj['Body']
-    csv_string = body.read().decode('utf-8')
+    if object_key[-3:]=='.h5':
+        client.download_file(bucket_name, object_key, pathsys+object_key.split('/')[-1]) 
+    else:
+        csv_string = body.read().decode('utf-8')
     if how=='net':
-        if (object_key in ['cancer/colon_cancer/cancer_colon_expression_tcga.txt','cancer/colon_cancer/cancer_colon_expression_geo.txt','cancer/pancreas_cancer/pdac_expression_sd_log_04.txt']) | (str.split(object_key,'_')[0] == 'cancer/aggnets/expression/expression'):
-            df = pd.read_csv(StringIO(csv_string),index_col=0,sep='\t')    
+        if (object_key in ['cancer/colon_cancer/cancer_colon_expression_tcga.txt','cancer/colon_cancer/cancer_colon_expression_geo.txt','cancer/pancreas_cancer/pdac_expression_sd_log_04.txt']) | (str.split(object_key,'_')[0] == 'cancer/aggnets/expression/expression') | (str.split(object_key,'_')[0] == 'cancer/aggnets/expression/recount3'):
+            df = pd.read_csv(StringIO(csv_string),index_col=0,sep='\t')  
+        elif object_key[-3:]=='.h5':
+            df = pd.read_hdf(pathsys+object_key.split('/')[-1])
+            os.system('rm '+pathsys+object_key.split('/')[-1])
         else:
             df = pd.read_csv(StringIO(csv_string),index_col=0,sep=',')
             if len(sexind) != 0:
@@ -2386,6 +2400,7 @@ def selectgenestar(genetarscore,tfgenesel,geneform,goform,gwasform):
 
 def mapObjectkey(slug,modality='network',how='',sex=''):
     regnetdisp='Transcription factor'
+    dict_tiss = {'LUAD': 'lung', 'LUSC': 'lungsquamous', 'KIRC':'kidney', 'PAAD':'pancreas', 'PRAD':'prostate', 'SKCM':'skin', 'STAD': 'stomach', 'LIHC':'liver', 'BRCA':'breast', 'COAD':'colon'}
     attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14,fid,mid='','','','','','','','','',''
     if len(slug.split('_')) > 2:
         slugsplit = slug.split('_')[2] 
@@ -2565,6 +2580,15 @@ def mapObjectkey(slug,modality='network',how='',sex=''):
             object_key='tissues/motif/tissues_motif.txt'
         elif modality == 'expression':
             object_key='cancer/aggnets/expression/expression_tcga_' + slug + '.txt'
+    elif slug in ["coadpy","brcapy","lihcpy","paadpy","kircpy","luadpy","luscpy","skcmpy","stadpy","pradpy"]:
+        ssagg='Aggregate'
+        categorynet='Cancer'
+        object_key = 'cancer/aggnets/networks/panda_tcga_'+slug[:-2]+'.csv'
+        backpage   = 'cancers/' + slug[:-2].upper() + '_cancer'
+        if modality == 'motif':
+            object_key='cancer/motif/MotifPriorGencode_p5.txt'
+        elif modality == 'expression':
+            object_key='cancer/aggnets/expression/recount3_tcga_' + slug[:-2] + '_purity03_normlogcpm_mintpm1_fracsamples01_tissueall_nodot.txt'
     elif slug=='mirnadragon': # dragon mirna network
         object_key='cells/networks/mirna/dragon_mirna_CCLE.csv'
         backpage = 'cell/mirna/'
@@ -2619,21 +2643,31 @@ def mapObjectkey(slug,modality='network',how='',sex=''):
         cancername = str.split(slug,'_')[0]
         tcganame   = '-'.join(str.split(slug,'_')[2:])
         if cancername=='COAD':
-            object_key = 'cancer/colon_cancer/networks/lioness/Colon_cancer_sample_' + tcganame + '.csv'
-            if (str.split(slug,'_')[2][0:3] == 'GSM'):
-                pancreassample   = Geosample.objects.get(sample=tcganame)
-                attr4  = pancreassample.tumor_location
-                attr14 = 'Tumor location'
-            else:
-                pancreassample   = Tcgasample.objects.get(sample=tcganame)
+            if str.split(slug,'_')[1] == '1':
+                object_key = 'cancer/colon_cancer/networks/lioness/Colon_cancer_sample_' + tcganame + '.csv'
+                if (str.split(slug,'_')[2][0:3] == 'GSM'):
+                    pancreassample   = Geosample.objects.get(sample=tcganame)
+                    attr4  = pancreassample.tumor_location
+                    attr14 = 'Tumor location'
+                else:
+                    pancreassample   = Tcgasample.objects.get(sample=tcganame)
+                    attr4  = pancreassample.anatomic_neoplasm_subdivision
+                    attr14 = 'Anatomic location'
+                attr1  = pancreassample.age_at_initial_pathologic_diagnosis
+            elif str.split(slug,'_')[1] == 'lioness':
+                object_key = 'cancer/'+dict_tiss[cancername]+'_cancer/lioness_tcga_'+cancername.lower()+'/lioness-'+tcganame+'.h5'
+                if modality == 'motif':
+                    object_key='cancer/motif/MotifPriorGencode_p5.txt'
+                elif modality == 'expression':
+                    object_key='cancer/aggnets/expression/recount3_tcga_'+cancername.lower()+'_purity03_normlogcpm_mintpm1_fracsamples01_tissueall_nodot.txt'
+                pancreassample   = Tcgasample.objects.get(submitter_id_clean=cancername+'_lioness_'+tcganame.replace('-','_'))
                 attr4  = pancreassample.anatomic_neoplasm_subdivision
                 attr14 = 'Anatomic location'
-            attr1  = pancreassample.age_at_initial_pathologic_diagnosis
             attr2  = pancreassample.race
             attr3  = pancreassample.gender
-            attr11 = 'Donor Age'
-            attr12 = 'Donor Race'
-            attr13 = 'Donor Gender'
+            attr11 = 'Donor age'
+            attr12 = 'Donor race'
+            attr13 = 'Donor gender'
         elif cancername=='GBM':
             object_key = 'cancer/glioblastoma_cancer/networks/lioness/' + tcganame + '.csv'
             if (str.split(slug,'_')[2][0:3] == 'GSM'):
@@ -2657,20 +2691,63 @@ def mapObjectkey(slug,modality='network',how='',sex=''):
                 attr13 = 'Donor race'
                 attr14 = 'Donor histological type'
         elif cancername=='PAAD':
-            object_key = 'cancer/pancreas_cancer/networks/lioness/' + tcganame + '.csv'
-            if modality == 'motif':
-                object_key='cancer/colon_cancer/cancer_colon_motif.txt'
-            elif modality == 'expression':
-                object_key='cancer/pancreas_cancer/pdac_expression_sd_log_04.txt'
-            pancreassample   = Pancreassample.objects.get(sample=tcganame)
+            if str.split(slug,'_')[1] == '1':
+                object_key = 'cancer/pancreas_cancer/networks/lioness/' + tcganame + '.csv'
+                if modality == 'motif':
+                    object_key='cancer/colon_cancer/cancer_colon_motif.txt'
+                elif modality == 'expression':
+                    object_key='cancer/pancreas_cancer/pdac_expression_sd_log_04.txt'
+                pancreassample   = Pancreassample.objects.get(sample=tcganame)
+            elif str.split(slug,'_')[1] == 'lioness':
+                object_key = 'cancer/'+dict_tiss[cancername]+'_cancer/lioness_tcga_'+cancername.lower()+'/lioness-'+tcganame+'.h5'
+                if modality == 'motif':
+                    object_key='cancer/motif/MotifPriorGencode_p5.txt'
+                elif modality == 'expression':
+                    object_key='cancer/aggnets/expression/recount3_tcga_'+cancername.lower()+'_purity03_normlogcpm_mintpm1_fracsamples01_tissueall_nodot.txt'
+                pancreassample   = Pancreassample.objects.get(submitter_id_clean=cancername+'_lioness_'+tcganame.replace('-','_'))
             attr1  = pancreassample.ethnicity
             attr2  = pancreassample.race
             attr3  = pancreassample.gender
             attr4  = pancreassample.primary_site
-            attr11 = 'Donor Ethnicity'
-            attr12 = 'Donor Race'
-            attr13 = 'Donor Gender'
-            attr14 = 'Primary Site'
+            attr11 = 'Donor ethnicity'
+            attr12 = 'Donor race'
+            attr13 = 'Donor gender'
+            attr14 = 'Primary site'
+        elif cancername in  ['LIHC','BRCA']:
+            object_key = 'cancer/'+dict_tiss[cancername]+'_cancer/lioness_tcga_'+cancername.lower()+'/lioness-'+tcganame+'.h5'
+            print(object_key)
+            print(tcganame)
+            if modality == 'motif':
+                object_key='cancer/motif/MotifPriorGencode_p5.txt'
+            elif modality == 'expression':
+                object_key='cancer/aggnets/expression/recount3_tcga_'+cancername.lower()+'_purity03_normlogcpm_mintpm1_fracsamples01_tissueall_nodot.txt'
+            if cancername=='LIHC':
+                liversample   = Liversample.objects.get(submitter_id_clean=cancername+'_lioness_'+tcganame.replace('-','_'))
+            elif cancername=='BRCA':
+                liversample   = Breastsample.objects.get(submitter_id_clean=cancername+'_lioness_'+tcganame.replace('-','_'))
+            attr1  = liversample.race
+            attr2  = liversample.gender
+            attr3  = liversample.primary_site
+            attr4  = liversample.uicc_stage
+            attr11 = 'Donor race'
+            attr12 = 'Donor gender'
+            attr13 = 'Tumor type'
+            attr14 = 'Tumor stage'
+        elif cancername in  ['LUAD','LUSC','KIRC','PAAD','PRAD','SKCM','STAD']:
+            object_key = 'cancer/'+dict_tiss[cancername]+'_cancer/lioness_tcga_'+cancername.lower()+'/lioness-'+tcganame+'.h5'
+            if modality == 'motif':
+                object_key='cancer/motif/MotifPriorGencode_p5.txt'
+            elif modality == 'expression':
+                object_key='cancer/aggnets/expression/recount3_tcga_'+cancername.lower()+'_purity03_normlogcpm_mintpm1_fracsamples01_tissueall_nodot.txt'
+            cancerpheno   = Cancerpheno.objects.get(submitter_id_clean=cancername+'_lioness_'+tcganame.replace('-','_'))
+            attr1  = cancerpheno.race
+            attr2  = cancerpheno.gender
+            attr3  = cancerpheno.tumorID
+            attr4  = cancerpheno.ajcc
+            attr11 = 'Donor race'
+            attr12 = 'Donor gender'
+            attr13 = 'Tumor type'
+            attr14 = 'Tumor stage'
         backpage   = 'cancers/' + cancername + '_cancer'
     elif (str.split(slug,'_')[1] == 'iPSC'):
         ssagg='Aggregate'

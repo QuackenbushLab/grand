@@ -256,8 +256,10 @@ class Cancer(models.Model):
     cancerref = models.CharField(max_length=200)
     nnets     = models.CharField(max_length=200)
     nnets2    = models.CharField(max_length=200)
+    nnets3    = models.CharField(max_length=200)
     nnetsref  = models.CharField(max_length=200)
     nnets2ref = models.CharField(max_length=200)
+    nnets3ref = models.CharField(max_length=200)
     datasets  = models.CharField(max_length=200)
     datasets2     = models.CharField(max_length=200)
     datasetsref   = models.CharField(max_length=200)
@@ -402,6 +404,10 @@ class Tcgasample(models.Model):
     vital_status = models.CharField(max_length=200)
     size = models.CharField(max_length=200)
     link = models.CharField(max_length=200)
+    size2 = models.CharField(max_length=200)
+    link2 = models.CharField(max_length=200)
+    ss = models.CharField(max_length=200)
+    submitter_id_clean= models.CharField(max_length=200)
 
 class Breastsample(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
@@ -417,6 +423,10 @@ class Breastsample(models.Model):
     uicc_stage   = models.CharField(max_length=200)
     time_to_event= models.CharField(max_length=200)
     vital_status = models.CharField(max_length=200)
+    link              = models.CharField(max_length=200)
+    size              = models.CharField(max_length=200)
+    ss                = models.CharField(max_length=200)
+    submitter_id_clean= models.CharField(max_length=200)
 
 class Cervixsample(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
@@ -447,6 +457,11 @@ class Liversample(models.Model):
     uicc_stage   = models.CharField(max_length=200)
     time_to_event= models.CharField(max_length=200)
     vital_status = models.CharField(max_length=200)
+    link              = models.CharField(max_length=200)
+    size              = models.CharField(max_length=200)
+    ss                = models.CharField(max_length=200)
+    submitter_id_clean= models.CharField(max_length=200)
+
 
 class Geosample(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
@@ -501,7 +516,10 @@ class Cancerpheno(models.Model):
     age                  = models.CharField(max_length=200)
     days_to_last_followup= models.CharField(max_length=200)
     tumorID              = models.CharField(max_length=200)
-
+    link              = models.CharField(max_length=200)
+    size              = models.CharField(max_length=200)
+    ss                = models.CharField(max_length=200)
+    submitter_id_clean= models.CharField(max_length=200)
 
 class Genelanding(models.Model):
     #SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
@@ -618,6 +636,10 @@ class Pancreassample(models.Model):
     size         = models.CharField(max_length=200)
     link         = models.CharField(max_length=200)
     subtype      = models.CharField(max_length=200)
+    size2        = models.CharField(max_length=200)
+    link2        = models.CharField(max_length=200)
+    ss           = models.CharField(max_length=200)
+    submitter_id_clean = models.CharField(max_length=200)
 
 class Otterac(models.Model):
     aurocbr      = models.FloatField()

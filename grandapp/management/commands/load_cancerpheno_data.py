@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Loading cancer geo sample data!")
-        for row in DictReader(open('./data/cancerpheno.csv')):
+        for row in DictReader(open('./data/cancerpheno_extended.csv')):
             geosample = Cancerpheno()
             geosample.sample               = row['sample']
             geosample.gender               = row['gender']
@@ -42,4 +42,8 @@ class Command(BaseCommand):
             geosample.age                  = row['age_at_initial_pathologic_diagnosis']
             geosample.days_to_last_followup= row['days_to_last_followup']
             geosample.tumorID              = row['tumorID']
+            geosample.link              = row['link']
+            geosample.size              = row['size']
+            geosample.ss                = row['ss']
+            geosample.submitter_id_clean= row['submitter_id_clean']
             geosample.save()
