@@ -2555,16 +2555,16 @@ def mapObjectkey(slug,modality='network',how='',sex=''):
             elif slug=='GBM_3':
                 object_key = 'cancer/glioblastoma_cancer/cancer_glioblastoma_v_expression.txt'
         backpage   = 'cancers/GBM_cancer'
-    elif slug in ['COAD_1','COAD_2']: # colon cancer
+    elif slug[:6] in ['COAD_1','COAD_2']: # colon cancer
         ssagg='Aggregate'
         categorynet='Cancer'
-        if slug=='COAD_1':
+        if slug[:6]=='COAD_1':
             object_key = 'cancer/colon_cancer/networks/panda/Colon_cancer_TCGA.csv'
             if modality == 'motif':
                 object_key='cancer/colon_cancer/cancer_colon_motif.txt'
             elif modality == 'expression':
                 object_key='cancer/colon_cancer/cancer_colon_expression_tcga.txt'
-        elif slug=='COAD_2':
+        elif slug[:6]=='COAD_2':
             object_key = 'cancer/colon_cancer/networks/panda/Colon_cancer_GEO.csv'
             if modality == 'motif':
                 object_key='cancer/colon_cancer/cancer_colon_motif_geo.txt'
