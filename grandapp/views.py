@@ -2310,7 +2310,7 @@ def selectgenes(df,tfgenesel,geneform,tfform,goform,gwasform):
     return df, found, ngwas, ngenesfound
 
 def fetchNetwork(object_key,how='net',sexind=[]):
-    pathsys = '/home/ubuntu' #'/Users/mab8354/Downloads/' 
+    pathsys = '/home/ubuntu/' #'/Users/mab8354/Downloads/' 
     client = boto3.client('s3')
     bucket_name = 'granddb'
     csv_obj = client.get_object(Bucket=bucket_name, Key=object_key)
