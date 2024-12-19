@@ -31,13 +31,14 @@ $(document).ready(function() {
           point: {
             xAxis: 0,
             yAxis: 0,
-            x: x[0],
-            y: x[1]
+            x: parseFloat(x[0]),
+            y: parseFloat(x[1])
           },
           text: x[nSeries],
           url: x[nSeries+1],
         }
       })
+      console.log(annotationPoints)
 
     var series = []
     for (var i = 1; i <= nSeries; i++) {
@@ -53,7 +54,9 @@ $(document).ready(function() {
 
       chart: {
         type: 'line',
-        zoomType: 'x',
+        zooming: {
+          type: 'x'
+        },
         panning: true,
         panKey: 'shift',
         scrollablePlotArea: {
@@ -71,7 +74,8 @@ $(document).ready(function() {
           verticalAlign: 'top',
           y: 10
         },
-        labels: annotationPoints
+        labels: annotationPoints,
+        visible: true,
       }],
 
       xAxis: {
