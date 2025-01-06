@@ -96,6 +96,10 @@
           {% if tool == 'panda' %}<a href="https://netzoo.github.io/zooanimals/panda/" style="text-decoration:none" target="_blank">PANDA</a> reconstructs a gene regulatory network using TF PPI, TF DNA binding motif, and gene expression samples. 
           You can check <a href='#cardtissuetcga' style="text-decoration:none">the phenotypic information</a> for the clinical variables of the samples that were used to reconstruct the network.
           {% endif %}
+          <br>The variable Samples indicates the number of samples used for network reconstruction. For single-sample networks, clicking the number of samples links to the phenotypic variable table and the individual
+          networks. The number in the Sample variable and the phenotypic variable table may be different because the table can include samples from other studies. For example, in colon cancer, 444 TCGA samples were
+          used to build LIONESS networks in a first study and 445 samples were used for a more recent study. The superset of both TCGA samples is comprised of 487 samples, which is the size of the pheotypic variables
+          table. This discrepancy is due to different pre-processinng techniques, inclusion/exclusion criteria, and sample quality-control.
           </p>
         <table id="tissuestable" class="table table-hover" style="width: 100%">
                 <thead>
