@@ -755,7 +755,7 @@ def drugtarg(request,slug):
         form = TarForm({'topbottomtar':'Largest','nedgestar':100,'topbottomtartf':'Largest','nedgestartf':100,'tfgeneseltar':'nosel'})
         clueform = ClueForm({'tfgeneselclue':'by gene'})
         tfgeneseltar,found, ngwas, ngenesfound='nosel','',0,0
-        object_keytf,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug,how='tf')
+        object_keytf,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14,_,_=mapObjectkey(slug,how='tf')
         slug2=backpage[1]
         backpage=backpage[0]
         d = {'TF': ['TF'], 'tar': [1]}
@@ -779,11 +779,11 @@ def drugtarg(request,slug):
             nedgestar      = int(request.POST['nedgestar'])
             nedgestartf    = int(request.POST['nedgestartf'])
             # fetch network
-            object_keytf,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug,how='tf')
+            object_keytf,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14,_,_=mapObjectkey(slug,how='tf')
             slug2=backpage[1]
             backpage=backpage[0]
             dftf=fetchNetwork(object_keytf, how='sig')
-            object_keygene,ssaggss,categorynetss,regnetdispss,backpagess,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14=mapObjectkey(slug,how='gene')
+            object_keygene,ssaggss,categorynetss,regnetdispss,backpagess,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14,_,_=mapObjectkey(slug,how='gene')
             dfgene=fetchNetwork(object_keygene, how='sig')
             genetarscore, found, ngwas, ngenesfound        = computetargeting(dfgene,absvaltar,topbottomtar,nedgestar,'gene',tfgeneseltar,geneformtar,goformtar,gwasformtar,modality='precompute')
             tftarscore, foundslug, ngwasslug, ngenesfoundslug  = computetargeting(dftf,absvaltartf,topbottomtartf,nedgestartf,'tf',tfgeneseltar,geneformtar,goformtar,gwasformtar,modality='precompute')
@@ -872,7 +872,7 @@ def taragg(request,slug):
             nedgestar      = int(request.POST['nedgestar'])
             nedgestartf    = int(request.POST['nedgestartf'])
             # fetch network
-            object_key,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14,mim,fif=mapObjectkey(slug)
+            object_key,ssagg,categorynet,regnetdisp,backpage,attr1,attr2,attr3,attr4,attr11,attr12,attr13,attr14,_,_=mapObjectkey(slug)
             df=fetchNetwork(object_key)
             genetarscore, found, ngwas, ngenesfound = computetargeting(df,absvaltar,topbottomtar,nedgestar,'gene',tfgeneseltar,geneformtar,goformtar,gwasformtar)
             tftarscore, foundslug, ngwasslug, negensfoundslug    = computetargeting(df,absvaltartf,topbottomtartf,nedgestartf,'tf',tfgeneseltar,geneformtar,goformtar,gwasformtar)
