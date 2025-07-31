@@ -51,7 +51,7 @@ class NetForm(forms.ModelForm):
     nedges = forms.IntegerField(
         widget=forms.NumberInput(attrs={'type':'range', 'step': '10', 'min': '50', 'max': '150', 'value':'100','id':'myEdge'}), required=False
     )
-    geneform = forms.CharField(
+    geneform = forms.TextField(
         required=False,
         widget=forms.Textarea(attrs={'rows':3, 'cols':7, 'maxlength':100000}),
         label="gene",
