@@ -53,9 +53,9 @@ class NetForm(forms.ModelForm):
     )
     geneform = forms.CharField(
         required=False,
-        widget=forms.Textarea(attrs={'rows':3, 'cols':7}),
+        widget=forms.Textarea(attrs={'rows':3, 'cols':7, 'maxlength':100000}),
         label="gene",
-        max_length=10000
+        max_length=100000
     )
     tfform = forms.CharField(
         required=False,
