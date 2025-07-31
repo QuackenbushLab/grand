@@ -729,7 +729,7 @@ class netmod(models.Model):
     absval    = models.BooleanField()
     edgetargeting= models.BooleanField()
     tfgenesel = models.CharField(choices=CHOICES3, max_length=200)
-    geneform  = models.CharField(max_length=200)
+    geneform  = models.CharField(max_length=1000)
     tfform    = models.CharField(max_length=200)
     goform    = models.CharField(max_length=200)
     gwasform    = models.CharField(max_length=200)
